@@ -1,0 +1,22 @@
+{
+    "folders": [
+        {
+            "name": "eta-regulator-board",
+            "path": "./"
+        },
+        {
+            "name": "eta-regulator-board-web-ui",
+            "path": "./web-ui"
+        },
+        {
+            "name": "eta-regulator-board-web-api",
+            "path": "./web-api"
+        }
+    ],
+    "settings": {
+        "[python]": {
+            "editor.defaultFormatter": "ms-python.python"
+        },
+        "python.formatting.provider": "none"
+    }
+}
