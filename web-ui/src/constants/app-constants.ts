@@ -1,8 +1,21 @@
-export const AppConstants = {
-    title: 'Eta Regulator Board',
-    version: '2023.07.05',
-    company: 'Eta Ltd©',
-    webApiRoot: process.env.NODE_ENV === 'production'
-      ? 'http://10.10.10.1:5000'
-      : 'http://127.0.0.1:5000'
-  };
+const AppConstants = {
+    appInfo: {
+        companyName: 'Инженерный Центр Энерготехаудит©',
+        title: 'Регуляторы ЭТА24™',
+    },
+
+    noDataLongText: 'Нет данных для отображения',
+    loadingDelay: 500,
+    headerIconSize: 26,
+    colors: {
+        companyColor: '#2c394c',
+        companyColorHighlight: '#e0e6eb',
+        companyColorDarkHighlight: '#b1c1cd',
+        companyMetroHover: '#0072C6',
+        borderGreyColor: '#a3a3a3',
+        themeBaseAccent: '#FF5722',
+        baseDarkgreyTextColor: '#464646'
+    }
+};
+
+export default AppConstants;

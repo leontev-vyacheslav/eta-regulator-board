@@ -63,7 +63,7 @@ test.txt  100%    29     0.0KB/s   00:00    c
 It is important to mention that we have the option to copy a folder with all of its contents. For example like that:
 
 ```bash
-scp -r eta-regulator-board-web-api/src  root@10.10.10.1:/home/eta-regulator-board-web-api
+scp -r src ./startup.sh root@10.10.10.1:/home/eta-regulator-board/web-api
 ```
 
 In the absence of a ssh public key from your computer you  will always need to enter the root user password for every command.

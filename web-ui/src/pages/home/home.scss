@@ -1,0 +1,57 @@
+.logos-container {
+  text-align: center;
+  display: flex;
+
+  svg {
+    display: inline-block;
+
+    circle {
+      fill: #2c394c;
+    }
+  }
+;
+
+  div {
+    flex: 1;
+    align-self: center;
+    text-align: left;
+    font-size: 24px;
+    margin-left: 10px;
+    color: #666666;
+    font-weight: bold;
+  }
+;
+}
+
+.devextreme-logo {
+  width: 200px;
+  height: 34px;
+  margin-bottom: 19px;
+}
+
+.home-page-content {
+  p {
+    line-height: 30px;
+    text-align: justify;
+  }
+}
+
+.screen-x-small .logos-container {
+  flex-direction: column;
+
+  div {
+    text-align: inherit;
+  }
+;
+
+  svg {
+    margin: 0 auto;
+    width: 50%;
+    display: block;
+  }
+}
+
+.screen-x-small .logos-container span {
+  margin: initial;
+  font-size: 16px;
+}

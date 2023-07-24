@@ -1,16 +1,14 @@
-import { StrictMode } from 'react';
-import ReactDOM from 'react-dom/client';
+import './polyfills';
 
+import { createRoot } from 'react-dom/client';
 import './index.css';
-import App from './app';
+import Main from './app';
+import React, { StrictMode } from 'react';
 
-
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root =  createRoot(document.getElementById('root')!);
 
 root.render(
   <StrictMode>
-    <App />
+    <Main />
   </StrictMode>
 );
