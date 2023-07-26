@@ -1,4 +1,5 @@
 from app import app
+from decopators.validate import validate
 from responses.json_response import JsonResponse
 from models.test_model import TestModel
 
@@ -13,6 +14,7 @@ def get_tests():
     ])
 
 @app.get('/tests/<id>')
+@validate
 def get_test(id: int):
 
     return JsonResponse(id)
