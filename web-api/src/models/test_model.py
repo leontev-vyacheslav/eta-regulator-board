@@ -1,8 +1,6 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
-
-@dataclass
-class TestModel:
+class TestModel(BaseModel):
     id: int
 
     message: str
