@@ -2,10 +2,12 @@ import os
 
 from flask import Flask, send_from_directory
 from flask_cors import CORS
+from decorators.app_route_prefix import app_route_prefix
 
 app = Flask(__name__)
 CORS(app)
 
+app.api_route = app_route_prefix(app.route, '/api')
 
 @app.route('/favicon.ico', methods=['GET'])
 def favicon():
@@ -22,7 +24,7 @@ def shutdown(security_pass: str):
 
         return 'Shutting down...'
     else:
-        
+
         return 'Shut down was rejected...'
 
 
