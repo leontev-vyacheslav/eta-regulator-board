@@ -1,12 +1,16 @@
 import os
 
-from flask import Flask, request, send_from_directory
+from flask import Flask, send_from_directory
 from flask_cors import CORS
+from flask_pydantic import validate
 
+from decorators.app_router_prefix import app_route_prefix
+from models.shutdown_request_model import ShutdownRequestModel
 
 app = Flask(__name__)
 CORS(app)
 
+app.api_route = app_route_prefix(app.route, '/api')
 
 @app.route('/favicon.ico', methods=['GET'])
 def favicon():
@@ -18,9 +22,10 @@ def favicon():
     )
 
 @app.route('/shutdown', methods=['POST'])
-def shutdown():
+@validate()
+def shutdown(form: ShutdownRequestModel):
 
-    if request.form['security_pass'] == 'onioneer':
+    if form.security_pass == 'onioneer':
         os.kill(os.getpid(), 9)
 
         return 'Shutting down...'

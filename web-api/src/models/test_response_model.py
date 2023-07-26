@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
-class TestModel(BaseModel):
+
+class TestResponseModel(BaseModel):
     id: int
 
     message: str

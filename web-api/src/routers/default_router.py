@@ -1,13 +1,14 @@
 from flask_pydantic import validate
+
 from app import app
-from models.simple_message_model import SimpleMessageModel
+from models.message_response_model import MessageResponseModel
 
 
-@app.get('/')
+@app.route('/', methods=['GET'])
+@app.api_route('/', methods=['GET'])
 @validate()
 def home():
 
-    return SimpleMessageModel(
-        message='Eta Regulator Board Web API v. 0.1'
+    return MessageResponseModel(
+        message='Eta Regulator Board Web API v.0.1'
     )
-

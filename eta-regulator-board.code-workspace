@@ -15,8 +15,12 @@
     ],
     "settings": {
         "[python]": {
-            "editor.defaultFormatter": "ms-python.python"
+            "editor.defaultFormatter": "ms-python.autopep8",
+            "editor.codeActionsOnSave": {
+                "source.organizeImports": true
+            }
         },
-        "python.formatting.provider": "none"
+        "python.formatting.provider": "autopep8",
+        "python.languageServer": "Pylance"
     }
 }

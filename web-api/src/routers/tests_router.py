@@ -1,25 +1,28 @@
 from flask import Response
 from flask_pydantic import validate
-from app import app
-from models.test_list_model import TestListModel
-from models.test_model import TestModel
 
-@app.route('/tests', methods=['GET'])
+from app import app
+from models.message_response_model import MessageResponseModel
+from models.test_list_response_model import TestListResponseModel
+from models.test_response_model import TestResponseModel
+
+
+@app.api_route('/tests/list', methods=['GET'])
 @validate()
 def get_tests():
 
-    return TestListModel(items=[
-        TestModel(id=1, message='Test 1'),
-        TestModel(id=2, message='Test 2'),
-    ])
+    return TestListResponseModel(items=[
+        TestResponseModel(id=1, message='Test 1'),
+        TestResponseModel(id=2, message='Test 2'),
+    ], status=200)
 
 
-@app.route('/tests/<test_id>', methods=['GET'])
+@app.api_route('/tests/<test_id>', methods=['GET'])
 @validate()
 def get_test(test_id: int):
-    test_list = TestListModel(items=[
-        TestModel(id=1, message='Test 1'),
-        TestModel(id=2, message='Test 2'),
+    test_list = TestListResponseModel(items=[
+        TestResponseModel(id=1, message='Test 1'),
+        TestResponseModel(id=2, message='Test 2'),
     ])
 
     test = next((test for test in test_list.items if test.id == test_id), None)
@@ -28,6 +31,8 @@ def get_test(test_id: int):
         return test
     else:
         return Response(
-            'Item not found',
+            MessageResponseModel(
+                message='Item not found'
+            ),
             status=500
         )
