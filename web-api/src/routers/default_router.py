@@ -1,11 +1,10 @@
 from app import app
+from responses.json_response import JsonResponse
 
 
 @app.get('/')
 def home():
 
-    return {
-        'data': {
-                'message': 'eta-regulator-board-web-api'
-        }
-    }
+    return JsonResponse({
+        'message': 'eta-regulator-board-web-api'
+    })
