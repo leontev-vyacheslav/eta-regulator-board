@@ -6,6 +6,11 @@ ssh root@10.10.10.1 'rm -rf /mnt/mmcblk0p1/eta-regulator-board/web-ui/'
 Start-Sleep -Seconds 2
 Write-Host
 
+Write-Host "${GREEN}Deleting JS and CSS source maps files...${RESET}"
+Get-ChildItem -Path "./build" -Recurse -Include "*.map" | Remove-Item -Force -Recurse
+Start-Sleep -Seconds 2
+Write-Host
+
 Write-Host "${GREEN}Copying updated files...${RESET}"
 scp -r build root@10.10.10.1:/mnt/mmcblk0p1/eta-regulator-board/web-ui
 Start-Sleep -Seconds 2

@@ -132,6 +132,8 @@ Then, restart the uHTTPd service to apply the changes:
 
 Finally, copy the static js-bundle to the appropriate directory on your OpenWrt OS of the Omega2 device.
 
+## 8. How can I start a shell script after reboot OS linux?
+
 ## 8. How to create a python virtual environment based on certain version a python  interpreter (Windows)?
 
 ```bash

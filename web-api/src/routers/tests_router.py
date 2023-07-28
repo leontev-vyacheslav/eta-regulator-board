@@ -7,23 +7,21 @@ from models.test_list_response_model import TestListResponseModel
 from models.test_response_model import TestResponseModel
 
 
+test_list = [
+    TestResponseModel(id=1, message='Test 1'),
+    TestResponseModel(id=2, message='Test 2'),
+]
+
 @app.api_route('/tests/list', methods=['GET'])
 @validate()
 def get_tests():
 
-    return TestListResponseModel(items=[
-        TestResponseModel(id=1, message='Test 1'),
-        TestResponseModel(id=2, message='Test 2'),
-    ], status=200)
+    return TestListResponseModel(items=test_list, status=200)
 
 
 @app.api_route('/tests/<test_id>', methods=['GET'])
 @validate()
 def get_test(test_id: int):
-    test_list = TestListResponseModel(items=[
-        TestResponseModel(id=1, message='Test 1'),
-        TestResponseModel(id=2, message='Test 2'),
-    ])
 
     test = next((test for test in test_list.items if test.id == test_id), None)
 
