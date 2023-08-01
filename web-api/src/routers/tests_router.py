@@ -16,14 +16,14 @@ test_list = [
 @validate()
 def get_tests():
 
-    return TestListResponseModel(items=test_list, status=200)
+    return TestListResponseModel(items=test_list)
 
 
 @app.api_route('/tests/<test_id>', methods=['GET'])
 @validate()
 def get_test(test_id: int):
 
-    test = next((test for test in test_list.items if test.id == test_id), None)
+    test = next((test for test in test_list if test.id == test_id), None)
 
     if test is not None:
         return test

@@ -134,7 +134,7 @@ Finally, copy the static js-bundle to the appropriate directory on your OpenWrt 
 
 ## 8. How can I start a shell script after reboot OS linux?
 
-## 8. How to create a python virtual environment based on certain version a python  interpreter (Windows)?
+## 9. How to create a python virtual environment based on certain version a python  interpreter (Windows)?
 
 ```bash
 py -3.6 -m venv .venv
@@ -146,3 +146,83 @@ Now you have the python package manager and will use it for extending python lan
 ```bash
 python3 -m pip install flask, flask-cors
 ```
+
+## 10. How to properly perform a factory reset Omega2 device and to setup a production environment ?
+
+### 1. Need to execute three following command in th CLI, like that
+
+```shell
+    firstboot -y
+    sync
+    reboot
+```
+
+### 2. Wait 3-5 minutes, turn off your wifi adapter on the developer machine
+
+### 3. Connect to Omega2 device wifi network, for example with credential: Omega-8f79 (12345678)
+
+### 4. In the browser of the developer machine explore using following url <http://omega-8f79.local/OnionOS/> or <http://192.168.3.1/>
+
+### 5. Login with credential: root (onioneer)
+
+### 6. Allow to connect to internet selected wifi adapter with internet access
+
+### 7. Check connection to developer machine by ssh, like that
+
+```shell
+ssh root@192.168.3.1
+```
+
+### 8. If necessary change the default ip address for the wlan adapter to 10.10.10.1
+
+/etc/config/network
+
+```yaml
+config interface 'wlan'
+    option type 'bridge'
+    option proto 'static'
+    option ipaddr '192.168.3.1'
+    option netmask '255.255.255.0'
+    option ip6assign '60'
+```
+
+```yaml
+    option ipaddr '10.10.10.1'
+```
+
+### 9. Restore an access through ssh with a key pair (see ## 5)
+
+### 10. Restore an access to web-ui app (see ## 7)
+
+### 11. Install python3
+
+```shell
+opkg update
+opkg install python3
+```
+
+(free 14)
+
+### 12. Install a python package manager PIP
+
+```shell
+opkg install python3-pip
+```
+
+(free 11M)
+
+### 13. Install the FLASK library
+
+```shell
+python3 -m pip install flask flask-cors flask_pydantic
+```
+
+It will install many packages with itself:
+
+itsdangerous,typing-extensions,zipp,importlib-metadata, click,
+MarkupSafe, Jinja2, dataclasses, Werkzeug,
+flask, flask-cors, pydantic, flask-pydantic
+
+(free 9M)
+
+### 14. Deploy applications using deploy.ps1 in the appropriate project folders
