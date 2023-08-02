@@ -226,3 +226,15 @@ flask, flask-cors, pydantic, flask-pydantic
 (free 9M)
 
 ### 14. Deploy applications using deploy.ps1 in the appropriate project folders
+
+## 11. How to format microsd card on Omega2+?
+
+```bash
+top | grep mnt              # find all process depend on mounted storage device
+
+kill xxx                    # kill the flask web-api app and the other processes blocked the mounted storage device
+
+/etc/init.d/uhttpd stop     # stop web-ui
+umount /dev/mmcblk0            # unmount storage device
+mkfs.ext4 /dev/mmcblk0      # format
+```
