@@ -1,5 +1,5 @@
 {
-  "name": "energytechaudit.mobiletracker.webclient",
+  "name": "eta-regulator-board-web-ui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

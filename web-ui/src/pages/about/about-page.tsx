@@ -16,7 +16,7 @@ const AboutPage = () => {
                 <div className={ 'about-app-info' } style={ { display: 'flex', flexDirection: 'row' } }>
                     <AppAbout/>
                     <div>
-                        <p className={ 'about-app-title' }>{ AppConstants.appInfo.title }</p>
+                        <p className={ 'about-app-title' }>{ `${AppConstants.appInfo.title}${AppConstants.appInfo.version}` }</p>
                         <p className={ 'about-app-company' }>{ AppConstants.appInfo.companyName }</p>
                         <p>Все права сохранены.</p>
                     </div>

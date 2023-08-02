@@ -157,7 +157,7 @@ python3 -m pip install flask, flask-cors
     reboot
 ```
 
-### 2. Wait 3-5 minutes, turn off your wifi adapter on the developer machine
+### 2. Wait 2-3 minutes, turn off your wifi adapter on the developer machine
 
 ### 3. Connect to Omega2 device wifi network, for example with credential: Omega-8f79 (12345678)
 
