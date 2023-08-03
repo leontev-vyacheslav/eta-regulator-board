@@ -4,9 +4,10 @@ import { HomeIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import { useEffect } from 'react';
 import { useAppData } from '../../contexts/app-data';
+import Button from 'devextreme-react/button';
 
 export default () => {
-    const { getTestListDataAsync } = useAppData();
+    const { getTestListDataAsync, postTestDataAsync } = useAppData();
 
     useEffect(() => {
         (async () => {
@@ -48,6 +49,15 @@ export default () => {
                         <span>.</span>
                     </p>
                 </div>
+
+                <Button text='Post' onClick={ async () => {
+                    const testModel = await postTestDataAsync({
+                        id: 0,
+                        message: 'Hi, there'
+                    });
+
+                    console.log(testModel);
+                } } />
             </div>
         </>
     );

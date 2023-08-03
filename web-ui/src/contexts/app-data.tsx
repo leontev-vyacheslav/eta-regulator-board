@@ -8,13 +8,16 @@ import notify from 'devextreme/ui/notify';
 import { SharedAreaContextModel } from '../models/shared-area-context';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
 import { TestListModel } from '../models/data/test-list-model';
+import { TestModel } from '../models/data/test-model';
 
 export type AxiosWithCredentialsFunc = (config: AxiosRequestConfig) => Promise<AxiosResponse | undefined>;
-export type GetTestDataAsyncFunc = () => Promise<TestListModel | null> ;
+export type GetTestListDataAsyncFunc = () => Promise<TestListModel | null> ;
+export type PostTestDataAsyncFunc = (testModel: TestModel) => Promise<TestModel | null> ;
 
 
 export type AppDataContextModel = {
-    getTestListDataAsync: GetTestDataAsyncFunc,
+    getTestListDataAsync: GetTestListDataAsyncFunc,
+    postTestDataAsync: PostTestDataAsyncFunc
 };
 
 const AppDataContext = createContext<AppDataContextModel>({} as AppDataContextModel);
@@ -52,15 +55,35 @@ function AppDataProvider (props: AppBaseProviderProps) {
         [getUserAuthDataFromStorage, hideLoader, showLoader],
     );
 
-    const getTestListDataAsync = useCallback<GetTestDataAsyncFunc>(async (): Promise<TestListModel | null> => {
+    const getTestListDataAsync = useCallback<GetTestListDataAsyncFunc>(async (): Promise<TestListModel | null> => {
         const response = await axiosWithCredentials({
             url: `${ routes.host }${ routes.tests }/list`,
             method: HttpConstants.Methods.Get as Method,
             data: {}
         });
+
         if (response && response.status === HttpConstants.StatusCodes.Ok) {
+
             return response.data as TestListModel;
         }
+
+        return null;
+    }, [axiosWithCredentials]);
+
+
+    const postTestDataAsync = useCallback<PostTestDataAsyncFunc>(async (testModel: TestModel): Promise<TestModel | null> => {
+
+        const response = await axiosWithCredentials({
+            url: `${ routes.host }${ routes.tests }/post`,
+            method: HttpConstants.Methods.Post as Method,
+            data: testModel
+        });
+
+        if (response && response.status === HttpConstants.StatusCodes.Ok) {
+
+            return response.data as TestModel;
+        }
+
         return null;
     }, [axiosWithCredentials]);
 
@@ -68,6 +91,7 @@ function AppDataProvider (props: AppBaseProviderProps) {
         <AppDataContext.Provider
             value={ {
                 getTestListDataAsync,
+                postTestDataAsync
             } }
             { ...props }
         />

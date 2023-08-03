@@ -8,7 +8,7 @@ from decorators.app_router_prefix import app_route_prefix
 from models.shutdown_request_model import ShutdownRequestModel
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, allow_headers=['*'])
 
 app.api_route = app_route_prefix(app.route, '/api')
 

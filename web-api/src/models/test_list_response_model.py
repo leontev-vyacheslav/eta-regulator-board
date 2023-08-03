@@ -1,5 +1,5 @@
-from models.list_response_base_model import ListResponseBaseModel
+from models.list_response_base_model import ListBaseModel
 
 
-class TestListResponseModel(ListResponseBaseModel):
+class TestListModel(ListBaseModel):
     pass
