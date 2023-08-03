@@ -7,13 +7,14 @@ import { HttpConstants } from '../constants/app-http-constants';
 import notify from 'devextreme/ui/notify';
 import { SharedAreaContextModel } from '../models/shared-area-context';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
+import { TestListModel } from '../models/data/test-list-model';
 
 export type AxiosWithCredentialsFunc = (config: AxiosRequestConfig) => Promise<AxiosResponse | undefined>;
-export type GetTestDataAsyncFunc = () => Promise<any>;
+export type GetTestDataAsyncFunc = () => Promise<TestListModel | null> ;
 
 
 export type AppDataContextModel = {
-  getTestDataAsync: GetTestDataAsyncFunc,
+    getTestListDataAsync: GetTestDataAsyncFunc,
 };
 
 const AppDataContext = createContext<AppDataContextModel>({} as AppDataContextModel);
@@ -51,14 +52,14 @@ function AppDataProvider (props: AppBaseProviderProps) {
         [getUserAuthDataFromStorage, hideLoader, showLoader],
     );
 
-    const getTestDataAsync = useCallback<GetTestDataAsyncFunc>(async () => {
+    const getTestListDataAsync = useCallback<GetTestDataAsyncFunc>(async (): Promise<TestListModel | null> => {
         const response = await axiosWithCredentials({
-            url: `${ routes.host }${ routes.test }`,
+            url: `${ routes.host }${ routes.tests }/list`,
             method: HttpConstants.Methods.Get as Method,
             data: {}
         });
         if (response && response.status === HttpConstants.StatusCodes.Ok) {
-            return response.data;
+            return response.data as TestListModel;
         }
         return null;
     }, [axiosWithCredentials]);
@@ -66,7 +67,7 @@ function AppDataProvider (props: AppBaseProviderProps) {
     return (
         <AppDataContext.Provider
             value={ {
-                getTestDataAsync,
+                getTestListDataAsync,
             } }
             { ...props }
         />

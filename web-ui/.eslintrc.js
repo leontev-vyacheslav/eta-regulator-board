@@ -46,6 +46,11 @@ module.exports = {
     '@typescript-eslint/no-inferrable-types': 'off'
 
   },
+  'overrides': [
+    {
+      'files': [ 'src/**/*.tsx', 'src/**/*.ts' ],
+    }
+  ],
   'env': {
     'browser': true,
     'es6': true,

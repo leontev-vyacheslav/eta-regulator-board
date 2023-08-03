@@ -38,7 +38,7 @@
     "eject": "react-scripts eject",
     "build-themes": "devextreme build",
     "postinstall": "npm run build-themes",
-    "lint": "eslint ."
+    "lint": "eslint src"
   },
   "eslintConfig": {
     "extends": "react-app",

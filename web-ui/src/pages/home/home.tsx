@@ -1,9 +1,20 @@
-import AppConstants from '../../constants/app-constants';
 import './home.scss';
+import AppConstants from '../../constants/app-constants';
 import { HomeIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
+import { useEffect } from 'react';
+import { useAppData } from '../../contexts/app-data';
 
 export default () => {
+    const { getTestListDataAsync } = useAppData();
+
+    useEffect(() => {
+        (async () => {
+            const testList = await getTestListDataAsync();
+            console.log(testList);
+        })();
+    }, [getTestListDataAsync]);
+
     return (
         <>
             <PageHeader caption={ 'Главная' }>
