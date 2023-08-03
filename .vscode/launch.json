@@ -5,12 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "web-ui",
+            "consoleTitle": "web-ui",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "start"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node",
+            "cwd": "${workspaceRoot}/web-ui",
+            "console": "integratedTerminal",
+
+        },
+        {
             "name": "web-api",
+            "consoleTitle": "web-api",
             "type": "python",
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "src/app.py",
+                "FLASK_APP": "web-api/src/app.py",
                 "FLASK_DEBUG": "1"
             },
             "args": [
@@ -19,8 +37,8 @@
                 "--no-reload",
                 "--host=0.0.0.0"
             ],
-            "jinja": true,
-            "justMyCode": false
+            "justMyCode": false,
+            "console": "integratedTerminal"
         }
     ]
 }
