@@ -39,15 +39,15 @@ function Set-AppVersion([string] $RelativePath, [string] $SearchPattern, [string
 
 function Sync-DateTime
 {
-    Write-Host "${GREEN}Sync date&time according to the device timezone (${utcNow})...${RESET}"
+    Write-Host "Sync date&time according to the device timezone (${utcNow})..." -ForegroundColor Green
     ssh ${ACCOUNT}@${IPADDR} "ntpd -q -p ptbtime1.ptb.de"
     Start-Sleep -Seconds 2
     Write-Host
 }
 
-function Init-AppFolder ([string] $AppRootFolder)
+function Initialize-AppFolder ([string] $AppRootFolder)
 {
-    Write-Host "${GREEN}Initializing the app folders...${RESET}"
+    Write-Host "Initializing the app folders..." -ForegroundColor Green
     ssh ${ACCOUNT}@${IPADDR} "mkdir -p ${APP_ROOT}${AppRootFolder}/"
     Start-Sleep -Seconds 2
     Write-Host
