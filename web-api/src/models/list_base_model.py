@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-from models.test_response_model import TestModel
+from models.test_model import TestModel
 
 
 class ListBaseModel(ABC, BaseModel):

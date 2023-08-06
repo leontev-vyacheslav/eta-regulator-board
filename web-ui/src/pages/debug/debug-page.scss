@@ -1,0 +1,24 @@
+@import "../../themes/generated/variables.base.scss";
+@import "../../themes/variables";
+
+.about-app-info {
+  display: flex;
+  border-bottom: gray solid 4px;
+  width: 400px;
+
+  svg {
+    height: 100px;
+    width: 100px;
+    align-self: center;
+    fill: $base-company-color;
+    justify-self: left;
+  }
+}
+
+.about-app-title, .about-app-company {
+  font-weight: bold;
+}
+
+.screen-x-small .about-app-info {
+  width: 100%;
+}

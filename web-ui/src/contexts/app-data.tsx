@@ -11,13 +11,17 @@ import { TestListModel } from '../models/data/test-list-model';
 import { TestModel } from '../models/data/test-model';
 
 export type AxiosWithCredentialsFunc = (config: AxiosRequestConfig) => Promise<AxiosResponse | undefined>;
-export type GetTestListDataAsyncFunc = () => Promise<TestListModel | null> ;
-export type PostTestDataAsyncFunc = (testModel: TestModel) => Promise<TestModel | null> ;
+export type GetTestListDataAsyncFunc = () => Promise<TestListModel | null>;
+export type PostTestDataAsyncFunc = (testModel: TestModel) => Promise<TestModel | null>;
+export type PutTestDataAsyncFunc = (testModel: TestModel) => Promise<TestModel | null>;
+export type DeleteTestDataAsyncFunc = (testId: number) => Promise<TestModel | null>;
 
 
 export type AppDataContextModel = {
     getTestListDataAsync: GetTestListDataAsyncFunc,
-    postTestDataAsync: PostTestDataAsyncFunc
+    postTestDataAsync: PostTestDataAsyncFunc,
+    putTestDataAsync: PutTestDataAsyncFunc,
+    deleteTestDataAsync: DeleteTestDataAsyncFunc
 };
 
 const AppDataContext = createContext<AppDataContextModel>({} as AppDataContextModel);
@@ -57,7 +61,7 @@ function AppDataProvider (props: AppBaseProviderProps) {
 
     const getTestListDataAsync = useCallback<GetTestListDataAsyncFunc>(async (): Promise<TestListModel | null> => {
         const response = await axiosWithCredentials({
-            url: `${ routes.host }${ routes.tests }/list`,
+            url: `${ routes.host }${ routes.tests }`,
             method: HttpConstants.Methods.Get as Method,
             data: {}
         });
@@ -70,12 +74,43 @@ function AppDataProvider (props: AppBaseProviderProps) {
         return null;
     }, [axiosWithCredentials]);
 
+    const deleteTestDataAsync = useCallback<DeleteTestDataAsyncFunc>(async (testId: number): Promise<TestModel | null> => {
+        debugger
+        const response = await axiosWithCredentials({
+            url: `${ routes.host }${ routes.tests }/${ testId }`,
+            method: HttpConstants.Methods.Delete as Method,
+        });
+
+        if (response && response.status === HttpConstants.StatusCodes.Ok) {
+
+            return response.data as TestModel;
+        }
+
+        return null;
+    }, [axiosWithCredentials]);
+
 
     const postTestDataAsync = useCallback<PostTestDataAsyncFunc>(async (testModel: TestModel): Promise<TestModel | null> => {
 
         const response = await axiosWithCredentials({
-            url: `${ routes.host }${ routes.tests }/post`,
+            url: `${ routes.host }${ routes.tests }`,
             method: HttpConstants.Methods.Post as Method,
+            data: testModel
+        });
+
+        if (response && response.status === HttpConstants.StatusCodes.Ok) {
+
+            return response.data as TestModel;
+        }
+
+        return null;
+    }, [axiosWithCredentials]);
+
+    const putTestDataAsync = useCallback<PutTestDataAsyncFunc>(async (testModel: TestModel): Promise<TestModel | null> => {
+
+        const response = await axiosWithCredentials({
+            url: `${ routes.host }${ routes.tests }`,
+            method: HttpConstants.Methods.Put as Method,
             data: testModel
         });
 
@@ -91,7 +126,9 @@ function AppDataProvider (props: AppBaseProviderProps) {
         <AppDataContext.Provider
             value={ {
                 getTestListDataAsync,
-                postTestDataAsync
+                postTestDataAsync,
+                putTestDataAsync,
+                deleteTestDataAsync
             } }
             { ...props }
         />

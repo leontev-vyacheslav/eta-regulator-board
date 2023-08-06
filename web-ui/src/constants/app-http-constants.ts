@@ -10,7 +10,8 @@ export const HttpConstants = {
     Methods:{
       Get: 'GET',
       Post: 'POST',
-      Delete: 'DELETE'
+      Delete: 'DELETE',
+      Put: 'PUT'
     },
     StatusCodes: {
         Ok: 200,

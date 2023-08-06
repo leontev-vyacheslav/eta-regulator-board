@@ -35,7 +35,12 @@ export { RiBatteryChargeLine as LowPowerModeDisabledIcon } from 'react-icons/ri'
 export { RiBatteryLowLine as BatteryLevelIcon } from 'react-icons/ri';
 export { IoMdBatteryCharging as ChargingLevelIcon } from 'react-icons/io';
 export { IoBatteryChargingOutline as BatteryIcon } from 'react-icons/io5';
-export { MdErrorOutline as ErrorIcon } from 'react-icons/md'
+export { MdErrorOutline as ErrorIcon } from 'react-icons/md';
+export { VscDebug as DebugIcon } from 'react-icons/vsc';
+export { IoEllipsisHorizontal as ExtensionIcon } from 'react-icons/io5';
+export { IoCloudDownloadOutline as DownloadIcon } from 'react-icons/io5';
+export { ImFileZip as PackageIcon } from 'react-icons/im';
+
 
 import { MdMoreVert } from 'react-icons/md';
 export const GridAdditionalMenuIcon = () => <MdMoreVert style={ { cursor: 'pointer' } } size={ 18 } />
