@@ -75,7 +75,6 @@ function AppDataProvider (props: AppBaseProviderProps) {
     }, [axiosWithCredentials]);
 
     const deleteTestDataAsync = useCallback<DeleteTestDataAsyncFunc>(async (testId: number): Promise<TestModel | null> => {
-        debugger
         const response = await axiosWithCredentials({
             url: `${ routes.host }${ routes.tests }/${ testId }`,
             method: HttpConstants.Methods.Delete as Method,
