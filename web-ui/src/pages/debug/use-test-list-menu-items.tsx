@@ -1,60 +1,111 @@
 import { useCallback, useMemo } from 'react'
-import { AddIcon, DeleteIcon, EditIcon, ExtensionIcon } from '../../constants/app-icons';
+import { AddIcon, DeleteIcon, EditIcon, ExtensionIcon, RefreshIcon } from '../../constants/app-icons';
 import { useAppData } from '../../contexts/app-data';
 import { List } from 'devextreme-react/list';
+import notify from 'devextreme/ui/notify';
+import devices from 'devextreme/core/devices';
+
 import { TestModel } from '../../models/data/test-model';
 import { useDebugPageContext } from './debug-page-context';
-import notify from 'devextreme/ui/notify';
 import { showConfirmDialog, showPromptDialog } from '../../utils/dialogs';
+import { useScreenSize } from '../../utils/media-query';
 
 export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<List<TestModel, any>> }) => {
-    const { postTestDataAsync, putTestDataAsync, deleteTestDataAsync } = useAppData();
+    const { getTestListDataAsync, postTestDataAsync, putTestDataAsync, deleteTestDataAsync } = useAppData();
     const { setTestList } = useDebugPageContext();
+    const { isXSmall } = useScreenSize();
+
+    const refreshTestListAsync = useCallback(async () => {
+        const testList = await getTestListDataAsync();
+        if (testList) {
+            setTestList(testList);
+        }
+
+    }, [getTestListDataAsync, setTestList]);
 
     const addTestItemAsync = useCallback(async () => {
         showPromptDialog({
             title: 'Новое тестовое значение',
             iconName: 'AddIcon',
-
             callback: async ({ text }: { text: string }) => {
                 if (text) {
-                    const test = await postTestDataAsync({
+                    const currentTest = await postTestDataAsync({
                         id: 0,
                         message: text
                     });
 
-                    if (test) {
+                    if (currentTest) {
                         setTestList(previous => {
-                            return previous ? { ...previous, items: [...previous.items, test] } : null;
+                            return previous ? { ...previous, items: [...previous.items, currentTest] } : null;
                         });
 
                         notify({
                             type: 'success',
-                            message: `The test list item  was successfully added with the identifier ${test.id}!`
-                        }, { position: 'bottom center', direction: 'down-stack' });
+                            width: devices.current().phone ? '90%' : undefined,
+                            message: `Тестовый элемент с идентификатором ${currentTest.id}  был успешно добавлен!`,
+                            position: isXSmall ? 'bottom center' : {
+                                at: 'bottom right',
+                                my: 'bottom right',
+                                offset: '-20 -20'
+                            },
+                        }, {
+                            direction: 'up-stack'
+                        });
                     }
                 }
-            },
-            textRender: () => {
-                return <div>Введите текстовое значение</div>
             }
         });
-
-
-
-
-    }, [postTestDataAsync, setTestList]);
+    }, [isXSmall, postTestDataAsync, setTestList]);
 
     const updateTestItemAsync = useCallback(async () => {
-        const test = await putTestDataAsync({
-            id: 2,
-            message: 'Test2 with changes'
-        });
 
-        if (test) {
-            //
+        if (!listRef || !listRef.current) {
+            return;
         }
-    }, [putTestDataAsync]);
+
+        const selectedItems = listRef.current.instance.option('selectedItems');
+
+        if (selectedItems && selectedItems.length > 0) {
+            const originalTest = selectedItems.find(() => true);
+
+            if (!originalTest) {
+                return;
+            }
+
+            showPromptDialog({
+                title: 'Тестовое значение',
+                iconName: 'EditIcon',
+                text: originalTest.message,
+                callback: async ({ text }: { text: string }) => {
+                    const currentTest = await putTestDataAsync({ ...originalTest, message: text });
+
+                    if (currentTest) {
+                        setTestList(previous => {
+                            const changedTest = previous!.items.find(i => i.id === currentTest.id)!;
+                            changedTest.message = currentTest.message;
+
+                            return { ...previous! };
+                        });
+                    }
+                }
+            });
+
+            return;
+        }
+
+        notify({
+            type: 'warning',
+            message: 'Не выделен ни один элемент списка!',
+            width: devices.current().phone ? '90%' : undefined,
+            position: isXSmall ? 'bottom center' : {
+                at: 'bottom right',
+                my: 'bottom right',
+                offset: '-20 -20'
+            },
+        }, { position: 'bottom center', direction: 'up-stack' });
+
+
+    }, [isXSmall, listRef, putTestDataAsync, setTestList]);
 
     const deleteTestItemAsync = useCallback(async () => {
             if (!listRef || !listRef.current) {
@@ -64,33 +115,46 @@ export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<Lis
             const selectedItems = listRef.current.instance.option('selectedItems');
 
             if (selectedItems && selectedItems.length > 0) {
-                const testId = selectedItems.find(() => true)!.id;
+                const originalTest = selectedItems.find(() => true)!;
 
                 showConfirmDialog({
                     title: 'Confirm',
-                    iconName: 'EditIcon',
+                    iconName: 'DeleteIcon',
+                    iconSize: 36,
                     callback: async () => {
-                        const test = await deleteTestDataAsync(testId);
-                        if (test) {
+                        const currentTest = await deleteTestDataAsync(originalTest.id);
+                        if (currentTest) {
                             setTestList(previous => {
-                                return previous ? { ...previous, items: previous.items.filter(i => i.id !== test.id) } : null;
+                                return previous ? { ...previous, items: previous.items.filter(i => i.id !== currentTest.id) } : null;
                             });
 
                             notify({
                                 type: 'success',
-                                message: `The test list item with the identifier ${test.id} was successfully deleted!`
-                            }, { position: 'bottom center', direction: 'down-stack' });
+                                width: devices.current().phone ? '90%' : undefined,
+                                message: `Тестовый элемент с идентификатором  ${currentTest.id} успешно удален!`,
+                                position: isXSmall ? 'bottom center' : {
+                                    at: 'bottom right',
+                                    my: 'bottom right',
+                                    offset: '-20 -20'
+                                },
+                            }, { position: 'bottom center', direction: 'up-stack' });
 
                             return;
                         }
 
                         notify({
                             type: 'error',
-                            message: 'The test list item with ${test.id} was not deleted because of an error!'
-                        }, { position: 'bottom center', direction: 'down-stack' });
+                            width: devices.current().phone ? '90%' : undefined,
+                            message:  `Тестовый элемент с идентификатором ${originalTest.id} не был удален из-за ошибки!`,
+                            position: isXSmall ? 'bottom center' : {
+                                at: 'bottom right',
+                                my: 'bottom right',
+                                offset: '-20 -20'
+                            },
+                        }, { position: 'bottom center', direction: 'up-stack' });
                     },
                     textRender: () => {
-                        return <> { `Do you really want to delete the test list item with id ${testId}?` } </>;
+                        return <> { `Действительно хотите удалить Тестовый элемент с идентификатором ${originalTest!.id}?` } </>;
                     }
                 });
 
@@ -99,29 +163,42 @@ export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<Lis
 
             notify({
                 type: 'warning',
-                message: 'No one test item was selected!'
-            }, { position: 'bottom center', direction: 'down-stack' });
+                width: devices.current().phone ? '90%' : undefined,
+                message: 'Не выделен ни один элемент списка!',
+                position: isXSmall ? 'bottom center' : {
+                    at: 'bottom right',
+                    my: 'bottom right',
+                    offset: '-20 -20'
+                },
+            }, { position: 'bottom center', direction: 'up-stack' });
 
-    }, [deleteTestDataAsync, listRef, setTestList]);
+    }, [deleteTestDataAsync, isXSmall, listRef, setTestList]);
 
     return useMemo(() => {
         return [{
             icon: () => <ExtensionIcon size={ 20 } color='black' />,
-            items: [{
-                text: 'Add...',
-                icon: () => <AddIcon size={ 20 } />,
-                onClick: addTestItemAsync
-            },
-            {
-                text: 'Update...',
-                icon: () => <EditIcon size={ 20 } />,
-                onClick: updateTestItemAsync
-            },
-            {
-                text: 'Delete...',
-                icon: () => <DeleteIcon size={ 20 } />,
-                onClick: deleteTestItemAsync
-            }]
+            items: [
+                {
+                    text: 'Обновить список...',
+                    icon: () => <RefreshIcon size={ 20 } />,
+                    onClick: refreshTestListAsync
+                },
+                {
+                    text: 'Добавить...',
+                    icon: () => <AddIcon size={ 20 } />,
+                    onClick: addTestItemAsync
+                },
+                {
+                    text: 'Изменить...',
+                    icon: () => <EditIcon size={ 20 } />,
+                    onClick: updateTestItemAsync
+                },
+                {
+                    text: 'Удалить...',
+                    icon: () => <DeleteIcon size={ 20 } />,
+                    onClick: deleteTestItemAsync
+                }
+            ]
         }];
-    }, [addTestItemAsync, deleteTestItemAsync, updateTestItemAsync])
+    }, [addTestItemAsync, deleteTestItemAsync, refreshTestListAsync, updateTestItemAsync])
 }

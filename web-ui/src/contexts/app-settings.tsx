@@ -25,9 +25,9 @@ function AppSettingsProvider (props: AppBaseProviderProps) {
         initialAppSettingsData = { ...initialAppSettingsData, ...{ workDate: new Date(new Date().setHours(0, 0, 0, 0)) } };
     }
     else {
-        initialAppSettingsData = { ...initialAppSettingsData, ...{ workDate: new Date(initialAppSettingsData.workDate) } };
+        initialAppSettingsData = { ...initialAppSettingsData, ...{ workDate: new Date(new Date().setHours(0, 0, 0, 0)) } };
     }
-    
+
     if(!initialAppSettingsData.isShowFooter)  {
         initialAppSettingsData = { ...initialAppSettingsData, ...{ isShowFooter: true } };
     }

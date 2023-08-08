@@ -4,19 +4,19 @@ import dxPopup, { ToolbarItem } from 'devextreme/ui/popup';
 import dxTextBox, { Properties } from 'devextreme/ui/text_box';
 import devices from 'devextreme/core/devices';
 import * as AppIcons from '../constants/app-icons';
-import { SimpleDialogContentModel, SimpleDialogModel } from '../models/simple-dialog';
+import { PromptSimpleDialogModel, SimpleDialogContentModel, SimpleDialogModel } from '../models/simple-dialog';
 import ReactDOMServer from 'react-dom/server';
 import AppConstants from '../constants/app-constants';
 
 const dialogContentRender = ({ iconName, iconSize, iconColor, textRender }: SimpleDialogContentModel) => {
-    iconSize = iconSize ? iconSize : 24
+
     iconColor = iconColor ? iconColor : AppConstants.colors.themeBaseAccent;
 
     function innerContent() {
         return (
             <div style={ { display: 'flex', alignItems: 'center' } }>
-                {createElement((AppIcons as any)[iconName], { size: iconSize ? iconSize : 36, style: { alignSelf: 'flex-start', color: iconColor ? iconColor : '#ff5722' } })}
-                <span style={ { marginLeft: 10 } }>{textRender()}</span>
+                {createElement((AppIcons as any)[iconName], { size: iconSize = iconSize ? iconSize : 24, style: { alignSelf: 'flex-start', color: iconColor ? iconColor : '#ff5722' } })}
+                {textRender ? <span style={ { marginLeft: 10 } }>{textRender()}</span> : null}
             </div>
         );
     }
@@ -44,7 +44,14 @@ const showAlertDialog = ({ title, iconName, iconSize, iconColor, textRender, cal
     });
 };
 
-const showPromptDialog = ({ title, iconName, iconSize, iconColor, textRender, callback }: SimpleDialogModel) => {
+const showPromptDialog = ({ title, iconName, iconSize, iconColor, textRender, callback, text }: PromptSimpleDialogModel) => {
+
+    textRender = textRender
+        ? textRender
+        : () => {
+            return <div>Введите текстовое значение</div>
+        };
+
     const root = document.querySelector('#root');
 
     if (!root) {
@@ -66,6 +73,7 @@ const showPromptDialog = ({ title, iconName, iconSize, iconColor, textRender, ca
         const textBoxElement = document.createElement('div');
         contentContainerElement.insertAdjacentElement('beforeend', textBoxElement)
         textBox = new dxTextBox(textBoxElement, {
+            value: text,
             label: 'Prompt text',
             labelMode: 'static'
         } as Properties);
@@ -123,5 +131,6 @@ const showPromptDialog = ({ title, iconName, iconSize, iconColor, textRender, ca
 
     popup.show();
 };
+
 
 export { showConfirmDialog, showAlertDialog, showPromptDialog };

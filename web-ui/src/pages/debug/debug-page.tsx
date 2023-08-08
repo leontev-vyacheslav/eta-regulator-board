@@ -15,7 +15,7 @@ import { DebugPageContextProvider } from './debug-page-context';
 const DebugPageInner = () => {
     const listRef = useRef<List<TestModel>>(null);
     const listMenuItems = useTestListMenuItems({ listRef });
-    
+
     return (
         <>
             <PageHeader caption={ 'Отладка' }>
@@ -24,7 +24,7 @@ const DebugPageInner = () => {
 
             <div className={ 'content-block' }>
                 <div className={ 'dx-card responsive-paddings' }>
-                    <PageToolbar title={ 'Test list' } menuItems={ listMenuItems } />
+                    <PageToolbar title={ 'Тестовый список' } menuItems={ listMenuItems } />
                     <TestList ref={ listRef } />
                 </div>
             </div>
