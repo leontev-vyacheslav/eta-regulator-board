@@ -49,7 +49,7 @@ Write-Host
 
 # Copying updated files...
 Write-Host "Copying updated files..." -ForegroundColor Green
-scp -r src ./startup.sh ${ACCOUNT}@${IPADDR}:${APP_ROOT}/web-api
+scp -r src ./startup.sh ./requirements.txt ./runtime.txt ${ACCOUNT}@${IPADDR}:${APP_ROOT}/web-api
 Start-Sleep -Seconds 2
 Write-Host
 
@@ -61,12 +61,24 @@ ssh ${ACCOUNT}@${IPADDR} "echo -e '#!/bin/sh -e\n\ncd ${APP_ROOT}/web-api/\n\nsh
 Start-Sleep -Seconds 2
 Write-Host
 
+# problem!
+# ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/;python3 -m venv --copies .venv"
+# ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/;source .venv/bin/activate;python3 -m pip install -r requirements.txt"
+
+
+# Installing dependencies
+Write-Host "Installing dependencies..." -ForegroundColor Green
+ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/;python3 -m pip install -r requirements.txt"
+Start-Sleep -Seconds 2
+Write-Host
+
 
 # Compiling to byte for python specific version
 Write-Host "Compiling to byte for python specific version..." -ForegroundColor Green
 ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/; python3 -m compileall -b src"
 Start-Sleep -Seconds 2
 Write-Host
+
 
 # Launching 'eta-regulator-board-web-api...
 Write-Host "Launching '$WEB_API_APP_NAME'..." -ForegroundColor Green

@@ -10,5 +10,5 @@ from models.message_model import MessageModel
 def home():
 
     return MessageModel(
-        message='Eta Regulator Board Web API v.0.1.20230809-080739'
+        message='Eta Regulator Board Web API v.0.1.20230809-184808'
     )
