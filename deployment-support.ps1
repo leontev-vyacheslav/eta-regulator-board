@@ -40,7 +40,7 @@ function Set-AppVersion([string] $RelativePath, [string] $SearchPattern, [string
 function Sync-DateTime
 {
     Write-Host "Sync date&time according to the device timezone (${utcNow})..." -ForegroundColor Green
-    ssh ${ACCOUNT}@${IPADDR} "ntpd -q -p ptbtime1.ptb.de"
+    ssh ${ACCOUNT}@${IPADDR} "ntpd -q -p ptbtime1.ptb.de" # Network Time Protocol daemon
     Start-Sleep -Seconds 2
     Write-Host
 }

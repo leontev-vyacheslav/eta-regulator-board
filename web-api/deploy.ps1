@@ -62,6 +62,12 @@ Start-Sleep -Seconds 2
 Write-Host
 
 
+# Compiling to byte for python specific version
+Write-Host "Compiling to byte for python specific version..." -ForegroundColor Green
+ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/; python3 -m compileall -b src"
+Start-Sleep -Seconds 2
+Write-Host
+
 # Launching 'eta-regulator-board-web-api...
 Write-Host "Launching '$WEB_API_APP_NAME'..." -ForegroundColor Green
 ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/; sh startup.sh"

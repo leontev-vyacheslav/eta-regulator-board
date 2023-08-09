@@ -102,7 +102,7 @@ export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<Lis
                 my: 'bottom right',
                 offset: '-20 -20'
             },
-        }, { position: 'bottom center', direction: 'up-stack' });
+        }, { direction: 'up-stack' });
 
 
     }, [isXSmall, listRef, putTestDataAsync, setTestList]);
@@ -137,7 +137,7 @@ export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<Lis
                                     my: 'bottom right',
                                     offset: '-20 -20'
                                 },
-                            }, { position: 'bottom center', direction: 'up-stack' });
+                            }, { direction: 'up-stack' });
 
                             return;
                         }
@@ -151,7 +151,7 @@ export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<Lis
                                 my: 'bottom right',
                                 offset: '-20 -20'
                             },
-                        }, { position: 'bottom center', direction: 'up-stack' });
+                        }, { direction: 'up-stack' });
                     },
                     textRender: () => {
                         return <> { `Действительно хотите удалить Тестовый элемент с идентификатором ${originalTest!.id}?` } </>;
@@ -170,7 +170,7 @@ export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<Lis
                     my: 'bottom right',
                     offset: '-20 -20'
                 },
-            }, { position: 'bottom center', direction: 'up-stack' });
+            }, { direction: 'up-stack' });
 
     }, [deleteTestDataAsync, isXSmall, listRef, setTestList]);
 

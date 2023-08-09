@@ -19,7 +19,7 @@ class TestListRepository:
 
 
     def _dump(self) -> bool:
-        with open(self.data_path, 'w') as file:
+        with open(self.data_path, 'w', encoding='utf-8') as file:
             json = self.test_list.json()
             dumped_bytes = file.write(json)
 
