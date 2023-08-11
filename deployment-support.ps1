@@ -1,6 +1,6 @@
 $GREEN = "`e[32m"
 $RESET = "`e[0m"
-$IPADDR = "10.10.10.1"
+$IPADDR = "omega-8f79"
 $ACCOUNT = 'root'
 $APP_ROOT = "/mnt/mmcblk0p1/eta-regulator-board" # /home/eta-regulator-board
 
