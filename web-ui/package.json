@@ -1,5 +1,5 @@
 {
-  "name": "energytechaudit.mobiletracker.webclient",
+  "name": "eta-regulator-board-web-ui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -38,7 +38,7 @@
     "eject": "react-scripts eject",
     "build-themes": "devextreme build",
     "postinstall": "npm run build-themes",
-    "lint": "eslint ."
+    "lint": "eslint src"
   },
   "eslintConfig": {
     "extends": "react-app",

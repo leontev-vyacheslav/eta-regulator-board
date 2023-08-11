@@ -1,16 +1,62 @@
-$GREEN = "`e[32m"
-$RESET = "`e[0m"
+Import-Module $PSScriptRoot\..\deployment-support.ps1 -Force
 
-Write-Host "${GREEN}Shutting down 'eta-regulator-board-web-ui' and removing orignal files...${RESET}"
-ssh root@10.10.10.1 'rm -rf /mnt/mmcblk0p1/eta-regulator-board/web-ui/'
+# Check connection
+$testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1
+If($testConnectionStatus.Status -ne "Success")
+{
+    Write-Host "Failed to connect to the device ${IPADDR}." -ForegroundColor Red
+    Write-Host
+
+    Exit 1
+}
+
+Write-Host "Connection with the device was established!" -ForegroundColor Green
+
+# Bump up the app build version
+Write-Host "Bump up '$WEB_UI_APP_NAME' build version before delpoyment ($buildDateTimeMark)..." -ForegroundColor Green
+Set-AppVersion `
+    -RelativePath "./src/constants/app-constants.ts" `
+    -SearchPattern "version:" `
+    -Substitution "        version: 'v.0.1.${buildDateTimeMark}'"
 Start-Sleep -Seconds 2
 Write-Host
 
-Write-Host "${GREEN}Copying updated files...${RESET}"
-scp -r build root@10.10.10.1:/mnt/mmcblk0p1/eta-regulator-board/web-ui
+
+# Sync date&time on OpenWrt OS
+Sync-DateTime
+
+
+# Rebuilding the app
+Write-Host "${GREEN}Rebuilding '$WEB_UI_APP_NAME'...${RESET}"
+npm run build
 Start-Sleep -Seconds 2
 Write-Host
 
-Write-Host "${GREEN}Restarting UHTTPD web server...${RESET}"
-ssh root@10.10.10.1 '/etc/init.d/uhttpd restart'
+
+# Initializing the app folders
+Initialize-AppFolder `
+    -AppRootFolder "/web-ui"
+
+
+
+Write-Host "Shutting down '$WEB_UI_APP_NAME' and removing orignal files..." -ForegroundColor Green
+ssh ${ACCOUNT}@${IPADDR} "rm -rf ${APP_ROOT}/web-ui/"
+Start-Sleep -Seconds 2
+Write-Host
+
+
+Write-Host "Deleting JS and CSS source maps files..." -ForegroundColor Green
+Get-ChildItem -Path "./build" -Recurse -Include "*.map" | Remove-Item -Force -Recurse
+Start-Sleep -Seconds 2
+Write-Host
+
+
+Write-Host "Copying updated files..." -ForegroundColor Green
+scp -r build ${ACCOUNT}@${IPADDR}:${APP_ROOT}/web-ui
+Start-Sleep -Seconds 2
+Write-Host
+
+
+Write-Host "Restarting UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
+ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd restart'
 Start-Sleep -Seconds 2

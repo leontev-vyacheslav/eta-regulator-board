@@ -1,16 +1,22 @@
 import { createElement } from 'react';
 import { alert, confirm } from 'devextreme/ui/dialog';
+import dxPopup, { ToolbarItem } from 'devextreme/ui/popup';
+import dxTextBox, { Properties } from 'devextreme/ui/text_box';
+import devices from 'devextreme/core/devices';
 import * as AppIcons from '../constants/app-icons';
-import { SimpleDialogContentModel, SimpleDialogModel } from '../models/simple-dialog';
+import { PromptSimpleDialogModel, SimpleDialogContentModel, SimpleDialogModel } from '../models/simple-dialog';
 import ReactDOMServer from 'react-dom/server';
-
+import AppConstants from '../constants/app-constants';
 
 const dialogContentRender = ({ iconName, iconSize, iconColor, textRender }: SimpleDialogContentModel) => {
+
+    iconColor = iconColor ? iconColor : AppConstants.colors.themeBaseAccent;
+
     function innerContent() {
         return (
             <div style={ { display: 'flex', alignItems: 'center' } }>
-                { createElement((AppIcons as any)[iconName], { size: iconSize ? iconSize : 36, style: { color: iconColor ? iconColor : '#ff5722' } }) }
-                <span style={ { marginLeft: 10 } }>{ textRender() }</span>
+                {createElement((AppIcons as any)[iconName], { size: iconSize = iconSize ? iconSize : 24, style: { alignSelf: 'flex-start', color: iconColor ? iconColor : '#ff5722' } })}
+                {textRender ? <span style={ { marginLeft: 10 } }>{textRender()}</span> : null}
             </div>
         );
     }
@@ -20,11 +26,10 @@ const dialogContentRender = ({ iconName, iconSize, iconColor, textRender }: Simp
     );
 }
 
-const showConfirmDialog = ({ title, iconName, iconSize, iconColor, textRender, callback } : SimpleDialogModel) => {
-
+const showConfirmDialog = ({ title, iconName, iconSize, iconColor, textRender, callback }: SimpleDialogModel) => {
     confirm(dialogContentRender({ iconName, iconSize, iconColor, textRender }), title).then((dialogResult) => {
         if (dialogResult) {
-            if(callback) {
+            if (callback) {
                 callback();
             }
         }
@@ -39,4 +44,93 @@ const showAlertDialog = ({ title, iconName, iconSize, iconColor, textRender, cal
     });
 };
 
-export { showConfirmDialog, showAlertDialog };
+const showPromptDialog = ({ title, iconName, iconSize, iconColor, textRender, callback, text }: PromptSimpleDialogModel) => {
+
+    textRender = textRender
+        ? textRender
+        : () => {
+            return <div>Введите текстовое значение</div>
+        };
+
+    const root = document.querySelector('#root');
+
+    if (!root) {
+        return;
+    }
+
+    root.insertAdjacentHTML('beforeend', '<div id="dx-prompt-dialog"></div>');
+    const element = document.querySelector('#dx-prompt-dialog');
+    let textBox: dxTextBox<Properties> | null = null;
+
+    const buildContent = () => {
+        const contentContainerElement = document.createElement('div');
+
+        const labelElement = document.createElement('div');
+        labelElement.style.marginBottom = '15px';
+        labelElement.innerHTML = dialogContentRender({ iconName, iconSize, iconColor, textRender })
+        contentContainerElement.insertAdjacentElement('beforeend', labelElement);
+
+        const textBoxElement = document.createElement('div');
+        contentContainerElement.insertAdjacentElement('beforeend', textBoxElement)
+        textBox = new dxTextBox(textBoxElement, {
+            value: text,
+            label: 'Prompt text',
+            labelMode: 'static'
+        } as Properties);
+
+        return contentContainerElement;
+    };
+
+    const popupToolbars: ToolbarItem[] = [{
+        widget: 'dxButton',
+        toolbar: 'bottom',
+        location: 'center',
+        options: {
+            text: 'Ok',
+            width: 100,
+            onClick: async () => {
+                if (callback) {
+                    await callback({ text: textBox?.option('text') });
+                    popup.hide();
+                }
+            },
+        },
+    }, {
+        widget: 'dxButton',
+        toolbar: 'bottom',
+        location: 'center',
+        options: {
+            text: 'Отмена',
+            width: 100,
+            onClick: () => {
+                popup.hide();
+            },
+        },
+    }];
+
+    const popup = new dxPopup(element!, {
+        title: title,
+        showCloseButton: false,
+        width: devices.current().phone ? '90%' : '100%',
+        maxWidth: 600,
+        height: 'auto',
+        toolbarItems: popupToolbars,
+        onHidden() {
+            element?.remove();
+        },
+        contentTemplate: buildContent,
+        animation: {
+            hide: {
+                type: 'fadeOut'
+            },
+            show: {
+                type: 'pop'
+            }
+        }
+    });
+
+    popup.show();
+};
+
+
+export { showConfirmDialog, showAlertDialog, showPromptDialog };

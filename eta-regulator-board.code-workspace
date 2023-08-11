@@ -15,8 +15,13 @@
     ],
     "settings": {
         "[python]": {
-            "editor.defaultFormatter": "ms-python.python"
+            "editor.defaultFormatter": "ms-python.python",
+            "editor.codeActionsOnSave": {
+                "source.organizeImports": true
+            }
         },
-        "python.formatting.provider": "none"
+        "python.formatting.provider": "none",
+        "python.languageServer": "Pylance",
+        "powershell.cwd": "d:\\Projects\\Eta\\eta-regulator-board"
     }
 }

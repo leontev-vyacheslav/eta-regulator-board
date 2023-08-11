@@ -132,7 +132,9 @@ Then, restart the uHTTPd service to apply the changes:
 
 Finally, copy the static js-bundle to the appropriate directory on your OpenWrt OS of the Omega2 device.
 
-## 8. How to create a python virtual environment based on certain version a python  interpreter (Windows)?
+## 8. How can I start a shell script after reboot OS linux?
+
+## 9. How to create a python virtual environment based on certain version a python  interpreter (Windows)?
 
 ```bash
 py -3.6 -m venv .venv
@@ -144,3 +146,121 @@ Now you have the python package manager and will use it for extending python lan
 ```bash
 python3 -m pip install flask, flask-cors
 ```
+
+## 10. How to properly perform a factory reset Omega2 device and to setup a production environment ?
+
+### 1. Need to execute three following command in th CLI, like that
+
+```shell
+    firstboot -y
+    sync
+    reboot
+```
+
+### 2. Wait 2-3 minutes, turn off your wifi adapter on the developer machine
+
+### 3. Connect to Omega2 device wifi network, for example with credential: Omega-8f79 (12345678)
+
+### 4. In the browser of the developer machine explore using following url <http://omega-8f79.local/OnionOS/> or <http://192.168.3.1/>
+
+### 5. Login with credential: root (onioneer)
+
+### 6. Allow to connect to internet selected wifi adapter with internet access
+
+### 7. Check connection to developer machine by ssh, like that
+
+```shell
+ssh root@192.168.3.1
+```
+
+### 8. If necessary change the default ip address for the wlan adapter to 10.10.10.1
+
+/etc/config/network
+
+```yaml
+config interface 'wlan'
+    option type 'bridge'
+    option proto 'static'
+    option ipaddr '192.168.3.1'
+    option netmask '255.255.255.0'
+    option ip6assign '60'
+```
+
+```yaml
+    option ipaddr '10.10.10.1'
+```
+
+### 9. Restore an access through ssh with a key pair (see ## 5)
+
+### 10. Restore an access to web-ui app (see ## 7)
+
+### 11. Install python3
+
+```shell
+opkg update
+opkg install python3
+```
+
+(free 14)
+
+### 12. Install a python package manager PIP
+
+```shell
+opkg install python3-pip
+```
+
+(free 11M)
+
+### 13. Install the FLASK library
+
+```shell
+python3 -m pip install flask flask-cors flask_pydantic
+```
+
+It will install many packages with itself:
+
+itsdangerous,typing-extensions,zipp,importlib-metadata, click,
+MarkupSafe, Jinja2, dataclasses, Werkzeug,
+flask, flask-cors, pydantic, flask-pydantic
+
+(free 9M)
+
+### 14. Deploy applications using deploy.ps1 in the appropriate project folders
+
+## 11. How to format microsd card on Omega2+?
+
+```bash
+top | grep mnt              # find all process depend on mounted storage device
+
+kill xxx                    # kill the flask web-api app and the other processes blocked the mounted storage device
+
+/etc/init.d/uhttpd stop     # stop web-ui
+umount /dev/mmcblk0            # unmount storage device
+mkfs.ext4 /dev/mmcblk0      # format
+```
+
+## 12. Can we upgrade OpenWrt OS to latest version (OpenWrt 21.02.0) on the Onion Omega2/2+ device?
+
+### 1. Get current version
+
+<https://openwrt.org/toh/linksys/wrt610n/sysinfo>
+
+```shell
+    cat /etc/openwrt_release
+    cat /proc/version
+    cat /proc/cpuinfo
+```
+
+<https://openwrt.org/docs/guide-user/network/dsa/upgrading-to-2102?dataflt%5BBrand*%7E%5D=Onion>
+
+<https://yoursunny.com/t/2019/omega2pro-openwrt/>
+<https://openwrt.org/toh/hwdata/onion/onion_omega2plus>
+
+sysupgrade /mnt/mmcblk0p1/openwrt-22.03.5-ramips-mt76x8-onion_omega2p-squashfs-sysupgrade.bin
+
+root@Omega-7995:~# sysupgrade /mnt/mmcblk0p1/openwrt-22.03.5-ramips-mt76x8-onion_omega2p-squashfs-sysupgrade.bin
+Image not in /tmp, copying...
+Saving config files...
+Commencing upgrade. Closing all shell sessions.
+Connection to 192.168.3.1 closed by remote host.
+Connection to 192.168.3.1 closed.

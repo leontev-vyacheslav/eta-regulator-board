@@ -56,17 +56,17 @@ const Header = ({ title, menuToggleEnabled,  toggleMenu } : HeaderProps) => {
                 <Item location={ 'after' } locateInMenu={ 'auto' } menuItemTemplate={ 'workDayWidgetTemplate' } >
                     <WorkDateWidget />
                 </Item>
-                <Item location={ 'after' } locateInMenu={ 'auto' } menuItemTemplate={ 'userPanelTemplate' }>
+                {/* <Item location={ 'after' } locateInMenu={ 'auto' } menuItemTemplate={ 'userPanelTemplate' }>
                     <Button className={ 'user-button authorization' } stylingMode={ 'text' }>
                         <UserPanel menuMode={ 'context' }/>
                     </Button>
-                </Item>
+                </Item> */}
 
                 <Template name={ 'userPanelTemplate' }>
                     <UserPanel menuMode={ 'list' }/>
                 </Template>
                 <Template name={ 'workDayWidgetTemplate' }>
-                    <div style={ { display: 'flex', alignItems: 'center', borderBottomColor: '#d8d8d8', borderBottomWidth: 1, borderBottomStyle: 'solid'  } } className={ 'dx-item-content dx-list-item-content' }>
+                    <div style={ { display: 'flex', alignItems: 'center', /*borderBottomColor: '#d8d8d8', borderBottomWidth: 1, borderBottomStyle: 'solid' */  } } className={ 'dx-item-content dx-list-item-content' }>
                         <span className={ 'dx-icon dx-icon-info dx-list-item-icon' }/>
                         <WorkDateWidget outerStyle={ { marginLeft: 15 } }/>
                     </div>

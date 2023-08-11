@@ -1,8 +1,5 @@
-from dataclasses import dataclass
-from typing import List
-from models.test_model import TestModel
+from models.list_base_model import ListBaseModel
 
 
-@dataclass
-class TestListModel:
-    items: List[TestModel]
+class TestListModel(ListBaseModel):
+    pass

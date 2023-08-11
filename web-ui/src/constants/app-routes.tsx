@@ -1,5 +1,5 @@
 import { withNavigationWatcher } from '../contexts/navigation';
-import { HomePage,  SettingsPage, AboutPage, SignOutPage } from '../pages';
+import { HomePage,  SettingsPage, AboutPage, SignOutPage, DebugPage } from '../pages';
 
 /*
 const AboutPage = lazy(() => import('../pages/about/about'));
@@ -16,6 +16,10 @@ const routes = [
     {
         path: '/home',
         component: HomePage,
+    },
+    {
+        path: '/debug',
+        component: DebugPage
     },
     {
         path: '/settings',

@@ -1,10 +1,13 @@
+from flask_pydantic import validate
 from app import app
-from responses.json_response import JsonResponse
+from models.message_model import MessageModel
 
 
-@app.get('/')
+@app.route('/', methods=['GET'])
+@app.api_route('/', methods=['GET'])
+@validate()
 def home():
 
-    return JsonResponse({
-        'message': 'eta-regulator-board-web-api'
-    })
+    return MessageModel(
+        message='Eta Regulator Board Web API v.0.1.20230811-075757'
+    )
