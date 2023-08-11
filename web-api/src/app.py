@@ -10,7 +10,7 @@ from models.shutdown_request_model import ShutdownRequestModel
 app = Flask(__name__)
 CORS(app,
      allow_headers=['*'],
-     methods=['GET', 'POST',  'PUT', 'DELETE'],
+     methods=['GET', 'POST', 'PUT', 'DELETE'],
      origins=['*']
     )
 

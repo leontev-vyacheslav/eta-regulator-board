@@ -34,7 +34,8 @@ Initialize-AppFolder `
 
 # Shutting down 'eta-regulator-board-web-api' and removing orignal files...
 Write-Host "Shutting down '$WEB_API_APP_NAME' and removing orignal files..."  -ForegroundColor Green
-ssh ${ACCOUNT}@${IPADDR} "wget --post-data='security_pass=onioneer' ${WEB_API_SHUTDOWN_ENDPOINT}"
+# ssh ${ACCOUNT}@${IPADDR} "wget --post-data='security_pass=onioneer' --tries=2 ${WEB_API_SHUTDOWN_ENDPOINT}"
+ssh ${ACCOUNT}@${IPADDR} "cd ${APP_ROOT}/web-api/src;kill `$(cat PID_FILE)"
 ssh ${ACCOUNT}@${IPADDR} "rm -rf ${APP_ROOT}/web-api/src/"
 Start-Sleep -Seconds 2
 Write-Host
@@ -73,8 +74,8 @@ Start-Sleep -Seconds 2
 Write-Host
 
 
-# Compiling to byte for python specific version
-Write-Host "Compiling to byte for python specific version..." -ForegroundColor Green
+# Compiling to bytecode for python specific version
+Write-Host "Compiling to bytecode for python specific version..." -ForegroundColor Green
 ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/; python3 -m compileall -b src"
 Start-Sleep -Seconds 2
 Write-Host

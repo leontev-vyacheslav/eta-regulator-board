@@ -238,3 +238,29 @@ kill xxx                    # kill the flask web-api app and the other processes
 umount /dev/mmcblk0            # unmount storage device
 mkfs.ext4 /dev/mmcblk0      # format
 ```
+
+## 12. Can we upgrade OpenWrt OS to latest version (OpenWrt 21.02.0) on the Onion Omega2/2+ device?
+
+### 1. Get current version
+
+<https://openwrt.org/toh/linksys/wrt610n/sysinfo>
+
+```shell
+    cat /etc/openwrt_release
+    cat /proc/version
+    cat /proc/cpuinfo
+```
+
+<https://openwrt.org/docs/guide-user/network/dsa/upgrading-to-2102?dataflt%5BBrand*%7E%5D=Onion>
+
+<https://yoursunny.com/t/2019/omega2pro-openwrt/>
+<https://openwrt.org/toh/hwdata/onion/onion_omega2plus>
+
+sysupgrade /mnt/mmcblk0p1/openwrt-22.03.5-ramips-mt76x8-onion_omega2p-squashfs-sysupgrade.bin
+
+root@Omega-7995:~# sysupgrade /mnt/mmcblk0p1/openwrt-22.03.5-ramips-mt76x8-onion_omega2p-squashfs-sysupgrade.bin
+Image not in /tmp, copying...
+Saving config files...
+Commencing upgrade. Closing all shell sessions.
+Connection to 192.168.3.1 closed by remote host.
+Connection to 192.168.3.1 closed.
