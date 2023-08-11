@@ -2,10 +2,12 @@ import os
 
 from flask import Flask, send_from_directory
 from flask_cors import CORS
+
 from flask_pydantic import validate
 
 from decorators.app_router_prefix import app_route_prefix
 from models.shutdown_request_model import ShutdownRequestModel
+
 
 app = Flask(__name__)
 CORS(app,

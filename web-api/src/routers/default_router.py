@@ -1,5 +1,4 @@
 from flask_pydantic import validate
-
 from app import app
 from models.message_model import MessageModel
 
