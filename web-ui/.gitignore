@@ -28,5 +28,4 @@ yarn-error.log*
 
 .eslintcache
 
-
-
+.vscode/chrome

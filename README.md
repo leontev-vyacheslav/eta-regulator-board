@@ -241,7 +241,9 @@ mkfs.ext4 /dev/mmcblk0      # format
 
 ## 12. Can we upgrade OpenWrt OS to latest version (OpenWrt 21.02.0) on the Onion Omega2/2+ device?
 
-### 1. Get current version
+<http://repo.onioniot.com/>
+
+### 1. Get sysinfo
 
 <https://openwrt.org/toh/linksys/wrt610n/sysinfo>
 
@@ -270,3 +272,6 @@ Commencing upgrade. Closing all shell sessions.
 Connection to 192.168.3.1 closed by remote host.
 
 Connection to 192.168.3.1 closed.
+
+
+https://community.onion.io/topic/4963/beta-openwrt-22-03-firmware-available-your-feedback-is-needed

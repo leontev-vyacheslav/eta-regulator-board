@@ -2,20 +2,40 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "web-ui",
-            "consoleTitle": "web-ui",
-            "type": "node",
+            "name": "web-tasks-beat",
+            "consoleTitle": "web-tasks-beat",
+            "type": "python",
             "request": "launch",
-            "runtimeArgs": [
-                "run-script",
-                "start"
-            ],
-            "runtimeExecutable": "npm",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "cwd": "${workspaceRoot}/web-ui",
+            "module": "celery",
             "console": "integratedTerminal",
+            "cwd": "${workspaceRoot}/web-api/src",
+            "args": [
+                "-A",
+                "app.celery",
+                "beat",
+                "-l",
+                "info"
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "web-tasks-worker",
+            "consoleTitle": "web-tasks-worker",
+            "type": "python",
+            "request": "launch",
+            "module": "celery",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceRoot}/web-api/src",
+            "args": [
+                "-A",
+                "app.celery",
+                "worker",
+                "-l",
+                "info",
+                "--concurrency=3",
+                "-E"
+            ],
+            "justMyCode": false
         },
         {
             "name": "web-api",
@@ -35,6 +55,35 @@
             ],
             "justMyCode": false,
             "console": "integratedTerminal"
-        }
+        },
+        {
+            "name": "web-ui",
+            "consoleTitle": "web-ui",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceRoot}/web-ui/src",
+            "userDataDir": "${workspaceRoot}//web-ui/.vscode/chrome",
+            "sourceMapPathOverrides": {
+                "webpack:///src/*": "${webRoot}/*"
+            },
+            "preLaunchTask": "npm: start"
+        },
+        // {
+        //     "name": "web-ui-run",
+        //     "consoleTitle": "web-ui",
+        //     "type": "node",
+        //     "request": "launch",
+        //     "runtimeArgs": [
+        //         "run-script",
+        //         "start"
+        //     ],
+        //     "runtimeExecutable": "npm",
+        //     "skipFiles": [
+        //         "<node_internals>/**"
+        //     ],
+        //     "cwd": "${workspaceRoot}/web-ui",
+        //     "console": "integratedTerminal",
+        // },
     ]
 }

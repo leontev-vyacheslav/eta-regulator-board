@@ -1,20 +1,16 @@
 {
     "folders": [
         {
-            "name": "omega-8f79",
-            "uri": "ssh://omega-8f79/"
-        },
-        {
             "name": "eta-regulator-board",
-            "path": "./",
+            "path": "."
         },
         {
             "name": "eta-regulator-board-web-ui",
-            "path": "./web-ui"
+            "path": "web-ui"
         },
         {
             "name": "eta-regulator-board-web-api",
-            "path": "./web-api"
+            "path": "web-api"
         }
     ],
     "settings": {
