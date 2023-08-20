@@ -16,7 +16,7 @@
                 "-l",
                 "info"
             ],
-            "justMyCode": true
+            "justMyCode": false
         },
         {
             "name": "web-tasks-worker",

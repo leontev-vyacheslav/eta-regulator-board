@@ -1,14 +1,13 @@
 import os
 import pathlib
+from datetime import timedelta
 
 from flask import Flask, send_from_directory
 from flask_cors import CORS
-
 from flask_pydantic import validate
 
 from decorators.app_router_prefix import app_route_prefix
 from models.shutdown_request_model import ShutdownRequestModel
-
 
 app = Flask(__name__)
 CORS(app,
@@ -42,16 +41,34 @@ def shutdown(form: ShutdownRequestModel):
 
 from celery import Celery
 
-data_path = os.path.join(pathlib.Path(os.path.dirname(__file__)).__str__(), 'data')
+celery_data_path = pathlib.Path(__file__).parent.resolve().joinpath('data/celery')
+
+celery_backend_folder = celery_data_path.joinpath('results')
+celery_backend_folder.mkdir(exist_ok=True, parents=True)
+
+celery_broker_folders = {
+    'data_folder_in': celery_data_path.joinpath('in'),
+    'data_folder_out': celery_data_path.joinpath('in'),  # has to be the same as 'data_folder_in'
+    'processed_folder': celery_data_path.joinpath('processed')
+}
+
+for celery_broker_folder in celery_broker_folders.values():
+    celery_broker_folder.mkdir(exist_ok=True)
+
 
 class CeleryConfig:
-    timezone = 'UTC'
-    enable_utc = True
     worker_pool='solo'
     ignore_result = False
 
-    broker_url = 'sqla+sqlite:///' + os.path.join(data_path, 'eta-regulator-board-tasks-broker.db')
-    result_backend = 'db+sqlite:///' +  os.path.join(data_path, 'eta-regulator-board-tasks-backend.db')
+    broker_url = 'filesystem://'
+    broker_transport_options = {k: str(f) for k, f in celery_broker_folders.items()}
+    result_backend = 'file://{}'.format(str(celery_backend_folder).replace('\\', '/'))
+
+    result_expires=10
+    task_serializer = 'json'
+    persist_results = False
+    result_serializer = 'json'
+    accept_content = ['json']
 
     broker_connection_retry_on_startup = True
     beat_schedule = {
@@ -61,7 +78,6 @@ class CeleryConfig:
             'args': (16, 16)
         },
     }
-    accept_content = ['json']
 
 celery = Celery()
 celery.config_from_object(CeleryConfig)
@@ -70,7 +86,7 @@ celery.config_from_object(CeleryConfig)
 def simple_task(x, y):
 
     file = open('./data/eta-regulator-board-tasks.dat', 'a')
-    file.write(f'Result: {x + y} \n')
+    file.write(f'Result: {x + y}\n')
 
     return f'Result: {x + y}'
 

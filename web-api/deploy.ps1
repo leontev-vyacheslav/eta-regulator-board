@@ -1,4 +1,4 @@
-Import-Module $PSScriptRoot\..\deployment-support.ps1 -Force
+Import-Module $PSScriptRoot\..\deployment\deployment-support.ps1 -Force
 
 # Check connection
 $testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1
@@ -44,6 +44,7 @@ Write-Host
 # Deleting compiled Python version dependent modules...
 Write-Host "Deleting compiled Python version dependent modules..."  -ForegroundColor Green
 Get-ChildItem -Path "./src" -Recurse -Include "__pycache__" | Remove-Item -Force -Recurse
+Get-ChildItem -Path "./src/data" -Recurse -Include "celery" | Remove-Item -Force -Recurse
 Start-Sleep -Seconds 2
 Write-Host
 
@@ -57,30 +58,28 @@ Write-Host
 
 # Adding the ability to startup the application after OS reboot...
 Write-Host "Adding the ability to startup '$WEB_API_APP_NAME' after OS reboot..." -ForegroundColor Green
+scp ..\deployment\configs\rc.local ${ACCOUNT}@${IPADDR}:/etc/rc.local
 ssh ${ACCOUNT}@${IPADDR} 'chmod 755 /etc/rc.local'
-ssh ${ACCOUNT}@${IPADDR} "echo -e '#!/bin/sh -e\n\ncd ${APP_ROOT}/web-api/\n\nsh ""startup.sh""\n\nexit 0\n\n# ${WEB_API_APP_NAME} date&time build mark ${buildDateTimeMark}' > /etc/rc.local"
+ssh ${ACCOUNT}@${IPADDR} "echo -e '# ${WEB_API_APP_NAME} date&time build mark ${buildDateTimeMark}' >> /etc/rc.local"
 Start-Sleep -Seconds 2
 Write-Host
-
-# problem!
-# ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/;python3 -m venv --copies .venv"
-# ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/;source .venv/bin/activate;python3 -m pip install -r requirements.txt"
-
 
 # Installing dependencies
-Write-Host "Installing dependencies..." -ForegroundColor Green
-ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/;python3 -m pip install -r requirements.txt"
-Start-Sleep -Seconds 2
-Write-Host
-
+$reinstallFlag = Read-Host -Prompt 'Do you want to install/reinstall all Python dependencies (yes/no)?'
+if ($reinstallFlag -eq 'yes') {
+    Write-Host "Installing dependencies..." -ForegroundColor Green
+    ssh ${ACCOUNT}@${IPADDR} "cd ${APP_ROOT}/web-api/;python3 -m pip install -r requirements.txt --prefix ${APP_ROOT}"
+    Start-Sleep -Seconds 2
+    Write-Host
+}
 
 # Compiling to bytecode for python specific version
 Write-Host "Compiling to bytecode for python specific version..." -ForegroundColor Green
-ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/; python3 -m compileall -b src"
+ssh ${ACCOUNT}@${IPADDR} "cd ${APP_ROOT}/web-api/; python3 -m compileall -b src"
 Start-Sleep -Seconds 2
 Write-Host
 
 
 # Launching 'eta-regulator-board-web-api...
 Write-Host "Launching '$WEB_API_APP_NAME'..." -ForegroundColor Green
-ssh root@${IPADDR} "cd ${APP_ROOT}/web-api/; sh startup.sh"
+ssh ${ACCOUNT}@${IPADDR} "cd ${APP_ROOT}/web-api/; sh startup.sh"

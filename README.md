@@ -274,4 +274,9 @@ Connection to 192.168.3.1 closed by remote host.
 Connection to 192.168.3.1 closed.
 
 
-https://community.onion.io/topic/4963/beta-openwrt-22-03-firmware-available-your-feedback-is-needed
+<https://community.onion.io/topic/4963/beta-openwrt-22-03-firmware-available-your-feedback-is-needed>
+
+
+## 13. Celery
+
+<https://github.com/mossadnik/celery-example-local-filesystem/tree/master>

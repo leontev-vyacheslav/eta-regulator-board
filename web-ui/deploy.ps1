@@ -1,4 +1,4 @@
-Import-Module $PSScriptRoot\..\deployment-support.ps1 -Force
+Import-Module $PSScriptRoot\..\deployment\deployment-support.ps1 -Force
 
 # Check connection
 $testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1
@@ -21,10 +21,8 @@ Set-AppVersion `
 Start-Sleep -Seconds 2
 Write-Host
 
-
 # Sync date&time on OpenWrt OS
 Sync-DateTime
-
 
 # Rebuilding the app
 Write-Host "${GREEN}Rebuilding '$WEB_UI_APP_NAME'...${RESET}"
@@ -33,30 +31,33 @@ Start-Sleep -Seconds 2
 Write-Host
 
 
+Write-Host "Shutdowning UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
+ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd stop'
+Start-Sleep -Seconds 2
+
 # Initializing the app folders
 Initialize-AppFolder `
     -AppRootFolder "/web-ui"
-
-
 
 Write-Host "Shutting down '$WEB_UI_APP_NAME' and removing orignal files..." -ForegroundColor Green
 ssh ${ACCOUNT}@${IPADDR} "rm -rf ${APP_ROOT}/web-ui/"
 Start-Sleep -Seconds 2
 Write-Host
 
-
 Write-Host "Deleting JS and CSS source maps files..." -ForegroundColor Green
 Get-ChildItem -Path "./build" -Recurse -Include "*.map" | Remove-Item -Force -Recurse
 Start-Sleep -Seconds 2
 Write-Host
-
 
 Write-Host "Copying updated files..." -ForegroundColor Green
 scp -r build ${ACCOUNT}@${IPADDR}:${APP_ROOT}/web-ui
 Start-Sleep -Seconds 2
 Write-Host
 
+Write-Host "Updating UHTTPD configuration for '$WEB_UI_APP_NAME'..." -ForegroundColor Green
+scp ..\deployment\configs\uhttpd ${ACCOUNT}@${IPADDR}:/etc/config/uhttpd
+Start-Sleep -Seconds 2
 
-Write-Host "Restarting UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd restart'
+Write-Host "Starting UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
+ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd start'
 Start-Sleep -Seconds 2
