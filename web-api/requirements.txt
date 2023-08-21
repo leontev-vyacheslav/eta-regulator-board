@@ -3,4 +3,4 @@ flask-cors
 dataclasses
 Flask-Pydantic
 gunicorn
-celery
+celery==4.4.7
