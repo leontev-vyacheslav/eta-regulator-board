@@ -2,6 +2,7 @@
 git init
 git config --global --add safe.directory /workspaces/eta-regulator-board
 git remote add -t \* -f origin https://github.com/leontev-vyacheslav/eta-regulator-board
+git clean -d -f
 git checkout master
 git reset --hard
 
