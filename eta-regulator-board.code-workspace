@@ -5,11 +5,11 @@
             "path": "."
         },
         {
-            "name": "eta-regulator-board-web-ui",
+            "name": "web-ui",
             "path": "web-ui"
         },
         {
-            "name": "eta-regulator-board-web-api",
+            "name": "web-api",
             "path": "web-api"
         }
     ],
