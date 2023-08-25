@@ -35,7 +35,7 @@
 
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
-				"ms-python.python",
+				"ms-python.python@2022.8.0",
 				"ms-python.vscode-pylance"
 			]
 		}
@@ -43,10 +43,14 @@
 
 
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	// "remoteUser": "vscode",
+	"remoteUser": "vscode",
 	"forwardPorts": [3000, 5000],
 
 	"features": {
 		"powershell": "latest"
-	}
+	},
+	"mounts": [
+		"source=eta-regulator-board-node_modules,target=${containerWorkspaceFolder}/web-ui/src/node_modules"
+	],
+	"postCreateCommand": "sudo chown vscode nod_modules"
 }
