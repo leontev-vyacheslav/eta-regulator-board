@@ -2,7 +2,7 @@ const AppConstants = {
     appInfo: {
         companyName: 'Инженерный Центр Энерготехаудит©',
         title: 'Регуляторы ЭТА24™',
-        version: 'v.0.1.20230817-195404'
+        version: 'v.0.1.20230825-032335'
     },
 
     noDataLongText: 'Нет данных для отображения',

@@ -24,14 +24,27 @@ Write-Host
 # Sync date&time on OpenWrt OS
 Sync-DateTime
 
-# Rebuilding the app
-Write-Host "${GREEN}Rebuilding '$WEB_UI_APP_NAME'...${RESET}"
-npm run build
-Start-Sleep -Seconds 2
-Write-Host
+$reinstallFlag = Read-Host -Prompt 'Do you want to install/reinstall all dependencies (yes/no)?'
+if ($reinstallFlag -eq 'yes') {
+    # Reinstall dependencies
+    Write-Host "${GREEN}Installing dependencies '$WEB_UI_APP_NAME'...${RESET}"
+    npm install
+    Start-Sleep -Seconds 2
+    Write-Host
+}
 
 
-Write-Host "Shutdowning UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
+$rebuildFlag = Read-Host -Prompt 'Do you want to rebuild app (yes/no)?'
+if ($rebuildFlag -eq 'yes') {
+    # Rebuilding the app
+    Write-Host "${GREEN}Rebuilding '$WEB_UI_APP_NAME'...${RESET}"
+    npm run build
+    Start-Sleep -Seconds 2
+    Write-Host
+}
+
+
+Write-Host "Shutting down UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
 ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd stop'
 Start-Sleep -Seconds 2
 
@@ -39,7 +52,7 @@ Start-Sleep -Seconds 2
 Initialize-AppFolder `
     -AppRootFolder "/web-ui"
 
-Write-Host "Shutting down '$WEB_UI_APP_NAME' and removing orignal files..." -ForegroundColor Green
+Write-Host "Removing orignal files '$WEB_UI_APP_NAME'..." -ForegroundColor Green
 ssh ${ACCOUNT}@${IPADDR} "rm -rf ${APP_ROOT}/web-ui/"
 Start-Sleep -Seconds 2
 Write-Host
@@ -55,7 +68,7 @@ Start-Sleep -Seconds 2
 Write-Host
 
 Write-Host "Updating UHTTPD configuration for '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-scp ..\deployment\configs\uhttpd ${ACCOUNT}@${IPADDR}:/etc/config/uhttpd
+scp ../deployment/configs/uhttpd ${ACCOUNT}@${IPADDR}:/etc/config/uhttpd
 Start-Sleep -Seconds 2
 
 Write-Host "Starting UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green

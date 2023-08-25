@@ -58,7 +58,7 @@ Write-Host
 
 # Adding the ability to startup the application after OS reboot...
 Write-Host "Adding the ability to startup '$WEB_API_APP_NAME' after OS reboot..." -ForegroundColor Green
-scp ..\deployment\configs\rc.local ${ACCOUNT}@${IPADDR}:/etc/rc.local
+scp ../deployment/configs/rc.local ${ACCOUNT}@${IPADDR}:/etc/rc.local
 ssh ${ACCOUNT}@${IPADDR} 'chmod 755 /etc/rc.local'
 ssh ${ACCOUNT}@${IPADDR} "echo -e '# ${WEB_API_APP_NAME} date&time build mark ${buildDateTimeMark}' >> /etc/rc.local"
 Start-Sleep -Seconds 2
