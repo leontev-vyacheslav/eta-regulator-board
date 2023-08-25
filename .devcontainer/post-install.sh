@@ -7,6 +7,8 @@ git reset --hard
 sudo apt-get update
 sudo apt-get install iputils-ping -y
 
-sudo ssh-keygen
+ssh-keygen # install keys for vscode user
 
 sudo apt-get install npm
+
+sudo setcap cap_net_raw=eip /opt/microsoft/powershell/7/pwsh   # https://github.com/PowerShell/PowerShell/issues/18585
