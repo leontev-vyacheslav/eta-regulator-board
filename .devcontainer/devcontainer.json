@@ -53,5 +53,5 @@
 	// "mounts": [
 	//	"source=eta-regulator-board-node_modules,target=${containerWorkspaceFolder}/web-ui/src/node_modules"
 	// ],
-	// "postCreateCommand": "sudo chown vscode nod_modules"
+	// "postCreateCommand": "sudo chown vscode node_modules"
 }
