@@ -13,7 +13,7 @@ class TestListRepository:
         current_path = pathlib.Path(os.path.dirname(__file__)).parent
         self.data_path = os.path.join(current_path.__str__(), 'data/tests.json')
 
-        with open(self.data_path, 'r') as file:
+        with open(self.data_path, 'r', encoding='utf-8') as file:
             json = file.read()
             self.test_list: TestListModel = TestListModel.parse_raw(json)
 

@@ -85,7 +85,7 @@ celery.config_from_object(CeleryConfig)
 @celery.task(name='app.simple_task')
 def simple_task(x, y):
 
-    file = open('./data/eta-regulator-board-tasks.dat', 'a')
+    file = open('./data/eta-regulator-board-tasks.dat', 'a', encoding='utf-8')
     file.write(f'Result: {x + y}\n')
 
     return f'Result: {x + y}'

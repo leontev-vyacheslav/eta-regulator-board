@@ -8,5 +8,14 @@
         "**/Thumbs.db": true,
         "**/__pycache__": true,
         "**/.venv": false,
-    }
+    },
+    "python.analysis.typeCheckingMode": "off",
+    "python.linting.pylintPath": ".venv/bin/pylint",
+    "python.linting.pylintArgs": [
+        "--disable=missing-function-docstring",
+        "--disable=redefined-builtin",
+        "--disable=missing-module-docstring",
+        "--disable=missing-class-docstring",
+        "--disable=invalid-name"
+      ],
 }
