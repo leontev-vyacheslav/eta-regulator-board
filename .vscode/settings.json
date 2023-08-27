@@ -9,5 +9,5 @@
         "**/web-api": true,
         "**/web-ui": true
     },
-    "python.defaultInterpreterPath": "/workspaces/eta-regulator-board-wsl/web-api/.venv/bin/python",
+    "python.defaultInterpreterPath": "/workspaces/eta-regulator-board/web-api/.venv/bin/python",
 }
