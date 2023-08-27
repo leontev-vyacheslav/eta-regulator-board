@@ -9,6 +9,7 @@
         "**/__pycache__": true,
         "**/.venv": false,
     },
+    "python.defaultInterpreterPath": "/workspaces/eta-regulator-board-wsl/web-api/.venv/bin/python",
     "python.analysis.typeCheckingMode": "off",
     "python.linting.pylintPath": ".venv/bin/pylint",
     "python.linting.pylintArgs": [
