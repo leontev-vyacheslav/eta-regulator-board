@@ -13,7 +13,6 @@ import { AppDataProvider } from './contexts/app-data';
 import { SharedAreaProvider } from './contexts/shared-area';
 import ruMessages from 'devextreme/localization/messages/ru.json';
 import { locale, loadMessages } from 'devextreme/localization';
-import React from 'react';
 
 function App () {
     // const { user } = useAuth();

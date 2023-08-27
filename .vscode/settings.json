@@ -8,5 +8,6 @@
         "**/Thumbs.db": true,
         "**/web-api": true,
         "**/web-ui": true
-    }
+    },
+    "python.defaultInterpreterPath": "./web-api/.venv/bin/python3",
 }
