@@ -9,7 +9,7 @@
         "**/__pycache__": true,
         "**/.venv": false,
     },
-    "python.defaultInterpreterPath": "/workspaces/eta-regulator-board/web-api/.venv/bin/python",
+    "python.defaultInterpreterPath": "/workspaces/eta-regulator-board/regulator-driver/.venv/bin/python",
     "python.analysis.typeCheckingMode": "off",
     "python.linting.pylintArgs": [
         "--disable=missing-function-docstring",
@@ -17,5 +17,5 @@
         "--disable=missing-module-docstring",
         "--disable=missing-class-docstring",
         "--disable=invalid-name"
-      ],
+    ],
 }

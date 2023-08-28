@@ -13,8 +13,8 @@
             "path": "web-api"
         },
         {
-            "name": "SSH FS - omega-8f79",
-            "uri": "ssh://omega-8f79/"
+            "name": "regulator-driver",
+            "path": "regulator-driver"
         }
     ],
     "settings": {
@@ -26,6 +26,5 @@
         },
         "python.formatting.provider": "none",
         "python.languageServer": "Pylance",
-        "powershell.cwd": "d:\\Projects\\Eta\\eta-regulator-board"
     }
 }

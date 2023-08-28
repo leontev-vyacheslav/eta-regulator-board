@@ -33,21 +33,13 @@
             },
             "preLaunchTask": "npm: start"
         },
-        // {
-        //     "name": "web-ui-run",
-        //     "consoleTitle": "web-ui",
-        //     "type": "node",
-        //     "request": "launch",
-        //     "runtimeArgs": [
-        //         "run-script",
-        //         "start"
-        //     ],
-        //     "runtimeExecutable": "npm",
-        //     "skipFiles": [
-        //         "<node_internals>/**"
-        //     ],
-        //     "cwd": "${workspaceRoot}/web-ui",
-        //     "console": "integratedTerminal",
-        // },
+        {
+            "name": "regulator-driver",
+            "consoleTitle": "regulator-driver",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceRoot}/regulator-driver/src/app.py",
+            "justMyCode": true
+        },
     ]
 }
