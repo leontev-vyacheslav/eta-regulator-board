@@ -1,8 +1,8 @@
 #!/bin/sh -e
 
-cd /mnt/mmcblk0p1/eta-regulator-board/web-api/
+cd /mnt/mmcblk0p1/eta-regulator-board/web-api/&&sh "startup.sh"
 
-sh "startup.sh"
+cd /mnt/mmcblk0p1/eta-regulator-board/driver/&&sh "startup.sh"
 
 exit 0
 

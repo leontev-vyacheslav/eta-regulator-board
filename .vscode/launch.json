@@ -34,11 +34,11 @@
             "preLaunchTask": "npm: start"
         },
         {
-            "name": "regulator-driver",
-            "consoleTitle": "regulator-driver",
+            "name": "driver",
+            "consoleTitle": "driver",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceRoot}/regulator-driver/src/app.py",
+            "program": "${workspaceRoot}/driver/src/app.py",
             "justMyCode": true
         },
     ]

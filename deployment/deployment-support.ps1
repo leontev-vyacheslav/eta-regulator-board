@@ -9,6 +9,7 @@ $buildDateTimeMark = Get-Date -Format "yyyyMMdd-HHmmss"
 
 $WEB_API_APP_NAME = "eta-regulator-board-web-api"
 $WEB_UI_APP_NAME = "eta-regulator-board-web-ui"
+$DRIVER_APP_NAME = "eta-regulator-board-driver"
 $WEB_API_SHUTDOWN_ENDPOINT = "http://127.0.0.1:5000/shutdown"
 
 function Set-AppVersion([string] $RelativePath, [string] $SearchPattern, [string] $Substitution)

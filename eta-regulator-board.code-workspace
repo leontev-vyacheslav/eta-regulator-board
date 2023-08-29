@@ -5,16 +5,20 @@
             "path": "."
         },
         {
-            "name": "web-ui",
-            "path": "web-ui"
+            "name": "driver",
+            "path": "driver"
         },
         {
             "name": "web-api",
             "path": "web-api"
         },
         {
-            "name": "regulator-driver",
-            "path": "regulator-driver"
+            "name": "web-ui",
+            "path": "web-ui"
+        },
+        {
+            "name": "SSH FS - omega-8f79",
+            "uri": "ssh://omega-8f79/"
         }
     ],
     "settings": {

@@ -1,0 +1,1 @@
+python3 src/app.py --main_thead_interval=60 --interval1=20 --interval2=120

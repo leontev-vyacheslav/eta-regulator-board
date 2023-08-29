@@ -12,10 +12,13 @@
     "python.defaultInterpreterPath": "/workspaces/eta-regulator-board/regulator-driver/.venv/bin/python",
     "python.analysis.typeCheckingMode": "off",
     "python.linting.pylintArgs": [
-        "--disable=missing-function-docstring",
+
         "--disable=redefined-builtin",
         "--disable=missing-module-docstring",
         "--disable=missing-class-docstring",
-        "--disable=invalid-name"
+        "--disable=invalid-name",
+        "--disable=logging-fstring-interpolation"
     ],
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
 }
