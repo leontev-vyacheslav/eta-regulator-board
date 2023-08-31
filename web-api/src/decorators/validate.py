@@ -1,6 +1,7 @@
 # https://stackoverflow.com/questions/34587634/get-query-string-as-function-parameters-on-flask
 # https://github.com/linsomniac/flask-publisher/blob/main/publisher.py
 from flask import request
+
 def validate(original_function):
     # Define additional code to be executed before and/or after the original function
     def wrapper_function(*args, **kwargs):

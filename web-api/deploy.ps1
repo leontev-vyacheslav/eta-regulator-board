@@ -1,4 +1,4 @@
-Import-Module $PSScriptRoot\..\deployment\deployment-support.ps1 -Force
+Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
 
 # Check connection
 $testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1
@@ -16,9 +16,9 @@ Write-Host
 # Bump up the app build version
 Write-Host "Bump up '$WEB_API_APP_NAME' build version before delpoyment ($buildDateTimeMark)..." -ForegroundColor Green
 Set-AppVersion `
-    -RelativePath "./src/routers/default_router.py" `
-    -SearchPattern "Eta Regulator Board Web API" `
-    -Substitution "        message='Eta Regulator Board Web API v.0.1.${buildDateTimeMark}'"
+    -RelativePath "./src/app.py" `
+    -SearchPattern "APP_VERSION = " `
+    -Substitution "APP_VERSION = 'v.0.1.${buildDateTimeMark}'"
 Start-Sleep -Seconds 2
 Write-Host
 

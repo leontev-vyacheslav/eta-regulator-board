@@ -1,12 +1,12 @@
 {
     "folders": [
         {
-            "name": "eta-regulator-board",
-            "path": "."
+            "name": ".workspace",
+            "path": "./"
         },
         {
-            "name": "driver",
-            "path": "driver"
+            "name": "tasks-driver",
+            "path": "tasks-driver"
         },
         {
             "name": "web-api",
@@ -15,20 +15,19 @@
         {
             "name": "web-ui",
             "path": "web-ui"
-        },
-        {
-            "name": "SSH FS - omega-8f79",
-            "uri": "ssh://omega-8f79/"
         }
     ],
     "settings": {
-        "[python]": {
-            "editor.defaultFormatter": "ms-python.python",
-            "editor.codeActionsOnSave": {
-                "source.organizeImports": true
-            }
-        },
-        "python.formatting.provider": "none",
         "python.languageServer": "Pylance",
+        "python.analysis.typeCheckingMode": "off",
+        "python.linting.pylintPath": "pylint",
+        "python.linting.pylintArgs": [
+            "--disable=redefined-builtin",
+            "--disable=missing-module-docstring",
+            "--disable=missing-class-docstring",
+            "--disable=missing-function-docstring",
+            "--disable=invalid-name",
+            "--disable=logging-fstring-interpolation",
+        ],
     }
 }

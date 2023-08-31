@@ -5,7 +5,7 @@ import sys
 from threading import Thread, get_ident
 from time import sleep
 
-app_version = 'v.0.1.20230829-115839'
+APP_VERSION = 'v.0.1.20230830-044744'
 
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s')
 main_logger = logging.getLogger('main_logger')
@@ -19,23 +19,20 @@ def background_task(interval_sec, message):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m1", "--main_thead_interval", type=int, default=60)
+    parser.add_argument("-m", "--main_thead_interval", type=int, default=60)
     parser.add_argument("-i1", "--interval1", type=int, default=10)
     parser.add_argument("-i2", "--interval2", type=int, default=5)
     args = parser.parse_args()
 
     main_logger.setLevel(logging.INFO)
-
-    main_logger_file_handler = logging.FileHandler('app.log')
-
-
+    main_logger_file_handler = logging.FileHandler('./tasks-driver/app.log')
     main_logger_file_handler.setLevel(logging.INFO)
     main_logger.addHandler(main_logger_file_handler)
 
     if __debug__:
         main_logger.addHandler(logging.StreamHandler(sys.stdout))
 
-    main_logger.info(f'Eta Regulator Board Web API {app_version}')
+    main_logger.info(f'Eta Regulator Board Web API {APP_VERSION}')
 
     deamons = [
         Thread(
@@ -60,5 +57,4 @@ def main():
 
 
 if __name__ == '__main__':
-
     main()

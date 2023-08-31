@@ -7,7 +7,7 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "**/web-api": true,
-        "**/web-ui": true
-    },
-    "python.defaultInterpreterPath": "/workspaces/eta-regulator-board/web-api/.venv/bin/python",
+        "**/web-ui": true,
+        "**/tasks-driver": true,
+    }
 }

@@ -4,6 +4,7 @@
         {
             "name": "web-api",
             "consoleTitle": "web-api",
+            // "python": "${workspaceFolder}/.venv/bin/python",
             "type": "python",
             "request": "launch",
             "module": "flask",
@@ -34,11 +35,12 @@
             "preLaunchTask": "npm: start"
         },
         {
-            "name": "driver",
-            "consoleTitle": "driver",
+            "name": "tasks-driver",
+            "consoleTitle": "tasks-driver",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceRoot}/driver/src/app.py",
+            // "python": "${workspaceRoot}/.venv/bin/python",
+            "program": "${workspaceRoot}/tasks-driver/src/app.py",
             "justMyCode": true
         },
     ]

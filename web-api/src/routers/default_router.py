@@ -1,5 +1,5 @@
 from flask_pydantic import validate
-from app import app
+from app import app, APP_VERSION
 from models.message_model import MessageModel
 
 
@@ -9,5 +9,5 @@ from models.message_model import MessageModel
 def home():
 
     return MessageModel(
-        message='Eta Regulator Board Web API v.0.1.20230827-122900'
+        message=f'Eta Regulator Board Web API {APP_VERSION}'
     )

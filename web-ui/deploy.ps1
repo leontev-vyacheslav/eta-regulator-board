@@ -1,4 +1,4 @@
-Import-Module $PSScriptRoot\..\deployment\deployment-support.ps1 -Force
+Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
 
 # Check connection
 $testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1

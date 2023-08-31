@@ -1,13 +1,14 @@
 import os
-import pathlib
-from datetime import timedelta
 
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_pydantic import validate
 
+
 from decorators.app_router_prefix import app_route_prefix
 from models.shutdown_request_model import ShutdownRequestModel
+
+APP_VERSION = 'v.0.1.20230829-115839'
 
 app = Flask(__name__)
 CORS(app,
@@ -35,9 +36,8 @@ def shutdown(form: ShutdownRequestModel):
         os.kill(os.getpid(), 9)
 
         return 'Shutting down...'
-    else:
 
-        return 'Shut down was rejected...'
+    return 'Shut down was rejected...'
 
 
 from routers import *

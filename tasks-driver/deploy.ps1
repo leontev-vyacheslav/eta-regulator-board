@@ -1,4 +1,4 @@
-Import-Module $PSScriptRoot\..\deployment\deployment-support.ps1 -Force
+Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
 
 # Check connection
 $testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1
@@ -17,8 +17,8 @@ Write-Host
 Write-Host "Bump up '$DRIVER_APP_NAME' build version before delpoyment ($buildDateTimeMark)..." -ForegroundColor Green
 Set-AppVersion `
     -RelativePath "./src/app.py" `
-    -SearchPattern "app_version = " `
-    -Substitution "app_version = 'v.0.1.${buildDateTimeMark}'"
+    -SearchPattern "APP_VERSION = " `
+    -Substitution "APP_VERSION = 'v.0.1.${buildDateTimeMark}'"
 Start-Sleep -Seconds 2
 Write-Host
 
