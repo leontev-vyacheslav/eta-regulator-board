@@ -2,14 +2,14 @@ $GREEN = "`e[32m"
 $RESET = "`e[0m"
 $IPADDR = "omega-8f79"
 $ACCOUNT = 'root'
-$APP_ROOT = "/mnt/mmcblk0p1/eta-regulator-board" # /home/eta-regulator-board
+$WORKSPACE_ROOT = "/mnt/mmcblk0p1/eta-regulator-board" # /home/eta-regulator-board
 
 $utcNow = Get-Date -Format "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'" -AsUTC
 $buildDateTimeMark = Get-Date -Format "yyyyMMdd-HHmmss"
 
 $WEB_API_APP_NAME = "eta-regulator-board-web-api"
 $WEB_UI_APP_NAME = "eta-regulator-board-web-ui"
-$DRIVER_APP_NAME = "eta-regulator-board-driver"
+$DRIVER_APP_NAME = "eta-regulator-board-tasks-driver"
 $WEB_API_SHUTDOWN_ENDPOINT = "http://127.0.0.1:5000/shutdown"
 
 function Set-AppVersion([string] $RelativePath, [string] $SearchPattern, [string] $Substitution)
@@ -49,7 +49,7 @@ function Sync-DateTime
 function Initialize-AppFolder ([string] $AppRootFolder)
 {
     Write-Host "Initializing the app folders..." -ForegroundColor Green
-    ssh ${ACCOUNT}@${IPADDR} "mkdir -p ${APP_ROOT}${AppRootFolder}/"
+    ssh ${ACCOUNT}@${IPADDR} "mkdir -p ${WORKSPACE_ROOT}${AppRootFolder}/"
     Start-Sleep -Seconds 2
     Write-Host
 }

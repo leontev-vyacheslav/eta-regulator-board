@@ -4,11 +4,26 @@ import logging.handlers
 import sys
 from threading import Thread, get_ident
 from time import sleep
+from typing import Optional
 
-APP_VERSION = 'v.0.1.20230830-044744'
+APP_VERSION = 'v.0.1.20230831-100403'
 
-logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s')
-main_logger = logging.getLogger('main_logger')
+
+def init_logger():
+    logger = logging.getLogger('main_logger')
+
+    logger.setLevel(logging.INFO)
+    file_handler = logging.FileHandler('./app.log', mode='w')
+    formatter = logging.Formatter(
+        fmt='%(asctime)s [%(levelname)s] %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+    return logger
+
 
 def background_task(interval_sec, message):
 
@@ -23,11 +38,6 @@ def main():
     parser.add_argument("-i1", "--interval1", type=int, default=10)
     parser.add_argument("-i2", "--interval2", type=int, default=5)
     args = parser.parse_args()
-
-    main_logger.setLevel(logging.INFO)
-    main_logger_file_handler = logging.FileHandler('./tasks-driver/app.log')
-    main_logger_file_handler.setLevel(logging.INFO)
-    main_logger.addHandler(main_logger_file_handler)
 
     if __debug__:
         main_logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -57,4 +67,5 @@ def main():
 
 
 if __name__ == '__main__':
+    main_logger: Optional[logging.Logger] = init_logger()
     main()

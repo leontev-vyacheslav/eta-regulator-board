@@ -1,3 +1,6 @@
+### on wsl host sync datetime
+# sudo hwclock -w
+
 ### init git and get projects from github
 git config --global user.email "leontev.vyacheslav@gmail.com"
 git config --global user.name "Leo"

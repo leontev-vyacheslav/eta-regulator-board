@@ -20,13 +20,13 @@ Write-Host
 
 # Shutting down 'eta-regulator-board-web-api'...
 Write-Host "Shutting down '$WEB_API_APP_NAME' and removing orignal files..."  -ForegroundColor Green
-ssh ${ACCOUNT}@${IPADDR} "cd ${APP_ROOT}/web-api/src;kill `$(cat PID_FILE)"
+ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}/web-api/src;kill `$(cat PID_FILE)"
 Start-Sleep -Seconds 2
 Write-Host
 
 # Removing orignal files...
 Write-Host "Shutting down '$WEB_API_APP_NAME' and removing orignal files..."  -ForegroundColor Green
-ssh ${ACCOUNT}@${IPADDR} "rm -rf ${APP_ROOT}"
+ssh ${ACCOUNT}@${IPADDR} "rm -rf ${WORKSPACE_ROOT}"
 Start-Sleep -Seconds 2
 Write-Host
 

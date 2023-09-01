@@ -1,5 +1,6 @@
 Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
 
+$APP_ROOT = "/web-ui"
 # Check connection
 $testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1
 If($testConnectionStatus.Status -ne "Success")
@@ -50,10 +51,10 @@ Start-Sleep -Seconds 2
 
 # Initializing the app folders
 Initialize-AppFolder `
-    -AppRootFolder "/web-ui"
+    -AppRootFolder $APP_ROOT
 
 Write-Host "Removing orignal files '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-ssh ${ACCOUNT}@${IPADDR} "rm -rf ${APP_ROOT}/web-ui/"
+ssh ${ACCOUNT}@${IPADDR} "rm -rf ${WORKSPACE_ROOT}${APP_ROOT}/"
 Start-Sleep -Seconds 2
 Write-Host
 
@@ -63,12 +64,12 @@ Start-Sleep -Seconds 2
 Write-Host
 
 Write-Host "Copying updated files..." -ForegroundColor Green
-scp -r build ${ACCOUNT}@${IPADDR}:${APP_ROOT}/web-ui
+scp -r build ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT}
 Start-Sleep -Seconds 2
 Write-Host
 
 Write-Host "Updating UHTTPD configuration for '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-scp ../deployment/configs/uhttpd ${ACCOUNT}@${IPADDR}:/etc/config/uhttpd
+scp ../.deployment/configs/uhttpd ${ACCOUNT}@${IPADDR}:/etc/config/uhttpd
 Start-Sleep -Seconds 2
 
 Write-Host "Starting UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
