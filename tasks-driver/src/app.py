@@ -6,7 +6,8 @@ from threading import Thread, get_ident
 from time import sleep
 from typing import Optional
 
-APP_VERSION = 'v.0.1.20230831-100403'
+
+APP_VERSION = 'v.0.1.20230901-035348'
 
 
 def init_logger():
@@ -26,7 +27,6 @@ def init_logger():
 
 
 def background_task(interval_sec, message):
-
     while True:
         sleep(interval_sec)
         main_logger.info(f'{message} {get_ident()}')

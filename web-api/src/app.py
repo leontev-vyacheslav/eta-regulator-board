@@ -1,4 +1,6 @@
 import os
+from threading import Thread, get_ident
+from time import sleep
 
 from flask import Flask, send_from_directory
 from flask_cors import CORS
@@ -8,7 +10,7 @@ from flask_pydantic import validate
 from decorators.app_router_prefix import app_route_prefix
 from models.shutdown_request_model import ShutdownRequestModel
 
-APP_VERSION = 'v.0.1.20230829-115839'
+APP_VERSION = 'v.0.1.20230901-042849'
 
 app = Flask(__name__)
 CORS(app,
@@ -39,5 +41,19 @@ def shutdown(form: ShutdownRequestModel):
 
     return 'Shut down was rejected...'
 
+
+def background_task(interval_sec, message):
+
+    while True:
+        sleep(interval_sec)
+        print(f'{message} {get_ident()}')
+
+thread = Thread(
+    target=background_task,
+    args=(10, 'Task1 thread'),
+    daemon=True
+)
+
+thread.start()
 
 from routers import *
