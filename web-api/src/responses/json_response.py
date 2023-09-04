@@ -3,7 +3,7 @@ from flask import Response, json
 
 class JsonResponse(Response):
 
-     def __init__(
+    def __init__(
         self,
         response=None,
         status=None,

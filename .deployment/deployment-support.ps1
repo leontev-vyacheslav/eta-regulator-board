@@ -53,3 +53,33 @@ function Initialize-AppFolder ([string] $AppRootFolder)
     Start-Sleep -Seconds 2
     Write-Host
 }
+
+function Find-ExternalError([System.Object]$remoteOutput) {
+    [bool]$hasError = 0
+
+    if ($null -eq $remoteOutput) {
+        return $hasError
+    }
+
+    
+    $remoteOutputArray = $null 
+    if ($remoteOutput -isnot [array]) {
+        $remoteOutputArray = ($remoteOutput)
+    }
+    else {
+        $remoteOutputArray = $remoteOutput
+    }
+    
+    foreach ( $remoteOutputItem in $remoteOutputArray) {
+        if ($remoteOutputItem.PSobject.Properties.Name.Contains('Exception') -eq 'False') {
+            Write-Host "$($remoteOutputItem.Exception.Message) ($($remoteOutputItem.Exception.GetType().Name))" -BackgroundColor Red
+            $hasError = 1
+        }
+        else {
+            Write-Host $remoteOutputItem
+        }
+    }
+    
+
+    return $hasError
+}

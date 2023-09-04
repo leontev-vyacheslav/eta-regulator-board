@@ -10,7 +10,7 @@ from flask_pydantic import validate
 from decorators.app_router_prefix import app_route_prefix
 from models.shutdown_request_model import ShutdownRequestModel
 
-APP_VERSION = 'v.0.1.20230904-060219'
+APP_VERSION = 'v.0.1.20230904-102610'
 
 app = Flask(__name__)
 CORS(

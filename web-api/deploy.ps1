@@ -37,8 +37,19 @@ Initialize-AppFolder `
 # Shutting down 'eta-regulator-board-web-api' and removing orignal files...
 Write-Host "Shutting down '$WEB_API_APP_NAME' and removing orignal files..."  -ForegroundColor Green
 # ssh ${ACCOUNT}@${IPADDR} "wget --post-data='security_pass=onioneer' --tries=2 ${WEB_API_SHUTDOWN_ENDPOINT}"
-ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}${APP_ROOT}/src;kill `$(cat PID_FILE)"
-ssh ${ACCOUNT}@${IPADDR} "rm -rf ${WORKSPACE_ROOT}${APP_ROOT}/src/"
+$remoteOutput = ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}${APP_ROOT}/src;kill `$(cat PID_FILE)" *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) { 
+    # exit
+}
+
+$remoteOutput = ssh ${ACCOUNT}@${IPADDR} "rm -rf ${WORKSPACE_ROOT}${APP_ROOT}/src/" *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) {
+    exit
+}
+
+
 Start-Sleep -Seconds 2
 Write-Host
 
@@ -53,16 +64,37 @@ Write-Host
 
 # Copying updated files...
 Write-Host "Copying updated files..." -ForegroundColor Green
-scp -r src ./startup.sh ./requirements.txt ./runtime.txt ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT}
+
+$remoteOutput = scp -r src ./startup.sh ../requirements.txt ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT} *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) {
+    exit
+}
+
 Start-Sleep -Seconds 2
 Write-Host
 
 
 # Adding the ability to startup the application after OS reboot...
 Write-Host "Adding the ability to startup '$WEB_API_APP_NAME' after OS reboot..." -ForegroundColor Green
-scp ../.deployment/configs/rc.local ${ACCOUNT}@${IPADDR}:/etc/rc.local
-ssh ${ACCOUNT}@${IPADDR} 'chmod 755 /etc/rc.local'
-ssh ${ACCOUNT}@${IPADDR} "echo -e '# ${WEB_API_APP_NAME} date&time build mark ${buildDateTimeMark}' >> /etc/rc.local"
+$remoteOutput = scp ../.deployment/configs/rc.local ${ACCOUNT}@${IPADDR}:/etc/rc.local  *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) {
+    exit
+}
+
+$remoteOutput = ssh ${ACCOUNT}@${IPADDR} 'chmod 755 /etc/rc.local' *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) {
+    exit
+}
+
+$remoteOutput = ssh ${ACCOUNT}@${IPADDR} "echo -e '# ${WEB_API_APP_NAME} date&time build mark ${buildDateTimeMark}' >> /etc/rc.local" *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) {
+    exit
+}
+
 Start-Sleep -Seconds 2
 Write-Host
 
@@ -70,14 +102,22 @@ Write-Host
 $reinstallFlag = Read-Host -Prompt 'Do you want to install/reinstall all Python dependencies (yes/no)?'
 if ($reinstallFlag -eq 'yes') {
     Write-Host "Installing dependencies..." -ForegroundColor Green
-    ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}${APP_ROOT}/;python3 -m pip install -r requirements.txt --prefix ${WORKSPACE_ROOT}"
+    $remoteOutput = ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}${APP_ROOT}/;python3 -m pip install -r requirements.txt --prefix ${WORKSPACE_ROOT}" *>&1
+    $hasError = Find-ExternalError -remoteOutput $remoteOutput
+    if ($hasError) {
+        exit
+    }
     Start-Sleep -Seconds 2
     Write-Host
 }
 
 # Compiling to bytecode for python specific version
 Write-Host "Compiling to bytecode for python specific version..." -ForegroundColor Green
-ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}${APP_ROOT}/; python3 -m compileall -b src"
+$remoteOutput = ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}${APP_ROOT}/; python3 -m compileall -b src" *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) {
+    exit
+}
 Start-Sleep -Seconds 2
 Write-Host
 
