@@ -8,5 +8,6 @@
         "**/Thumbs.db": true,
         "**/__pycache__": true,
         "**/.venv": false,
-    }
+    },
+    "python.terminal.activateEnvironment": true
 }

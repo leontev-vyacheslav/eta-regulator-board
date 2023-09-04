@@ -19,7 +19,8 @@
                 "--host=0.0.0.0"
             ],
             "justMyCode": false,
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "jinja": false
         },
         {
             "name": "web-ui",
@@ -27,8 +28,8 @@
             "type": "chrome",
             "request": "launch",
             "url": "http://localhost:3000",
-            "webRoot": "${workspaceRoot}/web-ui/src",
-            "userDataDir": "${workspaceRoot}//web-ui/.vscode/chrome",
+            "webRoot": "${workspaceFolder}/web-ui/src",
+            "userDataDir": "${workspaceFolder}//web-ui/.vscode/chrome",
             "sourceMapPathOverrides": {
                 "webpack:///src/*": "${webRoot}/*"
             },
@@ -39,9 +40,9 @@
             "consoleTitle": "tasks-driver",
             "type": "python",
             "request": "launch",
-            // "python": "${workspaceRoot}/.venv/bin/python",
-            "program": "${workspaceRoot}/tasks-driver/src/app.py",
-            "justMyCode": true
+            // "python": "${workspaceFolder}/.venv/bin/python",
+            "program": "${workspaceFolder}/tasks-driver/src/app.py",
+            "justMyCode": true,
         },
     ]
 }

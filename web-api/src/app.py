@@ -10,16 +10,18 @@ from flask_pydantic import validate
 from decorators.app_router_prefix import app_route_prefix
 from models.shutdown_request_model import ShutdownRequestModel
 
-APP_VERSION = 'v.0.1.20230901-042849'
+APP_VERSION = 'v.0.1.20230904-060219'
 
 app = Flask(__name__)
-CORS(app,
-     allow_headers=['*'],
-     methods=['GET', 'POST', 'PUT', 'DELETE'],
-     origins=['*']
-    )
+CORS(
+    app,
+    allow_headers=['*'],
+    methods=['GET', 'POST', 'PUT', 'DELETE'],
+    origins=['*']
+)
 
 app.api_route = app_route_prefix(app.route, '/api')
+
 
 @app.route('/favicon.ico', methods=['GET'])
 def favicon():
@@ -29,6 +31,7 @@ def favicon():
         'favicon.ico',
         mimetype='image/vnd.microsoft.icon'
     )
+
 
 @app.route('/shutdown', methods=['POST'])
 @validate()
@@ -48,6 +51,7 @@ def background_task(interval_sec, message):
         sleep(interval_sec)
         print(f'{message} {get_ident()}')
 
+
 thread = Thread(
     target=background_task,
     args=(10, 'Task1 thread'),
@@ -55,5 +59,6 @@ thread = Thread(
 )
 
 thread.start()
+
 
 from routers import *

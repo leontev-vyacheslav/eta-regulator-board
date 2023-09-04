@@ -2,7 +2,7 @@
 
 cd /mnt/mmcblk0p1/eta-regulator-board/web-api/&&sh "startup.sh"
 
-cd /mnt/mmcblk0p1/eta-regulator-board/tasks-driver/&&sh "startup.sh"
+# cd /mnt/mmcblk0p1/eta-regulator-board/tasks-driver/&&sh "startup.sh"
 
 exit 0
 

@@ -12,4 +12,5 @@
     },
     "typescript.preferences.quoteStyle": "single",
     "javascript.preferences.quoteStyle": "single",
+    "python.terminal.activateEnvironment": false
 }
