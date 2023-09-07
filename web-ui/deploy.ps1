@@ -1,5 +1,7 @@
 Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
 
+Clear-Host
+
 $APP_ROOT = "/web-ui"
 # Check connection
 $testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1
@@ -17,8 +19,8 @@ Write-Host "Connection with the device was established!" -ForegroundColor Green
 Write-Host "Bump up '$WEB_UI_APP_NAME' build version before delpoyment ($buildDateTimeMark)..." -ForegroundColor Green
 Set-AppVersion `
     -RelativePath "./src/constants/app-constants.ts" `
-    -SearchPattern "version:" `
-    -Substitution "        version: 'v.0.1.${buildDateTimeMark}'"
+    -SearchPattern "APP_VERSION = " `
+    -Substitution "const APP_VERSION = 'v.0.1.${buildDateTimeMark}';"
 Start-Sleep -Seconds 2
 Write-Host
 
@@ -46,7 +48,12 @@ if ($rebuildFlag -eq 'yes') {
 
 
 Write-Host "Shutting down UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd stop'
+$remoteOutput = ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd stop' *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) {
+    exit
+}
+
 Start-Sleep -Seconds 2
 
 # Initializing the app folders
@@ -54,7 +61,11 @@ Initialize-AppFolder `
     -AppRootFolder $APP_ROOT
 
 Write-Host "Removing orignal files '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-ssh ${ACCOUNT}@${IPADDR} "rm -rf ${WORKSPACE_ROOT}${APP_ROOT}/"
+$remoteOutput = ssh ${ACCOUNT}@${IPADDR} "rm -rf ${WORKSPACE_ROOT}${APP_ROOT}/" *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) {
+    exit
+}
 Start-Sleep -Seconds 2
 Write-Host
 
@@ -64,14 +75,26 @@ Start-Sleep -Seconds 2
 Write-Host
 
 Write-Host "Copying updated files..." -ForegroundColor Green
-scp -r build ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT}
+$remoteOutput = scp -r build ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT} *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) {
+    exit
+}
 Start-Sleep -Seconds 2
 Write-Host
 
 Write-Host "Updating UHTTPD configuration for '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-scp ../.deployment/configs/uhttpd ${ACCOUNT}@${IPADDR}:/etc/config/uhttpd
+$remoteOutput = scp ../.deployment/configs/uhttpd ${ACCOUNT}@${IPADDR}:/etc/config/uhttpd *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) {
+    exit
+}
 Start-Sleep -Seconds 2
 
 Write-Host "Starting UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd start'
+$remoteOutput = ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd start' *>&1
+$hasError = Find-ExternalError -remoteOutput $remoteOutput
+if ($hasError) {
+    exit
+}
 Start-Sleep -Seconds 2

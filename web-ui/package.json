@@ -6,14 +6,12 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
-
-    "@types/jest": "^29.5.3",
     "@types/file-saver": "^2.0.5",
+    "@types/jest": "^29.5.3",
     "@types/node": "^20.4.4",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "^5.3.3",
-
     "axios": "^1.4.0",
     "devextreme": "^23.1.4",
     "devextreme-react": "^23.1.4",
@@ -57,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
     "@typescript-eslint/parser": "^6.1.0",
     "devextreme-cli": "^1.6.0",
@@ -67,8 +66,8 @@
     "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^3.0.0",
-    "svg-url-loader": "^8.0.0",
-    "sass": "^1.64.1"
+    "sass": "^1.64.1",
+    "svg-url-loader": "^8.0.0"
   },
   "resolutions": {
     "@types/react": "^18.2.15",

@@ -9,5 +9,6 @@
         "**/web-api": true,
         "**/web-ui": true,
         "**/tasks-driver": true,
+        "**/__pycache__": true
     }
 }

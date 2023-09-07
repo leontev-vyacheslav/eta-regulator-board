@@ -12,5 +12,6 @@
     },
     "typescript.preferences.quoteStyle": "single",
     "javascript.preferences.quoteStyle": "single",
-    "python.terminal.activateEnvironment": false
+    "python.terminal.activateEnvironment": false,
+    "terminal.integrated.tabs.defaultColor": "terminal.ansiBlue"
 }

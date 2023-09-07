@@ -9,5 +9,6 @@
         "**/__pycache__": true,
         "**/.venv": false,
     },
-    "python.terminal.activateEnvironment": true
+    "python.terminal.activateEnvironment": true,
+    "terminal.integrated.tabs.defaultColor": "terminal.ansiGreen"
 }

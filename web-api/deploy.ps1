@@ -48,8 +48,6 @@ $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
     exit
 }
-
-
 Start-Sleep -Seconds 2
 Write-Host
 
