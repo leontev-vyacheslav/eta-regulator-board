@@ -6,7 +6,8 @@ from flask_pydantic import validate
 
 from utils.app_route_prefix import app_route_prefix
 from models.shutdown_request_model import ShutdownRequestModel
-from workers.workers_starter import WorkersStarter
+from workers.worker_logger_extension import WorkerLoggger
+from workers.worker_starter_extension import WorkerStarter
 
 APP_VERSION = 'v.0.1.20230905-043441'
 
@@ -17,7 +18,8 @@ CORS(
     methods=['GET', 'POST', 'PUT', 'DELETE'],
     origins=['*']
 )
-WorkersStarter(app)
+WorkerLoggger(app)
+WorkerStarter(app)
 
 app.api_route = app_route_prefix(app.route, '/api')
 

@@ -5,10 +5,6 @@
             "path": "./"
         },
         {
-            "name": "tasks-driver",
-            "path": "tasks-driver"
-        },
-        {
             "name": "web-api",
             "path": "web-api"
         },

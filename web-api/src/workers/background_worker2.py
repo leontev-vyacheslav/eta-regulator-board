@@ -11,6 +11,8 @@ def background_worker2(app: Flask, interval_sec, environment_state, lock: Lock):
         with lock:
             environment_state.state_value_1 += 10
             environment_state.state_value_2 += 50
-            app.logger.info(
-                 f'{current_thread().name} {get_ident()} -> {environment_state.json()}'
-            )
+
+            if hasattr(app, 'worker_logger') and app.worker_logger is not None:
+                app.worker_logger.info(
+                    f'{current_thread().name} {get_ident()} -> {environment_state.json()}'
+                )
