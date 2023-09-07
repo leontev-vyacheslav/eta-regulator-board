@@ -30,8 +30,9 @@ Sync-DateTime
 
 
 # Initializing the app folders
-Initialize-AppFolder `
-    -AppRootFolder "${APP_ROOT}/src"
+[string[]]$folders = "${APP_ROOT}/src", "${APP_ROOT}/data", "${APP_ROOT}/log"
+Initialize-AppFolders `
+    -AppRootFolders $folders
 
 
 # Shutting down 'eta-regulator-board-web-api' and removing orignal files...
@@ -39,7 +40,7 @@ Write-Host "Shutting down '$WEB_API_APP_NAME' and removing orignal files..."  -F
 # ssh ${ACCOUNT}@${IPADDR} "wget --post-data='security_pass=onioneer' --tries=2 ${WEB_API_SHUTDOWN_ENDPOINT}"
 $remoteOutput = ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}${APP_ROOT}/src;kill `$(cat PID_FILE)" *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
-if ($hasError) { 
+if ($hasError) {
     # exit
 }
 

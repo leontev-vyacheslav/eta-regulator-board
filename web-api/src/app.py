@@ -1,27 +1,23 @@
 import os
 
-from flask import Flask, send_from_directory
+from flask import send_from_directory
 from flask_cors import CORS
 from flask_pydantic import validate
+from flask_ex import FlaskEx
 
-from utils.app_route_prefix import app_route_prefix
 from models.shutdown_request_model import ShutdownRequestModel
-from workers.worker_logger_extension import WorkerLoggger
 from workers.worker_starter_extension import WorkerStarter
 
 APP_VERSION = 'v.0.1.20230905-043441'
 
-app = Flask(__name__)
+app = FlaskEx(__name__)
 CORS(
     app,
     allow_headers=['*'],
     methods=['GET', 'POST', 'PUT', 'DELETE'],
     origins=['*']
 )
-WorkerLoggger(app)
 WorkerStarter(app)
-
-app.api_route = app_route_prefix(app.route, '/api')
 
 
 @app.route('/favicon.ico', methods=['GET'])
@@ -44,7 +40,6 @@ def shutdown(form: ShutdownRequestModel):
         return 'Shutting down...'
 
     return 'Shut down was rejected...'
-
 
 
 from routers import *

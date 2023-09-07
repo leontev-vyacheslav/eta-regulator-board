@@ -57,8 +57,9 @@ if ($hasError) {
 Start-Sleep -Seconds 2
 
 # Initializing the app folders
-Initialize-AppFolder `
-    -AppRootFolder $APP_ROOT
+
+Initialize-AppFolders `
+    -AppRootFolders $APP_ROOT
 
 Write-Host "Removing orignal files '$WEB_UI_APP_NAME'..." -ForegroundColor Green
 $remoteOutput = ssh ${ACCOUNT}@${IPADDR} "rm -rf ${WORKSPACE_ROOT}${APP_ROOT}/" *>&1
