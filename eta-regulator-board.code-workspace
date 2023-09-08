@@ -26,8 +26,14 @@
             "--disable=logging-fstring-interpolation",
         ],
         "python.formatting.provider": "autopep8",
+        "python.formatting.autopep8Args": [
+            "--max-line-length",
+            "120",
+        ],
         "[python]": {
-            "editor.defaultFormatter": "ms-python.python"
+            "editor.defaultFormatter": "ms-python.python",
+            "editor.rulers": [120],
+            "editor.foldingHighlight": true,
         },
         "python.terminal.activateEnvironment": false,
         "powershell.cwd": "/workspaces/eta-regulator-board",

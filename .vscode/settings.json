@@ -6,8 +6,8 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
+        "**/__pycache__": true,
         "**/web-api": true,
-        "**/web-ui": true,
-        "**/__pycache__": true
+        "**/web-ui": true
     }
 }
