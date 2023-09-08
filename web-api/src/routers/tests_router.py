@@ -1,3 +1,5 @@
+from typing import Optional
+from flask import Response
 from flask_pydantic import validate
 
 from app import app
@@ -22,7 +24,7 @@ def get(test_id: int):
     test_list_repository = TestListRepository()
     current_test = test_list_repository.get(test_id)
 
-    return current_test
+    return current_test if current_test is not None else Response(status=204)
 
 
 @app.api_route('/tests', methods=['POST'])
@@ -40,7 +42,7 @@ def put(body: TestModel):
     test_list_repository = TestListRepository()
     current_test = test_list_repository.update(body)
 
-    return current_test
+    return current_test if current_test is not None else Response(status=204)
 
 
 @app.api_route('/tests/<test_id>', methods=['DELETE'])
@@ -49,4 +51,4 @@ def delete(test_id: int):
     test_list_repository = TestListRepository()
     current_test = test_list_repository.delete(test_id)
 
-    return current_test
+    return current_test if current_test is not None else Response(status=204)

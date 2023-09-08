@@ -1,7 +1,7 @@
 from flask_pydantic import validate
 
 from app import app
-from workers import environment_state
+from workers.worker_starter_extension import environment_state
 
 @app.api_route('/environment', methods=['GET'])
 @validate()

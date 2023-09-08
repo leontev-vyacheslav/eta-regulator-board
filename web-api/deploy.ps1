@@ -56,7 +56,6 @@ Write-Host
 # Deleting compiled Python version dependent modules...
 Write-Host "Deleting compiled Python version dependent modules..."  -ForegroundColor Green
 Get-ChildItem -Path "./src" -Recurse -Include "__pycache__" | Remove-Item -Force -Recurse
-Get-ChildItem -Path "./src/data" -Recurse -Include "celery" | Remove-Item -Force -Recurse
 Start-Sleep -Seconds 2
 Write-Host
 
@@ -64,7 +63,7 @@ Write-Host
 # Copying updated files...
 Write-Host "Copying updated files..." -ForegroundColor Green
 
-$remoteOutput = scp -r src ./startup.sh ../requirements.txt ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT} *>&1
+$remoteOutput = scp -r src data/config.json data/tests.json log ./startup.sh ./requirements.txt ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT} *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
     exit
