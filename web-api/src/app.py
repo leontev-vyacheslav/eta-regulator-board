@@ -8,7 +8,7 @@ from flask_ex import FlaskEx
 from models.shutdown_request_model import ShutdownRequestModel
 from workers.worker_starter_extension import WorkerStarter
 
-APP_VERSION = 'v.0.1.20230908-073525'
+APP_VERSION = 'v.0.1.20230909-065543'
 
 app = FlaskEx(__name__)
 CORS(

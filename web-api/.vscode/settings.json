@@ -10,5 +10,8 @@
         "**/.venv": false,
     },
     "python.terminal.activateEnvironment": true,
-    "terminal.integrated.tabs.defaultColor": "terminal.ansiGreen"
+    "terminal.integrated.tabs.defaultColor": "terminal.ansiGreen",
+    "python.analysis.extraPaths": [
+        "./src"
+    ]
 }

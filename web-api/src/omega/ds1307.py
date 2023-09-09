@@ -1,29 +1,7 @@
 from datetime import datetime
-from OmegaExpansion import onionI2C
+from smbus2 import SMBus
 
-
-def _bcd_to_int(bcd):
-    out = 0
-    for d in (bcd >> 4, bcd):
-        for p in (1, 2, 4, 8):
-            if d & 1:
-                out += int(p)
-            d >>= 1
-        out = int(out) * 10
-    out = int(out / 10)
-    return out
-
-
-def _int_to_bcd(n):
-    bcd = 0
-    for i in (n // 10, n % 10):
-        for p in (8, 4, 2, 1):
-            if i >= p:
-                bcd += 1
-                i -= p
-            bcd <<= 1
-    return bcd >> 1
-
+from omega.decoders import bcd_to_int, int_to_bcd
 
 class DS1307:
     _REG_SECONDS = 0x00
@@ -36,47 +14,53 @@ class DS1307:
     _REG_CONTROL = 0x07
 
     def __init__(self, addr=0x68):
-        self._bus = onionI2C.OnionI2C()
+        self._bus = SMBus(0)
         self._addr = addr
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self._bus.close()
 
     def _write(self, register, data):
         # print "addr =0x%x register = 0x%x data = 0x%x %i " % (self._addr, register, data,_bcd_to_int(data))
-        self._bus.writeByte(self._addr, register, data)
+        self._bus.write_byte_data(self._addr, register, data)
 
     def _read(self, data):
 
-        returndata = self._bus.readBytes(self._addr, data, 1)
-        return returndata[0]
+        returndata = self._bus.read_byte_data(self._addr, data, 1)
+        return returndata
 
     def _read_seconds(self):
-        out = _bcd_to_int(self._read(self._REG_SECONDS))
+        out = bcd_to_int(self._read(self._REG_SECONDS))
         return out
 
     def _read_minutes(self):
-        out = _bcd_to_int(self._read(self._REG_MINUTES))
+        out = bcd_to_int(self._read(self._REG_MINUTES))
         return out
 
     def _read_hours(self):
         d = self._read(self._REG_HOURS)
         if d == 0x64:
             d = 0x40
-        out = _bcd_to_int(d & 0x3F)
+        out = bcd_to_int(d & 0x3F)
         return out
 
     def _read_day(self):
-        out = _bcd_to_int(self._read(self._REG_DAY))
+        out = bcd_to_int(self._read(self._REG_DAY))
         return out
 
     def _read_date(self):
-        out = _bcd_to_int(self._read(self._REG_DATE))
+        out = bcd_to_int(self._read(self._REG_DATE))
         return out
 
     def _read_month(self):
-        out = _bcd_to_int(self._read(self._REG_MONTH))
+        out = bcd_to_int(self._read(self._REG_MONTH))
         return out
 
     def _read_year(self):
-        out = _bcd_to_int(self._read(self._REG_YEAR))
+        out = bcd_to_int(self._read(self._REG_YEAR))
         return out
 
     def read_all(self):
@@ -109,37 +93,37 @@ class DS1307:
         if seconds is not None:
             if seconds < 0 or seconds > 59:
                 raise ValueError('Seconds is out of range [0,59].')
-            self._write(self._REG_SECONDS, _int_to_bcd(seconds))
+            self._write(self._REG_SECONDS, int_to_bcd(seconds))
 
         if minutes is not None:
             if minutes < 0 or minutes > 59:
                 raise ValueError('Minutes is out of range [0,59].')
-            self._write(self._REG_MINUTES, _int_to_bcd(minutes))
+            self._write(self._REG_MINUTES, int_to_bcd(minutes))
 
         if hours is not None:
             if hours < 0 or hours > 23:
                 raise ValueError('Hours is out of range [0,23].')
-            self._write(self._REG_HOURS, _int_to_bcd(hours))  # not | 0x40 as in the orignal code
+            self._write(self._REG_HOURS, int_to_bcd(hours))  # not | 0x40 as in the orignal code
 
         if year is not None:
             if year < 0 or year > 99:
                 raise ValueError('Years is out of range [0,99].')
-            self._write(self._REG_YEAR, _int_to_bcd(year))
+            self._write(self._REG_YEAR, int_to_bcd(year))
 
         if month is not None:
             if month < 1 or month > 12:
                 raise ValueError('Month is out of range [1,12].')
-            self._write(self._REG_MONTH, _int_to_bcd(month))
+            self._write(self._REG_MONTH, int_to_bcd(month))
 
         if date is not None:
             if date < 1 or date > 31:
                 raise ValueError('Date is out of range [1,31].')
-            self._write(self._REG_DATE, _int_to_bcd(date))
+            self._write(self._REG_DATE, int_to_bcd(date))
 
         if day is not None:
             if day < 1 or day > 7:
                 raise ValueError('Day is out of range [1,7].')
-            self._write(self._REG_DAY, _int_to_bcd(day))
+            self._write(self._REG_DAY, int_to_bcd(day))
 
     def write_datetime(self, dt):
         """Write from a datetime.datetime object.

@@ -37,7 +37,7 @@ class WorkerStarter():
 
                     thread = Thread(
                         target=worker,
-                        args=(app, worker_info.interval, environment_state, lock),
+                        args=(app, worker_info.interval, worker_info.immediately, environment_state, lock),
                         daemon=True
                     )
                     thread.start()

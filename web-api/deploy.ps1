@@ -63,7 +63,7 @@ Write-Host
 # Copying updated files...
 Write-Host "Copying updated files..." -ForegroundColor Green
 
-$remoteOutput = scp -r src data/config.json data/tests.json log ./startup.sh ./requirements.txt ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT} *>&1
+$remoteOutput = scp -r src data log ./startup.sh ./requirements.txt ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT} *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
     exit
