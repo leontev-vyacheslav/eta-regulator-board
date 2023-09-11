@@ -1,6 +1,33 @@
+import os
+
+from flask import send_from_directory
 from flask_pydantic import validate
-from app import app, APP_VERSION
+
+from app import app, APP_NAME, APP_VERSION
 from models.message_model import MessageModel
+from models.shutdown_request_model import ShutdownRequestModel
+
+
+@app.route('/favicon.ico', methods=['GET'])
+def favicon():
+
+    return send_from_directory(
+        os.path.join(app.root_path, 'static'),
+        'favicon.ico',
+        mimetype='image/vnd.microsoft.icon'
+    )
+
+
+@app.route('/shutdown', methods=['POST'])
+@validate()
+def shutdown(form: ShutdownRequestModel):
+
+    if form.security_pass == 'onioneer':
+        os.kill(os.getpid(), 9)
+
+        return 'Shutting down...'
+
+    return 'Shut down was rejected...'
 
 
 @app.route('/', methods=['GET'])
@@ -9,5 +36,5 @@ from models.message_model import MessageModel
 def home():
 
     return MessageModel(
-        message=f'Eta Regulator Board Web API {APP_VERSION}'
+        message=f'{APP_NAME} {APP_VERSION}'
     )

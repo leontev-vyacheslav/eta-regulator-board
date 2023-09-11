@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 import { TestListModel } from '../../models/data/test-list-model';
-import { useAppData } from '../../contexts/app-data';
+import { useAppData } from '../../contexts/app-data/app-data';
 
 export type DebugPageContextModel = {
     testList: TestListModel | null,

@@ -9,12 +9,12 @@ import { AuthProvider } from './contexts/auth';
 import { useScreenSizeClass } from './utils/media-query';
 import ContentAuth from './content-auth';
 import { AppSettingsProvider } from './contexts/app-settings';
-import { AppDataProvider } from './contexts/app-data';
+import { AppDataProvider } from './contexts/app-data/app-data';
 import { SharedAreaProvider } from './contexts/shared-area';
 import ruMessages from 'devextreme/localization/messages/ru.json';
 import { locale, loadMessages } from 'devextreme/localization';
 
-function App () {
+function App() {
     // const { user } = useAuth();
 
     // if (user === undefined) {
@@ -23,26 +23,28 @@ function App () {
     loadMessages(ruMessages);
     locale('ru-RU');
 
-    return /*user === null ? <ContentNonAuth/> :*/  <ContentAuth/>
+    return /*user === null ? <ContentNonAuth/> :*/  <ContentAuth />
 }
 
-function Main () {
+function Main() {
     const screenSizeClass = useScreenSizeClass();
     return (
         <BrowserRouter>
-            <AppSettingsProvider>
-                <AuthProvider>
-                    <SharedAreaProvider>
-                        <AppDataProvider>
+
+            <AuthProvider>
+                <SharedAreaProvider>
+                    <AppDataProvider>
+                        <AppSettingsProvider>
                             <NavigationProvider>
-                                <div className={ `app ${ screenSizeClass }` }>
-                                    <App/>
+                                <div className={ `app ${screenSizeClass}` }>
+                                    <App />
                                 </div>
                             </NavigationProvider>
-                        </AppDataProvider>
-                    </SharedAreaProvider>
-                </AuthProvider>
-            </AppSettingsProvider>
+                        </AppSettingsProvider>
+                    </AppDataProvider>
+                </SharedAreaProvider>
+            </AuthProvider>
+
         </BrowserRouter>
     );
 }
