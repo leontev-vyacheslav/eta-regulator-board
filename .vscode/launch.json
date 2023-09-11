@@ -4,7 +4,6 @@
         {
             "name": "web-api",
             "consoleTitle": "web-api",
-            // "python": "${workspaceFolder}/.venv/bin/python",
             "type": "python",
             "request": "launch",
             "module": "flask",
@@ -34,15 +33,6 @@
                 "webpack:///src/*": "${webRoot}/*"
             },
             "preLaunchTask": "npm: start"
-        },
-        {
-            "name": "tasks-driver",
-            "consoleTitle": "tasks-driver",
-            "type": "python",
-            "request": "launch",
-            // "python": "${workspaceFolder}/.venv/bin/python",
-            "program": "${workspaceFolder}/tasks-driver/src/app.py",
-            "justMyCode": true,
-        },
+        }
     ]
 }

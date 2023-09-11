@@ -1,0 +1,15 @@
+POST http://127.0.0.1:5000/shutdown
+Content-Type: application/x-www-form-urlencoded
+
+security_pass='test'
+
+###
+POST http://localhost:5000/api/rtc
+Content-Type: application/json
+
+{
+    "datetime": "{{$datetime iso8601}}"
+}
+
+###
+GET http://localhost:5000/api/rtc

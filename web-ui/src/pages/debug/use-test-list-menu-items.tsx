@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { AddIcon, DeleteIcon, EditIcon, ExtensionIcon, RefreshIcon } from '../../constants/app-icons';
-import { useAppData } from '../../contexts/app-data';
+import { useAppData } from '../../contexts/app-data/app-data';
 import { List } from 'devextreme-react/list';
 import notify from 'devextreme/ui/notify';
 import devices from 'devextreme/core/devices';

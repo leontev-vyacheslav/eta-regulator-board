@@ -3,3 +3,4 @@ flask-cors
 dataclasses
 Flask-Pydantic
 gunicorn
+smbus2
