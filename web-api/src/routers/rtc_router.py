@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask_pydantic import validate
 
 from app import app
@@ -20,9 +20,9 @@ def get_rtc() -> RtcDateTimeModel:
     return RtcDateTimeModel(datetime=rtc_now)
 
 
-@app.api_route('/rtc', methods=['POST'])
+@app.api_route('/rtc', methods=['PUT'])
 @validate()
-def post_rtc(body: RtcDateTimeModel):
+def put_rtc(body: RtcDateTimeModel):
 
     if is_debug():
         return RtcDateTimeModel(datetime=datetime.now())

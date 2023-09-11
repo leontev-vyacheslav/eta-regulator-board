@@ -26,7 +26,10 @@ const Header = ({ title, menuToggleEnabled,  toggleMenu } : HeaderProps) => {
                     alignItems: 'flex-start'
                 }
             } }>
-                <div> { appSettingsData.workDate.toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: 'numeric' }) }</div>
+                <div> { appSettingsData.workDate
+                ? appSettingsData.workDate.toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: 'numeric' })
+                : null
+             }</div>
             </div>
         ) ;
     };

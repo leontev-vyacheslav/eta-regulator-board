@@ -3,9 +3,8 @@ import ContextMenu, { Position } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
 import { useAuth } from '../../contexts/auth';
 import { useSharedArea } from '../../contexts/shared-area';
-import { AdditionalMenuIcon, ExitIcon, UserIcon, WorkDateIcon, WorkDateTodayIcon } from '../../constants/app-icons';
+import { AdditionalMenuIcon, ExitIcon, UserIcon, WorkDateIcon } from '../../constants/app-icons';
 import ContextMenuItem from '../context-menu-item/context-menu-item';
-import { useAppSettings } from '../../contexts/app-settings';
 import { UserPanelProps } from '../../models/user-panel-props';
 import { ContextMenuItemItemModel } from '../../models/context-menu-item-props';
 
@@ -14,7 +13,6 @@ import './user-panel.scss';
 export default function ({ menuMode }: UserPanelProps) {
     const { user } = useAuth();
     const { showWorkDatePicker, signOutWithConfirm } = useSharedArea();
-    const { setWorkDateToday } = useAppSettings();
     const menuItems = useMemo(() => {
         return [
             {
@@ -43,13 +41,6 @@ export default function ({ menuMode }: UserPanelProps) {
                 }
             },
             {
-                text: 'Сегодня',
-                renderIconItem: () => <WorkDateTodayIcon size={ 18 }/>,
-                onClick: () => {
-                    setWorkDateToday();
-                }
-            },
-            {
                 text: 'Выход',
                 renderIconItem: () => <ExitIcon size={ 18 }/>,
                 onClick: () => {
@@ -57,7 +48,7 @@ export default function ({ menuMode }: UserPanelProps) {
                 }
             },
         ];
-    }, [setWorkDateToday, showWorkDatePicker, signOutWithConfirm, user?.email]);
+    }, [showWorkDatePicker, signOutWithConfirm, user?.email]);
 
     return (
         <div className={ 'user-panel' }>

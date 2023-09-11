@@ -7,17 +7,19 @@ import { useAppSettings } from '../../contexts/app-settings';
 import { useScreenSize } from '../../utils/media-query';
 import './settings-form.scss';
 import { SettingsFormProps } from '../../models/settings-form-props';
+import { useAppData } from '../../contexts/app-data/app-data';
 
 const SettingsForm = ({ style }: SettingsFormProps) => {
     const dxAppSettingsFormRef = useRef<Form>(null);
     const { appSettingsData, setAppSettingsData } = useAppSettings();
-    const { isXSmall } = useScreenSize();
+    const { putRtcDateTimeAsync } = useAppData();
+    const { isXSmall, isSmall } = useScreenSize();
 
     return (
         <ScrollView height={ '100%' } width={ '100%' }>
             <Form
                 height={ 600 }
-                width={ style.width }
+                width={  isXSmall || isSmall ? '100%' : style.width  }
                 scrollingEnabled={ true }
                 colCount={ 1 }
                 formData={ appSettingsData }
@@ -30,16 +32,26 @@ const SettingsForm = ({ style }: SettingsFormProps) => {
                             label={ { location: 'top', showColon: true, text: 'Рабочая дата' } }
                             editorType={ 'dxDateBox' }
                             editorOptions={ {
-                                type: 'date'
+                                type: 'datetime'
                             } }
                         />
                     </Tab>
                 </TabbedItem>
                 <GroupItem>
                     <Button className={ 'form-button' } text={ 'Сохранить' } width={ 125 } type={ 'default' }
-                            onClick={ () => {
+                            onClick={ async () => {
                                 const formRef = dxAppSettingsFormRef.current;
                                 if (formRef && formRef.instance) {
+                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                    const formData =  formRef.instance.option('formData');
+                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                    const currentWorkDate = new Date(Date.parse(''));
+
+                                    const rtcDateTime = await putRtcDateTimeAsync({
+                                        datetime: formData.workDate
+                                    });
+
+                                    console.log(rtcDateTime);
                                     setAppSettingsData({ ...appSettingsData, ...formRef.instance.option('formData') });
                                     notify({
                                             message: 'Настройки приложения успешно сохранены.',
