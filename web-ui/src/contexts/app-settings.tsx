@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-// import notify from 'devextreme/ui/notify';
 import { AppSettingsContextModel, AppSettingsDataContextModel } from '../models/app-settings-context';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
 import { useAppData } from './app-data/app-data';
@@ -24,9 +23,7 @@ function AppSettingsProvider(props: AppBaseProviderProps) {
                 });
             }
         })();
-
     }, [getRtcDateTimeAsync]);
-
 
     return <AppSettingsContext.Provider value={ {
         appSettingsData,

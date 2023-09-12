@@ -5,8 +5,6 @@ import { Footer } from './components';
 import AppConstants from './constants/app-constants';
 import NotFoundPage from './pages/not-found/not-found-page';
 
-
-
 const ContentAuth = () => {
     return (
         <>

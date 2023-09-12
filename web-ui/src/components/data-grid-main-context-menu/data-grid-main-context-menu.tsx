@@ -43,7 +43,7 @@ const DataGridMainContextMenu = ({ innerRef, commands }: ContextMenuProps) => {
 
     return <ContextMenu
         ref={ innerRef }
-        closeOnOutsideClick={ true }
+        hideOnOutsideClick={ true }
         itemRender={ (item) => <ContextMenuItem item={ item } /> }
         showEvent={ 'suppress' }
         items={ items }

@@ -13,7 +13,7 @@ const MainContextMenu = ({ innerRef, items }: ContextMenuProps) => {
 
   return <ContextMenu
         ref={ innerRef }
-        closeOnOutsideClick={ true }
+        hideOnOutsideClick={ true }
         itemRender={ (item) => <MenuItem item={ item } /> }
         showEvent={ 'suppress' }
         items={ items as unknown as Item[] }
