@@ -1,0 +1,14 @@
+{
+    "workers":[
+        {
+            "name": "background_worker1",
+            "interval": 30,
+            "immediately": false
+        },
+        {
+            "name": "background_worker2",
+            "interval": 60,
+            "immediately": false
+        }
+    ]
+}
