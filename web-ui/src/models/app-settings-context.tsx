@@ -9,5 +9,6 @@ export type AppSettingsDataContextModel = AppSettingsModel;
 
 export type AppSettingsContextModel = {
   appSettingsData: AppSettingsDataContextModel,
-  setAppSettingsData: Dispatch<SetStateAction<AppSettingsDataContextModel>>
+  setAppSettingsData: Dispatch<SetStateAction<AppSettingsDataContextModel>>,
+  updateWorkDateAsync: () => Promise<void>
 }

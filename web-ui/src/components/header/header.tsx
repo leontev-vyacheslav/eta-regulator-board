@@ -9,11 +9,39 @@ import { WorkDateWidgetProps } from '../../models/work-date-widget-props';
 import { HeaderProps } from '../../models/header-props';
 
 import './header.scss';
+import { useCallback, useEffect,  useState } from 'react';
 
 const Header = ({ title, menuToggleEnabled,  toggleMenu } : HeaderProps) => {
     const { appSettingsData } = useAppSettings();
 
     const WorkDateWidget = ( { outerStyle }: WorkDateWidgetProps) => {
+        const [isShowColon, setIsShowColon] = useState<boolean>(true);
+
+        useEffect(() => {
+            const intervalTimer = setInterval(() => {
+                setIsShowColon(previous => !previous);
+            }, 1000);
+
+            return () => clearInterval(intervalTimer)
+        }, []);
+
+        const getFormattedWorkDate = useCallback(() => {
+            if (!appSettingsData.workDate)
+                return null;
+
+            const formattedWorkDate = appSettingsData
+                .workDate
+                .toLocaleDateString('ru-RU', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: 'numeric'
+                });
+
+            return isShowColon ? formattedWorkDate : formattedWorkDate.replaceAll(':', ' ');
+        }, [isShowColon]);
+
         return (
             <div style={ {
                 ...outerStyle, ...{
@@ -26,10 +54,7 @@ const Header = ({ title, menuToggleEnabled,  toggleMenu } : HeaderProps) => {
                     alignItems: 'flex-start'
                 }
             } }>
-                <div> { appSettingsData.workDate
-                ? appSettingsData.workDate.toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: 'numeric' })
-                : null
-             }</div>
+                <div> { getFormattedWorkDate() }</div>
             </div>
         ) ;
     };

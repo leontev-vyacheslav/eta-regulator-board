@@ -3,7 +3,7 @@ from flask_ex import FlaskEx
 
 from workers.worker_starter_extension import WorkerStarter
 
-APP_VERSION = 'v.0.1.20230912-081546'
+APP_VERSION = 'v.0.1.20230927-064510'
 APP_NAME = 'Eta Regulator Board Web API'
 
 app = FlaskEx(__name__)

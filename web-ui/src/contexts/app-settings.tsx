@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { AppSettingsContextModel, AppSettingsDataContextModel } from '../models/app-settings-context';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
 import { useAppData } from './app-data/app-data';
@@ -14,20 +14,36 @@ function AppSettingsProvider(props: AppBaseProviderProps) {
         isShowFooter: true,
     });
 
-    useEffect(() => {
-        (async () => {
-            const rtcDateTime = await getRtcDateTimeAsync();
+    const updateWorkDateAsync = useCallback(async () => {
+        const rtcDateTime = await getRtcDateTimeAsync();
             if (rtcDateTime) {
                 setAppSettingsData(previous => {
                     return { ...previous, workDate: rtcDateTime.datetime };
                 });
             }
-        })();
     }, [getRtcDateTimeAsync]);
+
+    useEffect(() => {
+        (async () => {
+            await updateWorkDateAsync();
+        })();
+    }, [updateWorkDateAsync]);
+
+    useEffect(() => {
+        const intervalTimer = setInterval(async () => {
+            await updateWorkDateAsync();
+            console.log(appSettingsData.workDate);
+
+        }, 60000);
+
+        return () => clearInterval(intervalTimer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return <AppSettingsContext.Provider value={ {
         appSettingsData,
-        setAppSettingsData
+        setAppSettingsData,
+        updateWorkDateAsync
     } } { ...props } />;
 }
 
