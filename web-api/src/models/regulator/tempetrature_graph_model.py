@@ -1,9 +1,9 @@
 from typing import List
 
-from pydantic import BaseModel
+from models.abstracts.app_base_model import AppBaseModel
 
 
-class TemperatureGraphItemModel(BaseModel):
+class TemperatureGraphItemModel(AppBaseModel):
     outdoor_temperature: float
 
     supply_pipe_temperature: float
@@ -11,5 +11,5 @@ class TemperatureGraphItemModel(BaseModel):
     return_pipe_temperature: float
 
 
-class TemperatureGraphModel(BaseModel):
+class TemperatureGraphModel(AppBaseModel):
     items: List[TemperatureGraphItemModel] = []

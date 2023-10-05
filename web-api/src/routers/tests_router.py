@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 from flask import Response
 from flask_pydantic import validate
 
@@ -20,8 +21,8 @@ from models.regulator.tempetrature_graph_model import TemperatureGraphItemModel,
 
 
 @app.api_route('/tests', methods=['GET'])
-@validate()
-def get_list():
+@validate(response_by_alias=True)
+def get_list() -> List[TestModel]:
     test_list_repository = TestListRepository()
     test_list: TestListModel = test_list_repository.get_list()
 
@@ -29,7 +30,7 @@ def get_list():
 
 
 @app.api_route('/tests/<test_id>', methods=['GET'])
-@validate()
+@validate(response_by_alias=True)
 def get(test_id: int):
     test_list_repository = TestListRepository()
     current_test = test_list_repository.get(test_id)
@@ -38,7 +39,7 @@ def get(test_id: int):
 
 
 @app.api_route('/tests', methods=['POST'])
-@validate()
+@validate(response_by_alias=True)
 def post(body: TestModel) -> TestModel:
     test_list_repository = TestListRepository()
     current_test = test_list_repository.append(body)
@@ -47,7 +48,7 @@ def post(body: TestModel) -> TestModel:
 
 
 @app.api_route('/tests', methods=['PUT'])
-@validate()
+@validate(response_by_alias=True)
 def put(body: TestModel):
     test_list_repository = TestListRepository()
     current_test = test_list_repository.update(body)
@@ -56,7 +57,7 @@ def put(body: TestModel):
 
 
 @app.api_route('/tests/<test_id>', methods=['DELETE'])
-@validate()
+@validate(response_by_alias=True)
 def delete(test_id: int):
     test_list_repository = TestListRepository()
     current_test = test_list_repository.delete(test_id)
@@ -65,7 +66,7 @@ def delete(test_id: int):
 
 
 @app.api_route('/tests/settings', methods=['POST'])
-@validate()
+@validate(response_by_alias=True)
 def post_settings():
 
     return SettingsModel(

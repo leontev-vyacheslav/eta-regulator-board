@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from models.abstracts.app_base_model import AppBaseModel
 
 from models.regulator.control_parameters_model import ControlParametersModel
 from models.regulator.enums.regulator_state_model import RegulatorStateModel
@@ -7,7 +7,7 @@ from models.regulator.service_model import ServiceModel
 from models.regulator.signin_model import SignInModel
 
 
-class SettingsModel(BaseModel):
+class SettingsModel(AppBaseModel):
     mhenoscheme_name: str
 
     regulator_state: RegulatorStateModel

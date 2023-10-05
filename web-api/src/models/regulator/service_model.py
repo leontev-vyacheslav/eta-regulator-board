@@ -1,18 +1,18 @@
-from pydantic import BaseModel
+from models.abstracts.app_base_model import AppBaseModel
 
 from models.regulator.rtc_datetime_model import RtcDateTimeModel
 
-class SoftwareInfoModel(BaseModel):
+class SoftwareInfoModel(AppBaseModel):
     web_api_version: str
 
     web_ui_version: str
 
 
-class HardwareInfoModel(BaseModel):
+class HardwareInfoModel(AppBaseModel):
     onion_mac_address: str
 
 
-class ServiceModel(BaseModel):
+class ServiceModel(AppBaseModel):
     software_info: SoftwareInfoModel
 
     hardware_info: HardwareInfoModel

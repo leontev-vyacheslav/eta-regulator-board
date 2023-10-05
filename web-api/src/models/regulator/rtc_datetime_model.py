@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from models.abstracts.app_base_model import AppBaseModel
 
 
 def convert_datetime_to_iso_8601_with_z_suffix(dt: datetime) -> str:
@@ -8,7 +8,7 @@ def convert_datetime_to_iso_8601_with_z_suffix(dt: datetime) -> str:
     #$.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
 
 
-class RtcDateTimeModel(BaseModel):
+class RtcDateTimeModel(AppBaseModel):
     datetime: datetime
 
     class Config:

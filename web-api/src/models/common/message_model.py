@@ -1,9 +1,9 @@
 from typing import Any, Optional
 
-from pydantic import BaseModel
+from models.abstracts.app_base_model import AppBaseModel
 
 
-class MessageModel(BaseModel):
+class MessageModel(AppBaseModel):
     message: str
-    
+
     data: Optional[Any] = None

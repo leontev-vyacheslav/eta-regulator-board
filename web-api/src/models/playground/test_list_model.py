@@ -1,5 +1,8 @@
-from models.abstracts.list_base_model import ListBaseModel
+from typing import Optional, List
+
+from models.abstracts.app_base_model import AppBaseModel
+from models.playground.test_model import TestModel
 
 
-class TestListModel(ListBaseModel):
-    pass
+class TestListModel(AppBaseModel):
+    items: Optional[List[TestModel]]

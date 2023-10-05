@@ -1,11 +1,11 @@
-from pydantic import BaseModel
+from models.abstracts.app_base_model import AppBaseModel
 
 from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.enums.manual_control_mode_model import ManualControlModeModel
 from models.regulator.enums.valve_position_state_model import ValvePositionStateModel
 
 
-class ControlModel(BaseModel):
+class ControlModel(AppBaseModel):
     control_mode: ControlModeModel = ControlModeModel.AUTO
 
     manual_control_mode: ManualControlModeModel = ManualControlModeModel.VALVE

@@ -1,7 +1,5 @@
-from abc import ABC
-
-from pydantic import BaseModel
+from models.abstracts.app_base_model import AppBaseModel
 
 
-class EntityModel(BaseModel, ABC):
+class EntityModel(AppBaseModel):
     id: int

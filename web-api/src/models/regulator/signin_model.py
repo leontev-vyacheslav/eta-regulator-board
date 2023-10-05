@@ -1,5 +1,5 @@
-from pydantic import BaseModel
+from models.abstracts.app_base_model import AppBaseModel
 
 
-class SignInModel(BaseModel):
+class SignInModel(AppBaseModel):
     pass_key: str

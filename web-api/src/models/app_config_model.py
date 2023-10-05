@@ -1,12 +1,13 @@
 from typing import List
-from pydantic import BaseModel
+
+from models.abstracts.app_base_model import AppBaseModel
 
 
-class WorkerConfigInfo(BaseModel):
+class WorkerConfigInfo(AppBaseModel):
     name: str
     interval: int
     immediately: bool
 
 
-class AppConfigModel(BaseModel):
+class AppConfigModel(AppBaseModel):
     workers: List[WorkerConfigInfo] = []
