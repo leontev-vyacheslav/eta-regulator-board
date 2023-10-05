@@ -2,7 +2,7 @@ from datetime import datetime
 from flask_pydantic import validate
 
 from app import app
-from models.rtc_datetime_model import RtcDateTimeModel
+from models.regulator.rtc_datetime_model import RtcDateTimeModel
 from omega.ds1307 import DS1307
 from utils.debug_helper import is_debug
 

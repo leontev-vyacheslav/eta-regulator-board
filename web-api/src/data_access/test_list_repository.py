@@ -1,8 +1,8 @@
 from typing import Optional
 
 from app import app
-from models.test_list_model import TestListModel
-from models.test_model import TestModel
+from models.playground.test_list_model import TestListModel
+from models.playground.test_model import TestModel
 
 
 class TestListRepository:

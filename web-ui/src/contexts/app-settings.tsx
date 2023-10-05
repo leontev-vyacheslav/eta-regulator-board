@@ -32,8 +32,6 @@ function AppSettingsProvider(props: AppBaseProviderProps) {
     useEffect(() => {
         const intervalTimer = setInterval(async () => {
             await updateWorkDateAsync();
-            console.log(appSettingsData.workDate);
-
         }, 60000);
 
         return () => clearInterval(intervalTimer);

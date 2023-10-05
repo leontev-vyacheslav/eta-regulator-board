@@ -4,8 +4,8 @@ from flask import send_from_directory
 from flask_pydantic import validate
 
 from app import app, APP_NAME, APP_VERSION
-from models.message_model import MessageModel
-from models.shutdown_request_model import ShutdownRequestModel
+from models.common.message_model import MessageModel
+from models.common.shutdown_request_model import ShutdownRequestModel
 
 
 @app.route('/favicon.ico', methods=['GET'])

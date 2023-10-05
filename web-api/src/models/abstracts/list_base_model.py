@@ -3,8 +3,9 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-from models.test_model import TestModel
+from models.abstracts.entity_model import EntityModel
+
 
 
 class ListBaseModel(ABC, BaseModel):
-    items: Optional[List[TestModel]]
+    items: Optional[List[EntityModel]]
