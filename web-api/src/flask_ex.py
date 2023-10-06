@@ -41,6 +41,7 @@ class FlaskEx(Flask):
 
         self.worker_logger: Logger = self._init_worker_logger()
         self.app_config = self._init_app_config()
+        # self.regulator_settings_repository = RegulatorSettingsRepository()
 
     def api_route(self, rule: str, **options: Any) -> Callable:
         return self.route(f'/api{rule}', **options)

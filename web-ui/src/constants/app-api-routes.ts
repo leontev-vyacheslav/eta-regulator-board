@@ -4,5 +4,6 @@ export default {
     accountSignOut: '/api/sign-out',
 
     tests: '/api/tests',
-    rtc: '/api/rtc'
+    rtc: '/api/rtc',
+    regulatorSettings: '/api/regulator-settings'
 };

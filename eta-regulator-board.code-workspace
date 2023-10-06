@@ -16,7 +16,7 @@
     "settings": {
         "python.languageServer": "Pylance",
         "python.analysis.typeCheckingMode": "off",
-        "python.linting.pylintPath": "pylint",
+        "python.linting.pylintPath": ".venv/bin/pylint",
         "python.linting.pylintArgs": [
             "--disable=redefined-builtin",
             "--disable=missing-module-docstring",
@@ -26,8 +26,7 @@
             "--disable=logging-fstring-interpolation",
             "--disable=bare-except",
 
-            "--max-line-length=120"
-
+            "--max-line-length=140"
         ],
         "python.formatting.provider": "autopep8",
         "python.formatting.autopep8Args": [
@@ -36,7 +35,7 @@
         ],
         "[python]": {
             "editor.defaultFormatter": "ms-python.python",
-            "editor.rulers": [120],
+            "editor.rulers": [140],
             "editor.foldingHighlight": true,
         },
         "python.terminal.activateEnvironment": false,

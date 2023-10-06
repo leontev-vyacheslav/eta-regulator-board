@@ -10,11 +10,14 @@ import { PageToolbar } from '../../components/page-toolbar/page-toolbar';
 import { useTestListMenuItems } from './use-test-list-menu-items';
 import { TestList } from './test-list';
 import { DebugPageContextProvider } from './debug-page-context';
+import { Button } from 'devextreme-react';
+import { useAppData } from '../../contexts/app-data/app-data';
 // import { ReactComponent as AppAbout } from '../../assets/app-about.svg'
 
 const DebugPageInner = () => {
     const listRef = useRef<List<TestModel>>(null);
     const listMenuItems = useTestListMenuItems({ listRef });
+    const { getRegulatorSettingsAsync } = useAppData();
 
     return (
         <>
@@ -26,6 +29,10 @@ const DebugPageInner = () => {
                 <div className={ 'dx-card responsive-paddings' }>
                     <PageToolbar title={ 'Тестовый список' } menuItems={ listMenuItems } />
                     <TestList ref={ listRef } />
+                    <Button text={ 'Regulator settings' } onClick={ async () => {
+                        const regulatorSettings = await getRegulatorSettingsAsync();
+                        console.log(regulatorSettings);
+                    } } />
                 </div>
             </div>
         </>

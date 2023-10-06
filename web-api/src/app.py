@@ -1,6 +1,7 @@
 from flask_cors import CORS
 from flask_ex import FlaskEx
 
+from data_access.requlator_settings_repository import RegulatorSettingsRepository
 from workers.worker_starter_extension import WorkerStarter
 
 APP_VERSION = 'v.0.1.20231004-064321'
@@ -14,6 +15,7 @@ CORS(
     origins=['*']
 )
 WorkerStarter(app)
+RegulatorSettingsRepository(app)
 
 
 #pylint: disable=wrong-import-position, disable=wildcard-import
