@@ -37,18 +37,22 @@ function AuthProvider (props: AppBaseProviderProps) {
         setUser(userAuthData);
     }, [getUserAuthDataFromStorage]);
 
-    const signIn = useCallback<SignInAsyncFunc>(async (email: string, password: string) => {
+    const signIn = useCallback<SignInAsyncFunc>(async (password: string) => {
         let userAuthData = null;
         try {
-            const response = await axios.get(
-                `${routes.host}${routes.accountSignIn}?email=${email}&password=${password}`,
+            const response = await axios.post(
+                `${routes.host}${routes.accountSignIn}`, {
+                    password: password
+                }
             );
-            if (response && response.status === HttpConstants.StatusCodes.Ok && response.data) {
+
+            if (response && response.status === HttpConstants.StatusCodes.Created && response.data) {
                 userAuthData = response.data;
                 if (userAuthData) {
                     localStorage.setItem('@userAuthData', JSON.stringify(userAuthData));
                 }
             }
+            
             setUser(userAuthData);
         } catch (error) {
             console.log(`The authentication process was failed with error: ${(error as Error).message}`);
@@ -60,12 +64,15 @@ function AuthProvider (props: AppBaseProviderProps) {
         const userAuthData = getUserAuthDataFromStorage();
         if (userAuthData) {
             try {
-                await axios.post(`${routes.host}${routes.accountSignOut}`, userAuthData, {
+                const signoutResponse = await axios.post(`${routes.host}${routes.accountSignOut}`, userAuthData, {
                     headers: {
                         ...HttpConstants.Headers.ContentTypeJson,
-                        Authentication: `Bearer ${userAuthData.token}`,
+                        'Authorization': `Bearer ${userAuthData.token}`,
                     },
                 });
+
+                console.log(signoutResponse);
+
             } catch (error) {
                 console.log('It was happened error during a process of an user security token revoke!');
             }

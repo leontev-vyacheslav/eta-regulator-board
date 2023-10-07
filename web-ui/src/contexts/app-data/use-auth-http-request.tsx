@@ -11,7 +11,7 @@ export type AxiosWithCredentialsFunc = (config: AxiosRequestConfig, suppressLoad
 
 export const useAuthHttpRequest = () => {
 
-    const { getUserAuthDataFromStorage } = useAuth();
+    const { getUserAuthDataFromStorage, signOut } = useAuth();
     const { showLoader, hideLoader }: SharedAreaContextModel = useSharedArea();
 
     const axiosWithCredentials = useCallback<AxiosWithCredentialsFunc>(
@@ -33,9 +33,16 @@ export const useAuthHttpRequest = () => {
                 }
 
                 response = await httpClientBase.request(config) as AxiosResponse;
+                console.log(response);
+
             } catch (error) {
                 response = (error as AxiosError).response;
-                notify('В процессе выполнения запроса или получения данных от сервера произошла ошибка', 'error', 10000);
+                if (response?.status === 401) {
+                    await signOut();
+                    notify(response.data.message, 'error', 10000);
+                } else {
+                    notify('В процессе выполнения запроса или получения данных от сервера произошла ошибка', 'error', 10000);
+                }
             } finally {
                 if (!suppressLoader) {
                     setTimeout(() => {
@@ -46,7 +53,7 @@ export const useAuthHttpRequest = () => {
 
             return response;
         },
-        [getUserAuthDataFromStorage, hideLoader, showLoader],
+        [getUserAuthDataFromStorage, hideLoader, showLoader, signOut],
 
     );
 

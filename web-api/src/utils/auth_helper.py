@@ -4,33 +4,47 @@ import jwt
 
 from app import app
 from data_access.requlator_settings_repository import RegulatorSettingsRepository
+from models.common.message_model import MessageModel
+from responses.json_response import JsonResponse
 
 
 def authorize(f):
     @wraps(f)
     def decorator(*args, **kwargs):
         token = None
-        if 'bearer' in request.headers:
-            token = request.headers['bearer']
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization'].replace('Bearer ', '')
 
         if not token:
-            return jsonify({'message': 'A valid access token is missing.'})
+            return make_response(
+                jsonify({'message': 'The access token is invalid.'}),
+                401
+            )
         try:
             regulator_settings_repository: RegulatorSettingsRepository = app.extensions['regulator_settings_repository']
-            mac_address = regulator_settings_repository.settings.service.hardware_info.onion_mac_address
-            pass_key = regulator_settings_repository.settings.signin.pass_key
-            data = jwt.decode(token, pass_key, algorithms=["HS256"])
+            regulator_settings = regulator_settings_repository.settings
+
+            mac_address = regulator_settings.service.hardware_info.onion_mac_address
+            password = regulator_settings.signin.password
+
+            data = jwt.decode(token, password, algorithms=["HS256"])
 
             if data is not None:
                 auth_mac_address = data.get('mac_address')
                 if auth_mac_address is None or auth_mac_address != mac_address:
-                    raise Exception
+                    raise Exception('The access token is invalid.')
             else:
-                raise Exception
-        except:
-            return make_response(
-                jsonify({'message': 'The access token is invalid.'}),
-                401
+                raise Exception('The access token is invalid.')
+        except jwt.ExpiredSignatureError:
+            return JsonResponse(
+                response=MessageModel(message='Срок действия токена авторизации истек.'),
+                status=401
+            )
+        # pylint: disable=broad-except
+        except Exception as ex:
+            return JsonResponse(
+                response=MessageModel(message=ex.__str__()),
+                status=401
             )
 
         return f(*args, **kwargs)

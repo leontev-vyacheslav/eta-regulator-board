@@ -1,15 +1,18 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { SingleCard } from './layouts';
-import { LoginForm } from './components';
+import { SinginForm } from './components';
 
 const ContentNonAuth = () => {
     return (
         <Routes>
-            <Route path="/login" element={
+            <Route path="/sign-in" element={
                 <SingleCard title="Вход">
-                    <LoginForm />
+                    <SinginForm />
                 </SingleCard>
             } />
+
+            <Route path='*' element={ <Navigate to='/sign-in' replace /> }
+            />
         </Routes>
     );
 }

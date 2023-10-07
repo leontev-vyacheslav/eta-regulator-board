@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from flask_ex import FlaskEx
+from models.common.signin_model import SigninModel
 from models.regulator.control_model import ControlModel
 from models.regulator.control_parameters_model import ControlParametersModel
 from models.regulator.enums.regulator_state_model import RegulatorStateModel
@@ -9,7 +10,6 @@ from models.regulator.regulator_owner_model import RegulatorOwnerModel
 from models.regulator.rtc_datetime_model import RtcDateTimeModel
 from models.regulator.service_model import HardwareInfoModel, ServiceModel, SoftwareInfoModel
 from models.regulator.settings_model import SettingsModel
-from models.regulator.signin_model import SignInModel
 from models.regulator.tempetrature_graph_model import TemperatureGraphItemModel, TemperatureGraphModel
 
 
@@ -40,8 +40,8 @@ class RegulatorSettingsRepository():
 
             mhenoscheme_name='Независимое присоединение системы отопления с управлением двумя насосами и функцией подпитки',
 
-            signin=SignInModel(
-                pass_key='1234567890'
+            signin=SigninModel(
+                password='1234567890'
             ),
 
             regulator_owner=RegulatorOwnerModel(

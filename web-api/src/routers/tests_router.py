@@ -11,6 +11,7 @@ from utils.auth_helper import authorize
 
 @app.api_route('/tests', methods=['GET'])
 @validate(response_by_alias=True)
+@authorize
 def get_test_list() -> List[TestModel]:
     test_list_repository = TestListRepository()
     test_list: TestListModel = test_list_repository.get_list()

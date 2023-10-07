@@ -5,25 +5,27 @@ import './dx-styles.scss';
 
 import { BrowserRouter } from 'react-router-dom';
 import { NavigationProvider } from './contexts/navigation';
-import { AuthProvider } from './contexts/auth';
+import { AuthProvider, useAuth } from './contexts/auth';
 import { useScreenSizeClass } from './utils/media-query';
-import ContentAuth from './content-auth';
 import { AppSettingsProvider } from './contexts/app-settings';
 import { AppDataProvider } from './contexts/app-data/app-data';
 import { SharedAreaProvider } from './contexts/shared-area';
 import ruMessages from 'devextreme/localization/messages/ru.json';
 import { locale, loadMessages } from 'devextreme/localization';
+import ContentAuth from './content-auth';
+import ContentNonAuth from './content-non-auth';
 
 function App() {
-    // const { user } = useAuth();
+    const { user } = useAuth();
 
-    // if (user === undefined) {
-    //     return null;
-    // }
+    if (user === undefined) {
+        return null;
+    }
+
     loadMessages(ruMessages);
     locale('ru-RU');
 
-    return /*user === null ? <ContentNonAuth/> :*/  <ContentAuth />
+    return user === null ? <ContentNonAuth/> :  <ContentAuth />
 }
 
 function Main() {

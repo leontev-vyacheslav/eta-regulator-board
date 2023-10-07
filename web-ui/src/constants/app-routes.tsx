@@ -32,7 +32,7 @@ const routes = [
     {
         path: '/logout',
         component: SignOutPage,
-    },
+    }
 ];
 
 export default routes.map((route) => {
