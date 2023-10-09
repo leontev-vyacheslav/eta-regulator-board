@@ -4,5 +4,6 @@ __all__= [
     'environment_router',
     'rtc_router',
     'regulator_settings_router',
-    'signin_router'
+    'signin_router',
+    'gpio_router'
 ]

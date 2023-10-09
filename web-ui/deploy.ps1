@@ -51,7 +51,7 @@ Write-Host "Shutting down UHTTPD web server with '$WEB_UI_APP_NAME'..." -Foregro
 $remoteOutput = ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd stop' *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
-    exit
+    # exit
 }
 
 Start-Sleep -Seconds 2

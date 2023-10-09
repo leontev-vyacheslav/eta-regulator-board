@@ -5,6 +5,7 @@ import { DebugIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import { useRef } from 'react';
 import List from 'devextreme-react/list';
+import Switch from 'devextreme-react/switch';
 import { TestModel } from '../../models/data/test-model';
 import { PageToolbar } from '../../components/page-toolbar/page-toolbar';
 import { useTestListMenuItems } from './use-test-list-menu-items';
@@ -17,7 +18,7 @@ import { useAppData } from '../../contexts/app-data/app-data';
 const DebugPageInner = () => {
     const listRef = useRef<List<TestModel>>(null);
     const listMenuItems = useTestListMenuItems({ listRef });
-    const { getRegulatorSettingsAsync } = useAppData();
+    const { getRegulatorSettingsAsync, postSetGpioAsync } = useAppData();
 
     return (
         <>
@@ -29,10 +30,16 @@ const DebugPageInner = () => {
                 <div className={ 'dx-card responsive-paddings' }>
                     <PageToolbar title={ 'Тестовый список' } menuItems={ listMenuItems } />
                     <TestList ref={ listRef } />
-                    <Button text={ 'Regulator settings' } onClick={ async () => {
-                        const regulatorSettings = await getRegulatorSettingsAsync();
-                        console.log(regulatorSettings);
-                    } } />
+                    <div>
+                        <Button text={ 'Regulator settings' } onClick={ async () => {
+                            const regulatorSettings = await getRegulatorSettingsAsync();
+                            console.log(regulatorSettings);
+                        } } />
+                    </div>
+                    <div style={ { marginTop: 20 } }>
+                        <Switch onValueChanged={ async (e) => {
+                            await postSetGpioAsync(3, e.value)
+                        } } /></div>
                 </div>
             </div>
         </>
@@ -41,8 +48,8 @@ const DebugPageInner = () => {
 
 export default () => {
     return (
-    <DebugPageContextProvider>
-        <DebugPageInner />
-    </DebugPageContextProvider>
+        <DebugPageContextProvider>
+            <DebugPageInner />
+        </DebugPageContextProvider>
     );
 };

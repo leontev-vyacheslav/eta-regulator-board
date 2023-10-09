@@ -4,6 +4,7 @@ import jwt
 
 from app import app
 from data_access.requlator_settings_repository import RegulatorSettingsRepository
+from models.common.owner_info_model import OwnerInfoModel
 from models.common.auth_user_model import AuthUserModel
 from models.common.message_model import MessageModel
 from models.common.signin_model import SigninModel
@@ -25,7 +26,7 @@ def signin(body: SigninModel):
     if user_password == password:
         token = jwt.encode({
             'mac_address': mac_address,
-            'exp': datetime.utcnow() + timedelta(minutes = 1)
+            'exp': datetime.utcnow() + timedelta(minutes = 5)
         }, password)
 
         return JsonResponse(
@@ -46,5 +47,28 @@ def signout():
 
     return JsonResponse(
         response=MessageModel(message='The user token has been revoked.'),
+        status=200
+    )
+
+@app.route('/auth-check', methods=['GET'])
+@validate()
+@authorize
+def auth_check():
+
+    return JsonResponse(
+        response=MessageModel(
+            message='The authorization token is valid.'
+        ),
+        status=200
+    )
+
+@app.route('/owner-info', methods=['GET'])
+@validate()
+def get_owner_info():
+    regulator_settings_repository: RegulatorSettingsRepository = app.extensions['regulator_settings_repository']
+    regulator_settings = regulator_settings_repository.settings
+
+    return  JsonResponse(
+        response=OwnerInfoModel(name=regulator_settings.regulator_owner.name),
         status=200
     )

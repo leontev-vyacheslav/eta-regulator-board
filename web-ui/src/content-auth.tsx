@@ -1,11 +1,21 @@
+import { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import routes from './constants/app-routes';
 import { SideNavOuterToolbar as SideNavBarLayout } from './layouts';
 import { Footer } from './components';
 import AppConstants from './constants/app-constants';
 import NotFoundPage from './pages/not-found/not-found-page';
+import { useAuthData } from './contexts/app-data/use-auth-data';
 
 const ContentAuth = () => {
+    const { getAuthCheckDataAsync } = useAuthData();
+
+    useEffect(() => {
+        (async () => {
+            await getAuthCheckDataAsync();
+        })();
+    }, [getAuthCheckDataAsync]);
+
     return (
         <>
             <SideNavBarLayout title={ AppConstants.appInfo.title }>
