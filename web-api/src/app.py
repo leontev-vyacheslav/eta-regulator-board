@@ -4,7 +4,7 @@ from flask_ex import FlaskEx
 from data_access.requlator_settings_repository import RegulatorSettingsRepository
 from workers.worker_starter_extension import WorkerStarter
 
-APP_VERSION = 'v.0.1.20231009-135437'
+APP_VERSION = 'v.0.1.20231010-152651'
 APP_NAME = 'Eta Regulator Board Web API'
 
 app = FlaskEx(__name__)

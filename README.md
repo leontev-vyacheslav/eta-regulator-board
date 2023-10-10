@@ -239,44 +239,15 @@ umount /dev/mmcblk0            # unmount storage device
 mkfs.ext4 /dev/mmcblk0      # format
 ```
 
-## 12. Can we upgrade OpenWrt OS to latest version (OpenWrt 21.02.0) on the Onion Omega2/2+ device?
+## 12. How can I control the GPIOs from Python/Is there an onionGpio module for Python3?
 
-<http://repo.onioniot.com/>
+In official documentation was mentioned such python2 library as pyOnionGpio.
+It was written as a quick and dirty wrapper for the sysfs gpio interface way back in 2016.
+We don't recommend using it for anything other than a hello world.
 
-### 1. Get sysinfo
+BETTER OPTIONS
+There are other better sysfs gpio libraries available for Python3:
 
-<https://openwrt.org/toh/linksys/wrt610n/sysinfo>
-
-```shell
-    cat /etc/openwrt_release
-    cat /proc/version
-    cat /proc/cpuinfo
-```
-
-<https://openwrt.org/docs/guide-user/network/dsa/upgrading-to-2102?dataflt%5BBrand*%7E%5D=Onion>
-
-<https://yoursunny.com/t/2019/omega2pro-openwrt/>
-
-<https://openwrt.org/toh/hwdata/onion/onion_omega2plus>
-
-sysupgrade /mnt/mmcblk0p1/openwrt-22.03.5-ramips-mt76x8-onion_omega2p-squashfs-sysupgrade.bin
-
-root@Omega-7995:~# sysupgrade /mnt/mmcblk0p1/openwrt-22.03.5-ramips-mt76x8-onion_omega2p-squashfs-sysupgrade.bin
-
-Image not in /tmp, copying...
-
-Saving config files...
-
-Commencing upgrade. Closing all shell sessions.
-
-Connection to 192.168.3.1 closed by remote host.
-
-Connection to 192.168.3.1 closed.
-
-
-<https://community.onion.io/topic/4963/beta-openwrt-22-03-firmware-available-your-feedback-is-needed>
-
-
-## 13. Celery
-
-<https://github.com/mossadnik/celery-example-local-filesystem/tree/master>
+https://pypi.org/project/gpio/
+https://python-periphery.readthedocs.io/en/latest/gpio.html
+https://github.com/vitiral/gpio

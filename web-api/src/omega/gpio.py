@@ -1,7 +1,9 @@
 import subprocess
+from typing import List
 
 
 def set(pin: int, state: bool) -> bool:
+
     completed_process = subprocess.run(
         ['fast-gpio',
          'set',
@@ -38,3 +40,8 @@ def get(pin: int) -> bool:
     value = stdout.replace(f'> Read GPIO{pin}: ', str())[0]
 
     return bool(int(value))
+
+
+def get_all(pins: List[int]) -> List[bool]:
+
+    return [get(p) for p in pins]

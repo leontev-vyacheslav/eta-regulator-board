@@ -33,8 +33,6 @@ export const useAuthHttpRequest = () => {
                 }
 
                 response = await httpClientBase.request(config) as AxiosResponse;
-                console.log(response);
-
             } catch (error) {
                 response = (error as AxiosError).response;
                 if (response?.status === 401) {

@@ -28,7 +28,7 @@ export const SinginForm = () => {
     const formData = useRef<SigninFormModel>(
         (
             process.env.NODE_ENV === 'production'
-                ? { password: null }
+                ? { password: '1234567890' }
                 : { password: '1234567890' }
         ) as SigninFormModel
     );
@@ -75,5 +75,4 @@ export const SinginForm = () => {
             </Form>
         </form>
     );
-
 }

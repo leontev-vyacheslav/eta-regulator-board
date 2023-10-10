@@ -9,10 +9,10 @@ export type TestListProps = { innerRef?: Ref<List<TestModel>> }
 const TestListInner = ({ innerRef }: TestListProps) => {
     const { testList } = useDebugPageContext();
 
-    return  <List ref={ innerRef }
+    return  <List className='app-list' ref={ innerRef }
         dataSource={ testList?.items }
         selectionMode={ 'single' }
-        height={ 300 }
+        height={ 150 }
         itemRender={ (item: TestModel) => {
             return <>{item.id}. {item.message}</>
         } }

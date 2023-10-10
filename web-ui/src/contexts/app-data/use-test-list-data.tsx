@@ -10,7 +10,6 @@ export type GetTestListDataAsyncFunc = () => Promise<TestListModel | null>;
 export type PostTestDataAsyncFunc = (testModel: TestModel) => Promise<TestModel | null>;
 export type PutTestDataAsyncFunc = (testModel: TestModel) => Promise<TestModel | null>;
 export type DeleteTestDataAsyncFunc = (testId: number) => Promise<TestModel | null>;
-export type PostSetGpioAsyncFunc = (pin: number, state: boolean) => Promise<object | null>;
 
 export type AppDataContextTestListEndpointsModel = {
     getTestListDataAsync: GetTestListDataAsyncFunc;
@@ -20,10 +19,7 @@ export type AppDataContextTestListEndpointsModel = {
     putTestDataAsync: PutTestDataAsyncFunc;
 
     deleteTestDataAsync: DeleteTestDataAsyncFunc;
-
-    postSetGpioAsync: PostSetGpioAsyncFunc;
 }
-
 
 export const useTestListData = () => {
 
@@ -88,26 +84,11 @@ export const useTestListData = () => {
         return null;
     }, [authHttpRequest]);
 
-    const postSetGpioAsync = useCallback<PostSetGpioAsyncFunc>(async (pin: number, state: boolean): Promise<object | null> => {
-        const response = await authHttpRequest({
-            url: `${routes.host}${routes.gpio}/${pin}/${state}`,
-            method: HttpConstants.Methods.Put as Method,
-        });
-
-        if (response && response.status === HttpConstants.StatusCodes.Ok) {
-
-            return {};
-        }
-
-        return null;
-    }, [authHttpRequest]);
 
     return {
         getTestListDataAsync,
         postTestDataAsync,
         putTestDataAsync,
         deleteTestDataAsync,
-
-        postSetGpioAsync
     };
 }

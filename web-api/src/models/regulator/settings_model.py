@@ -2,6 +2,7 @@ from models.abstracts.app_base_model import AppBaseModel
 
 from models.regulator.control_parameters_model import ControlParametersModel
 from models.regulator.enums.regulator_state_model import RegulatorStateModel
+from models.regulator.gpio_set_model import GpioSetModel
 from models.regulator.regulator_owner_model import RegulatorOwnerModel
 from models.regulator.service_model import ServiceModel
 from models.common.signin_model import SigninModel
@@ -19,3 +20,5 @@ class SettingsModel(AppBaseModel):
     control_parameters: ControlParametersModel
 
     service: ServiceModel
+
+    gpio_set: GpioSetModel

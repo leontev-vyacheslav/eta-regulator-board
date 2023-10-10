@@ -1,6 +1,7 @@
 import { SigninModel } from '../data/signin-model'
 import { ControlParametersModel } from './control-parameters-model'
 import { RegulatorStateModel } from './enums/regulator-state-model'
+import { GpioSetModel } from './gpio-set-model'
 import { RegulatorOwnerModel } from './regulator-owner-model'
 import { ServiceModel } from './service-model'
 
@@ -16,5 +17,7 @@ export type RegulatorSettings = {
 
     controlParameters: ControlParametersModel,
 
-    service: ServiceModel
+    service: ServiceModel,
+
+    gpioSet: GpioSetModel
 }
