@@ -3,7 +3,8 @@ import {
     ExitIcon,
     HomeIcon,
     DebugIcon,
-    SettingsIcon
+    SettingsIcon,
+    GpioIcon
 } from './app-icons';
 import { IconBaseProps } from 'react-icons/lib/cjs/iconBase';
 import { TreeViewItemModel } from '../models/tree-view-item';
@@ -22,6 +23,18 @@ export const navigation: TreeViewItemModel[] = [
         restricted: false,
     },
     {
+        text: 'Вводы/выводы',
+        iconRender: (props: IconBaseProps) => <GpioIcon size={ 22 } { ...props } />,
+        path: '/gpio',
+        restricted: false,
+    },
+    {
+        text: 'Отладка',
+        iconRender: (props: IconBaseProps) => <DebugIcon size={ 22 } { ...props } />,
+        path: '/debug',
+        restricted: false,
+    },
+    {
         text: 'О программе',
         iconRender: (props: IconBaseProps) => <AboutIcon size={ 22 } { ...props } />,
         path: '/about',
@@ -32,11 +45,5 @@ export const navigation: TreeViewItemModel[] = [
         iconRender: (props: IconBaseProps) => <ExitIcon size={ 22 } { ...props } />,
         command: 'exit',
         restricted: false
-    },
-    {
-        text: 'Отладка',
-        iconRender: (props: IconBaseProps) => <DebugIcon size={ 22 } { ...props } />,
-        path: '/debug',
-        restricted: false,
     },
 ];

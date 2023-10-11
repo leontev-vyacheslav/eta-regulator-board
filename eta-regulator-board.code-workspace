@@ -11,10 +11,6 @@
         {
             "name": "web-ui",
             "path": "web-ui"
-        },
-        {
-            "name": "SSH FS - omega-8f79",
-            "uri": "ssh://omega-8f79/"
         }
     ],
     "settings": {

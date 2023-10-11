@@ -2,18 +2,15 @@ import { useCallback, useMemo } from 'react'
 import { AddIcon, DeleteIcon, EditIcon, ExtensionIcon, RefreshIcon } from '../../constants/app-icons';
 import { useAppData } from '../../contexts/app-data/app-data';
 import { List } from 'devextreme-react/list';
-import notify from 'devextreme/ui/notify';
-import devices from 'devextreme/core/devices';
 
 import { TestModel } from '../../models/data/test-model';
 import { useDebugPageContext } from './debug-page-context';
 import { showConfirmDialog, showPromptDialog } from '../../utils/dialogs';
-import { useScreenSize } from '../../utils/media-query';
+import { proclaim } from '../../utils/proclaim';
 
 export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<List<TestModel, any>> }) => {
     const { getTestListDataAsync, postTestDataAsync, putTestDataAsync, deleteTestDataAsync } = useAppData();
     const { setTestList } = useDebugPageContext();
-    const { isXSmall } = useScreenSize();
 
     const refreshTestListAsync = useCallback(async () => {
         const testList = await getTestListDataAsync();
@@ -39,23 +36,15 @@ export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<Lis
                             return previous ? { ...previous, items: [...previous.items, currentTest] } : null;
                         });
 
-                        notify({
+                        proclaim({
                             type: 'success',
-                            width: devices.current().phone ? '90%' : undefined,
                             message: `Тестовый элемент с идентификатором ${currentTest.id}  был успешно добавлен!`,
-                            position: isXSmall ? 'bottom center' : {
-                                at: 'bottom right',
-                                my: 'bottom right',
-                                offset: '-20 -20'
-                            },
-                        }, {
-                            direction: 'up-stack'
                         });
                     }
                 }
             }
         });
-    }, [isXSmall, postTestDataAsync, setTestList]);
+    }, [postTestDataAsync, setTestList]);
 
     const updateTestItemAsync = useCallback(async () => {
 
@@ -93,19 +82,13 @@ export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<Lis
             return;
         }
 
-        notify({
+        proclaim({
             type: 'warning',
             message: 'Не выделен ни один элемент списка!',
-            width: devices.current().phone ? '90%' : undefined,
-            position: isXSmall ? 'bottom center' : {
-                at: 'bottom right',
-                my: 'bottom right',
-                offset: '-20 -20'
-            },
-        }, { direction: 'up-stack' });
+        });
 
 
-    }, [isXSmall, listRef, putTestDataAsync, setTestList]);
+    }, [listRef, putTestDataAsync, setTestList]);
 
     const deleteTestItemAsync = useCallback(async () => {
             if (!listRef || !listRef.current) {
@@ -128,30 +111,18 @@ export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<Lis
                                 return previous ? { ...previous, items: previous.items.filter(i => i.id !== currentTest.id) } : null;
                             });
 
-                            notify({
+                            proclaim({
                                 type: 'success',
-                                width: devices.current().phone ? '90%' : undefined,
                                 message: `Тестовый элемент с идентификатором  ${currentTest.id} успешно удален!`,
-                                position: isXSmall ? 'bottom center' : {
-                                    at: 'bottom right',
-                                    my: 'bottom right',
-                                    offset: '-20 -20'
-                                },
-                            }, { direction: 'up-stack' });
+                            });
 
                             return;
                         }
 
-                        notify({
+                        proclaim({
                             type: 'error',
-                            width: devices.current().phone ? '90%' : undefined,
                             message:  `Тестовый элемент с идентификатором ${originalTest.id} не был удален из-за ошибки!`,
-                            position: isXSmall ? 'bottom center' : {
-                                at: 'bottom right',
-                                my: 'bottom right',
-                                offset: '-20 -20'
-                            },
-                        }, { direction: 'up-stack' });
+                        });
                     },
                     textRender: () => {
                         return <> { `Действительно хотите удалить Тестовый элемент с идентификатором ${originalTest!.id}?` } </>;
@@ -161,18 +132,12 @@ export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<Lis
                 return;
             }
 
-            notify({
+            proclaim({
                 type: 'warning',
-                width: devices.current().phone ? '90%' : undefined,
                 message: 'Не выделен ни один элемент списка!',
-                position: isXSmall ? 'bottom center' : {
-                    at: 'bottom right',
-                    my: 'bottom right',
-                    offset: '-20 -20'
-                },
-            }, { direction: 'up-stack' });
+            });
 
-    }, [deleteTestDataAsync, isXSmall, listRef, setTestList]);
+    }, [deleteTestDataAsync, listRef, setTestList]);
 
     return useMemo(() => {
         return [{

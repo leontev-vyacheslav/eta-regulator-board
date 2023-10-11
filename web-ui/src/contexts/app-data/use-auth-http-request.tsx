@@ -3,14 +3,13 @@ import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { HttpConstants } from '../../constants/app-http-constants';
 import { useSharedArea } from '../shared-area';
 import { SharedAreaContextModel } from '../../models/shared-area-context';
-import notify from 'devextreme/ui/notify';
 import { useAuth } from '../auth';
 import { httpClientBase } from './http-client-base';
+import { proclaim } from '../../utils/proclaim';
 
 export type AxiosWithCredentialsFunc = (config: AxiosRequestConfig, suppressLoader?: boolean) => Promise<AxiosResponse | undefined>;
 
 export const useAuthHttpRequest = () => {
-
     const { getUserAuthDataFromStorage, signOut } = useAuth();
     const { showLoader, hideLoader }: SharedAreaContextModel = useSharedArea();
 
@@ -37,15 +36,22 @@ export const useAuthHttpRequest = () => {
                 response = (error as AxiosError).response;
                 if (response?.status === 401) {
                     await signOut();
-                    notify(response.data.message, 'error', 10000);
+                    proclaim({
+                        type: 'error',
+                        message: response.data.message,
+                    });
+
                 } else {
-                    notify('В процессе выполнения запроса или получения данных от сервера произошла ошибка', 'error', 10000);
+                    proclaim({
+                        type: 'error',
+                        message: 'В процессе выполнения запроса или получения данных от сервера произошла ошибка',
+                    });
                 }
             } finally {
                 if (!suppressLoader) {
                     setTimeout(() => {
                         hideLoader();
-                    }, 500);
+                    }, 250);
                   }
             }
 

@@ -1,13 +1,13 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import Form, { GroupItem, SimpleItem, Tab, TabbedItem } from 'devextreme-react/form';
 import ScrollView from 'devextreme-react/scroll-view';
 import Button from 'devextreme-react/button';
-import notify from 'devextreme/ui/notify';
 import { useAppSettings } from '../../contexts/app-settings';
 import { useScreenSize } from '../../utils/media-query';
 import './settings-form.scss';
 import { SettingsFormProps } from '../../models/settings-form-props';
 import { useAppData } from '../../contexts/app-data/app-data';
+import { proclaim } from '../../utils/proclaim';
 
 const SettingsForm = ({ style }: SettingsFormProps) => {
     const dxAppSettingsFormRef = useRef<Form>(null);
@@ -45,25 +45,15 @@ const SettingsForm = ({ style }: SettingsFormProps) => {
                                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                     const formData =  formRef.instance.option('formData');
                                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                                    const currentWorkDate = new Date(Date.parse(''));
 
-                                    const rtcDateTime = await putRtcDateTimeAsync({
+                                     await putRtcDateTimeAsync({
                                         datetime: formData.workDate
                                     });
-
-                                    console.log(rtcDateTime);
                                     setAppSettingsData({ ...appSettingsData, ...formRef.instance.option('formData') });
-                                    notify({
-                                            message: 'Настройки приложения успешно сохранены.',
-                                            width: 300,
-                                            height: 60,
-                                            position: isXSmall ? 'bottom center' : {
-                                                at: 'bottom right',
-                                                my: 'bottom right',
-                                                offset: '-20 -20'
-                                            }
-                                        }, 'success', 5000
-                                    );
+                                    proclaim({
+                                        type: 'success',
+                                        message: 'Настройки приложения успешно сохранены.'
+                                    });
                                 }
                             } }/>
                 </GroupItem>

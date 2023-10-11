@@ -1,13 +1,12 @@
 import { useState, useRef, useCallback, FormEvent, useEffect } from 'react';
 import Form, { Item, Label, ButtonItem, ButtonOptions, RequiredRule } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
-import notify from 'devextreme/ui/notify';
 import { useAuth } from '../../contexts/auth';
-
-import './signin-form.scss';
 import { SigninFormModel } from '../../models/signin-form-model';
 import { useAuthData } from '../../contexts/app-data/use-auth-data';
 import { OwnerInfoModel } from '../../models/data/owner-info-model';
+import { proclaim } from '../../utils/proclaim';
+import './signin-form.scss';
 
 export const SinginForm = () => {
     const [ownerInfo, setOwnerInfo] = useState<OwnerInfoModel | null>(null);
@@ -40,9 +39,16 @@ export const SinginForm = () => {
             setLoading(true);
             try {
                 await signIn(password!);
-                notify('Пользователь успешно выполнил вход.', 'success', 5000);
+                proclaim({
+                    type: 'success',
+                    message: 'Пользователь успешно выполнил вход.'
+                });
+
             } catch (error) {
-                notify('Пользователь не найден или неверный пароль.', 'error', 5000);
+                proclaim({
+                    type: 'error',
+                    message: 'Пользователь не найден или неверный пароль.',
+                });
             }
             setLoading(false);
         }

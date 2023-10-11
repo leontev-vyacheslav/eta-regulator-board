@@ -40,6 +40,7 @@ export { VscDebug as DebugIcon } from 'react-icons/vsc';
 export { IoEllipsisHorizontal as ExtensionIcon } from 'react-icons/io5';
 export { IoCloudDownloadOutline as DownloadIcon } from 'react-icons/io5';
 export { ImFileZip as PackageIcon } from 'react-icons/im';
+export { IoHardwareChipOutline as  GpioIcon } from 'react-icons/io5';
 
 
 import { MdMoreVert } from 'react-icons/md';
