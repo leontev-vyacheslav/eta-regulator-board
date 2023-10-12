@@ -1,7 +1,5 @@
 import Toolbar, { Item } from 'devextreme-react/toolbar';
 import Button from 'devextreme-react/button';
-import UserPanel from '../user-panel/user-panel';
-import { Template } from 'devextreme-react/core/template';
 import { ReactComponent as AppLogo } from '../../assets/app-logo.svg';
 import { useAppSettings } from '../../contexts/app-settings';
 import { MenuIcon } from '../../constants/app-icons';
@@ -11,54 +9,54 @@ import { HeaderProps } from '../../models/header-props';
 import './header.scss';
 import { useCallback, useEffect,  useState } from 'react';
 
+const WorkDateWidget = ( { outerStyle }: WorkDateWidgetProps) => {
+    const { appSettingsData } = useAppSettings();
+    const [isShowColon, setIsShowColon] = useState<boolean>(true);
+
+    useEffect(() => {
+        const intervalTimer = setInterval(() => {
+            setIsShowColon(previous => !previous);
+        }, 1000);
+
+        return () => clearInterval(intervalTimer)
+    }, []);
+
+    const getFormattedWorkDate = useCallback(() => {
+        if (!appSettingsData.workDate)
+            return null;
+
+        const formattedWorkDate = appSettingsData
+            .workDate
+            .toLocaleDateString('ru-RU', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: 'numeric'
+            });
+
+        return isShowColon ? formattedWorkDate : formattedWorkDate.replaceAll(':', ' ');
+    }, [appSettingsData.workDate, isShowColon]);
+
+    return (
+        <div style={ {
+            ...outerStyle, ...{
+                fontSize: 14,
+                marginTop: 3,
+                fontWeight: 'bold',
+                display: 'flex',
+                flexDirection: 'column',
+                lineHeight: 'initial',
+                alignItems: 'flex-start'
+            }
+        } }>
+            <div> { getFormattedWorkDate() }</div>
+        </div>
+    ) ;
+};
+
 const Header = ({ title, menuToggleEnabled,  toggleMenu } : HeaderProps) => {
     const { appSettingsData } = useAppSettings();
-
-    const WorkDateWidget = ( { outerStyle }: WorkDateWidgetProps) => {
-        const [isShowColon, setIsShowColon] = useState<boolean>(true);
-
-        useEffect(() => {
-            const intervalTimer = setInterval(() => {
-                setIsShowColon(previous => !previous);
-            }, 1000);
-
-            return () => clearInterval(intervalTimer)
-        }, []);
-
-        const getFormattedWorkDate = useCallback(() => {
-            if (!appSettingsData.workDate)
-                return null;
-
-            const formattedWorkDate = appSettingsData
-                .workDate
-                .toLocaleDateString('ru-RU', {
-                    day: '2-digit',
-                    month: 'long',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: 'numeric'
-                });
-
-            return isShowColon ? formattedWorkDate : formattedWorkDate.replaceAll(':', ' ');
-        }, [isShowColon]);
-
-        return (
-            <div style={ {
-                ...outerStyle, ...{
-                    fontSize: 14,
-                    marginTop: 3,
-                    fontWeight: 'bold',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    lineHeight: 'initial',
-                    alignItems: 'flex-start'
-                }
-            } }>
-                <div> { getFormattedWorkDate() }</div>
-            </div>
-        ) ;
-    };
-
     return (
         <header className={ 'header-component' }>
             <Toolbar className={ 'header-toolbar' }>
@@ -81,24 +79,13 @@ const Header = ({ title, menuToggleEnabled,  toggleMenu } : HeaderProps) => {
                         );
                     } }
                 />
-                <Item location={ 'after' } locateInMenu={ 'auto' } menuItemTemplate={ 'workDayWidgetTemplate' } >
-                    <WorkDateWidget />
-                </Item>
-                {/* <Item location={ 'after' } locateInMenu={ 'auto' } menuItemTemplate={ 'userPanelTemplate' }>
-                    <Button className={ 'user-button authorization' } stylingMode={ 'text' }>
-                        <UserPanel menuMode={ 'context' }/>
-                    </Button>
-                </Item> */}
-
-                <Template name={ 'userPanelTemplate' }>
-                    <UserPanel menuMode={ 'list' }/>
-                </Template>
-                <Template name={ 'workDayWidgetTemplate' }>
-                    <div style={ { display: 'flex', alignItems: 'center', /*borderBottomColor: '#d8d8d8', borderBottomWidth: 1, borderBottomStyle: 'solid' */  } } className={ 'dx-item-content dx-list-item-content' }>
-                        <span className={ 'dx-icon dx-icon-info dx-list-item-icon' }/>
-                        <WorkDateWidget outerStyle={ { marginLeft: 15 } }/>
-                    </div>
-                </Template>
+                {
+                    appSettingsData.workDate ?
+                        <Item location={ 'after' } locateInMenu={ 'auto' } >
+                            <WorkDateWidget />
+                        </Item>
+                        : null
+                }
             </Toolbar>
         </header>
     )

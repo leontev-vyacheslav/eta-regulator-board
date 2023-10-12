@@ -4,7 +4,7 @@ import {
     HomeIcon,
     DebugIcon,
     SettingsIcon,
-    GpioIcon
+    GpioIcon,
 } from './app-icons';
 import { IconBaseProps } from 'react-icons/lib/cjs/iconBase';
 import { TreeViewItemModel } from '../models/tree-view-item';

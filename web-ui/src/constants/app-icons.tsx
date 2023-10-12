@@ -41,6 +41,7 @@ export { IoEllipsisHorizontal as ExtensionIcon } from 'react-icons/io5';
 export { IoCloudDownloadOutline as DownloadIcon } from 'react-icons/io5';
 export { ImFileZip as PackageIcon } from 'react-icons/im';
 export { IoHardwareChipOutline as  GpioIcon } from 'react-icons/io5';
+export { VscTools as ServiceIcon } from 'react-icons/vsc';
 
 
 import { MdMoreVert } from 'react-icons/md';

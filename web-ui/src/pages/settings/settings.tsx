@@ -11,7 +11,7 @@ export default () => {
             </PageHeader>
             <div className={ 'content-block' }>
                 <div className={ 'dx-card responsive-paddings' }>
-                    <SettingsForm style={ { width: 400 } }/>
+                    <SettingsForm style={ { width: 600 } }/>
                 </div>
             </div>
         </>
