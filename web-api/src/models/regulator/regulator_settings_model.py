@@ -1,24 +1,24 @@
 from models.abstracts.app_base_model import AppBaseModel
-
-from models.regulator.control_parameters_model import ControlParametersModel
+from models.regulator.regulator_parameters_model import RegulatorParametersModel
 from models.regulator.enums.regulator_state_model import RegulatorStateModel
 from models.regulator.gpio_set_model import GpioSetModel
-from models.regulator.regulator_owner_model import RegulatorOwnerModel
 from models.regulator.service_model import ServiceModel
 from models.common.signin_model import SigninModel
 
 
-class SettingsModel(AppBaseModel):
-    mhenoscheme_name: str
+class RegulatorSettingsModel(AppBaseModel):
 
+    # Пуск
     regulator_state: RegulatorStateModel
 
+    # Вход в систему
     signin: SigninModel
 
-    regulator_owner: RegulatorOwnerModel
+    # Параметры
+    regulator_parameters: RegulatorParametersModel
 
-    control_parameters: ControlParametersModel
-
-    service: ServiceModel
-
+    # Ввод/вывод
     gpio_set: GpioSetModel
+
+    # Сервис
+    service: ServiceModel

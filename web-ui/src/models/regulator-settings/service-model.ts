@@ -1,3 +1,9 @@
+export type RegulatorOwnerModel = {
+    name: string,
+
+    phoneNumber: string
+}
+
 export type SoftwareInfoModel = {
     webApiVersion: string,
 
@@ -15,6 +21,8 @@ export type RtcDateTimeModel = {
 }
 
 export type ServiceModel = {
+    regulatorOwner: RegulatorOwnerModel,
+
     softwareInfo: SoftwareInfoModel,
 
     hardwareInfo: HardwareInfoModel,

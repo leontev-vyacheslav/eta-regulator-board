@@ -3,7 +3,6 @@ from flask_pydantic import validate
 import jwt
 
 from app import app
-from data_access.requlator_settings_repository import RegulatorSettingsRepository
 from models.common.owner_info_model import OwnerInfoModel
 from models.common.auth_user_model import AuthUserModel
 from models.common.message_model import MessageModel
@@ -16,9 +15,7 @@ from utils.auth_helper import authorize
 @validate()
 def signin(body: SigninModel):
     user_password = body.password
-
-    regulator_settings_repository: RegulatorSettingsRepository = app.extensions['regulator_settings_repository']
-    regulator_settings = regulator_settings_repository.settings
+    regulator_settings = app.get_regulator_settings()
 
     password = regulator_settings.signin.password
     mac_address = regulator_settings.service.hardware_info.onion_mac_address
@@ -26,7 +23,7 @@ def signin(body: SigninModel):
     if user_password == password:
         token = jwt.encode({
             'mac_address': mac_address,
-            'exp': datetime.utcnow() + timedelta(minutes = 5)
+            'exp': datetime.utcnow() + timedelta(minutes = 30)
         }, password)
 
         return JsonResponse(
@@ -65,8 +62,7 @@ def auth_check():
 @app.route('/owner-info', methods=['GET'])
 @validate()
 def get_owner_info():
-    regulator_settings_repository: RegulatorSettingsRepository = app.extensions['regulator_settings_repository']
-    regulator_settings = regulator_settings_repository.settings
+    regulator_settings = app.get_regulator_settings()
 
     return  JsonResponse(
         response=OwnerInfoModel(name=regulator_settings.regulator_owner.name),

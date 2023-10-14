@@ -49,8 +49,7 @@ def get_gpio(pin: int):
 @app.api_route('/gpio/all', methods=['GET'])
 @validate(response_by_alias=True)
 def get_gpio_set():
-    regulator_settings_repository: RegulatorSettingsRepository = app.extensions['regulator_settings_repository']
-    regulator_settings = regulator_settings_repository.settings
+    regulator_settings = app.get_regulator_settings()
 
     if not is_debug():
         gpio_set_pins = [gpio_set_item.pin for gpio_set_item in regulator_settings.gpio_set.items]

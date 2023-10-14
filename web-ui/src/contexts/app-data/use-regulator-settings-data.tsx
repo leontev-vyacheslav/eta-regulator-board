@@ -1,12 +1,12 @@
 import { Method } from 'axios';
 import { useCallback } from 'react';
 import { useAuthHttpRequest } from './use-auth-http-request';
-import { RegulatorSettings } from '../../models/regulator-settings/settings-model';
+import { RegulatorSettingsModel } from '../../models/regulator-settings/regulator-settings-model';
 import { HttpConstants } from '../../constants/app-http-constants';
 import routes from '../../constants/app-api-routes';
 
 
-export type GetRegulatorSettingsAsyncFunc = () => Promise<RegulatorSettings | null>;
+export type GetRegulatorSettingsAsyncFunc = () => Promise<RegulatorSettingsModel | null>;
 
 export type AppDataContextRegulatorSettingsEndpointsModel = {
     getRegulatorSettingsAsync: GetRegulatorSettingsAsyncFunc;
@@ -23,7 +23,7 @@ export const useRegulatorSettingsData = () => {
 
         if (response && response.status === HttpConstants.StatusCodes.Ok) {
 
-            return response.data as RegulatorSettings;
+            return response.data as RegulatorSettingsModel;
         }
 
         return null;

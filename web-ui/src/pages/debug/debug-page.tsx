@@ -15,7 +15,6 @@ const DebugPageInner = () => {
     const listRef = useRef<List<TestModel>>(null);
     const listMenuItems = useTestListMenuItems({ listRef });
 
-
     return (
         <>
             <PageHeader caption={ 'Отладка' }>
@@ -32,7 +31,7 @@ const DebugPageInner = () => {
     )
 };
 
-export default () => {
+export const DebugPage = () => {
     return (
         <DebugPageContextProvider>
             <DebugPageInner />

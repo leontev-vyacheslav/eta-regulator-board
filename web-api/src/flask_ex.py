@@ -5,6 +5,7 @@ import pathlib
 from typing import Callable, Optional, Any, Union
 
 from flask import Flask
+from data_access.requlator_settings_repository import RegulatorSettingsRepository
 
 from models.app_config_model import AppConfigModel
 
@@ -68,3 +69,8 @@ class FlaskEx(Flask):
             json_config = f.read()
 
         return AppConfigModel.parse_raw(json_config)
+
+    def get_regulator_settings(self):
+        regulator_settings_repository: RegulatorSettingsRepository = self.extensions['regulator_settings_repository']
+
+        return regulator_settings_repository.settings

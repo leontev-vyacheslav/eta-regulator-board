@@ -1,7 +1,7 @@
-export { default as HomePage } from './home/home';
-export { default as SettingsPage } from './settings/settings';
-export { default as AboutPage } from './about/about-page';
-export { default as SignOutPage } from './sign-out/sign-out';
+export { HomePage } from './home/home';
+export { SettingsPage } from './settings-page/settings-page';
+export { AboutPage } from './about-page/about-page';
+export { SignOutPage } from './sign-out-page/sign-out-page';
 export { default as NotFoundPage } from './not-found/not-found-page';
-export { default as DebugPage } from './debug/debug-page';
+export { DebugPage } from './debug/debug-page';
 export { GpioPage } from './gpio-page/gpio-page';
