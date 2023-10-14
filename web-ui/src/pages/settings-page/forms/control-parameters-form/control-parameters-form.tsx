@@ -2,11 +2,15 @@ import { Form, GroupItem, SimpleItem } from 'devextreme-react/form';
 import { useScreenSize } from '../../../../utils/media-query';
 import { useRef } from 'react';
 import { useSettingPageContext } from '../../settings-page-context';
+import { ValvePositionStates } from '../../../../models/regulator-settings/enums/valve-position-state';
+import { ControlModes } from '../../../../models/regulator-settings/enums/control-mode-model';
+import {  ManualControlModes } from '../../../../models/regulator-settings/enums/manual-control-mode-model';
 
 export const ControlParametersForm = () => {
     const dxControlParametersFormRef = useRef<Form>(null);
     const { isXSmall, isSmall } = useScreenSize();
     const { regulatorSettings } = useSettingPageContext();
+    console.log(ValvePositionStates);
 
     return (
         <Form
@@ -23,19 +27,19 @@ export const ControlParametersForm = () => {
                     dataField='controlMode'
                     label={ { location: 'top', showColon: true, text: 'Режим управления' } }
                     editorType={ 'dxSelectBox' }
-                    editorOptions={ { items: [1, 2] } } />
+                    editorOptions={ { items: ControlModes, valueExpr: 'id', displayExpr: 'description' } } />
 
                 <SimpleItem
                     dataField='manualControlMode'
                     label={ { location: 'top', showColon: true, text: 'Режим ручного управления' } }
                     editorType={ 'dxSelectBox' }
-                    editorOptions={ { items: [1, 2] } } />
+                    editorOptions={ { items: ManualControlModes, valueExpr: 'id', displayExpr: 'description' } } />
 
                 <SimpleItem
                     dataField='valvePositionState'
                     label={ { location: 'top', showColon: true, text: 'Действие клапана' } }
                     editorType={ 'dxSelectBox' }
-                    editorOptions={ { items: [1, 2] } } />
+                    editorOptions={ { items: ValvePositionStates, valueExpr: 'id', displayExpr: 'description' } } />
             </GroupItem>
 
             <GroupItem caption={ 'Уставки' }>
