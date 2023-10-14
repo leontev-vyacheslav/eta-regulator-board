@@ -4,9 +4,9 @@ from models.common.signin_model import SigninModel
 from models.regulator.control_parameters_model import ControlParametersModel
 from models.regulator.regulator_parameters_model import RegulatorParametersModel
 from models.regulator.enums.regulator_state_model import RegulatorStateModel
+from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.regulator.rtc_datetime_model import RtcDateTimeModel
-from models.regulator.service_model import HardwareInfoModel, ServiceModel, SoftwareInfoModel
-from models.regulator.settings_model import SettingsModel
+from models.regulator.service_model import HardwareInfoModel, RegulatorOwnerModel, ServiceModel, SoftwareInfoModel
 from models.regulator.tempetrature_graph_model import TemperatureGraphItemModel, TemperatureGraphModel
 
 
@@ -35,19 +35,12 @@ class RegulatorSettingsRepository():
         return RegulatorSettingsModel(
             regulator_state=RegulatorStateModel.ON,
 
-            mhenoscheme_name='Независимое присоединение системы отопления с управлением двумя насосами и функцией подпитки',
-
             signin=SigninModel(
                 password='1234567890'
             ),
 
-            regulator_owner=RegulatorOwnerModel(
-                name='ETA',
-                phone_number='(+7)9274484221'
-            ),
-
-            control_parameters=ControlParametersModel(
-                control=ControlModel(),
+            regulator_parameters=RegulatorParametersModel(
+                control_parameters=ControlParametersModel(),
                 temperature_graph=TemperatureGraphModel(
                     items=[
                         TemperatureGraphItemModel(
