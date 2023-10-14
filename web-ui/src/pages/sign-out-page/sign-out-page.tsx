@@ -1,10 +1,9 @@
-
 import {  Route, Routes } from 'react-router-dom';
 import { useAuth } from '../../contexts/auth';
 import { useEffect } from 'react';
 
 
-export default function () {
+export const SignOutPage = function () {
     const { signOut } = useAuth();
 
     useEffect(() => {

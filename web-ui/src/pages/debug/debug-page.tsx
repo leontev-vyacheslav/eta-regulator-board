@@ -32,7 +32,7 @@ const DebugPageInner = () => {
     )
 };
 
-export default () => {
+export const DebugPage = () => {
     return (
         <DebugPageContextProvider>
             <DebugPageInner />

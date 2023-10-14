@@ -1,13 +1,12 @@
 import { SigninModel } from '../data/signin-model'
-import { ControlParametersModel } from './control-parameters-model'
+import { RegulatorParametersModel as RegulatorParametersModel } from './regulator-parameters-model'
 import { RegulatorStateModel } from './enums/regulator-state-model'
 import { GpioSetModel } from './gpio-set-model'
 import { RegulatorOwnerModel } from './regulator-owner-model'
 import { ServiceModel } from './service-model'
 
 
-export type RegulatorSettings = {
-    mhenoschemeName: string,
+export type RegulatorSettingsModel = {
 
     regulatorState: RegulatorStateModel,
 
@@ -15,9 +14,9 @@ export type RegulatorSettings = {
 
     regulatorOwner: RegulatorOwnerModel,
 
-    controlParameters: ControlParametersModel,
-
-    service: ServiceModel,
+    regulatorParameters: RegulatorParametersModel,
 
     gpioSet: GpioSetModel
+
+    service: ServiceModel,
 }

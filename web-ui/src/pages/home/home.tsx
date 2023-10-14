@@ -3,8 +3,7 @@ import AppConstants from '../../constants/app-constants';
 import { HomeIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 
-export default () => {
-
+export const HomePage = () => {
 
     return (
         <>

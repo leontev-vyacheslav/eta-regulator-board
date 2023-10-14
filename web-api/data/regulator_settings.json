@@ -1,5 +1,4 @@
 {
-    "mhenoschemeName": "\u041d\u0435\u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0435 \u043f\u0440\u0438\u0441\u043e\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u0435 \u0441\u0438\u0441\u0442\u0435\u043c\u044b \u043e\u0442\u043e\u043f\u043b\u0435\u043d\u0438\u044f \u0441 \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435\u043c \u0434\u0432\u0443\u043c\u044f \u043d\u0430\u0441\u043e\u0441\u0430\u043c\u0438 \u0438 \u0444\u0443\u043d\u043a\u0446\u0438\u0435\u0439 \u043f\u043e\u0434\u043f\u0438\u0442\u043a\u0438",
     "regulatorState": 1,
     "signin": {
         "password": "1234567890"
@@ -8,8 +7,8 @@
         "name": "ETA24",
         "phoneNumber": "(+7)9274484221"
     },
-    "controlParameters": {
-        "control": {
+    "regulatorParameters": {
+        "controlParameters": {
             "controlMode": 1,
             "manualControlMode": 1,
             "valvePositionState": 1,
@@ -37,9 +36,24 @@
                     "returnPipeTemperature": 29.6
                 }
             ]
-        }
+        },
+        "programms": {
+            "items": []
+        },
+        "schedules": {
+            "items": []
+        },
+        "regulationParameters": {
+            "proportionalityFactor": 40,
+            "integrationFactor": 3,
+            "differentiationFactor": 2,
+            "samplingTime": 10,
+            "reductionFactorPid": 10,
+            "valvePeriod": 0,
+            "analogControl": false
+        },
+        "emergencyVerification": {}
     },
-    
     "service": {
         "softwareInfo": {
             "webApiVersion": "v.0.1.20231004-064321",
