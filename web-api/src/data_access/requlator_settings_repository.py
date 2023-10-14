@@ -5,8 +5,8 @@ from models.regulator.control_parameters_model import ControlParametersModel
 from models.regulator.regulator_parameters_model import RegulatorParametersModel
 from models.regulator.enums.regulator_state_model import RegulatorStateModel
 from models.regulator.rtc_datetime_model import RtcDateTimeModel
-from models.regulator.service_model import HardwareInfoModel, RegulatorOwnerModel, ServiceModel, SoftwareInfoModel
-from models.regulator.regulator_settings_model import RegulatorSettingsModel
+from models.regulator.service_model import HardwareInfoModel, ServiceModel, SoftwareInfoModel
+from models.regulator.settings_model import SettingsModel
 from models.regulator.tempetrature_graph_model import TemperatureGraphItemModel, TemperatureGraphModel
 
 
@@ -40,9 +40,14 @@ class RegulatorSettingsRepository():
             signin=SigninModel(
                 password='1234567890'
             ),
-            # TODO: apply model refactoring
-            regulator_parameters=RegulatorParametersModel(
-                control_parameters=ControlParametersModel(),
+
+            regulator_owner=RegulatorOwnerModel(
+                name='ETA',
+                phone_number='(+7)9274484221'
+            ),
+
+            control_parameters=ControlParametersModel(
+                control=ControlModel(),
                 temperature_graph=TemperatureGraphModel(
                     items=[
                         TemperatureGraphItemModel(

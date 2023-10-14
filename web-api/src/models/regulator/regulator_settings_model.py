@@ -1,4 +1,5 @@
 from models.abstracts.app_base_model import AppBaseModel
+
 from models.regulator.regulator_parameters_model import RegulatorParametersModel
 from models.regulator.enums.regulator_state_model import RegulatorStateModel
 from models.regulator.gpio_set_model import GpioSetModel

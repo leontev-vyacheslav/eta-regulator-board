@@ -4,7 +4,6 @@
     "signin": {
         "password": "1234567890"
     },
-
     "regulatorParameters": {
         "controlParameters": {
             "controlMode": 1,
