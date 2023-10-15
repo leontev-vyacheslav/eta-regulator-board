@@ -2,10 +2,15 @@ from datetime import datetime
 
 from models.common.signin_model import SigninModel
 from models.regulator.control_parameters_model import ControlParametersModel
+from models.regulator.emergency_verification_model import EmergencyVerificationModel
+from models.regulator.gpio_set_model import GpioSetModel
+from models.regulator.regulation_parameters_model import RegulationParametersModel
 from models.regulator.regulator_parameters_model import RegulatorParametersModel
 from models.regulator.enums.regulator_state_model import RegulatorStateModel
+from models.regulator.regulator_programms_model import RegulatorProgrammsModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.regulator.rtc_datetime_model import RtcDateTimeModel
+from models.regulator.schedules_model import SchelulesModel
 from models.regulator.service_model import HardwareInfoModel, RegulatorOwnerModel, ServiceModel, SoftwareInfoModel
 from models.regulator.tempetrature_graph_model import TemperatureGraphItemModel, TemperatureGraphModel
 
@@ -14,6 +19,8 @@ class RegulatorSettingsRepository():
 
     def __init__(self, app = None, **kwargs):
         self._options = kwargs
+
+        self.settings: RegulatorSettingsModel = self._get_default_settings()
 
         if app is not None:
             self.init_app(app)
@@ -54,7 +61,14 @@ class RegulatorSettingsRepository():
                             return_pipe_temperature=29.6
                         )
                     ]
-                )
+                ),
+                regulation_parameters=RegulationParametersModel(),
+
+                emergency_verification=EmergencyVerificationModel(),
+
+                programms=RegulatorProgrammsModel(items=[]),
+
+                schedules=SchelulesModel(),
             ),
 
             service=ServiceModel(
@@ -72,7 +86,8 @@ class RegulatorSettingsRepository():
                 rtc_datetime=RtcDateTimeModel(
                     datetime=datetime.now()
                 )
-            )
+            ),
+            gpio_set=GpioSetModel(items=[])
         )
 
     def _dump(self) -> bool:
@@ -82,6 +97,7 @@ class RegulatorSettingsRepository():
 
         return len(json) == dumped_bytes
 
-    def update(self, settings):
-        self.settings = settings
+    def update(self, current_settings):
+        self.settings = current_settings
+
         self._dump()

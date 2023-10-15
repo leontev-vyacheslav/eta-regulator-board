@@ -17,3 +17,19 @@ export type RegulatorSettingsModel = {
 
     service: ServiceModel,
 }
+
+export type RegulatorSettingsChangeLogItemModel = {
+    dataField: string,
+
+    value: string | boolean | number | Date,
+
+    path: string,
+
+    datetime: Date
+}
+
+export type RegulatorSettingsChangeModel = {
+    regulatorSettings: RegulatorSettingsModel,
+
+    changeLogItem: RegulatorSettingsChangeLogItemModel
+}

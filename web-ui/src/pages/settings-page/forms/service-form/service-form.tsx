@@ -28,6 +28,7 @@ export const ServiceForm = () => {
                         pickerType: 'rollers'
                     } } />
             </GroupItem>
+
             <GroupItem caption={ 'Собственник' }>
                 <SimpleItem
                     dataField={ 'regulatorOwner.name' }
@@ -44,6 +45,7 @@ export const ServiceForm = () => {
                         mask: '+7 (000) 000-00-00'
                     } } />
             </GroupItem>
+            
             <GroupItem caption='Версии ПО'>
                 <SimpleItem
                  dataField={ 'softwareInfo.webApiVersion' }

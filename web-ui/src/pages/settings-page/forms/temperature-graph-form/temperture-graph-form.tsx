@@ -36,7 +36,8 @@ export const TemperatureGraphForm = () => {
             className='app-grid temperagure-graph-grid'
             showColumnLines
             dataSource={ regulatorSettings?.regulatorParameters.temperatureGraph.items }
-            height={ '50vh' } >
+            height={ '50vh' }
+            >
             <Selection mode='single' />
             <Column dataField='outdoorTemperature' caption={ сolumCaptions.outdoorTemperatureColCaption } allowSorting={ false } />
             <Column dataField='supplyPipeTemperature' caption={ сolumCaptions.supplyPipeTemperatureColCaption } allowSorting={ false } />

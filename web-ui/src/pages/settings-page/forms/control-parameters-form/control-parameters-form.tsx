@@ -5,12 +5,14 @@ import { useSettingPageContext } from '../../settings-page-context';
 import { ValvePositionStates } from '../../../../models/regulator-settings/enums/valve-position-state';
 import { ControlModes } from '../../../../models/regulator-settings/enums/control-mode-model';
 import {  ManualControlModes } from '../../../../models/regulator-settings/enums/manual-control-mode-model';
+import { FieldDataChangedEvent } from 'devextreme/ui/form';
+import { useAppData } from '../../../../contexts/app-data/app-data';
 
 export const ControlParametersForm = () => {
     const dxControlParametersFormRef = useRef<Form>(null);
     const { isXSmall, isSmall } = useScreenSize();
     const { regulatorSettings } = useSettingPageContext();
-    console.log(ValvePositionStates);
+    const { putRegulatorSettingsAsync } = useAppData();
 
     return (
         <Form
@@ -21,6 +23,20 @@ export const ControlParametersForm = () => {
             colCount={ 1 }
             formData={ regulatorSettings?.regulatorParameters.controlParameters }
             ref={ dxControlParametersFormRef }
+            onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
+                const regulutorSettingsChange = {
+                    regulatorSettings: regulatorSettings!,
+                    changeLogItem: {
+                        dataField: e.dataField!,
+                        datetime: new Date(),
+                        path: 'regulatorParameters.controlParameters',
+                        value: e.value
+                    }
+                }
+
+                await putRegulatorSettingsAsync(regulutorSettingsChange);
+                console.log(e, regulatorSettings);
+            } }
         >
             <GroupItem caption={ 'Режимы' }>
                 <SimpleItem

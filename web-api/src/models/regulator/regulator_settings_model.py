@@ -1,3 +1,6 @@
+from datetime import datetime as datetime_type
+from typing import Any
+# from typing import Union
 from models.abstracts.app_base_model import AppBaseModel
 
 from models.regulator.regulator_parameters_model import RegulatorParametersModel
@@ -23,3 +26,20 @@ class RegulatorSettingsModel(AppBaseModel):
 
     # Сервис
     service: ServiceModel
+
+
+class RegulatorSettingsChangeLogItemModel(AppBaseModel):
+    data_field: str
+
+    value: Any # Union[str, bool, float, int, datetime_type]
+
+    path: str
+
+    datetime: datetime_type
+
+
+
+class RegulatorSettingsChangeModel(AppBaseModel):
+    regulator_settings: RegulatorSettingsModel
+
+    change_log_item: RegulatorSettingsChangeLogItemModel

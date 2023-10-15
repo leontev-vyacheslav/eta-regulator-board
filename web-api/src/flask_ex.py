@@ -70,6 +70,11 @@ class FlaskEx(Flask):
 
         return AppConfigModel.parse_raw(json_config)
 
+    def get_regulator_settings_repository(self):
+        regulator_settings_repository: RegulatorSettingsRepository = self.extensions['regulator_settings_repository']
+
+        return regulator_settings_repository
+
     def get_regulator_settings(self):
         regulator_settings_repository: RegulatorSettingsRepository = self.extensions['regulator_settings_repository']
 

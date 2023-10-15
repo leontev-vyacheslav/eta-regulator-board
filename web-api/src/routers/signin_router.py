@@ -65,6 +65,6 @@ def get_owner_info():
     regulator_settings = app.get_regulator_settings()
 
     return  JsonResponse(
-        response=OwnerInfoModel(name=regulator_settings.regulator_owner.name),
+        response=OwnerInfoModel(name=regulator_settings.service.regulator_owner.name),
         status=200
     )
