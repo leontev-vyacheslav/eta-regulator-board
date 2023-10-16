@@ -1,15 +1,15 @@
 import { Dispatch, createContext, useContext, useEffect, useState } from 'react'
-import { GpioSetModel } from '../../models/regulator-settings/gpio-set-model';
-import { useGpioData } from '../../contexts/app-data/use-gpio-data';
+import { GpioSetModel } from '../../../../models/regulator-settings/gpio-set-model';
+import { useGpioData } from '../../../../contexts/app-data/use-gpio-data';
 
-export type GpioPageContextModel = {
+export type GpioListContextModel = {
     gpioSet: GpioSetModel | null,
     setGpioSet: Dispatch<React.SetStateAction<GpioSetModel | null | undefined>>
 };
 
-const GpioPageContext = createContext({} as GpioPageContextModel);
+const GpioListContext = createContext({} as GpioListContextModel);
 
-function GpioPageContextProvider(props: any) {
+function GpioListContextProvider(props: any) {
     const [gpioSet, setGpioSet] = useState<GpioSetModel | null>();
     const { getGpioAllAsync } = useGpioData();
 
@@ -21,14 +21,14 @@ function GpioPageContextProvider(props: any) {
     }, [getGpioAllAsync]);
 
     return (
-        <GpioPageContext.Provider value={ {
+        <GpioListContext.Provider value={ {
             gpioSet,
             setGpioSet
         } } { ...props }>
             {props.children}
-        </GpioPageContext.Provider>
+        </GpioListContext.Provider>
     );
 }
-const useGpioPageContext = () => useContext(GpioPageContext);
+const useGpioListContext = () => useContext(GpioListContext);
 
-export { GpioPageContextProvider, useGpioPageContext }
+export { GpioListContextProvider, useGpioListContext }

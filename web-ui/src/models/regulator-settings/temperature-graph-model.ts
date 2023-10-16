@@ -1,4 +1,6 @@
 export type TemperatureGraphItemModel = {
+    id: string,
+    
     outdoorTemperature: number,
 
     supplyPipeTemperature: number,

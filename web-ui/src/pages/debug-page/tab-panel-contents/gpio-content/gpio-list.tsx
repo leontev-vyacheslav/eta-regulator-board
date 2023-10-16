@@ -1,9 +1,9 @@
 import { List } from 'devextreme-react/list';
 import Switch from 'devextreme-react/switch';
 import { Ref } from 'react';
-import { GpioItemModel } from '../../models/regulator-settings/gpio-set-model';
-import { useGpioData } from '../../contexts/app-data/use-gpio-data';
-import { useGpioPageContext } from './gpio-page-context';
+import { GpioItemModel } from '../../../../models/regulator-settings/gpio-set-model';
+import { useGpioData } from '../../../../contexts/app-data/use-gpio-data';
+import { useGpioListContext } from './gpio-list-context';
 import React from 'react';
 
 export type GpioListProps = { innerRef?: Ref<List<GpioItemModel>> }
@@ -28,9 +28,10 @@ const GpioListItem = ({ gpioItem }: {gpioItem: GpioItemModel}) => {
 };
 
 export const GpioListInner = ({ innerRef }: GpioListProps) => {
-    const { gpioSet } = useGpioPageContext();
+    const { gpioSet } = useGpioListContext();
 
     return (
+        gpioSet ?
         <List
             className='app-list gpio-list'
             ref={ innerRef }
@@ -41,6 +42,7 @@ export const GpioListInner = ({ innerRef }: GpioListProps) => {
                 )
             } }
         />
+        : <div className='dx-empty-message' style={ { height: '50vh' } }>Нет данных для отображения</div>
     );
 }
 

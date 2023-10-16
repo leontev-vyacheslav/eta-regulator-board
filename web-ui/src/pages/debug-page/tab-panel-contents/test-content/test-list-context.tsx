@@ -1,15 +1,15 @@
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
-import { TestListModel } from '../../models/data/test-list-model';
-import { useAppData } from '../../contexts/app-data/app-data';
+import { TestListModel } from '../../../../models/data/test-list-model';
+import { useAppData } from '../../../../contexts/app-data/app-data';
 
-export type DebugPageContextModel = {
+export type TestListContextModel = {
     testList: TestListModel | null,
     setTestList: Dispatch<SetStateAction<TestListModel | null>>
 }
 
-const DebugPageContext = createContext({} as DebugPageContextModel);
+const TestListContext = createContext({} as TestListContextModel);
 
-function DebugPageContextProvider(props: any) {
+function TestListContextProvider(props: any) {
     const { getTestListDataAsync } = useAppData();
     const [testList, setTestList] = useState<TestListModel | null>(null);
 
@@ -24,14 +24,14 @@ function DebugPageContextProvider(props: any) {
     }, [getTestListDataAsync]);
 
     return (
-        <DebugPageContext.Provider value={ {
+        <TestListContext.Provider value={ {
             testList,
             setTestList
         } } { ...props }>
             {props.children}
-        </DebugPageContext.Provider>
+        </TestListContext.Provider>
     );
 }
-const useDebugPageContext = () => useContext(DebugPageContext);
+const useTestListContext = () => useContext(TestListContext);
 
-export { DebugPageContextProvider, useDebugPageContext }
+export { TestListContextProvider, useTestListContext };

@@ -107,12 +107,6 @@ html, body {
   .dx-list-item-selected svg {
     color: $base-accent;
   }
-   .dx-empty-message {
-    color: $base-accent;
-    font-size: 16px;
-    text-align: center;
-    padding: 16px;
-  }
 
   .dx-list-item.dx-list-item-selected {
     color: $base-accent !important;
@@ -287,4 +281,14 @@ html, body {
 
 .badge-important {
   background-color: #ff5722;
+}
+
+.dx-empty-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $base-accent;
+  font-size: 16px;
+  text-align: center;
+  padding: 16px;
 }

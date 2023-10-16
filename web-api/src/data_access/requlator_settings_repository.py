@@ -51,11 +51,13 @@ class RegulatorSettingsRepository():
                 temperature_graph=TemperatureGraphModel(
                     items=[
                         TemperatureGraphItemModel(
+                            id='1a0ec2da-5949-422d-8b20-e412178ec947',
                             outdoor_temperature=-30.0,
                             supply_pipe_temperature=90.0,
                             return_pipe_temperature=60.0
                         ),
                         TemperatureGraphItemModel(
+                            id='edd75bb3-e0e1-4277-871a-67657bba70a0',
                             outdoor_temperature=10.0,
                             supply_pipe_temperature=33.5,
                             return_pipe_temperature=29.6

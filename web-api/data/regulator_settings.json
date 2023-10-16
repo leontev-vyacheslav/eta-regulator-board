@@ -16,20 +16,34 @@
             "returnPipeTemperatureInfluience": 1.0,
             "supplyPipeMinTemperature": 30.0,
             "supplyPipeMaxTemperature": 91.0,
-            "startingCirculationPump": 2,
+            "startingCirculationPump": 1,
             "startingRechargePump": 2
         },
         "temperatureGraph": {
             "items": [
                 {
-                    "outdoorTemperature": -30.0,
-                    "supplyPipeTemperature": 90.0,
-                    "returnPipeTemperature": 61.5
+                    "id": "1a0ec2da-5949-422d-8b20-e412178ec947",
+                    "outdoorTemperature": -34.0,
+                    "supplyPipeTemperature": 93.0,
+                    "returnPipeTemperature": 61.6
                 },
                 {
-                    "outdoorTemperature": 10.0,
-                    "supplyPipeTemperature": 33.6,
-                    "returnPipeTemperature": 29.6
+                    "id": "edd75bb3-e0e1-4277-871a-67657bba70a0",
+                    "outdoorTemperature": 13.0,
+                    "supplyPipeTemperature": 32.6,
+                    "returnPipeTemperature": 27.6
+                },
+                {
+                    "id": "07a08cce-4246-49a9-be39-9c37515d66af",
+                    "outdoorTemperature": 25.0,
+                    "supplyPipeTemperature": 25.0,
+                    "returnPipeTemperature": 24.0
+                },
+                {
+                    "id": "7bda89ad-ccd0-d77a-d034-a7e249d45368",
+                    "outdoorTemperature": 20.0,
+                    "supplyPipeTemperature": 30.0,
+                    "returnPipeTemperature": 27.0
                 }
             ]
         },

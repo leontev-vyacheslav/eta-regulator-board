@@ -4,7 +4,6 @@ import {
     HomeIcon,
     DebugIcon,
     SettingsIcon,
-    GpioIcon,
 } from './app-icons';
 import { IconBaseProps } from 'react-icons/lib/cjs/iconBase';
 import { TreeViewItemModel } from '../models/tree-view-item';
@@ -22,12 +21,7 @@ export const navigation: TreeViewItemModel[] = [
         path: '/settings',
         restricted: false,
     },
-    {
-        text: 'Вводы/выводы',
-        iconRender: (props: IconBaseProps) => <GpioIcon size={ 22 } { ...props } />,
-        path: '/gpio',
-        restricted: false,
-    },
+
     {
         text: 'Отладка',
         iconRender: (props: IconBaseProps) => <DebugIcon size={ 22 } { ...props } />,

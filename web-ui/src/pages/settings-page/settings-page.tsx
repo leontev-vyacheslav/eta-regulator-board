@@ -4,8 +4,9 @@ import { SettingsIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import AppConstants from '../../constants/app-constants';
 import TabPanel, { Item as TabPanelItem } from 'devextreme-react/tab-panel';
-import { ControlParametersForm, RegulationParametersForm, RtcDateTimeForm, ServiceForm, TemperatureGraphForm } from './forms/index';
+import { ControlParametersForm, RegulationParametersForm, RtcDateTimeForm, ServiceForm, TemperatureGraphContent } from './tab-panel-contents/index';
 import { SettingPageContextProvider } from './settings-page-context';
+import { TemperatureGraphContextProvider } from './tab-panel-contents/temperature-graph-content/temperature-graph-context';
 
 export const SettingsPage = () => {
 
@@ -27,7 +28,9 @@ export const SettingsPage = () => {
                             </TabPanelItem>
 
                             <TabPanelItem title={ 'Темп. график' }>
-                                <TemperatureGraphForm />
+                                <TemperatureGraphContextProvider>
+                                    <TemperatureGraphContent />
+                                </TemperatureGraphContextProvider>
                             </TabPanelItem>
 
                             <TabPanelItem title={ 'Сервис' } >

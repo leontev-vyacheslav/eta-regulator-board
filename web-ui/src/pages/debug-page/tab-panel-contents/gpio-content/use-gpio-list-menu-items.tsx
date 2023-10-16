@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react'
-import { ExtensionIcon, RefreshIcon } from '../../constants/app-icons';
-import { useAppData } from '../../contexts/app-data/app-data';
-import { useGpioPageContext } from './gpio-page-context';
+import { ExtensionIcon, RefreshIcon } from '../../../../constants/app-icons';
+import { useAppData } from '../../../../contexts/app-data/app-data';
+import { useGpioListContext } from './gpio-list-context';
 
 export const useGpioListMenuItems = () => {
     const { getGpioAllAsync } = useAppData();
-    const { setGpioSet } = useGpioPageContext();
+    const { setGpioSet } = useGpioListContext();
 
     const refreshGpioSetAsync = useCallback(async () => {
         const gpioSet = await getGpioAllAsync();

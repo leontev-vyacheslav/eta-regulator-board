@@ -1,16 +1,16 @@
 import { useCallback, useMemo } from 'react'
-import { AddIcon, DeleteIcon, EditIcon, ExtensionIcon, RefreshIcon } from '../../constants/app-icons';
-import { useAppData } from '../../contexts/app-data/app-data';
+import { AddIcon, DeleteIcon, EditIcon, ExtensionIcon, RefreshIcon } from '../../../../constants/app-icons';
+import { useAppData } from '../../../../contexts/app-data/app-data';
 import { List } from 'devextreme-react/list';
 
-import { TestModel } from '../../models/data/test-model';
-import { useDebugPageContext } from './debug-page-context';
-import { showConfirmDialog, showPromptDialog } from '../../utils/dialogs';
-import { proclaim } from '../../utils/proclaim';
+import { TestModel } from '../../../../models/data/test-model';
+import { useTestListContext } from './test-list-context';
+import { showConfirmDialog, showPromptDialog } from '../../../../utils/dialogs';
+import { proclaim } from '../../../../utils/proclaim';
 
 export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<List<TestModel, any>> }) => {
     const { getTestListDataAsync, postTestDataAsync, putTestDataAsync, deleteTestDataAsync } = useAppData();
-    const { setTestList } = useDebugPageContext();
+    const { setTestList } = useTestListContext();
 
     const refreshTestListAsync = useCallback(async () => {
         const testList = await getTestListDataAsync();
