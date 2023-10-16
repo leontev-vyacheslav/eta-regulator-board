@@ -23,5 +23,3 @@ class ServiceModel(AppBaseModel):
     software_info: SoftwareInfoModel
 
     hardware_info: HardwareInfoModel
-
-    rtc_datetime: RtcDateTimeModel

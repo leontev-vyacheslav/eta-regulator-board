@@ -26,6 +26,4 @@ export type ServiceModel = {
     softwareInfo: SoftwareInfoModel,
 
     hardwareInfo: HardwareInfoModel,
-
-    rtcDatetime: RtcDateTimeModel
 }

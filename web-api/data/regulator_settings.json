@@ -10,14 +10,14 @@
             "valvePositionState": 1,
             "manualControlModeTemperatureSetpoint": 63.0,
             "analogValveSetpoint": 51.0,
-            "comfortTemperature": 24.5,
+            "comfortTemperature": 22.5,
             "economicalTemperature": 18.0,
             "roomTemperartureInfluence": 2.0,
             "returnPipeTemperatureInfluience": 1.0,
             "supplyPipeMinTemperature": 30.0,
-            "supplyPipeMaxTemperature": 90.0,
+            "supplyPipeMaxTemperature": 91.0,
             "startingCirculationPump": 2,
-            "startingRechargePump": 1
+            "startingRechargePump": 2
         },
         "temperatureGraph": {
             "items": [
@@ -40,12 +40,12 @@
             "items": []
         },
         "regulationParameters": {
-            "proportionalityFactor": 40.0,
+            "proportionalityFactor": 41.0,
             "integrationFactor": 3.0,
-            "differentiationFactor": 2.0,
-            "samplingTime": 10.0,
-            "reductionFactorPid": 10.0,
-            "valvePeriod": 0.0,
+            "differentiationFactor": 15.0,
+            "samplingTime": 16.0,
+            "reductionFactorPid": 18.0,
+            "valvePeriod": 3.0,
             "analogControl": false
         },
         "emergencyVerification": {}
@@ -87,7 +87,7 @@
     "service": {
         "regulatorOwner": {
             "name": "ETA24",
-            "phoneNumber": "(+7)9274484221"
+            "phoneNumber": "9274484221"
         },
         "softwareInfo": {
             "webApiVersion": "v.0.1.20231004-064321",
@@ -95,9 +95,6 @@
         },
         "hardwareInfo": {
             "onionMacAddress": "40-A3-6B-C9-8F-79"
-        },
-        "rtcDatetime": {
-            "datetime": "2023-10-06T05:17:34.708432"
         }
     }
 }

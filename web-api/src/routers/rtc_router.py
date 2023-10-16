@@ -25,6 +25,7 @@ def get_rtc() -> RtcDateTimeModel:
 def put_rtc(body: RtcDateTimeModel):
 
     if is_debug():
+
         return RtcDateTimeModel(datetime=datetime.now())
 
     with DS1307() as rtc:

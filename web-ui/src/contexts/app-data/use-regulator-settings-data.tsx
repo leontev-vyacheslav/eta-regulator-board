@@ -36,7 +36,7 @@ export const useRegulatorSettingsData = () => {
             url: `${routes.host}${routes.regulatorSettings}`,
             method: HttpConstants.Methods.Put as Method,
             data: regulatorSettingsChange
-        });
+        }, true);
 
         if (response && response.status === HttpConstants.StatusCodes.Ok) {
 

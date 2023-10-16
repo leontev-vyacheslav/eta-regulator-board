@@ -4,7 +4,7 @@ import { SettingsIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import AppConstants from '../../constants/app-constants';
 import TabPanel, { Item as TabPanelItem } from 'devextreme-react/tab-panel';
-import { ControlParametersForm, RegulatorParametersForm, ServiceForm, TemperatureGraphForm } from './forms/index';
+import { ControlParametersForm, RegulationParametersForm, RtcDateTimeForm, ServiceForm, TemperatureGraphForm } from './forms/index';
 import { SettingPageContextProvider } from './settings-page-context';
 
 export const SettingsPage = () => {
@@ -22,16 +22,20 @@ export const SettingsPage = () => {
                                 <ControlParametersForm />
                             </TabPanelItem>
 
+                            <TabPanelItem title={ 'Регулятор' }>
+                                <RegulationParametersForm />
+                            </TabPanelItem>
+
                             <TabPanelItem title={ 'Темп. график' }>
                                 <TemperatureGraphForm />
                             </TabPanelItem>
 
-                            <TabPanelItem title={ 'Регулятор' }>
-                                <RegulatorParametersForm />
-                            </TabPanelItem>
-
                             <TabPanelItem title={ 'Сервис' } >
                                 <ServiceForm />
+                            </TabPanelItem>
+
+                            <TabPanelItem title={ 'Даты и время' }>
+                                <RtcDateTimeForm />
                             </TabPanelItem>
                         </TabPanel>
                     </SettingPageContextProvider>

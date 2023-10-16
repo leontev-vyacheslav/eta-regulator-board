@@ -2,14 +2,18 @@ import Form, { SimpleItem } from 'devextreme-react/form';
 import { useScreenSize } from '../../../../utils/media-query';
 import { useRef } from 'react';
 import { useSettingPageContext } from '../../settings-page-context';
+import { FieldDataChangedEvent } from 'devextreme/ui/form';
+import { useAppData } from '../../../../contexts/app-data/app-data';
 
-export const RegulatorParametersForm = () => {
+export const RegulationParametersForm = () => {
     const dxRegulatorParametersFormRef = useRef<Form>(null);
     const { isXSmall, isSmall } = useScreenSize();
     const { regulatorSettings } = useSettingPageContext();
+    const { putRegulatorSettingsAsync } = useAppData();
 
     return (
         <Form
+
             className='app-form setting-form'
             height={ '50vh' }
             width={ isXSmall || isSmall ? '100%' : 600 }
@@ -17,6 +21,21 @@ export const RegulatorParametersForm = () => {
             colCount={ 1 }
             formData={ regulatorSettings?.regulatorParameters.regulationParameters }
             ref={ dxRegulatorParametersFormRef }
+            onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
+                const regulatorSettingsChange = {
+                    regulatorSettings: regulatorSettings!,
+                    changeLogItem: {
+                        dataField: e.dataField!,
+                        datetime: new Date(),
+                        path: 'regulatorParameters.regulationParameters',
+                        value: e.value
+                    }
+                }
+
+                await putRegulatorSettingsAsync(regulatorSettingsChange);
+                // console.log(e, regulatorSettings);
+
+            } }
         >
             <SimpleItem
                 dataField='proportionalityFactor'
@@ -26,6 +45,7 @@ export const RegulatorParametersForm = () => {
 
             <SimpleItem
                 dataField='integrationFactor'
+
                 label={ { location: 'top', showColon: true, text: 'Коэффициент интегрирования' } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
@@ -52,13 +72,13 @@ export const RegulatorParametersForm = () => {
                 dataField='valvePeriod'
                 label={ { location: 'top', showColon: true, text: 'Период клапана' } }
                 editorType={ 'dxNumberBox' }
-                editorOptions={ { showSpinButtons: true, min: 0, max: 100, value: 0 } } />
+                editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
 
             <SimpleItem
                 dataField='analogСontrol'
                 label={ { location: 'top', showColon: true, text: 'Аналоговое управление' } }
                 editorType={ 'dxCheckBox' }
-                editorOptions={ { value: false } } />
+                editorOptions={ { } } />
 
         </Form>
     );

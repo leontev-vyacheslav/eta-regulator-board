@@ -2,11 +2,14 @@ import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
 import { useScreenSize } from '../../../../utils/media-query';
 import { useRef } from 'react';
 import { useSettingPageContext } from '../../settings-page-context';
+import { useAppData } from '../../../../contexts/app-data/app-data';
+import { FieldDataChangedEvent } from 'devextreme/ui/form';
 
 export const ServiceForm = () => {
-    const dxInfoFormRef = useRef<Form>(null);
+    const dxServiceFormRef = useRef<Form>(null);
     const { isXSmall, isSmall } = useScreenSize();
     const { regulatorSettings } = useSettingPageContext();
+    const { putRegulatorSettingsAsync } = useAppData();
 
     return (
         <Form
@@ -16,18 +19,21 @@ export const ServiceForm = () => {
             scrollingEnabled={ true }
             colCount={ 1 }
             formData={ regulatorSettings?.service }
-            ref={ dxInfoFormRef }
+            ref={ dxServiceFormRef }
+            onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
+                const regulatorSettingsChange = {
+                    regulatorSettings: regulatorSettings!,
+                    changeLogItem: {
+                        dataField: e.dataField!,
+                        datetime: new Date(),
+                        path: 'regulatorSettings.service',
+                        value: e.value
+                    }
+                }
+
+                await putRegulatorSettingsAsync(regulatorSettingsChange);
+            } }
         >
-            <GroupItem caption='Даты и время'>
-                <SimpleItem
-                    dataField={ 'rtcDatetime.datetime' }
-                    label={ { location: 'top', showColon: true, text: 'Рабочая дата (по часам реального времени)' } }
-                    editorType={ 'dxDateBox' }
-                    editorOptions={ {
-                        type: 'datetime',
-                        pickerType: 'rollers'
-                    } } />
-            </GroupItem>
 
             <GroupItem caption={ 'Собственник' }>
                 <SimpleItem
@@ -45,7 +51,7 @@ export const ServiceForm = () => {
                         mask: '+7 (000) 000-00-00'
                     } } />
             </GroupItem>
-            
+
             <GroupItem caption='Версии ПО'>
                 <SimpleItem
                  dataField={ 'softwareInfo.webApiVersion' }
