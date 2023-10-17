@@ -10,7 +10,7 @@ from models.regulator.enums.regulator_state_model import RegulatorStateModel
 from models.regulator.regulator_programms_model import RegulatorProgrammsModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.regulator.rtc_datetime_model import RtcDateTimeModel
-from models.regulator.schedules_model import SchelulesModel
+from models.regulator.schedules_model import ScheduleModel, ScheduleTimeModel, ScheduleWindowModel, SchelulesModel
 from models.regulator.service_model import HardwareInfoModel, RegulatorOwnerModel, ServiceModel, SoftwareInfoModel
 from models.regulator.tempetrature_graph_model import TemperatureGraphItemModel, TemperatureGraphModel
 
@@ -70,7 +70,28 @@ class RegulatorSettingsRepository():
 
                 programms=RegulatorProgrammsModel(items=[]),
 
-                schedules=SchelulesModel(),
+                schedules=SchelulesModel(items=[
+                    ScheduleModel(day=1, windows=[
+                        ScheduleWindowModel(
+                            start_time=ScheduleTimeModel(hours=7, minutes=0),
+                            end_time=ScheduleTimeModel(hours=12, minutes=30)
+                        ),
+                        ScheduleWindowModel(
+                            start_time=ScheduleTimeModel(hours=12, minutes=30),
+                            end_time=ScheduleTimeModel(hours=17, minutes=30)
+                        ),
+                    ]),
+                    ScheduleModel(day=2, windows=[
+                        ScheduleWindowModel(
+                            start_time=ScheduleTimeModel(hours=7, minutes=0),
+                            end_time=ScheduleTimeModel(hours=12, minutes=30)
+                        ),
+                        ScheduleWindowModel(
+                            start_time=ScheduleTimeModel(hours=12, minutes=30),
+                            end_time=ScheduleTimeModel(hours=17, minutes=30)
+                        ),
+                    ])
+                ]),
             ),
 
             service=ServiceModel(

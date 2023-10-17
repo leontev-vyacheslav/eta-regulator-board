@@ -2,8 +2,22 @@ from typing import List
 from models.abstracts.app_base_model import AppBaseModel
 
 
+class ScheduleTimeModel(AppBaseModel):
+    hours: int
+
+    minutes: int
+
+
+class ScheduleWindowModel(AppBaseModel):
+    start_time: ScheduleTimeModel
+
+    end_time: ScheduleTimeModel
+
+
 class ScheduleModel(AppBaseModel):
-    pass
+    day: int
+
+    windows: List[ScheduleWindowModel]
 
 
 # Расписания

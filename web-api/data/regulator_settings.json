@@ -24,7 +24,7 @@
                 {
                     "id": "1a0ec2da-5949-422d-8b20-e412178ec947",
                     "outdoorTemperature": -35.0,
-                    "supplyPipeTemperature": 93.0,
+                    "supplyPipeTemperature": 90.0,
                     "returnPipeTemperature": 61.6
                 },
                 {
@@ -32,6 +32,18 @@
                     "outdoorTemperature": 26.0,
                     "supplyPipeTemperature": 29.0,
                     "returnPipeTemperature": 24.0
+                },
+                {
+                    "id": "c31023dd-bdf8-79c6-ef8e-58e6195ce7ec",
+                    "outdoorTemperature": -34.0,
+                    "supplyPipeTemperature": 60.0,
+                    "returnPipeTemperature": 59.0
+                },
+                {
+                    "id": "1789aa8e-4385-2bc4-d298-489f138d5c70",
+                    "outdoorTemperature": -33.0,
+                    "supplyPipeTemperature": 57.0,
+                    "returnPipeTemperature": 56.0
                 }
             ]
         },
@@ -39,7 +51,22 @@
             "items": []
         },
         "schedules": {
-            "items": []
+            "items": [
+                {
+                    "day" : 1,
+                    "windows": [
+                        {"startTime": {"hours": 7, "minutes": 30}, "endTime": {"hours": 12, "minutes": 30}},
+                        {"startTime": {"hours": 12, "minutes": 30}, "endTime": {"hours": 17, "minutes": 30}}
+                    ]
+                },
+                {
+                    "day" : 2,
+                    "windows": [
+                        {"startTime": {"hours": 7, "minutes": 30}, "endTime": {"hours": 12, "minutes": 30}},
+                        {"startTime": {"hours": 12, "minutes": 30}, "endTime": {"hours": 17, "minutes": 30}}
+                    ]
+                }
+            ]
         },
         "regulationParameters": {
             "proportionalityFactor": 41.0,

@@ -13,6 +13,8 @@ const SettingPageContext = createContext({} as SettingPageContextModel);
 function SettingPageContextProvider (props: any) {
     const [regulatorSettings, setRegulatorSettings] = useState<RegulatorSettingsModel | null>(null);
     const { getRegulatorSettingsAsync } = useAppData();
+    console.log(regulatorSettings);
+
 
     useEffect(() => {
         (async () => {
