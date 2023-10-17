@@ -1,14 +1,9 @@
 import { useCallback, useMemo } from 'react'
-import { AddIcon, ExtensionIcon, RefreshIcon } from '../../../../constants/app-icons';
+import { AddIcon, AdditionalMenuIcon } from '../../../../constants/app-icons';
 import { useTemperatureGraphContext } from './temperature-graph-context';
 
 export const useTemperatureGraphMenuItems = () => {
     const { dataGridRef } = useTemperatureGraphContext();
-    
-
-    const refreshTestListAsync = useCallback(async () => {
-
-    }, []);
 
     const addTemperatureGraphItemAsync = useCallback(async () => {
         if(dataGridRef && dataGridRef.current) {
@@ -19,13 +14,8 @@ export const useTemperatureGraphMenuItems = () => {
 
     return useMemo(() => {
         return [{
-            icon: () => <ExtensionIcon size={ 20 } color='black' />,
+            icon: () => <AdditionalMenuIcon size={ 20 } color='black' />,
             items: [
-                {
-                    text: 'Обновить список...',
-                    icon: () => <RefreshIcon size={ 20 } />,
-                    onClick: refreshTestListAsync
-                },
                 {
                     text: 'Добавить...',
                     icon: () => <AddIcon size={ 20 } />,
@@ -33,5 +23,5 @@ export const useTemperatureGraphMenuItems = () => {
                 }
             ]
         }];
-    }, [addTemperatureGraphItemAsync, refreshTestListAsync])
+    }, [addTemperatureGraphItemAsync])
 }

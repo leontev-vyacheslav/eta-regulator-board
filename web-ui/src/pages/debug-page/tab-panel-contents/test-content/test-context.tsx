@@ -2,14 +2,14 @@ import { Dispatch, SetStateAction, createContext, useContext, useEffect, useStat
 import { TestListModel } from '../../../../models/data/test-list-model';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 
-export type TestListContextModel = {
+export type TestContextModel = {
     testList: TestListModel | null,
     setTestList: Dispatch<SetStateAction<TestListModel | null>>
 }
 
-const TestListContext = createContext({} as TestListContextModel);
+const TestTabContext = createContext({} as TestContextModel);
 
-function TestListContextProvider(props: any) {
+function TestContextProvider(props: any) {
     const { getTestListDataAsync } = useAppData();
     const [testList, setTestList] = useState<TestListModel | null>(null);
 
@@ -24,14 +24,15 @@ function TestListContextProvider(props: any) {
     }, [getTestListDataAsync]);
 
     return (
-        <TestListContext.Provider value={ {
+        <TestTabContext.Provider value={ {
             testList,
             setTestList
         } } { ...props }>
             {props.children}
-        </TestListContext.Provider>
+        </TestTabContext.Provider>
     );
 }
-const useTestListContext = () => useContext(TestListContext);
 
-export { TestListContextProvider, useTestListContext };
+const useTestContext = () => useContext(TestTabContext);
+
+export { TestContextProvider,useTestContext };

@@ -4,11 +4,9 @@ import AppConstants from '../../constants/app-constants';
 import { DebugIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import { useState } from 'react';
-import { TestListContextProvider } from './tab-panel-contents/test-content/test-list-context';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel';
-import { TestListTabPanelContent } from './tab-panel-contents/test-content/test-list-content';
-import { GpioListContextProvider } from './tab-panel-contents/gpio-content/gpio-list-context';
-import { GpioListTabPanelContent } from './tab-panel-contents/gpio-content/gpio-list-content';
+import { TestTabContent } from './tab-panel-contents/test-content/test-tab-content';
+import { GpioTabContent } from './tab-panel-contents/gpio-content/gpio-tab-content';
 
 
 export const DebugPage = () => {
@@ -27,16 +25,12 @@ export const DebugPage = () => {
                     } }>
                         <TabPanelItem title='Ввод/вывод'>
                         {activeTabIndex === 0 ?
-                                <GpioListContextProvider>
-                                    <GpioListTabPanelContent />
-                                </GpioListContextProvider>
+                                <GpioTabContent />
                             : null}
                         </TabPanelItem>
                         <TabPanelItem title='Тестовый список'>
                             {activeTabIndex === 1 ?
-                                <TestListContextProvider>
-                                    <TestListTabPanelContent />
-                                </TestListContextProvider>
+                                <TestTabContent />
                             : null}
                         </TabPanelItem>
                     </TabPanel>

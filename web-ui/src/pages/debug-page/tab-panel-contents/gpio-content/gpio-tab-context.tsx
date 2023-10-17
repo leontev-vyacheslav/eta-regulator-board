@@ -2,14 +2,14 @@ import { Dispatch, createContext, useContext, useEffect, useState } from 'react'
 import { GpioSetModel } from '../../../../models/regulator-settings/gpio-set-model';
 import { useGpioData } from '../../../../contexts/app-data/use-gpio-data';
 
-export type GpioListContextModel = {
+export type GpioTabContextModel = {
     gpioSet: GpioSetModel | null,
     setGpioSet: Dispatch<React.SetStateAction<GpioSetModel | null | undefined>>
 };
 
-const GpioListContext = createContext({} as GpioListContextModel);
+const GpioTabContext = createContext({} as GpioTabContextModel);
 
-function GpioListContextProvider(props: any) {
+function GpioTabContextProvider(props: any) {
     const [gpioSet, setGpioSet] = useState<GpioSetModel | null>();
     const { getGpioAllAsync } = useGpioData();
 
@@ -21,14 +21,14 @@ function GpioListContextProvider(props: any) {
     }, [getGpioAllAsync]);
 
     return (
-        <GpioListContext.Provider value={ {
+        <GpioTabContext.Provider value={ {
             gpioSet,
             setGpioSet
         } } { ...props }>
             {props.children}
-        </GpioListContext.Provider>
+        </GpioTabContext.Provider>
     );
 }
-const useGpioListContext = () => useContext(GpioListContext);
+const useGpioTabContext = () => useContext(GpioTabContext);
 
-export { GpioListContextProvider, useGpioListContext }
+export { GpioTabContextProvider, useGpioTabContext }

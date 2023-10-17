@@ -2,12 +2,12 @@ import List from 'devextreme-react/list'
 import { Ref } from 'react';
 import { TestModel } from '../../../../models/data/test-model';
 import React from 'react';
-import { useTestListContext } from './test-list-context';
+import { useTestContext } from './test-context';
 
 export type TestListProps = { innerRef?: Ref<List<TestModel>> }
 
 const TestListInner = ({ innerRef }: TestListProps) => {
-    const { testList } = useTestListContext();
+    const { testList } = useTestContext();
 
     return (testList
         ? <List className='app-list' ref={ innerRef }

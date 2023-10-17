@@ -3,7 +3,7 @@ import Switch from 'devextreme-react/switch';
 import { Ref } from 'react';
 import { GpioItemModel } from '../../../../models/regulator-settings/gpio-set-model';
 import { useGpioData } from '../../../../contexts/app-data/use-gpio-data';
-import { useGpioListContext } from './gpio-list-context';
+import { useGpioTabContext } from './gpio-tab-context';
 import React from 'react';
 
 export type GpioListProps = { innerRef?: Ref<List<GpioItemModel>> }
@@ -28,7 +28,7 @@ const GpioListItem = ({ gpioItem }: {gpioItem: GpioItemModel}) => {
 };
 
 export const GpioListInner = ({ innerRef }: GpioListProps) => {
-    const { gpioSet } = useGpioListContext();
+    const { gpioSet } = useGpioTabContext();
 
     return (
         gpioSet ?

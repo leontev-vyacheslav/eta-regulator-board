@@ -4,13 +4,13 @@ import { useAppData } from '../../../../contexts/app-data/app-data';
 import { List } from 'devextreme-react/list';
 
 import { TestModel } from '../../../../models/data/test-model';
-import { useTestListContext } from './test-list-context';
+import { useTestContext } from './test-context';
 import { showConfirmDialog, showPromptDialog } from '../../../../utils/dialogs';
 import { proclaim } from '../../../../utils/proclaim';
 
 export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<List<TestModel, any>> }) => {
     const { getTestListDataAsync, postTestDataAsync, putTestDataAsync, deleteTestDataAsync } = useAppData();
-    const { setTestList } = useTestListContext();
+    const { setTestList } = useTestContext();
 
     const refreshTestListAsync = useCallback(async () => {
         const testList = await getTestListDataAsync();

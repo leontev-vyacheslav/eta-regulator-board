@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react'
-import { ExtensionIcon, RefreshIcon } from '../../../../constants/app-icons';
+import {  AdditionalMenuIcon, RefreshIcon } from '../../../../constants/app-icons';
 import { useAppData } from '../../../../contexts/app-data/app-data';
-import { useGpioListContext } from './gpio-list-context';
+import { useGpioTabContext } from './gpio-tab-context';
 
 export const useGpioListMenuItems = () => {
     const { getGpioAllAsync } = useAppData();
-    const { setGpioSet } = useGpioListContext();
+    const { setGpioSet } = useGpioTabContext();
 
     const refreshGpioSetAsync = useCallback(async () => {
         const gpioSet = await getGpioAllAsync();
@@ -19,7 +19,7 @@ export const useGpioListMenuItems = () => {
 
     return useMemo(() => {
         return [{
-            icon: () => <ExtensionIcon size={ 20 } color='black' />,
+            icon: () => <AdditionalMenuIcon size={ 20 } color='black' />,
             items: [
                 {
                     text: 'Обновить список...',
