@@ -1,5 +1,4 @@
 from models.abstracts.app_base_model import AppBaseModel
-from models.regulator.rtc_datetime_model import RtcDateTimeModel
 
 class RegulatorOwnerModel(AppBaseModel):
     name: str

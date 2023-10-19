@@ -1,19 +1,14 @@
 from typing import List
+from datetime import datetime
 from models.abstracts.app_base_model import AppBaseModel
-
-
-class ScheduleTimeModel(AppBaseModel):
-    hours: int
-
-    minutes: int
 
 
 class ScheduleWindowModel(AppBaseModel):
     id:  str
 
-    start_time: ScheduleTimeModel
+    start_time: datetime
 
-    end_time: ScheduleTimeModel
+    end_time: datetime
 
     desired_temperature: int
 

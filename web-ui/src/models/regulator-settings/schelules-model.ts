@@ -1,14 +1,9 @@
-export type ScheduleTimeModel = {
-    hours: number,
-    minutes: number
-}
-
 export type ScheduleWindowModel = {
     id: string,
 
-    startTime: ScheduleTimeModel,
+    startTime: Date,
 
-    endTime: ScheduleTimeModel,
+    endTime: Date,
 
     desiredTemperature: number
 }

@@ -14,31 +14,7 @@
         }
     ],
     "settings": {
-        "python.languageServer": "Pylance",
-        "python.analysis.typeCheckingMode": "off",
-        "python.linting.pylintPath": ".venv/bin/pylint",
-        "python.linting.pylintArgs": [
-            "--disable=redefined-builtin",
-            "--disable=missing-module-docstring",
-            "--disable=missing-class-docstring",
-            "--disable=missing-function-docstring",
-            "--disable=invalid-name",
-            "--disable=logging-fstring-interpolation",
-            "--disable=bare-except",
 
-            "--max-line-length=140"
-        ],
-        "python.formatting.provider": "autopep8",
-        "python.formatting.autopep8Args": [
-            "--max-line-length",
-            "120",
-        ],
-        "[python]": {
-            "editor.defaultFormatter": "ms-python.python",
-            "editor.rulers": [140],
-            "editor.foldingHighlight": true,
-        },
-        "python.terminal.activateEnvironment": false,
         "powershell.cwd": "/workspaces/eta-regulator-board",
     }
 }

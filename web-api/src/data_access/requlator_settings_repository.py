@@ -10,7 +10,7 @@ from models.regulator.enums.regulator_state_model import RegulatorStateModel
 from models.regulator.regulator_programms_model import RegulatorProgrammsModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.regulator.rtc_datetime_model import RtcDateTimeModel
-from models.regulator.schedules_model import ScheduleModel, ScheduleTimeModel, ScheduleWindowModel, SchelulesModel
+from models.regulator.schedules_model import ScheduleModel, ScheduleWindowModel, SchelulesModel
 from models.regulator.service_model import HardwareInfoModel, RegulatorOwnerModel, ServiceModel, SoftwareInfoModel
 from models.regulator.tempetrature_graph_model import TemperatureGraphItemModel, TemperatureGraphModel
 
@@ -77,14 +77,14 @@ class RegulatorSettingsRepository():
                         windows=[
                             ScheduleWindowModel(
                                 id='71d1c170-7d37-464f-98bd-ab793a1242b4',
-                                start_time=ScheduleTimeModel(hours=7, minutes=0),
-                                end_time=ScheduleTimeModel(hours=12, minutes=30),
+                                start_time=datetime(year=1900, month=1, day=1, hour=7, minute=30, second=0),
+                                end_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
                                 desired_temperature=25
                             ),
                             ScheduleWindowModel(
                                 id='461e5aa1-5fda-44a7-9fca-d3c77de4da22',
-                                start_time=ScheduleTimeModel(hours=12, minutes=30),
-                                end_time=ScheduleTimeModel(hours=17, minutes=30),
+                                start_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
+                                end_time=datetime(year=1900, month=1, day=1, hour=17, minute=30, second=0),
                                 desired_temperature=24
                             ),
                         ]),
@@ -94,14 +94,14 @@ class RegulatorSettingsRepository():
                         windows=[
                             ScheduleWindowModel(
                                 id='2687d2b1-7de3-4eac-a43a-75347708c912',
-                                start_time=ScheduleTimeModel(hours=7, minutes=0),
-                                end_time=ScheduleTimeModel(hours=12, minutes=30),
+                                start_time=datetime(year=1900, month=1, day=1, hour=7, minute=30, second=0),
+                                end_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
                                 desired_temperature=23
                             ),
                             ScheduleWindowModel(
                                 id='1dc9e361-8565-4966-b1d3-f02d80b78d79',
-                                start_time=ScheduleTimeModel(hours=12, minutes=30),
-                                end_time=ScheduleTimeModel(hours=17, minutes=30),
+                                start_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
+                                end_time=datetime(year=1900, month=1, day=1, hour=17, minute=30, second=0),
                                 desired_temperature=22
                             ),
                         ])
