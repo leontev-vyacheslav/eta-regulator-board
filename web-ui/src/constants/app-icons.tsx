@@ -42,6 +42,8 @@ export { IoCloudDownloadOutline as DownloadIcon } from 'react-icons/io5';
 export { ImFileZip as PackageIcon } from 'react-icons/im';
 export { IoHardwareChipOutline as  GpioIcon } from 'react-icons/io5';
 export { VscTools as ServiceIcon } from 'react-icons/vsc';
+export { IoTodayOutline as DayOfWeekIcon } from 'react-icons/io5';
+
 
 
 import { MdMoreVert } from 'react-icons/md';

@@ -9,8 +9,6 @@ it('loader', async () => {
         render(<Loader />);
     });
 
-    // console.log(container.querySelector('svg'))
-    // container.querySelector('span')
     const spanElement = screen.getByTestId('testId');
     expect(spanElement).toBeInTheDocument();
 });

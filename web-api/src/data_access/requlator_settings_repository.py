@@ -17,7 +17,7 @@ from models.regulator.tempetrature_graph_model import TemperatureGraphItemModel,
 
 class RegulatorSettingsRepository():
 
-    def __init__(self, app = None, **kwargs):
+    def __init__(self, app=None, **kwargs):
         self._options = kwargs
 
         self.settings: RegulatorSettingsModel = self._get_default_settings()
@@ -71,26 +71,40 @@ class RegulatorSettingsRepository():
                 programms=RegulatorProgrammsModel(items=[]),
 
                 schedules=SchelulesModel(items=[
-                    ScheduleModel(day=1, windows=[
-                        ScheduleWindowModel(
-                            start_time=ScheduleTimeModel(hours=7, minutes=0),
-                            end_time=ScheduleTimeModel(hours=12, minutes=30)
-                        ),
-                        ScheduleWindowModel(
-                            start_time=ScheduleTimeModel(hours=12, minutes=30),
-                            end_time=ScheduleTimeModel(hours=17, minutes=30)
-                        ),
-                    ]),
-                    ScheduleModel(day=2, windows=[
-                        ScheduleWindowModel(
-                            start_time=ScheduleTimeModel(hours=7, minutes=0),
-                            end_time=ScheduleTimeModel(hours=12, minutes=30)
-                        ),
-                        ScheduleWindowModel(
-                            start_time=ScheduleTimeModel(hours=12, minutes=30),
-                            end_time=ScheduleTimeModel(hours=17, minutes=30)
-                        ),
-                    ])
+                    ScheduleModel(
+                        id='5895f8bf-9fb4-468b-bdac-cbf2010a72f0',
+                        day=1,
+                        windows=[
+                            ScheduleWindowModel(
+                                id='71d1c170-7d37-464f-98bd-ab793a1242b4',
+                                start_time=ScheduleTimeModel(hours=7, minutes=0),
+                                end_time=ScheduleTimeModel(hours=12, minutes=30),
+                                desired_temperature=25
+                            ),
+                            ScheduleWindowModel(
+                                id='461e5aa1-5fda-44a7-9fca-d3c77de4da22',
+                                start_time=ScheduleTimeModel(hours=12, minutes=30),
+                                end_time=ScheduleTimeModel(hours=17, minutes=30),
+                                desired_temperature=24
+                            ),
+                        ]),
+                    ScheduleModel(
+                        id='cb5595dc-fd0f-4245-acd5-eef83874c09d',
+                        day=2,
+                        windows=[
+                            ScheduleWindowModel(
+                                id='2687d2b1-7de3-4eac-a43a-75347708c912',
+                                start_time=ScheduleTimeModel(hours=7, minutes=0),
+                                end_time=ScheduleTimeModel(hours=12, minutes=30),
+                                desired_temperature=23
+                            ),
+                            ScheduleWindowModel(
+                                id='1dc9e361-8565-4966-b1d3-f02d80b78d79',
+                                start_time=ScheduleTimeModel(hours=12, minutes=30),
+                                end_time=ScheduleTimeModel(hours=17, minutes=30),
+                                desired_temperature=22
+                            ),
+                        ])
                 ]),
             ),
 

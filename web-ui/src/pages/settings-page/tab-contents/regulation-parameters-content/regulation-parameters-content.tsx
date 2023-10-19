@@ -33,8 +33,6 @@ export const RegulationParametersForm = () => {
                 }
 
                 await putRegulatorSettingsAsync(regulatorSettingsChange);
-                // console.log(e, regulatorSettings);
-
             } }
         >
             <SimpleItem

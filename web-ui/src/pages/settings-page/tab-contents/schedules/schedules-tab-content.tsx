@@ -1,3 +1,4 @@
+import './schedules.scss';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar'
 import { SchedulesContextProvider } from './schedules-context'
 import { SchedulesGrid } from './schedules-grid'

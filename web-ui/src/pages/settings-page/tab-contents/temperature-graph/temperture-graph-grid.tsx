@@ -33,7 +33,7 @@ export const TemperatureGraphGrid = () => {
         const store = new ArrayStore({
             key: 'id',
             data: regulatorSettings?.regulatorParameters.temperatureGraph.items,
-
+            
             onInserted: async (values: TemperatureGraphItemModel) => {
                 await putTemparatureGraphAsync(values);
             },

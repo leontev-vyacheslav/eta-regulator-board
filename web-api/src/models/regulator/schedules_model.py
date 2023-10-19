@@ -9,12 +9,18 @@ class ScheduleTimeModel(AppBaseModel):
 
 
 class ScheduleWindowModel(AppBaseModel):
+    id:  str
+
     start_time: ScheduleTimeModel
 
     end_time: ScheduleTimeModel
 
+    desired_temperature: int
+
 
 class ScheduleModel(AppBaseModel):
+    id:  str
+
     day: int
 
     windows: List[ScheduleWindowModel]

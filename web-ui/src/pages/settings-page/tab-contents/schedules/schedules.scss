@@ -1,0 +1,12 @@
+.schedules-grid {
+    .dx-datagrid-rowsview .dx-master-detail-row>.dx-master-detail-cell {
+        padding: 0px;
+    }
+}
+
+.schedule-grid {
+    .dx-datagrid .dx-datagrid-table .dx-header-row>td {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+}
