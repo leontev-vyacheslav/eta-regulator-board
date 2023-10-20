@@ -1,12 +1,24 @@
 .schedules-grid {
     .dx-datagrid-rowsview .dx-master-detail-row>.dx-master-detail-cell {
         padding: 0px;
+        background-color: transparent;
     }
+    .dx-datagrid-header-panel {
+        display: none;
+    }
+}
+
+.schedules-grid.app-grid svg {
+    width: inherit;
+    height: inherit
 }
 
 .schedule-grid {
     .dx-datagrid .dx-datagrid-table .dx-header-row>td {
         padding-top: 10px;
         padding-bottom: 10px;
+    }
+    .dx-datagrid-header-panel {
+        display: block;
     }
 }

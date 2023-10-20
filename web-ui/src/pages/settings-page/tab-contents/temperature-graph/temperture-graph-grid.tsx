@@ -7,8 +7,12 @@ import { TemperatureGraphItemModel } from '../../../../models/regulator-settings
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { useTemperatureGraphContext } from './temperature-graph-context';
 import { ValidationCallbackData, ValidationRule } from 'devextreme/common';
+import { formatMessage } from 'devextreme/localization';
+import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
+import { useTemperatureGraphMenuItems } from './use-temperature-graph-menu-items';
 
 export const TemperatureGraphGrid = () => {
+    const menuItems = useTemperatureGraphMenuItems();
     const { regulatorSettings } = useSettingPageContext();
     const { isXSmall, isSmall } = useScreenSize();
     const { putRegulatorSettingsAsync } = useAppData();
@@ -33,7 +37,7 @@ export const TemperatureGraphGrid = () => {
         const store = new ArrayStore({
             key: 'id',
             data: regulatorSettings?.regulatorParameters.temperatureGraph.items,
-            
+
             onInserted: async (values: TemperatureGraphItemModel) => {
                 await putTemparatureGraphAsync(values);
             },
@@ -81,36 +85,36 @@ export const TemperatureGraphGrid = () => {
         return [
             {
                 type: 'required',
-                message: 'Обязательное значение'
+                message: formatMessage('validation-required')
             },
             {
                 type: 'range',
                 min: -35,
                 max: 25,
-                message: 'Допустумые значения в диапазоне от -35°C до 25°C'
+                message: formatMessage('validation-range-formatted-with-values', '-35°C', '25°C')
             },
             {
-                type:'custom',
+                type: 'custom',
                 validationCallback: (options: ValidationCallbackData) => {
                     const items = temperatureGraphStore.createQuery().toArray();
                     const existedValue = items.find(t => t.outdoorTemperature === options.value && t.id !== options.data.id);
 
                     return !existedValue;
                 },
-                message: 'Значение уже существует'
+                message: formatMessage('validation-value-already-existed')
             }] as ValidationRule[]
     }, [temperatureGraphStore]);
 
-    const supplyPipeTemperatureValidationRules = useMemo<ValidationRule[]> (() => [
+    const supplyPipeTemperatureValidationRules = useMemo<ValidationRule[]>(() => [
         {
             type: 'required',
-            message: 'Обязательное значение'
+            message: formatMessage('validation-required')
         },
         {
             type: 'range',
             min: 35,
             max: 120,
-            message: 'Допустумые значения в диапазоне от 35°C до 120°C'
+            message: formatMessage('validation-range-formatted-with-values', '35°C', '120°C')
         },
         {
             type: 'custom',
@@ -118,20 +122,20 @@ export const TemperatureGraphGrid = () => {
 
                 return !options.data.returnPipeTemperature || options.data.returnPipeTemperature < options.value;
             },
-            message: 'Значение Тп всегда больше Тo'
+            message: formatMessage('validation-compare-supply-temperature-return-temperature')
         }
     ], [])
 
-    const returnPipeTemperatureValidationRules = useMemo<ValidationRule[]> (() => [
+    const returnPipeTemperatureValidationRules = useMemo<ValidationRule[]>(() => [
         {
             type: 'required',
-            message: 'Обязательное значение'
+            message: formatMessage('validation-required')
         },
         {
             type: 'range',
             min: 20,
             max: 80,
-            message: 'Допустумые значения в диапазоне от 20°C до 80°C'
+            message: formatMessage('validation-range-formatted-with-values', '20°C', '80°C')
         },
         {
             type: 'custom',
@@ -139,44 +143,47 @@ export const TemperatureGraphGrid = () => {
 
                 return !options.data.supplyPipeTemperature || options.data.supplyPipeTemperature > options.value;
             },
-            message: 'Значение То всегда меньше Тп'
+            message: formatMessage('validation-compare-supply-temperature-return-temperature')
         }
     ], []);
 
     return (
-        <DataGrid
-            ref={ dataGridRef }
-            className='app-grid temperagure-graph-grid'
-            showColumnLines
-            width={ isXSmall || isSmall ? '100%' : 600 }
-            dataSource={ temperatureGraphStore }
-            height={ '50vh' }
-        >
-            <Selection mode='single' />
+        <>
+            <PageToolbar title={ 'Температурный график' } menuItems={ menuItems } style={ { width: isXSmall || isSmall ? '100%' : 600 } } />
+            <DataGrid
+                ref={ dataGridRef }
+                className='app-grid temperagure-graph-grid'
+                showColumnLines
+                width={ isXSmall || isSmall ? '100%' : 600 }
+                dataSource={ temperatureGraphStore }
+                height={ '50vh' }
+            >
+                <Selection mode='single' />
 
-            <Column
-                dataField='outdoorTemperature'
-                caption={ сolumCaptions.outdoorTemperatureColCaption }
-                allowSorting={ true }
-                sortOrder='asc'
-                validationRules={ outdoorTemperatureValidationRules }
-            />
+                <Column
+                    dataField='outdoorTemperature'
+                    caption={ сolumCaptions.outdoorTemperatureColCaption }
+                    allowSorting={ true }
+                    sortOrder='asc'
+                    validationRules={ outdoorTemperatureValidationRules }
+                />
 
-            <Column
-                dataField='supplyPipeTemperature'
-                caption={ сolumCaptions.supplyPipeTemperatureColCaption }
-                allowSorting={ false }
-                validationRules={ supplyPipeTemperatureValidationRules }
-            />
+                <Column
+                    dataField='supplyPipeTemperature'
+                    caption={ сolumCaptions.supplyPipeTemperatureColCaption }
+                    allowSorting={ false }
+                    validationRules={ supplyPipeTemperatureValidationRules }
+                />
 
-            <Column
-                dataField='returnPipeTemperature'
-                caption={ сolumCaptions.returnPipeTemperature }
-                allowSorting={ false }
-                validationRules={ returnPipeTemperatureValidationRules }
-            />
+                <Column
+                    dataField='returnPipeTemperature'
+                    caption={ сolumCaptions.returnPipeTemperature }
+                    allowSorting={ false }
+                    validationRules={ returnPipeTemperatureValidationRules }
+                />
 
-            <Editing mode='row' allowUpdating allowDeleting />
-        </DataGrid>
+                <Editing mode='row' allowUpdating allowDeleting />
+            </DataGrid>
+        </>
     )
 }

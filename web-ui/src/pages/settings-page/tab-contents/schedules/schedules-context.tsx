@@ -1,18 +1,38 @@
 import DataGrid from 'devextreme-react/data-grid';
-import { RefObject, createContext, useContext, useMemo, useRef } from 'react';
-import { TemperatureGraphItemModel } from '../../../../models/regulator-settings/temperature-graph-model';
+import { RefObject, createContext, useCallback, useContext, useMemo, useRef } from 'react';
 import { ScheduleModel } from '../../../../models/regulator-settings/schelules-model';
+import { useAppData } from '../../../../contexts/app-data/app-data';
+import { useSettingPageContext } from '../../settings-page-context';
 
 export type SchedulesContextModel = {
-    dataGridRef: RefObject<DataGrid<ScheduleModel, any>>,
+    schedulesDataGridRef: RefObject<DataGrid<ScheduleModel, any>>;
 
-    daysOfWeek: {id: number, name: string}[]
+    daysOfWeek: {id: number, name: string}[];
+
+    putSchedulesAsync: (values: any) => Promise<void> | void;
 };
 
 const SchedulesContext = createContext<SchedulesContextModel>({} as SchedulesContextModel)
 
 function SchedulesContextProvider(props: any) {
-    const dataGridRef = useRef<DataGrid<TemperatureGraphItemModel>>(null);
+    const schedulesDataGridRef = useRef<DataGrid<ScheduleModel>>(null);
+    const { putRegulatorSettingsAsync } = useAppData();
+    const { regulatorSettings } = useSettingPageContext();
+
+    const putSchedulesAsync = useCallback(async (values: any) => {
+
+        const regulatorSettingsChange = {
+            regulatorSettings: regulatorSettings!,
+            changeLogItem: {
+                dataField: Object.keys(values).join(', '),
+                datetime: new Date(),
+                path: 'regulatorSettings.regulatorParameters.schedules.items',
+                value: Object.values(values).join(', ')
+            }
+        };
+
+        await putRegulatorSettingsAsync(regulatorSettingsChange);
+    }, [putRegulatorSettingsAsync, regulatorSettings]);
 
     const daysOfWeek = useMemo<{id: number, name: string}[]>( () =>
         [
@@ -28,8 +48,9 @@ function SchedulesContextProvider(props: any) {
 
     return (
         <SchedulesContext.Provider value={ {
-            dataGridRef,
-            daysOfWeek
+            schedulesDataGridRef,
+            daysOfWeek,
+            putSchedulesAsync
         } } { ...props } />
     );
 }

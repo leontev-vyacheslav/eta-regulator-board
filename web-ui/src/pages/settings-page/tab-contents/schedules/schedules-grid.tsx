@@ -2,51 +2,43 @@ import { DataGrid, Column, MasterDetail, Editing, Lookup } from 'devextreme-reac
 import { useSchedulesContext } from './schedules-context'
 import { useSettingPageContext } from '../../settings-page-context';
 import DataGridIconCellValueContainer from '../../../../components/data-grid-utils/data-grid-icon-cell-value-container';
-import { DayOfWeekIcon } from '../../../../constants/app-icons';
-import {  useCallback, useMemo } from 'react';
+import { AddIcon, AdditionalMenuIcon, DayOfWeekIcon } from '../../../../constants/app-icons';
+import {  useCallback, useMemo, useRef } from 'react';
 import ArrayStore from 'devextreme/data/array_store';
-import { ScheduleModel, ScheduleWindowModel } from '../../../../models/regulator-settings/schelules-model';
-import { useAppData } from '../../../../contexts/app-data/app-data';
+import { ScheduleModel } from '../../../../models/regulator-settings/schelules-model';
 import { ValidationCallbackData, ValidationRule } from 'devextreme/common';
+import { formatMessage } from 'devextreme/localization';
+import { ScheduleWindowsGrid } from './schedule-windows-grid';
+import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
+import { useScreenSize } from '../../../../utils/media-query';
+
 
 export const SchedulesGrid = () => {
-    const { dataGridRef, daysOfWeek } = useSchedulesContext();
+    const schedulesDataGridRef = useRef<DataGrid<ScheduleModel, any>>(null)
+    const { daysOfWeek, putSchedulesAsync } = useSchedulesContext();
     const { regulatorSettings } = useSettingPageContext();
-    const { putRegulatorSettingsAsync } = useAppData();
+    const { isXSmall, isSmall } = useScreenSize();
 
-    const timeValidationRules = useMemo<ValidationRule[]>(() => {
+    const dayOfWeekValidationRules = useMemo<ValidationRule[]>(() => {
         return [
             {
                 type: 'required',
-                message: 'Обязательное значение'
+                message: formatMessage('validation-required')
             },
             {
-                type:'custom',
-                validationCallback: (options: ValidationCallbackData) => {
-                    console.log(options);
-                    return new Date(options.data.startTime) < new Date(options.data.endTime);
+                type: 'custom',
+                validationCallback: (options: ValidationCallbackData) =>
+                {
+                    const existedDays = regulatorSettings?.regulatorParameters.schedules.items.map(i => i.day);
+
+                    return !existedDays?.find(d => d === options.data.day);
                 },
-                message: 'Начало периода должно быть меньше конца периода'
+                message:  formatMessage('validation-value-already-existed')
             }
-        ] as ValidationRule[]
-    }, []);
+        ];
+    }, [regulatorSettings?.regulatorParameters.schedules.items]);
 
-    const putSchedulesAsync = useCallback(async (values: any) => {
-
-        const regulatorSettingsChange = {
-            regulatorSettings: regulatorSettings!,
-            changeLogItem: {
-                dataField: Object.keys(values).join(', '),
-                datetime: new Date(),
-                path: 'regulatorSettings.regulatorParameters.schedules.items',
-                value: Object.values(values).join(', ')
-            }
-        };
-
-        await putRegulatorSettingsAsync(regulatorSettingsChange);
-    }, [putRegulatorSettingsAsync, regulatorSettings]);
-
-    const scheduleStore = useMemo(() => {
+    const schedulesStore = useMemo(() => {
 
         return new ArrayStore({
             key: 'id',
@@ -65,94 +57,69 @@ export const SchedulesGrid = () => {
         });
     }, [putSchedulesAsync, regulatorSettings?.regulatorParameters.schedules.items]);
 
+    const addScheduleAsync = useCallback(async () => {
+        if(schedulesDataGridRef && schedulesDataGridRef.current) {
+            await schedulesDataGridRef.current?.instance.addRow();
+        }
+    }, [schedulesDataGridRef]);
+
+    const menuItems = useMemo(() => {
+        return [{
+            icon: () => <AdditionalMenuIcon size={ 20 } color='black' />,
+            items: [
+                {
+                    text: 'Добавить день...',
+                    icon: () => <AddIcon size={ 20 } />,
+                    onClick: addScheduleAsync
+                }
+            ]
+        }];
+    }, [addScheduleAsync])
+
     return (
-        <DataGrid
-            className='app-grid schedules-grid'
-            key={ 'id' }
-            ref={ dataGridRef }
-            dataSource={ scheduleStore }
-            height={ '50vh' }
-            showColumnHeaders={ false }
-            toolbar={ { visible: false } }
-        >
-            <Column
-                dataType='number'
-                dataField={ 'day' }
-                caption='День недели'
-                allowSorting={ false }
-                editorOptions={ 'lookup' }
-                cellRender={ (e) => {
-                    return (
-                        <DataGridIconCellValueContainer
-                            cellDataFormatter={ () => daysOfWeek.find(d => d.id === e.data.day)!.name }
-                            iconRenderer={ (iconProps) => <DayOfWeekIcon size={ 18 } { ...iconProps } /> }
-                            rowStyle={ { textAlign: 'left' } }
-                        />
-                    );
-            } } >
-                <Lookup
-                    dataSource={ daysOfWeek }
-                    valueExpr={ 'id' }
-                    displayExpr={ 'name' }
+        <>
+            <PageToolbar title={ 'Дни недели' } menuItems={ menuItems } style={ { width:  isXSmall || isSmall ? '100%' : 600 } } />
+            <DataGrid
+                className='app-grid schedules-grid'
+                key={ 'id' }
+                ref={ schedulesDataGridRef }
+                dataSource={ schedulesStore }
+                height={ '50vh' }
+                showColumnHeaders={ false }
+                toolbar={ { visible: false } }
+                width={ isXSmall || isSmall ? '100%' : 600 }
+            >
+                <Column
+                    dataType='number'
+                    dataField={ 'day' }
+                    caption='День недели'
+                    sortOrder='asc'
+                    allowSorting={ false }
+                    editorOptions={ 'lookup' }
+                    cellRender={ (e) => {
+                        return (
+                            <DataGridIconCellValueContainer
+                                cellDataFormatter={ () => daysOfWeek.find(d => d.id === e.data.day)!.name }
+                                iconRenderer={ (iconProps) => <DayOfWeekIcon size={ 18 } { ...iconProps } /> }
+                                rowStyle={ { textAlign: 'left' } }
+                            />
+                        );
+                        } }
+                    validationRules={ dayOfWeekValidationRules }
+                    >
+                    <Lookup
+                        dataSource={ daysOfWeek }
+                        valueExpr={ 'id' }
+                        displayExpr={ 'name' }
+                    />
+                </Column>
+                <Editing allowAdding allowDeleting mode='row' />
+
+                <MasterDetail
+                    enabled={ true }
+                    render={ (e) => <ScheduleWindowsGrid schedule={ e.data } /> }
                 />
-            </Column>
-            <Editing allowAdding allowDeleting mode='row' />
-
-            <MasterDetail
-                enabled={ true }
-                render={ (e) => {
-
-                    const store = new ArrayStore<ScheduleWindowModel, string>({
-                        key: 'id',
-                        data: e.data.windows,
-                        onUpdated: async (key, values) => {
-                            await putSchedulesAsync(values);
-                        },
-
-                        onInserted: async (key, values) => {
-                            await putSchedulesAsync(values);
-                        }
-                    });
-
-                    return (
-                        <DataGrid
-                            key={ 'id' }
-                            className='app-grid schedule-grid'
-                            dataSource={ store }
-                            showColumnHeaders={ true }>
-                            <Column
-                                dataField={ 'startTime' }
-                                dataType='datetime'
-                                editorOptions={ { type: 'time' } }
-                                caption="Начало"
-                                allowSorting={ false }
-                                sortOrder={ 'asc' }
-                                format={ 'shortTime' }
-                                validationRules={ timeValidationRules }
-                            />
-                            <Column
-                                dataField={ 'endTime' }
-                                dataType='datetime'
-                                editorOptions={ { type: 'time' } }
-                                caption="Конец" allowSorting={ false }
-                                format={ 'shortTime' }
-                                validationRules={ timeValidationRules }
-                            />
-                            <Column
-                                dataField={ 'desiredTemperature' }
-                                allowSorting={ false }
-                                caption="Температура"
-                                validationRules={ [{
-                                    type: 'required',
-                                    message: 'Обязательное значение'
-                                }] }
-                            />
-
-                            <Editing allowAdding allowUpdating allowDeleting mode='row' newRowPosition={ 'last' } />
-                        </DataGrid>
-                    );
-                } }
-            />
-        </DataGrid>
+            </DataGrid>
+        </>
     )
 }

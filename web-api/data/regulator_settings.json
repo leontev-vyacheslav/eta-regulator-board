@@ -125,27 +125,70 @@
                     ]
                 },
                 {
-                    "id": "3f3a7fd8-a241-4f9d-9e62-a31f690c3e85",
-                    "day": 3,
+                    "id": "345cfc49-71f8-b881-ab1a-88b917c27037",
+                    "day": 4,
                     "windows": [
                         {
-                            "id": "a6bc1911-badb-84b9-efde-a7a70a0f97b9",
-                            "startTime": "1970-01-01T00:00:00+03:00",
-                            "endTime": "1970-01-01T03:30:00+03:00",
+                            "id": "a6cff058-8a66-fd1e-4c7d-0efd526d6ad9",
+                            "startTime": "1969-12-31T23:00:00+00:00",
+                            "endTime": "1970-01-01T04:00:00+00:00",
                             "desiredTemperature": 15
                         },
                         {
-                            "id": "9bab19ef-c6ad-9e4a-9e99-aed7b5dd8321",
-                            "startTime": "1970-01-01T08:00:00+03:00",
-                            "endTime": "1970-01-01T15:30:00+03:00",
-                            "desiredTemperature": 12
+                            "id": "5e10b42e-2b11-25d2-4158-81a930c08843",
+                            "startTime": "1970-01-01T07:00:00+03:00",
+                            "endTime": "1970-01-01T10:00:00+03:00",
+                            "desiredTemperature": 20
+                        },
+                        {
+                            "id": "8b021641-13e6-1cd4-bb96-1b11f6897896",
+                            "startTime": "1970-01-01T10:00:00+03:00",
+                            "endTime": "1970-01-01T10:30:00+03:00",
+                            "desiredTemperature": 21
                         }
                     ]
                 },
                 {
-                    "id": "29554b0e-94f9-e7c4-8b0a-52b7aaa9c757",
-                    "day": 4,
-                    "windows": []
+                    "id": "9e6c5765-9049-8fd1-853c-c9c2b394ea28",
+                    "day": 6,
+                    "windows": [
+                        {
+                            "id": "80e3fa8b-3779-7d83-ac33-d486cfea154d",
+                            "startTime": "1969-12-31T21:30:00+00:00",
+                            "endTime": "1969-12-31T22:30:00+00:00",
+                            "desiredTemperature": 11
+                        }
+                    ]
+                },
+                {
+                    "id": "f01dc5dd-968c-9572-9e29-18b3f2cd4914",
+                    "day": 5,
+                    "windows": [
+                        {
+                            "id": "bee461bc-187e-272e-c27d-d4ebc023fe38",
+                            "startTime": "1969-12-31T21:00:00+00:00",
+                            "endTime": "1970-01-01T04:00:00+00:00",
+                            "desiredTemperature": 11
+                        }
+                    ]
+                },
+                {
+                    "id": "c0c139b5-347a-2b1c-2230-89a4c2184ddd",
+                    "day": 3,
+                    "windows": [
+                        {
+                            "id": "84734cda-b55e-be69-4073-0235ee38444d",
+                            "startTime": "1969-12-31T21:00:00+00:00",
+                            "endTime": "1970-01-01T01:00:00+00:00",
+                            "desiredTemperature": 11
+                        },
+                        {
+                            "id": "5d5d2775-711c-cca6-e2bc-a9c09d41fd96",
+                            "startTime": "1970-01-01T01:00:00+00:00",
+                            "endTime": "1970-01-01T03:00:00+00:00",
+                            "desiredTemperature": 12
+                        }
+                    ]
                 }
             ]
         },
