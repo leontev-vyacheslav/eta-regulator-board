@@ -6,13 +6,13 @@ import { ScheduleModel, ScheduleWindowModel } from '../../../../models/regulator
 import ArrayStore from 'devextreme/data/array_store';
 import { useSettingPageContext } from '../../settings-page-context';
 import { useCallback, useMemo, useRef } from 'react';
-import { AddIcon, AdditionalMenuIcon } from '../../../../constants/app-icons';
+import { AddIcon, AdditionalMenuIcon, DeleteAllIcon } from '../../../../constants/app-icons';
 import { useSchedulesContext } from './schedules-context';
 
 export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => {
     const { putSchedulesAsync } = useSchedulesContext();
     const scheduleWindowsRef = useRef<DataGrid<ScheduleWindowModel, any>>(null);
-    const { regulatorSettings } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings } = useSettingPageContext();
 
     const addScheduleWindowAsync = useCallback(async () => {
         if(scheduleWindowsRef && scheduleWindowsRef.current) {
@@ -20,7 +20,8 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
         }
     }, []);
 
-    const scheduleWindowsStore = new ArrayStore<ScheduleWindowModel, string>({
+    const scheduleWindowsStore = useMemo( () => {
+        return new ArrayStore<ScheduleWindowModel, string>({
         key: 'id',
         data: schedule.windows,
         onUpdated: async (key, values) => {
@@ -31,6 +32,7 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
             await putSchedulesAsync(values);
         }
     });
+    }, [putSchedulesAsync, schedule.windows]);
 
     const scheduleWindowMenuItems = useMemo(() => {
 
@@ -41,10 +43,25 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                     text: 'Добавить окно...',
                     icon: () => <AddIcon size={ 20 } />,
                     onClick: addScheduleWindowAsync
+                },
+                {
+                    text: 'Удалить все окна...',
+                    icon: () => <DeleteAllIcon size={ 20 } />,
+                    onClick: async () => {
+                        if (regulatorSettings) {
+                            const currentSchedule = regulatorSettings?.regulatorParameters.schedules.items.find(i => i.day === schedule.day);
+                            if (currentSchedule) {
+                                currentSchedule.windows = [];
+                                await putSchedulesAsync([]);
+
+                                setRegulatorSettings({ ...regulatorSettings });
+                            }
+                        }
+                    }
                 }
             ]
         }]
-    }, [addScheduleWindowAsync]);
+    }, [addScheduleWindowAsync, putSchedulesAsync, regulatorSettings, schedule.day, setRegulatorSettings]);
 
     const timeValidationRules = useMemo<ValidationRule[]>(() => {
         return [
@@ -121,6 +138,7 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                 />
                 <Column
                     dataField={ 'desiredTemperature' }
+                    dataType='number'
                     allowSorting={ false }
                     caption="Температура"
                     validationRules={ [{

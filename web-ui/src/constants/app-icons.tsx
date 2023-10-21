@@ -20,6 +20,7 @@ export { IoHomeOutline as HomeIcon } from 'react-icons/io5';
 export { IoInformationCircleOutline as AboutIcon } from 'react-icons/io5';
 export { IoExitOutline as ExitIcon } from 'react-icons/io5';
 export { CgRemoveR as DeleteIcon } from 'react-icons/cg';
+export { RiDeleteBin7Line as DeleteAllIcon } from 'react-icons/ri';
 export { CgAddR as AddIcon } from 'react-icons/cg';
 export { BiEdit as EditIcon } from 'react-icons/bi';
 export { IoWarningSharp as WarningIcon } from 'react-icons/io5';

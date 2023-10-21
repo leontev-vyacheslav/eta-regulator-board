@@ -2,7 +2,7 @@ import { DataGrid, Column, MasterDetail, Editing, Lookup } from 'devextreme-reac
 import { useSchedulesContext } from './schedules-context'
 import { useSettingPageContext } from '../../settings-page-context';
 import DataGridIconCellValueContainer from '../../../../components/data-grid-utils/data-grid-icon-cell-value-container';
-import { AddIcon, AdditionalMenuIcon, DayOfWeekIcon } from '../../../../constants/app-icons';
+import { AddIcon, AdditionalMenuIcon, DayOfWeekIcon, DeleteAllIcon } from '../../../../constants/app-icons';
 import {  useCallback, useMemo, useRef } from 'react';
 import ArrayStore from 'devextreme/data/array_store';
 import { ScheduleModel } from '../../../../models/regulator-settings/schelules-model';
@@ -16,7 +16,7 @@ import { useScreenSize } from '../../../../utils/media-query';
 export const SchedulesGrid = () => {
     const schedulesDataGridRef = useRef<DataGrid<ScheduleModel, any>>(null)
     const { daysOfWeek, putSchedulesAsync } = useSchedulesContext();
-    const { regulatorSettings } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings } = useSettingPageContext();
     const { isXSmall, isSmall } = useScreenSize();
 
     const dayOfWeekValidationRules = useMemo<ValidationRule[]>(() => {
@@ -68,13 +68,27 @@ export const SchedulesGrid = () => {
             icon: () => <AdditionalMenuIcon size={ 20 } color='black' />,
             items: [
                 {
-                    text: 'Добавить день...',
+                    text: 'Добавить день',
                     icon: () => <AddIcon size={ 20 } />,
                     onClick: addScheduleAsync
+                },
+                {
+                     text: 'Удалить все дни...',
+                    icon: () => <DeleteAllIcon size={ 20 } />,
+                     onClick: async () => {
+                         if (!regulatorSettings || regulatorSettings.regulatorParameters.schedules.items.length === 0) {
+                            return;
+                         }
+
+                        regulatorSettings.regulatorParameters.schedules.items = [];
+                        await putSchedulesAsync([]);
+
+                        setRegulatorSettings({ ...regulatorSettings });
+                    }
                 }
             ]
         }];
-    }, [addScheduleAsync])
+    }, [addScheduleAsync, putSchedulesAsync, regulatorSettings, setRegulatorSettings])
 
     return (
         <>

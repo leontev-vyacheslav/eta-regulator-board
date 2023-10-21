@@ -1,37 +1,21 @@
 import DataGrid, { Column, Editing, Selection } from 'devextreme-react/data-grid'
 import { useSettingPageContext } from '../../settings-page-context';
 import { useScreenSize } from '../../../../utils/media-query';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import ArrayStore from 'devextreme/data/array_store';
 import { TemperatureGraphItemModel } from '../../../../models/regulator-settings/temperature-graph-model';
-import { useAppData } from '../../../../contexts/app-data/app-data';
-import { useTemperatureGraphContext } from './temperature-graph-context';
 import { ValidationCallbackData, ValidationRule } from 'devextreme/common';
 import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
-import { useTemperatureGraphMenuItems } from './use-temperature-graph-menu-items';
+import { AddIcon, AdditionalMenuIcon, DeleteAllIcon } from '../../../../constants/app-icons';
+import { useTemperatureGraphContext } from './temperature-graph-context';
 
 export const TemperatureGraphGrid = () => {
-    const menuItems = useTemperatureGraphMenuItems();
-    const { regulatorSettings } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings } = useSettingPageContext();
+    const { putTemparatureGraphAsync } = useTemperatureGraphContext();
     const { isXSmall, isSmall } = useScreenSize();
-    const { putRegulatorSettingsAsync } = useAppData();
-    const { dataGridRef } = useTemperatureGraphContext();
 
-    const putTemparatureGraphAsync = useCallback(async (values: TemperatureGraphItemModel) => {
-
-        const regulatorSettingsChange = {
-            regulatorSettings: regulatorSettings!,
-            changeLogItem: {
-                dataField: Object.keys(values).join(', '),
-                datetime: new Date(),
-                path: 'regulatorSettings.regulatorParameters.temperatureGraph.items',
-                value: Object.values(values).join(', ')
-            }
-        }
-
-        await putRegulatorSettingsAsync(regulatorSettingsChange);
-    }, [putRegulatorSettingsAsync, regulatorSettings]);
+    const dataGridRef = useRef<DataGrid<TemperatureGraphItemModel>>(null);
 
     const temperatureGraphStore = useMemo(() => {
         const store = new ArrayStore({
@@ -77,6 +61,35 @@ export const TemperatureGraphGrid = () => {
 
     const [сolumCaptions, setColumCaptions] = useState(defaultColumCaptions);
 
+    const menuItems = useMemo(() => {
+        return [{
+            icon: () => <AdditionalMenuIcon size={ 20 } color='black' />,
+            items: [
+                {
+                    text: 'Добавить точку...',
+                    icon: () => <AddIcon size={ 20 } />,
+                    onClick: async () =>  {
+                        if(dataGridRef && dataGridRef.current) {
+                            await dataGridRef.current?.instance.addRow();
+                        }
+                    }
+                },
+                {
+                    text: 'Удалить все точки...',
+                    icon: () => <DeleteAllIcon size={ 20 } />,
+                    onClick: async () => {
+                        if (regulatorSettings) {
+                            regulatorSettings.regulatorParameters.temperatureGraph.items = [];
+                            await putTemparatureGraphAsync({} as TemperatureGraphItemModel)
+
+                            setRegulatorSettings({ ...regulatorSettings });
+                        }
+                    }
+                }
+            ]
+        }];
+    }, [putTemparatureGraphAsync, regulatorSettings, setRegulatorSettings])
+
     useEffect(() => {
         setColumCaptions(defaultColumCaptions);
     }, [defaultColumCaptions]);
@@ -94,6 +107,9 @@ export const TemperatureGraphGrid = () => {
                 message: formatMessage('validation-range-formatted-with-values', '-35°C', '25°C')
             },
             {
+                type: 'numeric'
+            },
+            {
                 type: 'custom',
                 validationCallback: (options: ValidationCallbackData) => {
                     const items = temperatureGraphStore.createQuery().toArray();
@@ -109,6 +125,9 @@ export const TemperatureGraphGrid = () => {
         {
             type: 'required',
             message: formatMessage('validation-required')
+        },
+        {
+            type: 'numeric'
         },
         {
             type: 'range',
@@ -130,6 +149,9 @@ export const TemperatureGraphGrid = () => {
         {
             type: 'required',
             message: formatMessage('validation-required')
+        },
+        {
+            type: 'numeric'
         },
         {
             type: 'range',
@@ -161,6 +183,7 @@ export const TemperatureGraphGrid = () => {
                 <Selection mode='single' />
 
                 <Column
+                    dataType='number'
                     dataField='outdoorTemperature'
                     caption={ сolumCaptions.outdoorTemperatureColCaption }
                     allowSorting={ true }
@@ -169,6 +192,7 @@ export const TemperatureGraphGrid = () => {
                 />
 
                 <Column
+                    dataType='number'
                     dataField='supplyPipeTemperature'
                     caption={ сolumCaptions.supplyPipeTemperatureColCaption }
                     allowSorting={ false }
@@ -176,6 +200,7 @@ export const TemperatureGraphGrid = () => {
                 />
 
                 <Column
+                    dataType='number'
                     dataField='returnPipeTemperature'
                     caption={ сolumCaptions.returnPipeTemperature }
                     allowSorting={ false }

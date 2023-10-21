@@ -1,23 +1,41 @@
-import DataGrid from 'devextreme-react/data-grid';
-import { RefObject, createContext, useContext, useRef } from 'react';
+import { createContext, useCallback, useContext } from 'react'
 import { TemperatureGraphItemModel } from '../../../../models/regulator-settings/temperature-graph-model';
+import { useSettingPageContext } from '../../settings-page-context';
+import { useAppData } from '../../../../contexts/app-data/app-data';
 
-export type TempertureGraphContextModel = {
-    dataGridRef: RefObject<DataGrid<TemperatureGraphItemModel, any>>
+export type TemperatureGraphContextModel = {
+    putTemparatureGraphAsync: (values: TemperatureGraphItemModel) => Promise<void>;
 };
 
-const TempertureGraphContext = createContext<TempertureGraphContextModel>({} as TempertureGraphContextModel)
 
-function TemperatureGraphContextProvider(props: any) {
-    const dataGridRef = useRef<DataGrid<TemperatureGraphItemModel>>(null);
+const TemperatureGraphContext = createContext({} as TemperatureGraphContextModel);
+
+function TempregatureGraphProvider(props: any) {
+    const { regulatorSettings } = useSettingPageContext();
+    const { putRegulatorSettingsAsync } = useAppData();
+
+    const putTemparatureGraphAsync = useCallback(async (values: TemperatureGraphItemModel) => {
+
+        const regulatorSettingsChange = {
+            regulatorSettings: regulatorSettings!,
+            changeLogItem: {
+                dataField: Object.keys(values).join(', '),
+                datetime: new Date(),
+                path: 'regulatorSettings.regulatorParameters.temperatureGraph.items',
+                value: Object.values(values).join(', ')
+            }
+        }
+
+        await putRegulatorSettingsAsync(regulatorSettingsChange);
+    }, [putRegulatorSettingsAsync, regulatorSettings]);
 
     return (
-        <TempertureGraphContext.Provider value={ {
-            dataGridRef
+        <TemperatureGraphContext.Provider value={ {
+            putTemparatureGraphAsync
         } } { ...props } />
-    );
+    )
 }
 
-const useTemperatureGraphContext = () => useContext(TempertureGraphContext);
+const useTemperatureGraphContext = () => useContext(TemperatureGraphContext);
 
-export { TemperatureGraphContextProvider, useTemperatureGraphContext };
+export { TempregatureGraphProvider, useTemperatureGraphContext };
