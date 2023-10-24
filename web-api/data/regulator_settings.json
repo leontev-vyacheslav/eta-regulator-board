@@ -41,16 +41,21 @@
         "schedules": {
             "items": [
                 {
-                    "id": "72498e85-4ba7-8feb-3c2e-a9ce98335427",
+                    "id": "417d4d5e-b3a0-6401-d9d1-53ab43895265",
                     "day": 1,
                     "windows": [
                         {
-                            "id": "8462c2b5-bf50-21b6-3e75-a19321c69b86",
-                            "startTime": "1969-12-31T21:00:00+00:00",
-                            "endTime": "1969-12-31T23:00:00+00:00",
-                            "desiredTemperature": 232
+                            "id": "b134c845-5300-d39d-c668-b3d44a44bdd8",
+                            "startTime": "2023-10-23T21:00:52.968000+00:00",
+                            "endTime": "2023-10-24T03:00:02.806000+00:00",
+                            "desiredTemperature": 15
                         }
                     ]
+                },
+                {
+                    "id": "e6be290b-ede4-ce89-dbad-2ff6d5ef3a42",
+                    "day": 2,
+                    "windows": []
                 }
             ]
         },

@@ -7,6 +7,7 @@ import { TestModel } from '../../../../models/data/test-model';
 import { useTestContext } from './test-context';
 import { showConfirmDialog, showPromptDialog } from '../../../../utils/dialogs';
 import { proclaim } from '../../../../utils/proclaim';
+import { formatMessage } from 'devextreme/localization';
 
 export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<List<TestModel, any>> }) => {
     const { getTestListDataAsync, postTestDataAsync, putTestDataAsync, deleteTestDataAsync } = useAppData();
@@ -101,7 +102,7 @@ export const useTestListMenuItems = ({ listRef }: { listRef: React.RefObject<Lis
                 const originalTest = selectedItems.find(() => true)!;
 
                 showConfirmDialog({
-                    title: 'Confirm',
+                    title: formatMessage('confirm-title'),
                     iconName: 'DeleteIcon',
                     iconSize: 36,
                     callback: async () => {

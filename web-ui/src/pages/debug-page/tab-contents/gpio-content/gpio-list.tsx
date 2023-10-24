@@ -5,6 +5,7 @@ import { GpioItemModel } from '../../../../models/regulator-settings/gpio-set-mo
 import { useGpioData } from '../../../../contexts/app-data/use-gpio-data';
 import { useGpioTabContext } from './gpio-tab-context';
 import React from 'react';
+import { formatMessage } from 'devextreme/localization';
 
 export type GpioListProps = { innerRef?: Ref<List<GpioItemModel>> }
 
@@ -42,7 +43,7 @@ export const GpioListInner = ({ innerRef }: GpioListProps) => {
                 )
             } }
         />
-        : <div className='dx-empty-message' style={ { height: '50vh' } }>Нет данных для отображения</div>
+        : <div className='dx-empty-message' style={ { height: '50vh' } }>{formatMessage('dxCollectionWidget-noDataText')}</div>
     );
 }
 

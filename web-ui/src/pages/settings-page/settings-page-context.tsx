@@ -15,13 +15,13 @@ function SettingPageContextProvider (props: any) {
     const { getRegulatorSettingsAsync } = useAppData();
 
     useEffect(() => {
-        (async () => {
+        setTimeout(async() => {
             const regulatorSettings = await getRegulatorSettingsAsync();
 
             if(regulatorSettings){
                 setRegulatorSettings(regulatorSettings)
             }
-        })();
+        }, 100);
     }, [getRegulatorSettingsAsync]);
 
     return (

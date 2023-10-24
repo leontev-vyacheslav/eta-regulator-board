@@ -7,6 +7,7 @@ import { ControlModes } from '../../../../models/regulator-settings/enums/contro
 import {  ManualControlModes } from '../../../../models/regulator-settings/enums/manual-control-mode-model';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import { useAppData } from '../../../../contexts/app-data/app-data';
+import { formatMessage } from 'devextreme/localization';
 
 export const ControlParametersForm = () => {
     const dxControlParametersFormRef = useRef<Form>(null);
@@ -14,7 +15,7 @@ export const ControlParametersForm = () => {
     const { regulatorSettings } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
-    return (
+    return regulatorSettings ?
         <Form
             className='app-form setting-form'
             height={ '50vh' }
@@ -35,7 +36,6 @@ export const ControlParametersForm = () => {
                 }
 
                 await putRegulatorSettingsAsync(regulutorSettingsChange);
-                console.log(e, regulatorSettings);
             } }
         >
             <GroupItem caption={ 'Режимы' }>
@@ -96,7 +96,6 @@ export const ControlParametersForm = () => {
                     editorType={ 'dxNumberBox' }
                     editorOptions={ { showSpinButtons: true, min: 1, max: 5 } } />
 
-
                 <SimpleItem
                     dataField='supplyPipeMinTemperature'
                     label={ { location: 'top', showColon: true, text: 'Минимальная температура подачи' } }
@@ -124,5 +123,6 @@ export const ControlParametersForm = () => {
             </GroupItem>
 
         </Form>
-    );
+        // : <div className='dx-datagrid-nodata'>Нет данных для отображения</div>
+        : <div className='dx-empty-message' style={ { height: '50vh' } }>{formatMessage('dxCollectionWidget-noDataText')}</div>
 }

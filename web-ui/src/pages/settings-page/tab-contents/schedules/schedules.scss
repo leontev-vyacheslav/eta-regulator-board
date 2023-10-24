@@ -6,6 +6,9 @@
     .dx-datagrid-header-panel {
         display: none;
     }
+    .dx-master-detail-cell {
+        border-bottom: transparent !important;
+    }
 }
 
 .schedules-grid.app-grid svg {
@@ -13,12 +16,21 @@
     height: inherit
 }
 
-.schedule-grid {
+.schedule-windows-grid {
     .dx-datagrid .dx-datagrid-table .dx-header-row>td {
         padding-top: 10px;
         padding-bottom: 10px;
     }
     .dx-datagrid-header-panel {
-        display: block;
+        display: none;
     }
+
+    .time-picker {
+        input {
+            padding: 0 !important
+        }
+    }
+
+
+
 }

@@ -11,6 +11,7 @@ import { formatMessage } from 'devextreme/localization';
 import { ScheduleWindowsGrid } from './schedule-windows-grid';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { useScreenSize } from '../../../../utils/media-query';
+import { showConfirmDialog } from '../../../../utils/dialogs';
 
 
 export const SchedulesGrid = () => {
@@ -73,17 +74,28 @@ export const SchedulesGrid = () => {
                     onClick: addScheduleAsync
                 },
                 {
-                     text: 'Удалить все дни...',
+                     text: formatMessage('menu-item-delete-all-schedules'),
                     icon: () => <DeleteAllIcon size={ 20 } />,
                      onClick: async () => {
                          if (!regulatorSettings || regulatorSettings.regulatorParameters.schedules.items.length === 0) {
                             return;
                          }
 
-                        regulatorSettings.regulatorParameters.schedules.items = [];
-                        await putSchedulesAsync([]);
+                         showConfirmDialog({
+                            title: formatMessage('confirm-title'),
 
-                        setRegulatorSettings({ ...regulatorSettings });
+                            iconName: 'DeleteAllIcon',
+                            iconSize: 32,
+                            callback: async () => {
+                                regulatorSettings.regulatorParameters.schedules.items = [];
+                                await putSchedulesAsync([]);
+
+                                setRegulatorSettings({ ...regulatorSettings });
+                            },
+                            textRender: () => {
+                                return <> { formatMessage('confirm-dialog-delete-all-schedules') } </>;
+                            }
+                        });
                     }
                 }
             ]
@@ -92,7 +104,7 @@ export const SchedulesGrid = () => {
 
     return (
         <>
-            <PageToolbar title={ 'Дни недели' } menuItems={ menuItems } style={ { width:  isXSmall || isSmall ? '100%' : 600 } } />
+            <PageToolbar title={ formatMessage('schedules-title') } menuItems={ menuItems } style={ { width:  isXSmall || isSmall ? '100%' : 600 } } />
             <DataGrid
                 className='app-grid schedules-grid'
                 key={ 'id' }
@@ -103,6 +115,7 @@ export const SchedulesGrid = () => {
                 toolbar={ { visible: false } }
                 width={ isXSmall || isSmall ? '100%' : 600 }
             >
+                <Column type='detailExpand' width={ 50 } />
                 <Column
                     dataType='number'
                     dataField={ 'day' }

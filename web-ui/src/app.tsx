@@ -28,7 +28,19 @@ function App() {
             'validation-compare-supply-temperature-return-temperature': 'Значение Тп всегда больше Тo',
             'validation-value-already-existed': 'Значение уже существует',
             'validation-range-formatted-with-values': 'Допустумые значения в диапазоне от {0} до {1}',
-            'validation-range-overlapped': 'Перекрытие диапазонов'
+            'validation-range-overlapped': 'Перекрытие диапазонов',
+            'confirm-dialog-delete-all-schedules': 'Вы действительно хотите удалить все дни?',
+            'confirm-dialog-delete-all-schedule-windows': 'Вы действительно хотите удалить все окна?',
+            'confirm-dialog-delete-all-points': 'Вы действительно хотите удалить все точки?',
+            'menu-item-delete-all-schedules': 'Удалить все дни...',
+            'menu-item-delete-all-schedule-windows': 'Удалить все окна...',
+            'menu-item-delete-all-points': 'Удалить все точки...',
+            'menu-item-add-schedule-window': 'Добавить окно...',
+            'menu-item-add-point': 'Добавить точку...',
+            'confirm-title': 'Подтвердить',
+            'temperature-graph-title': 'Температурный график',
+            'schedule-windows-title': 'Временные окна',
+            'schedules-title': 'Дни недели'
         }
     });
     locale('ru-RU');

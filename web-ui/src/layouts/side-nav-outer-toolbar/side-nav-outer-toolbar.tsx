@@ -64,13 +64,18 @@ export default function ({ title, children }: SideNavProps) {
             return;
         }
 
-        history(path);
-        scrollViewRef.current?.instance.scrollTo(0);
+
 
         if (!isLarge || menuStatus === MenuStatus.TemporaryOpened) {
             setMenuStatus(MenuStatus.Closed);
             event.stopPropagation();
         }
+
+        setTimeout(() => {
+            history(path);
+            scrollViewRef.current?.instance.scrollTo(0);
+        }, 100);
+
     }, [history, menuStatus, isLarge]);
 
     return (

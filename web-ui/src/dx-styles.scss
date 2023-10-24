@@ -179,6 +179,15 @@ html, body {
     .dx-datagrid-borders > .dx-datagrid-header-panel {
       padding: 0;
     }
+
+  }
+
+  .app-grid {
+    .dx-datagrid .dx-row > td {
+      padding: 14px 10px !important;
+      font-size: 14px;
+      line-height: 20px;
+    }
   }
 
 /* Buttons */

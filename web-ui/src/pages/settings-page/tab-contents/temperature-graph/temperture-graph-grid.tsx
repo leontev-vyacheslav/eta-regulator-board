@@ -9,6 +9,7 @@ import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { AddIcon, AdditionalMenuIcon, DeleteAllIcon } from '../../../../constants/app-icons';
 import { useTemperatureGraphContext } from './temperature-graph-context';
+import { showConfirmDialog } from '../../../../utils/dialogs';
 
 export const TemperatureGraphGrid = () => {
     const { regulatorSettings, setRegulatorSettings } = useSettingPageContext();
@@ -53,9 +54,9 @@ export const TemperatureGraphGrid = () => {
 
     const defaultColumCaptions = useMemo(() => {
         return {
-            outdoorTemperatureColCaption: isXSmall ? 'Tвн. (°C)' : 'Внеш. темп. (°C)',
-            supplyPipeTemperatureColCaption: isXSmall ? 'Тп (°C)' : 'Темп. подачи (°C)',
-            returnPipeTemperature: isXSmall ? 'То (°C)' : 'Темп. обратки (°C)',
+            outdoorTemperatureColCaption: isXSmall ? 'Tвн, °C' : 'Внеш. темп. (°C)',
+            supplyPipeTemperatureColCaption: isXSmall ? 'Тп, °C' : 'Темп. подачи (°C)',
+            returnPipeTemperature: isXSmall ? 'То, °C' : 'Темп. обратки (°C)',
         };
     }, [isXSmall]);
 
@@ -66,7 +67,7 @@ export const TemperatureGraphGrid = () => {
             icon: () => <AdditionalMenuIcon size={ 20 } color='black' />,
             items: [
                 {
-                    text: 'Добавить точку...',
+                    text: formatMessage('menu-item-add-point'),
                     icon: () => <AddIcon size={ 20 } />,
                     onClick: async () =>  {
                         if(dataGridRef && dataGridRef.current) {
@@ -75,14 +76,24 @@ export const TemperatureGraphGrid = () => {
                     }
                 },
                 {
-                    text: 'Удалить все точки...',
+                    text: formatMessage('menu-item-delete-all-points'),
                     icon: () => <DeleteAllIcon size={ 20 } />,
                     onClick: async () => {
                         if (regulatorSettings) {
-                            regulatorSettings.regulatorParameters.temperatureGraph.items = [];
-                            await putTemparatureGraphAsync({} as TemperatureGraphItemModel)
+                            showConfirmDialog({
+                                title: formatMessage('confirm-title'),
+                                iconName: 'DeleteAllIcon',
+                                iconSize: 32,
+                                callback: async () => {
+                                    regulatorSettings.regulatorParameters.temperatureGraph.items = [];
+                                    await putTemparatureGraphAsync({} as TemperatureGraphItemModel)
 
-                            setRegulatorSettings({ ...regulatorSettings });
+                                    setRegulatorSettings({ ...regulatorSettings });
+                                },
+                                textRender: () => {
+                                    return <> { formatMessage('confirm-dialog-delete-all-points') } </>;
+                                }
+                            });
                         }
                     }
                 }
@@ -107,7 +118,7 @@ export const TemperatureGraphGrid = () => {
                 message: formatMessage('validation-range-formatted-with-values', '-35°C', '25°C')
             },
             {
-                type: 'numeric'
+                type: 'numeric',
             },
             {
                 type: 'custom',
@@ -171,7 +182,7 @@ export const TemperatureGraphGrid = () => {
 
     return (
         <>
-            <PageToolbar title={ 'Температурный график' } menuItems={ menuItems } style={ { width: isXSmall || isSmall ? '100%' : 600 } } />
+            <PageToolbar title={ formatMessage('temperature-graph-title') } menuItems={ menuItems } style={ { width: isXSmall || isSmall ? '100%' : 600 } } />
             <DataGrid
                 ref={ dataGridRef }
                 className='app-grid temperagure-graph-grid'
@@ -183,16 +194,17 @@ export const TemperatureGraphGrid = () => {
                 <Selection mode='single' />
 
                 <Column
-                    dataType='number'
+                    dataType='string'
                     dataField='outdoorTemperature'
                     caption={ сolumCaptions.outdoorTemperatureColCaption }
                     allowSorting={ true }
                     sortOrder='asc'
                     validationRules={ outdoorTemperatureValidationRules }
+                    editorOptions={ { mask: '#00' } }
                 />
 
                 <Column
-                    dataType='number'
+                     dataType='number'
                     dataField='supplyPipeTemperature'
                     caption={ сolumCaptions.supplyPipeTemperatureColCaption }
                     allowSorting={ false }
@@ -200,7 +212,7 @@ export const TemperatureGraphGrid = () => {
                 />
 
                 <Column
-                    dataType='number'
+                     dataType='number'
                     dataField='returnPipeTemperature'
                     caption={ сolumCaptions.returnPipeTemperature }
                     allowSorting={ false }
