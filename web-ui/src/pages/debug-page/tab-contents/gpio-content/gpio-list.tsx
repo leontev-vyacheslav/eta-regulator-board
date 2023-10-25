@@ -34,6 +34,7 @@ export const GpioListInner = ({ innerRef }: GpioListProps) => {
     return (
         gpioSet ?
         <List
+            height={ '50vh' }
             className='app-list gpio-list'
             ref={ innerRef }
             dataSource={ gpioSet?.items }

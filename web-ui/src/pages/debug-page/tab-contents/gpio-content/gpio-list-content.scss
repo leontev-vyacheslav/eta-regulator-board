@@ -4,6 +4,8 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        height: 45px;
+        padding-left: 10px;
 
         .gpio-list-item__pin {
             display: flex;

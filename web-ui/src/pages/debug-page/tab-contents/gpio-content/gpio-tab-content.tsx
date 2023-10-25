@@ -7,6 +7,7 @@ import { GpioItemModel } from '../../../../models/regulator-settings/gpio-set-mo
 import List from 'devextreme-react/list';
 import { useGpioListMenuItems } from './use-gpio-list-menu-items';
 import { GpioTabContextProvider } from './gpio-tab-context';
+// import { GpioGrid } from './gpio-grid';
 
 const GpioTabContentInner = () => {
     const listRef = useRef<List<GpioItemModel>>(null);
