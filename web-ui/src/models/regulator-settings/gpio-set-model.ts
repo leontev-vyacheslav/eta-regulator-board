@@ -1,9 +1,9 @@
 export type GpioItemModel = {
-    description?: string | null,
+    description?: string | null;
 
-    pin: number,
+    pin: number;
 
-    state: boolean
+    state: boolean;
 }
 
 export type GpioSetModel = {

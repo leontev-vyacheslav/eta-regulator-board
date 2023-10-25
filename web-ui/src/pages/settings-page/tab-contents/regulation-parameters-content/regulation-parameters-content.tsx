@@ -73,7 +73,7 @@ export const RegulationParametersForm = () => {
                 editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
 
             <SimpleItem
-                dataField='analogСontrol'
+                dataField='analogControl'
                 label={ { location: 'top', showColon: true, text: 'Аналоговое управление' } }
                 editorType={ 'dxCheckBox' }
                 editorOptions={ { } } />

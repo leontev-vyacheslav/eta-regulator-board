@@ -1,29 +1,29 @@
 export type RegulatorOwnerModel = {
-    name: string,
+    name: string;
 
-    phoneNumber: string
+    phoneNumber: string;
 }
 
 export type SoftwareInfoModel = {
-    webApiVersion: string,
+    webApiVersion: string;
 
-    webUiVersion: string
+    webUiVersion: string;
 }
 
 
 export type HardwareInfoModel = {
-    onionMacAddress: string
+    onionMacAddress: string;
 }
 
 
 export type RtcDateTimeModel = {
-    datetime: Date
+    datetime: Date;
 }
 
 export type ServiceModel = {
-    regulatorOwner: RegulatorOwnerModel,
+    regulatorOwner: RegulatorOwnerModel;
 
-    softwareInfo: SoftwareInfoModel,
+    softwareInfo: SoftwareInfoModel;
 
-    hardwareInfo: HardwareInfoModel,
+    hardwareInfo: HardwareInfoModel;
 }

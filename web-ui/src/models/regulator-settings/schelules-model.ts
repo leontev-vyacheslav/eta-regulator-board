@@ -1,21 +1,21 @@
 export type ScheduleWindowModel = {
-    id: string,
+    id: string;
 
-    startTime: Date,
+    startTime: Date;
 
-    endTime: Date,
+    endTime: Date;
 
-    desiredTemperature: number
+    desiredTemperature: number;
 }
 
 export type ScheduleModel = {
-    id: string,
+    id: string;
 
-    day: 1 | 2 | 3 | 4 | 5 | 6 | 7,
+    day: 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
-    windows: ScheduleWindowModel[]
+    windows: ScheduleWindowModel[];
 }
 
 export type SchedulesModel = {
-    items: ScheduleModel[]
+    items: ScheduleModel[];
 }

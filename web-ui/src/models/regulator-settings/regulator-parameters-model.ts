@@ -6,15 +6,15 @@ import { RegulatorProgrammsModel } from './regulator-programms-model';
 import { EmergencyVerificationModel } from './emergency-verification-model';
 
 export type RegulatorParametersModel = {
-    controlParameters: ControlParametersModel,
+    controlParameters: ControlParametersModel;
 
-    temperatureGraph: TemperatureGraphModel,
+    temperatureGraph: TemperatureGraphModel;
 
-    programms: RegulatorProgrammsModel,
+    programms: RegulatorProgrammsModel;
 
-    schedules: SchedulesModel,
+    schedules: SchedulesModel;
 
-    regulationParameters: RegulationParametersModel,
+    regulationParameters: RegulationParametersModel;
 
-    emergencyVerification: EmergencyVerificationModel
+    emergencyVerification: EmergencyVerificationModel;
 }

@@ -1,15 +1,15 @@
 export type RegulationParametersModel = {
-    proportionalityFactor: number
+    proportionalityFactor: number;
 
-    integrationFactor: number
+    integrationFactor: number;
 
-    differentiationFactor: number
+    differentiationFactor: number;
 
-    samplingTime: number
+    samplingTime: number;
 
-    reductionFactorPid: number
+    reductionFactorPid: number;
 
-    valvePeriod: number
+    valvePeriod: number;
 
-    analogControl: boolean
+    analogControl: boolean;
 }

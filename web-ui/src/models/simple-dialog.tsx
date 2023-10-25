@@ -2,20 +2,21 @@ import { ProcFunc } from './primitive-type';
 import { ReactNode } from 'react';
 
 export type SimpleDialogContentModel = {
-  iconName: string,
+  iconName: string;
 
-  iconSize?: number,
+  iconSize?: number;
 
-  iconColor?: string,
+  iconColor?: string;
 
-  textRender?: () => ReactNode
+  textRender?: () => ReactNode;
 }
 
 export type SimpleDialogModel = SimpleDialogContentModel & {
-  title: string,
-  callback: ProcFunc | ((props?: any) => Promise<void>)
+  title: string;
+
+  callback: ProcFunc | ((props?: any) => Promise<void>);
 }
 
 export type PromptSimpleDialogModel = SimpleDialogModel & {
-  text?: string
+  text?: string;
 }

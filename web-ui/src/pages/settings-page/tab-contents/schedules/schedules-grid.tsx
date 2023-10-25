@@ -1,8 +1,10 @@
+import './schedules.scss';
+
 import { DataGrid, Column, MasterDetail, Editing, Lookup } from 'devextreme-react/data-grid'
 import { useSchedulesContext } from './schedules-context'
 import { useSettingPageContext } from '../../settings-page-context';
 import DataGridIconCellValueContainer from '../../../../components/data-grid-utils/data-grid-icon-cell-value-container';
-import { AddIcon, AdditionalMenuIcon, DayOfWeekIcon, DeleteAllIcon } from '../../../../constants/app-icons';
+import { AddIcon, AdditionalMenuIcon, DayOfWeekIcon, DeleteAllIcon, RefreshIcon } from '../../../../constants/app-icons';
 import {  useCallback, useMemo, useRef } from 'react';
 import ArrayStore from 'devextreme/data/array_store';
 import { ScheduleModel } from '../../../../models/regulator-settings/schelules-model';
@@ -17,7 +19,7 @@ import { showConfirmDialog } from '../../../../utils/dialogs';
 export const SchedulesGrid = () => {
     const schedulesDataGridRef = useRef<DataGrid<ScheduleModel, any>>(null)
     const { daysOfWeek, putSchedulesAsync } = useSchedulesContext();
-    const { regulatorSettings, setRegulatorSettings } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useSettingPageContext();
     const { isXSmall, isSmall } = useScreenSize();
 
     const dayOfWeekValidationRules = useMemo<ValidationRule[]>(() => {
@@ -68,6 +70,11 @@ export const SchedulesGrid = () => {
         return [{
             icon: () => <AdditionalMenuIcon size={ 20 } color='black' />,
             items: [
+                {
+                    text: 'Обновить...',
+                    icon: () => <RefreshIcon size={ 20 } />,
+                    onClick: refreshRegulatorSettingsAsync
+                },
                 {
                     text: 'Добавить день',
                     icon: () => <AddIcon size={ 20 } />,

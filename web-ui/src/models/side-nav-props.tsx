@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 export type SideNavProps = {
-  title: string,
-  children: ReactNode
+  title: string;
+
+  children: ReactNode;
 }

@@ -32,6 +32,12 @@
                     "outdoorTemperature": -30.0,
                     "supplyPipeTemperature": 100.0,
                     "returnPipeTemperature": 80.0
+                },
+                {
+                    "id": "d451c3a7-c8a2-1eb7-80b2-6bc56ab339f8",
+                    "outdoorTemperature": -25.0,
+                    "supplyPipeTemperature": 95.0,
+                    "returnPipeTemperature": 75.0
                 }
             ]
         },
@@ -45,10 +51,16 @@
                     "day": 1,
                     "windows": [
                         {
-                            "id": "b134c845-5300-d39d-c668-b3d44a44bdd8",
-                            "startTime": "2023-10-23T21:00:52.968000+00:00",
-                            "endTime": "2023-10-24T03:00:02.806000+00:00",
+                            "id": "b4c3365a-b277-44ae-5228-cbc48d2b9125",
+                            "startTime": "2023-10-24T21:00:36.668000+00:00",
+                            "endTime": "2023-10-25T02:00:44.958000+00:00",
                             "desiredTemperature": 15
+                        },
+                        {
+                            "id": "e3fa97d2-14e0-dd82-b355-5da44de7186e",
+                            "startTime": "2023-10-25T02:00:48.485000+00:00",
+                            "endTime": "2023-10-25T03:00:08.628000+00:00",
+                            "desiredTemperature": 20
                         }
                     ]
                 },
@@ -64,7 +76,7 @@
             "integrationFactor": 3.0,
             "differentiationFactor": 15.0,
             "samplingTime": 16.0,
-            "reductionFactorPid": 18.0,
+            "reductionFactorPid": 19.0,
             "valvePeriod": 3.0,
             "analogControl": false
         },

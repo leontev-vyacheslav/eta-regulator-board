@@ -1,10 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 
 export type  NavigationDataModel = {
-  currentPath: string
+  currentPath: string;
 }
 
 export type NavigationContextModel = {
-  navigationData: NavigationDataModel,
-  setNavigationData:  Dispatch<SetStateAction<NavigationDataModel>>
+  navigationData: NavigationDataModel;
+
+  setNavigationData:  Dispatch<SetStateAction<NavigationDataModel>>;
 };

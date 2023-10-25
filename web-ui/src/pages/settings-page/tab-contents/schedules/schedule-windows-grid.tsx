@@ -32,7 +32,11 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
         },
 
         onInserted: async (key, values) => {
-            await putSchedulesAsync(values);
+            await putSchedulesAsync([values]);
+        },
+
+        onRemoved: async () => {
+            await putSchedulesAsync([]);
         }
     });
     }, [putSchedulesAsync, schedule.windows]);
@@ -99,7 +103,7 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
             {
                 type:'custom',
                 validationCallback: (options: ValidationCallbackData) => {
-                    if (options.data.startTime) {
+                    if (options.column.dataField === 'startTime' && options.data.startTime) {
                         const currentSchedule = regulatorSettings?.regulatorParameters.schedules.items.find(i => i.day === schedule.day);
 
                         if(currentSchedule) {
@@ -133,8 +137,7 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                 toolbar={ { visible: false } }>
                 <Column
                     dataField={ 'startTime' }
-                    cssClass='time-picker'
-
+                    cssClass='schedule-time-picker'
                     dataType='datetime'
                     editorOptions={  { type: 'time', pickerType: 'rollers', showDropDownButton: false } }
                     caption="Начало"
@@ -145,9 +148,9 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                 />
                 <Column
                     dataField={ 'endTime' }
-                    cssClass='time-picker'
+                    cssClass='schedule-time-picker'
                     dataType='datetime'
-                    editorOptions={ { type: 'time', pickerType: 'rollers', showDropDownButton: false } }
+                    editorOptions={ { type: 'time', pickerType: 'rollers', showDropDownButton: false,  } }
                     caption="Конец" allowSorting={ false }
                     format={ 'shortTime' }
                     validationRules={ timeValidationRules }

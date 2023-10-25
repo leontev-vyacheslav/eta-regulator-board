@@ -3,9 +3,11 @@
         padding: 0px;
         background-color: transparent;
     }
+
     .dx-datagrid-header-panel {
         display: none;
     }
+
     .dx-master-detail-cell {
         border-bottom: transparent !important;
     }
@@ -21,16 +23,23 @@
         padding-top: 10px;
         padding-bottom: 10px;
     }
+
     .dx-datagrid-header-panel {
         display: none;
     }
 
-    .time-picker {
+    .schedule-time-picker {
         input {
             padding: 0 !important
         }
     }
 
+    .dx-editor-cell .dx-texteditor .dx-texteditor-input {
+        padding: 0 8px 0 8px;
+    }
 
-
+    .dx-texteditor-container .dx-placeholder {
+        max-width: initial;
+        left: -15px;
+    }
 }

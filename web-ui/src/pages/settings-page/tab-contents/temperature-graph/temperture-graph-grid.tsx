@@ -7,14 +7,15 @@ import { TemperatureGraphItemModel } from '../../../../models/regulator-settings
 import { ValidationCallbackData, ValidationRule } from 'devextreme/common';
 import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
-import { AddIcon, AdditionalMenuIcon, DeleteAllIcon } from '../../../../constants/app-icons';
+import { AddIcon, AdditionalMenuIcon, DeleteAllIcon, RefreshIcon } from '../../../../constants/app-icons';
 import { useTemperatureGraphContext } from './temperature-graph-context';
 import { showConfirmDialog } from '../../../../utils/dialogs';
 
 export const TemperatureGraphGrid = () => {
-    const { regulatorSettings, setRegulatorSettings } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useSettingPageContext();
     const { putTemparatureGraphAsync } = useTemperatureGraphContext();
     const { isXSmall, isSmall } = useScreenSize();
+
 
     const dataGridRef = useRef<DataGrid<TemperatureGraphItemModel>>(null);
 
@@ -66,6 +67,11 @@ export const TemperatureGraphGrid = () => {
         return [{
             icon: () => <AdditionalMenuIcon size={ 20 } color='black' />,
             items: [
+                {
+                    text: 'Обновить...',
+                    icon: () => <RefreshIcon size={ 20 } />,
+                    onClick: refreshRegulatorSettingsAsync
+                },
                 {
                     text: formatMessage('menu-item-add-point'),
                     icon: () => <AddIcon size={ 20 } />,

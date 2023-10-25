@@ -7,29 +7,29 @@ import { ServiceModel } from './service-model'
 
 export type RegulatorSettingsModel = {
 
-    regulatorState: RegulatorStateModel,
+    regulatorState: RegulatorStateModel;
 
-    signIn: SigninModel,
+    signIn: SigninModel;
 
-    regulatorParameters: RegulatorParametersModel,
+    regulatorParameters: RegulatorParametersModel;
 
-    gpioSet: GpioSetModel
+    gpioSet: GpioSetModel;
 
-    service: ServiceModel,
+    service: ServiceModel;
 }
 
 export type RegulatorSettingsChangeLogItemModel = {
-    dataField: string,
+    dataField: string;
 
-    value: string | boolean | number | Date,
+    value: string | boolean | number | Date;
 
-    path: string,
+    path: string;
 
-    datetime: Date
+    datetime: Date;
 }
 
 export type RegulatorSettingsChangeModel = {
-    regulatorSettings: RegulatorSettingsModel,
+    regulatorSettings: RegulatorSettingsModel;
 
-    changeLogItem: RegulatorSettingsChangeLogItemModel
+    changeLogItem: RegulatorSettingsChangeLogItemModel;
 }

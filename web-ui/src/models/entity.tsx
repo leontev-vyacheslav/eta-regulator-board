@@ -1,9 +1,9 @@
 export interface Entity {
-  id: number
+  id: number;
 }
 
 export interface Dictionary extends Entity{
-  name: string,
+  name: string;
 
-  description: string
+  description: string;
 }

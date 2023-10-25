@@ -4,9 +4,13 @@ import { TreeViewItemModel } from './tree-view-item';
 import { ProcFunc } from './primitive-type';
 
 export type SideNavigationMenuProps = {
-  children?: ReactNode,
-  selectedItemChanged: (e: ItemClickEvent<TreeViewItemModel>) => void,
-  openMenu: ProcFunc,
-  compactMode: boolean,
-  onMenuReady: ProcFunc
+  children?: ReactNode;
+  
+  selectedItemChanged: (e: ItemClickEvent<TreeViewItemModel>) => void;
+
+  openMenu: ProcFunc;
+
+  compactMode: boolean;
+
+  onMenuReady: ProcFunc;
 }

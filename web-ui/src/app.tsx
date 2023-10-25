@@ -40,7 +40,8 @@ function App() {
             'confirm-title': 'Подтвердить',
             'temperature-graph-title': 'Температурный график',
             'schedule-windows-title': 'Временные окна',
-            'schedules-title': 'Дни недели'
+            'schedules-title': 'Дни недели',
+            'dxDataGrid-noDataText': 'Нет данных для отображения'
         }
     });
     locale('ru-RU');

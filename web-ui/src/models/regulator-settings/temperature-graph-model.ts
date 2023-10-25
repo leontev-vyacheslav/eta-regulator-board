@@ -1,11 +1,11 @@
 export type TemperatureGraphItemModel = {
-    id: string,
-    
-    outdoorTemperature: number,
+    id: string;
 
-    supplyPipeTemperature: number,
+    outdoorTemperature: number;
 
-    returnPipeTemperature: number
+    supplyPipeTemperature: number;
+
+    returnPipeTemperature: number;
 }
 
 export type TemperatureGraphModel = {

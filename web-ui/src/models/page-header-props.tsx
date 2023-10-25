@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 export type PageHeaderProps = {
-  caption: string,
-  children: ReactNode
+  caption: string;
+
+  children: ReactNode;
 }

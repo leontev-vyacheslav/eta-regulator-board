@@ -1,5 +1,7 @@
 export type PopupCallbackModel = {
-  modalResult: string,
-  parametric?: any,
-  data?: any
+  modalResult: string;
+  
+  parametric?: any;
+  
+  data?: any;
 }
