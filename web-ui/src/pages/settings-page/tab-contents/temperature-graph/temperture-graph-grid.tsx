@@ -105,7 +105,7 @@ export const TemperatureGraphGrid = () => {
                 }
             ]
         }];
-    }, [putTemparatureGraphAsync, regulatorSettings, setRegulatorSettings])
+    }, [putTemparatureGraphAsync, refreshRegulatorSettingsAsync, regulatorSettings, setRegulatorSettings])
 
     useEffect(() => {
         setColumCaptions(defaultColumCaptions);
@@ -206,7 +206,7 @@ export const TemperatureGraphGrid = () => {
                     allowSorting={ true }
                     sortOrder='asc'
                     validationRules={ outdoorTemperatureValidationRules }
-                    editorOptions={ { mask: '#00' } }
+                    editorOptions={ { mask: '#00', maskChar: ' ' } }
                 />
 
                 <Column

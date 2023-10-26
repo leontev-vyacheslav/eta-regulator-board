@@ -26,28 +26,28 @@
 }
 
 // large screen
-.screen-large, .screen-medium {
-    .gpio-list {
-        .gpio-list-item {
-            .gpio-list-item__pin {
-                width: 75px;
-            }
+// .screen-large, .screen-medium {
+//     .gpio-list {
+//         .gpio-list-item {
+//             .gpio-list-item__pin {
+//                 width: 75px;
+//             }
 
-            .gpio-list-item__description {
-                flex: initial;
-                width: 225px;
-            }
-            .gpio-list-item__switch {
-                flex: 1;
-                display: flex;
-                justify-content: flex-start;
-            }
-        }
-    }
-}
+//             .gpio-list-item__description {
+//                 flex: initial;
+//                 width: 225px;
+//             }
+//             .gpio-list-item__switch {
+//                 flex: 1;
+//                 display: flex;
+//                 justify-content: flex-start;
+//             }
+//         }
+//     }
+// }
 
-@media screen and (min-height: 800px) {
-    .gpio-list {
-        height: 450px;
-    }
-}
+// @media screen and (min-height: 800px) {
+//     .gpio-list {
+//         height: 450px;
+//     }
+// }

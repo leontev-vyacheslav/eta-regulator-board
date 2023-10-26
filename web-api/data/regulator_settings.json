@@ -38,11 +38,24 @@
                     "outdoorTemperature": -25.0,
                     "supplyPipeTemperature": 95.0,
                     "returnPipeTemperature": 75.0
+                },
+                {
+                    "id": "2dd23727-b689-9282-604b-775bba9e1df4",
+                    "outdoorTemperature": -20.0,
+                    "supplyPipeTemperature": 100.0,
+                    "returnPipeTemperature": 50.0
                 }
             ]
         },
         "programms": {
-            "items": []
+            "systemType": 1,
+            "heatSystemOff": false,
+            "controlCirculationPumps": true,
+            "switchingCirculationPumps": false,
+            "switchingCirculationPumpsPeriod": 12,
+            "monitoringCirculationPumps": false,
+            "valvePositionBySupplyTemperatureError": 1,
+            "valvePositionByOutdoorTemperatureError": 1
         },
         "schedules": {
             "items": [
@@ -67,7 +80,20 @@
                 {
                     "id": "e6be290b-ede4-ce89-dbad-2ff6d5ef3a42",
                     "day": 2,
-                    "windows": []
+                    "windows": [
+                        {
+                            "id": "0e6e4593-6156-e11d-bb46-c21bd146c499",
+                            "startTime": "2023-10-26T00:00:49+03:00",
+                            "endTime": "2023-10-26T01:00:01+03:00",
+                            "desiredTemperature": 15
+                        },
+                        {
+                            "id": "790c8e1c-7fce-a053-b592-980d52a158c2",
+                            "startTime": "2023-10-26T01:00:25+03:00",
+                            "endTime": "2023-10-26T10:20:45+03:00",
+                            "desiredTemperature": 20
+                        }
+                    ]
                 }
             ]
         },
@@ -75,10 +101,10 @@
             "proportionalityFactor": 41.0,
             "integrationFactor": 3.0,
             "differentiationFactor": 15.0,
-            "samplingTime": 16.0,
+            "samplingTime": 17.0,
             "reductionFactorPid": 19.0,
             "valvePeriod": 3.0,
-            "analogControl": false
+            "analogControl": true
         },
         "emergencyVerification": {}
     },

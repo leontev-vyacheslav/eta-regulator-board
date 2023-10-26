@@ -3,6 +3,8 @@ from datetime import datetime
 from models.common.signin_model import SigninModel
 from models.regulator.control_parameters_model import ControlParametersModel
 from models.regulator.emergency_verification_model import EmergencyVerificationModel
+from models.regulator.enums.system_type_model import SystemTypeModel
+from models.regulator.enums.valve_position_state_model import ValvePositionStateModel
 from models.regulator.gpio_set_model import GpioSetModel
 from models.regulator.regulation_parameters_model import RegulationParametersModel
 from models.regulator.regulator_parameters_model import RegulatorParametersModel
@@ -68,7 +70,16 @@ class RegulatorSettingsRepository():
 
                 emergency_verification=EmergencyVerificationModel(),
 
-                programms=RegulatorProgrammsModel(items=[]),
+                programms=RegulatorProgrammsModel(
+                    system_type=SystemTypeModel.INDEPENDENT,
+                    control_circulation_pumps=True,
+                    heat_system_off=False,
+                    monitoring_circulation_pumps=False,
+                    switching_circulation_pumps=False,
+                    switching_circulation_pumps_period=12,
+                    valve_position_by_outdoor_temperature_error=ValvePositionStateModel.HALTING,
+                    valve_position_by_supply_temperature_error=ValvePositionStateModel.HALTING
+                ),
 
                 schedules=SchelulesModel(items=[
                     ScheduleModel(

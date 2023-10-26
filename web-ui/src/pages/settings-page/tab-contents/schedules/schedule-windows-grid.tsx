@@ -150,7 +150,7 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                     dataField={ 'endTime' }
                     cssClass='schedule-time-picker'
                     dataType='datetime'
-                    editorOptions={ { type: 'time', pickerType: 'rollers', showDropDownButton: false,  } }
+                    editorOptions={ { type: 'time', pickerType: 'rollers', showDropDownButton: false } }
                     caption="Конец" allowSorting={ false }
                     format={ 'shortTime' }
                     validationRules={ timeValidationRules }
@@ -164,11 +164,11 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                         type: 'required',
                         message: formatMessage('validation-required')
                     },
-                {
-                    type: 'range',
-                    min: 15,
-                    max: 25
-                }] }
+                    {
+                        type: 'range',
+                        min: 15,
+                        max: 25
+                    }] }
                 />
 
                 <Editing allowAdding allowUpdating allowDeleting mode='row' newRowPosition={ 'last' } />

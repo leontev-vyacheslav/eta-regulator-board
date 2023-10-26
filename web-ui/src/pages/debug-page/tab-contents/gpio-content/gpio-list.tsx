@@ -6,6 +6,9 @@ import { useGpioData } from '../../../../contexts/app-data/use-gpio-data';
 import { useGpioTabContext } from './gpio-tab-context';
 import React from 'react';
 import { formatMessage } from 'devextreme/localization';
+import { useScreenSize } from '../../../../utils/media-query';
+import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
+import { useGpioListMenuItems } from './use-gpio-list-menu-items';
 
 export type GpioListProps = { innerRef?: Ref<List<GpioItemModel>> }
 
@@ -30,21 +33,27 @@ const GpioListItem = ({ gpioItem }: {gpioItem: GpioItemModel}) => {
 
 export const GpioListInner = ({ innerRef }: GpioListProps) => {
     const { gpioSet } = useGpioTabContext();
+    const { isXSmall, isSmall } = useScreenSize();
+    const listMenuItems = useGpioListMenuItems();
 
     return (
         gpioSet ?
-        <List
-            height={ '50vh' }
-            className='app-list gpio-list'
-            ref={ innerRef }
-            dataSource={ gpioSet?.items }
-            itemRender={ (gpioItem: GpioItemModel) => {
-                return (
-                    <GpioListItem  gpioItem={ gpioItem }/>
-                )
-            } }
-        />
-        : <div className='dx-empty-message' style={ { height: '50vh' } }>{formatMessage('dxCollectionWidget-noDataText')}</div>
+        <>
+            <PageToolbar title={ 'Элементы ввода/вывода' } menuItems={ listMenuItems } style={ { width: isXSmall || isSmall ? '100%' : 600  } } />
+            <List
+                height={ '50vh' }
+                width={ isXSmall || isSmall ? '100%' : 600 }
+                className='app-list gpio-list'
+                ref={ innerRef }
+                dataSource={ gpioSet?.items }
+                itemRender={ (gpioItem: GpioItemModel) => {
+                    return (
+                        <GpioListItem  gpioItem={ gpioItem }/>
+                    )
+                } }
+            />
+        </>
+        : <div className='dx-empty-message' style={ { height: '50vh', /*width: isXSmall || isSmall ? '100%' : 600*/ } }>{formatMessage('dxCollectionWidget-noDataText')}</div>
     );
 }
 
