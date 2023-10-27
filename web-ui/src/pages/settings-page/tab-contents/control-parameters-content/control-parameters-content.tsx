@@ -22,7 +22,7 @@ export const ControlParametersForm = () => {
             width={ isXSmall || isSmall ? '100%' : 600 }
             scrollingEnabled={ true }
             colCount={ 1 }
-            formData={ regulatorSettings?.regulatorParameters.controlParameters }
+            formData={ regulatorSettings?.heatingCircuits.items[0].regulatorParameters.controlParameters }
             ref={ dxControlParametersFormRef }
             onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
                 const regulutorSettingsChange = {

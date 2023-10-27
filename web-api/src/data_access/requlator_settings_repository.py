@@ -6,6 +6,7 @@ from models.regulator.emergency_verification_model import EmergencyVerificationM
 from models.regulator.enums.system_type_model import SystemTypeModel
 from models.regulator.enums.valve_position_state_model import ValvePositionStateModel
 from models.regulator.gpio_set_model import GpioSetModel
+from models.regulator.heating_circuits_model import HeatingCircuitModel, HeatingCircuitsModel
 from models.regulator.regulation_parameters_model import RegulationParametersModel
 from models.regulator.regulator_parameters_model import RegulatorParametersModel
 from models.regulator.enums.regulator_state_model import RegulatorStateModel
@@ -22,7 +23,7 @@ class RegulatorSettingsRepository():
     def __init__(self, app=None, **kwargs):
         self._options = kwargs
 
-        self.settings: RegulatorSettingsModel = self._get_default_settings()
+        # self.settings: RegulatorSettingsModel = self._get_default_settings()
 
         if app is not None:
             self.init_app(app)
@@ -47,76 +48,84 @@ class RegulatorSettingsRepository():
             signin=SigninModel(
                 password='1234567890'
             ),
+            heating_circuits=HeatingCircuitsModel(
+                items=[
+                    HeatingCircuitModel(
+                        name='Отопительный контур 1',
+                        regulator_parameters=RegulatorParametersModel(
+                            control_parameters=ControlParametersModel(),
+                            temperature_graph=TemperatureGraphModel(
+                                items=[
+                                    TemperatureGraphItemModel(
+                                        id='1a0ec2da-5949-422d-8b20-e412178ec947',
+                                        outdoor_temperature=-30.0,
+                                        supply_pipe_temperature=90.0,
+                                        return_pipe_temperature=60.0
+                                    ),
+                                    TemperatureGraphItemModel(
+                                        id='edd75bb3-e0e1-4277-871a-67657bba70a0',
+                                        outdoor_temperature=10.0,
+                                        supply_pipe_temperature=33.5,
+                                        return_pipe_temperature=29.6
+                                    )
+                                ]
+                            ),
+                            regulation_parameters=RegulationParametersModel(),
 
-            regulator_parameters=RegulatorParametersModel(
-                control_parameters=ControlParametersModel(),
-                temperature_graph=TemperatureGraphModel(
-                    items=[
-                        TemperatureGraphItemModel(
-                            id='1a0ec2da-5949-422d-8b20-e412178ec947',
-                            outdoor_temperature=-30.0,
-                            supply_pipe_temperature=90.0,
-                            return_pipe_temperature=60.0
+                            emergency_verification=EmergencyVerificationModel(),
+
+                            programms=RegulatorProgrammsModel(
+                                system_type=SystemTypeModel.INDEPENDENT,
+                                control_circulation_pumps=True,
+                                heat_system_off=False,
+                                monitoring_circulation_pumps=False,
+                                switching_circulation_pumps=False,
+                                switching_circulation_pumps_period=12,
+                                valve_position_by_outdoor_temperature_error=ValvePositionStateModel.HALTING,
+                                valve_position_by_supply_temperature_error=ValvePositionStateModel.HALTING
+                            ),
+
+                            schedules=SchelulesModel(items=[
+                                ScheduleModel(
+                                    id='5895f8bf-9fb4-468b-bdac-cbf2010a72f0',
+                                    day=1,
+                                    windows=[
+                                        ScheduleWindowModel(
+                                            id='71d1c170-7d37-464f-98bd-ab793a1242b4',
+                                            start_time=datetime(year=1900, month=1, day=1, hour=7, minute=30, second=0),
+                                            end_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
+                                            desired_temperature=25
+                                        ),
+                                        ScheduleWindowModel(
+                                            id='461e5aa1-5fda-44a7-9fca-d3c77de4da22',
+                                            start_time=datetime(year=1900, month=1, day=1,
+                                                                hour=12, minute=30, second=0),
+                                            end_time=datetime(year=1900, month=1, day=1, hour=17, minute=30, second=0),
+                                            desired_temperature=24
+                                        ),
+                                    ]),
+                                ScheduleModel(
+                                    id='cb5595dc-fd0f-4245-acd5-eef83874c09d',
+                                    day=2,
+                                    windows=[
+                                        ScheduleWindowModel(
+                                            id='2687d2b1-7de3-4eac-a43a-75347708c912',
+                                            start_time=datetime(year=1900, month=1, day=1, hour=7, minute=30, second=0),
+                                            end_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
+                                            desired_temperature=23
+                                        ),
+                                        ScheduleWindowModel(
+                                            id='1dc9e361-8565-4966-b1d3-f02d80b78d79',
+                                            start_time=datetime(year=1900, month=1, day=1,
+                                                                hour=12, minute=30, second=0),
+                                            end_time=datetime(year=1900, month=1, day=1, hour=17, minute=30, second=0),
+                                            desired_temperature=22
+                                        ),
+                                    ])
+                            ]),
                         ),
-                        TemperatureGraphItemModel(
-                            id='edd75bb3-e0e1-4277-871a-67657bba70a0',
-                            outdoor_temperature=10.0,
-                            supply_pipe_temperature=33.5,
-                            return_pipe_temperature=29.6
-                        )
-                    ]
-                ),
-                regulation_parameters=RegulationParametersModel(),
-
-                emergency_verification=EmergencyVerificationModel(),
-
-                programms=RegulatorProgrammsModel(
-                    system_type=SystemTypeModel.INDEPENDENT,
-                    control_circulation_pumps=True,
-                    heat_system_off=False,
-                    monitoring_circulation_pumps=False,
-                    switching_circulation_pumps=False,
-                    switching_circulation_pumps_period=12,
-                    valve_position_by_outdoor_temperature_error=ValvePositionStateModel.HALTING,
-                    valve_position_by_supply_temperature_error=ValvePositionStateModel.HALTING
-                ),
-
-                schedules=SchelulesModel(items=[
-                    ScheduleModel(
-                        id='5895f8bf-9fb4-468b-bdac-cbf2010a72f0',
-                        day=1,
-                        windows=[
-                            ScheduleWindowModel(
-                                id='71d1c170-7d37-464f-98bd-ab793a1242b4',
-                                start_time=datetime(year=1900, month=1, day=1, hour=7, minute=30, second=0),
-                                end_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
-                                desired_temperature=25
-                            ),
-                            ScheduleWindowModel(
-                                id='461e5aa1-5fda-44a7-9fca-d3c77de4da22',
-                                start_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
-                                end_time=datetime(year=1900, month=1, day=1, hour=17, minute=30, second=0),
-                                desired_temperature=24
-                            ),
-                        ]),
-                    ScheduleModel(
-                        id='cb5595dc-fd0f-4245-acd5-eef83874c09d',
-                        day=2,
-                        windows=[
-                            ScheduleWindowModel(
-                                id='2687d2b1-7de3-4eac-a43a-75347708c912',
-                                start_time=datetime(year=1900, month=1, day=1, hour=7, minute=30, second=0),
-                                end_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
-                                desired_temperature=23
-                            ),
-                            ScheduleWindowModel(
-                                id='1dc9e361-8565-4966-b1d3-f02d80b78d79',
-                                start_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
-                                end_time=datetime(year=1900, month=1, day=1, hour=17, minute=30, second=0),
-                                desired_temperature=22
-                            ),
-                        ])
-                ]),
+                    )
+                ]
             ),
 
             service=ServiceModel(

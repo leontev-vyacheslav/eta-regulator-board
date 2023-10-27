@@ -11,16 +11,16 @@ class RegulatorProgrammsModel(AppBaseModel):
 
     heat_system_off: bool
 
-    # управление циркуляционными насосами
+    # управление циркуляционными насосами - исключаем
     control_circulation_pumps: bool
 
-    # переключения циркуляционных насосов
+    # переключения циркуляционных насосов - исключаем
     switching_circulation_pumps: bool
 
-    # период переключения ципркуляционных насосов
+    # период переключения ципркуляционных насосов - исключаем
     switching_circulation_pumps_period: int
 
-    # контроль циркуляционных насосов
+    # контроль циркуляционных насосов - исключаем
     monitoring_circulation_pumps: bool
 
     # положение клапана при ошибке Тпод
@@ -29,5 +29,4 @@ class RegulatorProgrammsModel(AppBaseModel):
     # положение клапана при ошибке Тнв
     valve_position_by_outdoor_temperature_error: ValvePositionStateModel
 
-    # What means a 'подп. насос' ?
 

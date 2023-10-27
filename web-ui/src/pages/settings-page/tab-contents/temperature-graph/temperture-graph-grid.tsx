@@ -22,7 +22,7 @@ export const TemperatureGraphGrid = () => {
     const temperatureGraphStore = useMemo(() => {
         const store = new ArrayStore({
             key: 'id',
-            data: regulatorSettings?.regulatorParameters.temperatureGraph.items,
+            data: regulatorSettings?.heatingCircuits.items[0].regulatorParameters.temperatureGraph.items,
 
             onInserted: async (values: TemperatureGraphItemModel) => {
                 await putTemparatureGraphAsync(values);
@@ -33,7 +33,7 @@ export const TemperatureGraphGrid = () => {
             },
 
             onRemoving: async (key: any) => {
-                const removingItem = regulatorSettings?.regulatorParameters.temperatureGraph.items.find(i => i.id === key);
+                const removingItem = regulatorSettings?.heatingCircuits.items[0].regulatorParameters.temperatureGraph.items.find(i => i.id === key);
 
                 if (removingItem) {
                     (store as any).lastRemovingItem = removingItem;
@@ -51,7 +51,7 @@ export const TemperatureGraphGrid = () => {
         });
 
         return store;
-    }, [putTemparatureGraphAsync, regulatorSettings?.regulatorParameters.temperatureGraph.items]);
+    }, [putTemparatureGraphAsync, regulatorSettings?.heatingCircuits.items]);
 
     const defaultColumCaptions = useMemo(() => {
         return {
@@ -91,7 +91,7 @@ export const TemperatureGraphGrid = () => {
                                 iconName: 'DeleteAllIcon',
                                 iconSize: 32,
                                 callback: async () => {
-                                    regulatorSettings.regulatorParameters.temperatureGraph.items = [];
+                                    regulatorSettings.heatingCircuits.items[0].regulatorParameters.temperatureGraph.items = [];
                                     await putTemparatureGraphAsync({} as TemperatureGraphItemModel)
 
                                     setRegulatorSettings({ ...regulatorSettings });

@@ -32,33 +32,33 @@ export const SchedulesGrid = () => {
                 type: 'custom',
                 validationCallback: (options: ValidationCallbackData) =>
                 {
-                    const existedDays = regulatorSettings?.regulatorParameters.schedules.items.map(i => i.day);
+                    const existedDays = regulatorSettings?.heatingCircuits.items[0].regulatorParameters.schedules.items.map(i => i.day);
 
                     return !existedDays?.find(d => d === options.data.day);
                 },
                 message:  formatMessage('validation-value-already-existed')
             }
         ];
-    }, [regulatorSettings?.regulatorParameters.schedules.items]);
+    }, [regulatorSettings?.heatingCircuits.items]);
 
     const schedulesStore = useMemo(() => {
 
         return new ArrayStore({
             key: 'id',
-            data: regulatorSettings?.regulatorParameters.schedules.items,
+            data: regulatorSettings?.heatingCircuits.items[0].regulatorParameters.schedules.items,
             onRemoved: async (values: ScheduleModel) => {
                 await putSchedulesAsync(values);
             },
 
             onInserted: async (values: ScheduleModel) => {
-                const item = regulatorSettings?.regulatorParameters.schedules.items.find(i => i.id === values.id);
+                const item = regulatorSettings?.heatingCircuits.items[0].regulatorParameters.schedules.items.find(i => i.id === values.id);
                 if (item) {
                     item.windows = []
                 }
                 await putSchedulesAsync(values);
             },
         });
-    }, [putSchedulesAsync, regulatorSettings?.regulatorParameters.schedules.items]);
+    }, [putSchedulesAsync, regulatorSettings?.heatingCircuits.items]);
 
     const addScheduleAsync = useCallback(async () => {
         if(schedulesDataGridRef && schedulesDataGridRef.current) {
@@ -84,7 +84,7 @@ export const SchedulesGrid = () => {
                      text: formatMessage('menu-item-delete-all-schedules'),
                     icon: () => <DeleteAllIcon size={ 20 } />,
                      onClick: async () => {
-                         if (!regulatorSettings || regulatorSettings.regulatorParameters.schedules.items.length === 0) {
+                         if (!regulatorSettings || regulatorSettings.heatingCircuits.items[0].regulatorParameters.schedules.items.length === 0) {
                             return;
                          }
 
@@ -94,7 +94,7 @@ export const SchedulesGrid = () => {
                             iconName: 'DeleteAllIcon',
                             iconSize: 32,
                             callback: async () => {
-                                regulatorSettings.regulatorParameters.schedules.items = [];
+                                regulatorSettings.heatingCircuits.items[0].regulatorParameters.schedules.items = [];
                                 await putSchedulesAsync([]);
 
                                 setRegulatorSettings({ ...regulatorSettings });
@@ -107,7 +107,7 @@ export const SchedulesGrid = () => {
                 }
             ]
         }];
-    }, [addScheduleAsync, putSchedulesAsync, regulatorSettings, setRegulatorSettings])
+    }, [addScheduleAsync, putSchedulesAsync, refreshRegulatorSettingsAsync, regulatorSettings, setRegulatorSettings])
 
     return (
         <>
