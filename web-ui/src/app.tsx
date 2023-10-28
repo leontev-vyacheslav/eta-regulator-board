@@ -3,7 +3,7 @@ import './themes/generated/theme.base.css';
 import './themes/generated/theme.additional.css';
 import './dx-styles.scss';
 
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter as BrowserRouter } from 'react-router-dom';
 import { NavigationProvider } from './contexts/navigation';
 import { AuthProvider, useAuth } from './contexts/auth';
 import { useScreenSizeClass } from './utils/media-query';
@@ -14,9 +14,30 @@ import ruMessages from 'devextreme/localization/messages/ru.json';
 import { locale, loadMessages } from 'devextreme/localization';
 import ContentAuth from './content-auth';
 import ContentNonAuth from './content-non-auth';
+import { WorkdatePickerProvider } from './contexts/workdate-context';
+
 
 function App() {
     const { user } = useAuth();
+    // const location = useLocation();
+    // const navigation = useNavigate();
+
+    // useBeforeUnload(() => {
+    //     console.log(location);
+    //     localStorage.stuff2 = Date.now();
+    //     localStorage.stuff = JSON.stringify(location);
+    // });
+
+    // useEffect(() => {
+    //     const a = parseInt(localStorage.stuff2);
+    //     const b = Date.now();
+    //     const d = b - a;
+
+    //     if (d < 3000) {
+    //         const location = JSON.parse(localStorage.stuff);
+    //         navigation(location.pathname)
+    //     }
+    // }, [navigation]);
 
     if (user === undefined) {
         return null;
@@ -58,11 +79,13 @@ function Main() {
                 <SharedAreaProvider>
                     <AppDataProvider>
                         <AppSettingsProvider>
-                            <NavigationProvider>
-                                <div className={ `app ${screenSizeClass}` }>
-                                    <App />
-                                </div>
-                            </NavigationProvider>
+                            <WorkdatePickerProvider>
+                                <NavigationProvider>
+                                    <div className={ `app ${screenSizeClass}` }>
+                                        <App />
+                                    </div>
+                                </NavigationProvider>
+                            </WorkdatePickerProvider>
                         </AppSettingsProvider>
                     </AppDataProvider>
                 </SharedAreaProvider>

@@ -11,6 +11,7 @@ const WorkDatePicker = ({ innerRef, onClosed }: WorkDatePickerProps) => {
         ref={ innerRef }
         style={ { width: 0, height: 0 } }
         visible={ true }
+        type='datetime'
         value={ appSettingsData.workDate }
         pickerType={ 'rollers' }
         onClosed={ onClosed }

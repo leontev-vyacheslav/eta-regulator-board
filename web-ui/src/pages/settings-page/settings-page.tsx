@@ -7,12 +7,14 @@ import TabPanel, { Item as TabPanelItem } from 'devextreme-react/tab-panel';
 import { ControlParametersForm, RegulationParametersForm, RtcDateTimeForm, ServiceForm, TemperatureGraphTabContent } from './tab-contents/index';
 import { SettingPageContextProvider } from './settings-page-context';
 import { SchedulesTabContent } from './tab-contents/schedules/schedules-tab-content';
+import { useParams } from 'react-router';
 
 export const SettingsPage = () => {
+    const { circuitId } = useParams();
 
     return (
         <>
-            <PageHeader caption={ 'Настройки' }>
+            <PageHeader caption={ `Настройки (${circuitId ==='0' ? 'Контур 1' : 'Контур 2'})` }>
                 <SettingsIcon size={ AppConstants.headerIconSize } />
             </PageHeader>
             <div className={ 'content-block' }>
@@ -24,7 +26,7 @@ export const SettingsPage = () => {
                             </TabPanelItem>
 
                             <TabPanelItem title={ 'Регулятор' }>
-                                <RegulationParametersForm />
+                                <RegulationParametersForm  />
                             </TabPanelItem>
 
                             <TabPanelItem title={ 'Темп. график' }>

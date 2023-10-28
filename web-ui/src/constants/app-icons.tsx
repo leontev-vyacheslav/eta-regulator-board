@@ -45,6 +45,10 @@ export { IoHardwareChipOutline as  GpioIcon } from 'react-icons/io5';
 export { VscTools as ServiceIcon } from 'react-icons/vsc';
 export { IoTodayOutline as DayOfWeekIcon } from 'react-icons/io5';
 
+export { VscCircuitBoard as CircuitIcon } from 'react-icons/vsc';
+export { IoHandRightOutline as ManualModeIcon } from 'react-icons/io5';
+export { LuCalendarClock as RtcClockIcon } from 'react-icons/lu';
+
 
 
 import { MdMoreVert } from 'react-icons/md';

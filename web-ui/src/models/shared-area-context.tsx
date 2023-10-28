@@ -6,8 +6,6 @@ import { TreeViewItemModel } from './tree-view-item';
 export type SharedAreaContextModel = {
   signOutWithConfirm: ProcFunc;
 
-  showWorkDatePicker: ProcFunc;
-
   showLoader: ProcFunc;
 
   hideLoader: ProcFunc;

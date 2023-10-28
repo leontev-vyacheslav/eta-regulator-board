@@ -4,12 +4,12 @@
         "password": "1234567890"
     },
     "heatingCircuits": {
-        "items":[
+        "items": [
             {
-                "name": "Отопительный контур 1",
+                "name": "\u041e\u0442\u043e\u043f\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0443\u0440 1",
                 "regulatorParameters": {
                     "controlParameters": {
-                        "controlMode": 1,
+                        "controlMode": 2,
                         "manualControlMode": 2,
                         "valvePositionState": 1,
                         "manualControlModeTemperatureSetpoint": 63.0,
@@ -103,7 +103,7 @@
                     },
                     "regulationParameters": {
                         "proportionalityFactor": 41.0,
-                        "integrationFactor": 3.0,
+                        "integrationFactor": 1.0,
                         "differentiationFactor": 15.0,
                         "samplingTime": 17.0,
                         "reductionFactorPid": 19.0,
@@ -114,7 +114,7 @@
                 }
             },
             {
-                "name": "Отопительный контур 2",
+                "name": "\u041e\u0442\u043e\u043f\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0443\u0440 2",
                 "regulatorParameters": {
                     "controlParameters": {
                         "controlMode": 1,
@@ -210,8 +210,8 @@
                         ]
                     },
                     "regulationParameters": {
-                        "proportionalityFactor": 41.0,
-                        "integrationFactor": 3.0,
+                        "proportionalityFactor": 42.0,
+                        "integrationFactor": 2.0,
                         "differentiationFactor": 15.0,
                         "samplingTime": 17.0,
                         "reductionFactorPid": 19.0,
@@ -223,7 +223,6 @@
             }
         ]
     },
-
     "gpioSet": {
         "items": [
             {

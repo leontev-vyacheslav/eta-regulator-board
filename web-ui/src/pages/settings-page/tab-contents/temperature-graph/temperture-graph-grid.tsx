@@ -10,8 +10,11 @@ import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { AddIcon, AdditionalMenuIcon, DeleteAllIcon, RefreshIcon } from '../../../../constants/app-icons';
 import { useTemperatureGraphContext } from './temperature-graph-context';
 import { showConfirmDialog } from '../../../../utils/dialogs';
+import { useParams } from 'react-router-dom';
 
 export const TemperatureGraphGrid = () => {
+    const { circuitId } = useParams();
+
     const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useSettingPageContext();
     const { putTemparatureGraphAsync } = useTemperatureGraphContext();
     const { isXSmall, isSmall } = useScreenSize();
@@ -22,7 +25,7 @@ export const TemperatureGraphGrid = () => {
     const temperatureGraphStore = useMemo(() => {
         const store = new ArrayStore({
             key: 'id',
-            data: regulatorSettings?.heatingCircuits.items[0].regulatorParameters.temperatureGraph.items,
+            data: regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId) : 0].regulatorParameters.temperatureGraph.items,
 
             onInserted: async (values: TemperatureGraphItemModel) => {
                 await putTemparatureGraphAsync(values);
@@ -33,7 +36,7 @@ export const TemperatureGraphGrid = () => {
             },
 
             onRemoving: async (key: any) => {
-                const removingItem = regulatorSettings?.heatingCircuits.items[0].regulatorParameters.temperatureGraph.items.find(i => i.id === key);
+                const removingItem = regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId) : 0].regulatorParameters.temperatureGraph.items.find(i => i.id === key);
 
                 if (removingItem) {
                     (store as any).lastRemovingItem = removingItem;
@@ -51,7 +54,7 @@ export const TemperatureGraphGrid = () => {
         });
 
         return store;
-    }, [putTemparatureGraphAsync, regulatorSettings?.heatingCircuits.items]);
+    }, [circuitId, putTemparatureGraphAsync, regulatorSettings?.heatingCircuits.items]);
 
     const defaultColumCaptions = useMemo(() => {
         return {

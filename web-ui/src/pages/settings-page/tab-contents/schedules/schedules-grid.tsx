@@ -14,9 +14,12 @@ import { ScheduleWindowsGrid } from './schedule-windows-grid';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { useScreenSize } from '../../../../utils/media-query';
 import { showConfirmDialog } from '../../../../utils/dialogs';
+import { useParams } from 'react-router-dom';
 
 
 export const SchedulesGrid = () => {
+    const { circuitId } = useParams();
+
     const schedulesDataGridRef = useRef<DataGrid<ScheduleModel, any>>(null)
     const { daysOfWeek, putSchedulesAsync } = useSchedulesContext();
     const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useSettingPageContext();
@@ -32,33 +35,33 @@ export const SchedulesGrid = () => {
                 type: 'custom',
                 validationCallback: (options: ValidationCallbackData) =>
                 {
-                    const existedDays = regulatorSettings?.heatingCircuits.items[0].regulatorParameters.schedules.items.map(i => i.day);
+                    const existedDays = regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId): 0].regulatorParameters.schedules.items.map(i => i.day);
 
                     return !existedDays?.find(d => d === options.data.day);
                 },
                 message:  formatMessage('validation-value-already-existed')
             }
         ];
-    }, [regulatorSettings?.heatingCircuits.items]);
+    }, [circuitId, regulatorSettings?.heatingCircuits.items]);
 
     const schedulesStore = useMemo(() => {
 
         return new ArrayStore({
             key: 'id',
-            data: regulatorSettings?.heatingCircuits.items[0].regulatorParameters.schedules.items,
+            data: regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId): 0].regulatorParameters.schedules.items,
             onRemoved: async (values: ScheduleModel) => {
                 await putSchedulesAsync(values);
             },
 
             onInserted: async (values: ScheduleModel) => {
-                const item = regulatorSettings?.heatingCircuits.items[0].regulatorParameters.schedules.items.find(i => i.id === values.id);
+                const item = regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId): 0].regulatorParameters.schedules.items.find(i => i.id === values.id);
                 if (item) {
                     item.windows = []
                 }
                 await putSchedulesAsync(values);
             },
         });
-    }, [putSchedulesAsync, regulatorSettings?.heatingCircuits.items]);
+    }, [circuitId, putSchedulesAsync, regulatorSettings?.heatingCircuits.items]);
 
     const addScheduleAsync = useCallback(async () => {
         if(schedulesDataGridRef && schedulesDataGridRef.current) {

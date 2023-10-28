@@ -1,7 +1,7 @@
 import './debug-page.scss';
 
 import AppConstants from '../../constants/app-constants';
-import { DebugIcon } from '../../constants/app-icons';
+import { ManualModeIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import { useState } from 'react';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel';
@@ -14,8 +14,8 @@ export const DebugPage = () => {
 
     return (
         <>
-            <PageHeader caption={ 'Отладка' }>
-                <DebugIcon size={ AppConstants.headerIconSize } />
+            <PageHeader caption={ 'Ручной режим' }>
+                <ManualModeIcon size={ AppConstants.headerIconSize } />
             </PageHeader>
 
             <div className={ 'content-block' }>

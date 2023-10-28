@@ -64,8 +64,6 @@ export default function ({ title, children }: SideNavProps) {
             return;
         }
 
-
-
         if (!isLarge || menuStatus === MenuStatus.TemporaryOpened) {
             setMenuStatus(MenuStatus.Closed);
             event.stopPropagation();

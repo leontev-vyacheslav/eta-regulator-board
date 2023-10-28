@@ -8,8 +8,11 @@ import {  ManualControlModes } from '../../../../models/regulator-settings/enums
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { formatMessage } from 'devextreme/localization';
+import { useParams } from 'react-router-dom';
 
 export const ControlParametersForm = () => {
+    const { circuitId } = useParams();
+
     const dxControlParametersFormRef = useRef<Form>(null);
     const { isXSmall, isSmall } = useScreenSize();
     const { regulatorSettings } = useSettingPageContext();
@@ -22,7 +25,7 @@ export const ControlParametersForm = () => {
             width={ isXSmall || isSmall ? '100%' : 600 }
             scrollingEnabled={ true }
             colCount={ 1 }
-            formData={ regulatorSettings?.heatingCircuits.items[0].regulatorParameters.controlParameters }
+            formData={ regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId): 0].regulatorParameters.controlParameters }
             ref={ dxControlParametersFormRef }
             onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
                 const regulutorSettingsChange = {

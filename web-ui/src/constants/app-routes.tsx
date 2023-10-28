@@ -22,7 +22,7 @@ const routes = [
         component: DebugPage
     },
     {
-        path: '/settings',
+        path: '/settings/:circuitId',
         component: SettingsPage,
     },
     {
