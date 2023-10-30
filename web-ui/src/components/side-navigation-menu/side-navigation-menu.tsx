@@ -110,7 +110,10 @@ export default function SideNavigationMenu(props: SideNavigationMenuProps) {
               selectedItemChanged(event);
 
               if (treeViewRef.current) {
-                treeViewRef.current.instance.selectItem(event.itemData)
+
+                setTimeout(() => {
+                  treeViewRef.current!.instance.selectItem(event.itemData!);
+                }, 100)
               }
             }
           } }

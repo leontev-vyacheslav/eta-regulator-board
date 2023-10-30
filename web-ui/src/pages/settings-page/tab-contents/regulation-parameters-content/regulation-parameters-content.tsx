@@ -57,28 +57,21 @@ export const RegulationParametersForm = () => {
                 editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
 
             <SimpleItem
-                dataField='samplingTime'
-                label={ { location: 'top', showColon: true, text: 'Время дискретизации' } }
+                dataField='calculationPeriod'
+                label={ { location: 'top', showColon: true, text: 'Период расчета' } }
                 editorType={ 'dxNumberBox' }
-                editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
+                editorOptions={ { showSpinButtons: true, min: 1, max: 50 } } />
 
             <SimpleItem
-                dataField='reductionFactorPid'
-                label={ { location: 'top', showColon: true, text: 'Коэффициент снижения ПИД' } }
+                dataField='pulseDurationValve'
+                label={ { location: 'top', showColon: true, text: 'Длительность импульса регулирующего клапана' } }
                 editorType={ 'dxNumberBox' }
-                editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
+                editorOptions={ { showSpinButtons: true, min: 1, max: 20 } } />
 
             <SimpleItem
-                dataField='valvePeriod'
-                label={ { location: 'top', showColon: true, text: 'Период клапана' } }
-                editorType={ 'dxNumberBox' }
-                editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
-
-            <SimpleItem
-                dataField='analogControl'
-                label={ { location: 'top', showColon: true, text: 'Аналоговое управление' } }
-                editorType={ 'dxCheckBox' }
-                editorOptions={ { } } />
+                dataField='driveUnitAnalogControl'
+                label={ { location: 'top', showColon: true, text: 'Привод с аналоговым управлением' } }
+                editorType={ 'dxSwitch' } />
 
         </Form>
     );

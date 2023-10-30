@@ -148,6 +148,8 @@ export const SchedulesGrid = () => {
                         dataSource={ daysOfWeek }
                         valueExpr={ 'id' }
                         displayExpr={ 'name' }
+                        key={ 'id' }
+                        
                     />
                 </Column>
                 <Editing allowAdding allowDeleting mode='row' />

@@ -1,21 +1,22 @@
 import { ControlModeModel } from './enums/control-mode-model'
 import { ManualControlModeModel } from './enums/manual-control-mode-model'
-import { ValvePositionStateModel } from './enums/valve-position-state'
 
 export type ControlParametersModel = {
     controlMode: ControlModeModel;
 
     manualControlMode: ManualControlModeModel;
 
-    valvePositionState: ValvePositionStateModel;
-
     manualControlModeTemperatureSetpoint: number;
 
-    analogValveSetpoint: number;
+    analogValveErrorSetpoint: number;
+
+    summerModeTransitionTemperature: number;
 
     comfortTemperature: number;
 
     economicalTemperature: number;
+
+    frostProtectionTemperature: number;
 
     roomTemperartureInfluence: number;
 
@@ -25,7 +26,5 @@ export type ControlParametersModel = {
 
     supplyPipeMaxTemperature: number;
 
-    startingCirculationPump: number;
-
-    startingRechargePump: number;
+    controlCirculationPump: boolean;
 }

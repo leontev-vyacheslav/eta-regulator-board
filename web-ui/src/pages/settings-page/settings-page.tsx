@@ -5,22 +5,41 @@ import PageHeader from '../../components/page-header/page-header';
 import AppConstants from '../../constants/app-constants';
 import TabPanel, { Item as TabPanelItem } from 'devextreme-react/tab-panel';
 import { ControlParametersForm, RegulationParametersForm, RtcDateTimeForm, ServiceForm, TemperatureGraphTabContent } from './tab-contents/index';
-import { SettingPageContextProvider } from './settings-page-context';
+import { SettingPageContextProvider, useSettingPageContext } from './settings-page-context';
 import { SchedulesTabContent } from './tab-contents/schedules/schedules-tab-content';
 import { useParams } from 'react-router';
+import { HeatingCircuitContent } from './tab-contents/heating-circuit-content/heating-circuit-content';
+import { HeatingCircuitTypes } from '../../models/regulator-settings/enums/heating-circuit-type-model';
+import { useMemo } from 'react';
 
-export const SettingsPage = () => {
+export const SettingsPageInternal = () => {
     const { circuitId } = useParams();
+    const { heatingCircuitType } = useSettingPageContext();
+
+    const pageHeaderTitle = useMemo (() => {
+        const currentCircuitId = circuitId ? parseInt(circuitId) + 1 : 1;
+
+        if (!heatingCircuitType) {
+            return `Настройки контура ${currentCircuitId}`;
+        }
+        const currentHeatingCircuitType = HeatingCircuitTypes.find(t => t.id === heatingCircuitType);
+
+        return `Настройки контура ${currentCircuitId} (${currentHeatingCircuitType!.shotDescription})`;
+
+    }, [circuitId, heatingCircuitType]);
 
     return (
-        <>
-            <PageHeader caption={ `Настройки (${circuitId ==='0' ? 'Контур 1' : 'Контур 2'})` }>
+            <>
+            <PageHeader caption={ pageHeaderTitle }>
                 <SettingsIcon size={ AppConstants.headerIconSize } />
             </PageHeader>
             <div className={ 'content-block' }>
                 <div className={ 'dx-card responsive-paddings' }>
-                    <SettingPageContextProvider>
+
                         <TabPanel width={ '100%' }  height={ '65vh' } loop>
+                            <TabPanelItem title={ 'Общие' } >
+                                <HeatingCircuitContent />
+                            </TabPanelItem>
                             <TabPanelItem title={ 'Управление' }>
                                 <ControlParametersForm />
                             </TabPanelItem>
@@ -45,9 +64,18 @@ export const SettingsPage = () => {
                                 <RtcDateTimeForm />
                             </TabPanelItem>
                         </TabPanel>
-                    </SettingPageContextProvider>
+
                 </div>
             </div>
         </>
     );
 };
+
+
+export const SettingsPage = () => {
+    return (
+        <SettingPageContextProvider>
+            <SettingsPageInternal />
+        </SettingPageContextProvider>
+    )
+}

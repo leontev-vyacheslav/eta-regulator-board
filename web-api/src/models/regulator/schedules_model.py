@@ -10,7 +10,7 @@ class ScheduleWindowModel(AppBaseModel):
 
     end_time: datetime
 
-    desired_temperature: int
+    desired_temperature_mode: int
 
 
 class ScheduleModel(AppBaseModel):

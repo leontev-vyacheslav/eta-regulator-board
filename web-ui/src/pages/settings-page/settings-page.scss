@@ -8,6 +8,19 @@
 .setting-form {
   margin-top: 10px;
   padding: 5px;
+
+  .dx-field-item-label {
+    pointer-events: none;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    .dx-field-item-custom-label-content {
+      display: initial;
+    }
+    svg {
+      color: grey
+    }
+  }
 }
 
 .setting-grid {

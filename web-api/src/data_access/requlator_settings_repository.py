@@ -94,14 +94,14 @@ class RegulatorSettingsRepository():
                                             id='71d1c170-7d37-464f-98bd-ab793a1242b4',
                                             start_time=datetime(year=1900, month=1, day=1, hour=7, minute=30, second=0),
                                             end_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
-                                            desired_temperature=25
+                                            desired_temperature_mode=2
                                         ),
                                         ScheduleWindowModel(
                                             id='461e5aa1-5fda-44a7-9fca-d3c77de4da22',
                                             start_time=datetime(year=1900, month=1, day=1,
                                                                 hour=12, minute=30, second=0),
                                             end_time=datetime(year=1900, month=1, day=1, hour=17, minute=30, second=0),
-                                            desired_temperature=24
+                                            desired_temperature_mode=2
                                         ),
                                     ]),
                                 ScheduleModel(
@@ -112,14 +112,14 @@ class RegulatorSettingsRepository():
                                             id='2687d2b1-7de3-4eac-a43a-75347708c912',
                                             start_time=datetime(year=1900, month=1, day=1, hour=7, minute=30, second=0),
                                             end_time=datetime(year=1900, month=1, day=1, hour=12, minute=30, second=0),
-                                            desired_temperature=23
+                                            desired_temperature_mode=2
                                         ),
                                         ScheduleWindowModel(
                                             id='1dc9e361-8565-4966-b1d3-f02d80b78d79',
                                             start_time=datetime(year=1900, month=1, day=1,
                                                                 hour=12, minute=30, second=0),
                                             end_time=datetime(year=1900, month=1, day=1, hour=17, minute=30, second=0),
-                                            desired_temperature=22
+                                            desired_temperature_mode=2
                                         ),
                                     ])
                             ]),

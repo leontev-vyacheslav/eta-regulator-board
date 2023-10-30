@@ -1,4 +1,4 @@
-import DataGrid, { Column, Editing } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Editing, Lookup } from 'devextreme-react/data-grid';
 import { ValidationCallbackData, ValidationRule } from 'devextreme/common';
 import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
@@ -11,6 +11,8 @@ import { useSchedulesContext } from './schedules-context';
 import { useScreenSize } from '../../../../utils/media-query';
 import { showConfirmDialog } from '../../../../utils/dialogs';
 import { useParams } from 'react-router';
+import { ControlModeModel, ControlModes } from '../../../../models/regulator-settings/enums/control-mode-model';
+import { EditorPreparingEvent } from 'devextreme/ui/data_grid';
 
 export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => {
     const { circuitId } = useParams();
@@ -19,6 +21,10 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
     const scheduleWindowsRef = useRef<DataGrid<ScheduleWindowModel, any>>(null);
     const { regulatorSettings, setRegulatorSettings } = useSettingPageContext();
     const { isXSmall } = useScreenSize();
+
+    const temperatureModes = useMemo(() => {
+        return ControlModes.filter(m => [ControlModeModel.comfort, ControlModeModel.economy, ControlModeModel.protect].includes(m.id));
+    }, []);
 
     const addScheduleWindowAsync = useCallback(async () => {
         if(scheduleWindowsRef && scheduleWindowsRef.current) {
@@ -137,8 +143,16 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                 className='app-grid schedule-windows-grid'
                 dataSource={ scheduleWindowsStore }
                 showColumnHeaders={ !isXSmall }
-                toolbar={ { visible: false } }>
+                toolbar={ { visible: false } }
+                onEditorPreparing={ (e: EditorPreparingEvent<ScheduleWindowModel, any>) => {
+                    if (e.dataField === 'desiredTemperatureMode') {
+                        e.editorOptions.dropDownOptions = { width: 175 };
+                    }
+                } }
+                >
+
                 <Column
+
                     dataField={ 'startTime' }
                     cssClass='schedule-time-picker'
                     dataType='datetime'
@@ -159,20 +173,27 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                     validationRules={ timeValidationRules }
                 />
                 <Column
-                    dataField={ 'desiredTemperature' }
+                    dataField={ 'desiredTemperatureMode' }
                     dataType='number'
                     allowSorting={ false }
                     caption="Температура"
+                    editorOptions={ { usePopover: true } }
                     validationRules={ [{
                         type: 'required',
                         message: formatMessage('validation-required')
                     },
                     {
                         type: 'range',
-                        min: 15,
-                        max: 25
+                        min: 2,
+                        max: 4
                     }] }
-                />
+                >
+                    <Lookup
+                        dataSource={ temperatureModes }
+                        valueExpr={ 'id' }
+                        displayExpr={ 'description' }
+                    />
+                </Column>
 
                 <Editing allowAdding allowUpdating allowDeleting mode='row' newRowPosition={ 'last' } />
             </DataGrid>

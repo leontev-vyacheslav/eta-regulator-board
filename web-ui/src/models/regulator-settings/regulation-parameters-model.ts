@@ -5,11 +5,9 @@ export type RegulationParametersModel = {
 
     differentiationFactor: number;
 
-    samplingTime: number;
+    calculationPeriod: number;
 
-    reductionFactorPid: number;
+    pulseDurationValve: number;
 
-    valvePeriod: number;
-
-    analogControl: boolean;
+    driveUnitAnalogControl: boolean;
 }

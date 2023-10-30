@@ -1,18 +1,27 @@
 import { Dispatch, createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useAppData } from '../../contexts/app-data/app-data';
 import { RegulatorSettingsModel } from '../../models/regulator-settings/regulator-settings-model';
+import { HeatingCircuitTypeModel } from '../../models/regulator-settings/enums/heating-circuit-type-model';
+import { useParams } from 'react-router-dom';
 
 type SettingPageContextModel = {
-    regulatorSettings: RegulatorSettingsModel | null,
+    regulatorSettings: RegulatorSettingsModel | null;
+    setRegulatorSettings: Dispatch<React.SetStateAction<RegulatorSettingsModel | null>>;
 
-    setRegulatorSettings: Dispatch<React.SetStateAction<RegulatorSettingsModel | null>>,
+    heatingCircuitType: HeatingCircuitTypeModel | null;
+    setHeatingCircuitType: Dispatch<React.SetStateAction<HeatingCircuitTypeModel| null>>;
+
     refreshRegulatorSettingsAsync: () => Promise<void>
 }
 
 const SettingPageContext = createContext({} as SettingPageContextModel);
 
 function SettingPageContextProvider (props: any) {
+    const { circuitId } = useParams();
+
     const [regulatorSettings, setRegulatorSettings] = useState<RegulatorSettingsModel | null>(null);
+    const [heatingCircuitType, setHeatingCircuitType] = useState<HeatingCircuitTypeModel | null>(null);
+
     const { getRegulatorSettingsAsync } = useAppData();
 
     const refreshRegulatorSettingsAsync = useCallback(async () => {
@@ -28,15 +37,21 @@ function SettingPageContextProvider (props: any) {
             const regulatorSettings = await getRegulatorSettingsAsync();
 
             if(regulatorSettings){
-                setRegulatorSettings(regulatorSettings)
+                setRegulatorSettings(regulatorSettings);
+                const heatingCircuitType = regulatorSettings.heatingCircuits.items[circuitId ? parseInt(circuitId) : 0].type;
+                setHeatingCircuitType(heatingCircuitType);
             }
         }, 100);
-    }, [getRegulatorSettingsAsync]);
+    }, [circuitId, getRegulatorSettingsAsync]);
 
     return (
         <SettingPageContext.Provider value={ {
             regulatorSettings,
             setRegulatorSettings,
+
+            heatingCircuitType,
+            setHeatingCircuitType,
+
             refreshRegulatorSettingsAsync
         } } { ...props }>
             {props.children}

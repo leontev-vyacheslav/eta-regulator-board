@@ -5,7 +5,7 @@ export type ScheduleWindowModel = {
 
     endTime: Date;
 
-    desiredTemperature: number;
+    desiredTemperatureMode: number;
 }
 
 export type ScheduleModel = {
