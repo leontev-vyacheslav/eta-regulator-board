@@ -101,16 +101,21 @@ export default function SideNavigationMenu(props: SideNavigationMenuProps) {
           onItemClick={ event => {
             if (event.itemData) {
               const treeViewItem = event.itemData as TreeViewItemModel;
-              if (treeViewItem.command === 'workDate') {
-                showWorkDatePicker();
-              }
-              if (treeViewItem.command === 'exit') {
-                signOutWithConfirm();
-              }
               selectedItemChanged(event);
 
-              if (treeViewRef.current) {
+              if (treeViewItem.command === 'workDate') {
+                showWorkDatePicker();
 
+                return;
+              }
+
+              if (treeViewItem.command === 'exit') {
+                signOutWithConfirm();
+
+                return;
+              }
+
+              if (treeViewRef.current) {
                 setTimeout(() => {
                   treeViewRef.current!.instance.selectItem(event.itemData!);
                 }, 100)

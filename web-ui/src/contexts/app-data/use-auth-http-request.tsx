@@ -51,7 +51,7 @@ export const useAuthHttpRequest = () => {
                 if (!suppressLoader) {
                     setTimeout(() => {
                         hideLoader();
-                    }, 250);
+                    }, 100);
                   }
             }
 

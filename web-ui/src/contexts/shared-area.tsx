@@ -44,7 +44,7 @@ function SharedAreaProvider (props: AppBaseProviderProps) {
     const hideLoader = useCallback<ProcFunc>(() => {
         setTimeout(() => {
             setIsShowLoader(false);
-        }, 250);
+        }, 100);
     }, []);
 
     const showLoader = useCallback<ProcFunc>(() => {

@@ -24,7 +24,7 @@ export const RtcDateTimeForm = () => {
                 if (e.dataField === 'workDate') {
                     await putRtcDateTimeAsync({
                         datetime: e.value as Date
-                    })
+                    });
                 }
             } }
         >

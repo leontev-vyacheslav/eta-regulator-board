@@ -49,6 +49,10 @@ export { VscCircuitBoard as CircuitIcon } from 'react-icons/vsc';
 export { IoHandRightOutline as ManualModeIcon } from 'react-icons/io5';
 export { LuCalendarClock as RtcClockIcon } from 'react-icons/lu';
 
+export { MdOutlineWindPower as VentIcon } from 'react-icons/md';
+export { LiaHotjar as HeatingIcon } from 'react-icons/lia';
+export { MdOutlineWaterDrop as HotWaterIcon } from 'react-icons/md';
+
 
 
 import { MdMoreVert } from 'react-icons/md';

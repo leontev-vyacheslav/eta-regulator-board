@@ -7,19 +7,19 @@
         "items": [
             {
                 "name": "\u041e\u0442\u043e\u043f\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0443\u0440 1",
-                "type": 1,
+                "type": 3,
                 "regulatorParameters": {
                     "controlParameters": {
                         "controlMode": 1,
                         "manualControlMode": 1,
-                        "manualControlModeTemperatureSetpoint": 63.0,
-                        "analogValveErrorSetpoint": 51.0,
-                        "summerModeTransitionTemperature": 5.0,
+                        "manualControlModeTemperatureSetpoint": 60.0,
+                        "analogValveErrorSetpoint": 50.0,
+                        "summerModeTransitionTemperature": 10.0,
                         "comfortTemperature": 30.0,
-                        "economicalTemperature": 18.0,
+                        "economicalTemperature": 30.0,
                         "frostProtectionTemperature": 6.0,
-                        "roomTemperartureInfluence": 1.0,
-                        "returnPipeTemperatureInfluience": 0.0,
+                        "roomTemperartureInfluence": 10.0,
+                        "returnPipeTemperatureInfluience": 34.0,
                         "supplyPipeMinTemperature": 30.0,
                         "supplyPipeMaxTemperature": 91.0,
                         "controlCirculationPump": true
@@ -72,7 +72,7 @@
                                         "id": "b4c3365a-b277-44ae-5228-cbc48d2b9125",
                                         "startTime": "2023-10-24T21:00:36.668000+00:00",
                                         "endTime": "2023-10-25T02:00:44.958000+00:00",
-                                        "desiredTemperatureMode": 3
+                                        "desiredTemperatureMode": 2
                                     },
                                     {
                                         "id": "e3fa97d2-14e0-dd82-b355-5da44de7186e",

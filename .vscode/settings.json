@@ -7,7 +7,7 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "**/__pycache__": true,
-        "**/web-api": false,
-        "**/web-ui": false
+        "**/web-api": true,
+        "**/web-ui": true
     },
 }

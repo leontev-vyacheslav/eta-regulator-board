@@ -18,9 +18,12 @@ function WorkdatePickerProvider (props: any) {
 
     const showWorkDatePicker = useCallback<ProcFunc>(() => {
         setIsWorkDatePicker(true);
-        if (workDatePickerRef && workDatePickerRef.current) {
-            workDatePickerRef.current.instance.open();
-        }
+        setTimeout(() => {
+            if (workDatePickerRef && workDatePickerRef.current) {
+                workDatePickerRef.current.instance.open();
+            }
+        }, 100)
+
     }, []);
 
     const hideWorkDatePicker = useCallback<ProcFunc>(() => {
