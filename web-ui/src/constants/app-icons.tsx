@@ -53,6 +53,8 @@ export { MdOutlineWindPower as VentIcon } from 'react-icons/md';
 export { LiaHotjar as HeatingIcon } from 'react-icons/lia';
 export { MdOutlineWaterDrop as HotWaterIcon } from 'react-icons/md';
 
+export { VscGraphLine as GraphIcon } from 'react-icons/vsc'
+export { VscTable as TableIcon } from 'react-icons/vsc'
 
 
 import { MdMoreVert } from 'react-icons/md';

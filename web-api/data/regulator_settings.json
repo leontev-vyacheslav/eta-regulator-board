@@ -30,7 +30,7 @@
                                 "id": "b6e91f46-21b6-6c7d-211c-7e869b9cbb86",
                                 "outdoorTemperature": -35.0,
                                 "supplyPipeTemperature": 60.0,
-                                "returnPipeTemperature": 57.0
+                                "returnPipeTemperature": 55.0
                             },
                             {
                                 "id": "d451c3a7-c8a2-1eb7-80b2-6bc56ab338f8",
@@ -42,12 +42,18 @@
                                 "id": "d451c3a7-c8a2-1eb7-80b2-6bc56ab339f8",
                                 "outdoorTemperature": -25.0,
                                 "supplyPipeTemperature": 95.0,
-                                "returnPipeTemperature": 75.0
+                                "returnPipeTemperature": 82.0
                             },
                             {
                                 "id": "2dd23727-b689-9282-604b-775bba9e1df4",
                                 "outdoorTemperature": -20.0,
                                 "supplyPipeTemperature": 100.0,
+                                "returnPipeTemperature": 50.0
+                            },
+                            {
+                                "id": "3534e6fa-7de7-3dd5-1dba-4e3fe36b7b7d",
+                                "outdoorTemperature": -10.0,
+                                "supplyPipeTemperature": 60.0,
                                 "returnPipeTemperature": 50.0
                             }
                         ]
@@ -105,7 +111,7 @@
                     "regulationParameters": {
                         "proportionalityFactor": 41.0,
                         "integrationFactor": 1.0,
-                        "differentiationFactor": 15.0,
+                        "differentiationFactor": 16.0,
                         "calculationPeriod": 19.0,
                         "pulseDurationValve": 4.0,
                         "driveUnitAnalogControl": true
@@ -156,7 +162,7 @@
                                 "id": "2dd23727-b689-9282-604b-775bba9e1df4",
                                 "outdoorTemperature": -20.0,
                                 "supplyPipeTemperature": 100.0,
-                                "returnPipeTemperature": 50.0
+                                "returnPipeTemperature": 63.0
                             }
                         ]
                     },
