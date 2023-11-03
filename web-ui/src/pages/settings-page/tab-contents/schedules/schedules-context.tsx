@@ -1,12 +1,16 @@
-import { createContext, useCallback, useContext, useMemo } from 'react';
+import { createContext, useCallback, useContext, useMemo, useRef } from 'react';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { useSettingPageContext } from '../../settings-page-context';
+import DataGrid from 'devextreme-react/data-grid';
+import { ScheduleModel } from '../../../../models/regulator-settings/schelules-model';
 
 export type SchedulesContextModel = {
 
     daysOfWeek: {id: number, name: string}[];
 
     putSchedulesAsync: (values: any) => Promise<void> | void;
+
+    schedulesDataGridRef: React.RefObject<DataGrid<ScheduleModel, any>>
 };
 
 const SchedulesContext = createContext<SchedulesContextModel>({} as SchedulesContextModel)
@@ -14,6 +18,7 @@ const SchedulesContext = createContext<SchedulesContextModel>({} as SchedulesCon
 function SchedulesContextProvider(props: any) {
     const { putRegulatorSettingsAsync } = useAppData();
     const { regulatorSettings } = useSettingPageContext();
+    const schedulesDataGridRef = useRef<DataGrid<ScheduleModel, any>>(null)
 
     const putSchedulesAsync = useCallback(async (values: any) => {
 
@@ -45,7 +50,8 @@ function SchedulesContextProvider(props: any) {
     return (
         <SchedulesContext.Provider value={ {
             daysOfWeek,
-            putSchedulesAsync
+            putSchedulesAsync,
+            schedulesDataGridRef
         } } { ...props } />
     );
 }

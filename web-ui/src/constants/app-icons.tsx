@@ -49,12 +49,12 @@ export { VscCircuitBoard as CircuitIcon } from 'react-icons/vsc';
 export { IoHandRightOutline as ManualModeIcon } from 'react-icons/io5';
 export { LuCalendarClock as RtcClockIcon } from 'react-icons/lu';
 
-export { MdOutlineWindPower as VentIcon } from 'react-icons/md';
-export { LiaHotjar as HeatingIcon } from 'react-icons/lia';
-export { MdOutlineWaterDrop as HotWaterIcon } from 'react-icons/md';
 
 export { VscGraphLine as GraphIcon } from 'react-icons/vsc'
 export { VscTable as TableIcon } from 'react-icons/vsc'
+
+export { TbArrowsExchange2 as AxisInvertIcon } from 'react-icons/tb'
+export { TbArrowsExchange as AxisInvert2Icon } from 'react-icons/tb'
 
 
 import { MdMoreVert } from 'react-icons/md';

@@ -7,7 +7,7 @@
         "items": [
             {
                 "name": "\u041e\u0442\u043e\u043f\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0443\u0440 1",
-                "type": 3,
+                "type": 1,
                 "regulatorParameters": {
                     "controlParameters": {
                         "controlMode": 1,
@@ -29,8 +29,8 @@
                             {
                                 "id": "b6e91f46-21b6-6c7d-211c-7e869b9cbb86",
                                 "outdoorTemperature": -35.0,
-                                "supplyPipeTemperature": 60.0,
-                                "returnPipeTemperature": 55.0
+                                "supplyPipeTemperature": 120.0,
+                                "returnPipeTemperature": 79.0
                             },
                             {
                                 "id": "d451c3a7-c8a2-1eb7-80b2-6bc56ab338f8",
@@ -48,13 +48,13 @@
                                 "id": "2dd23727-b689-9282-604b-775bba9e1df4",
                                 "outdoorTemperature": -20.0,
                                 "supplyPipeTemperature": 100.0,
-                                "returnPipeTemperature": 50.0
+                                "returnPipeTemperature": 70.0
                             },
                             {
                                 "id": "3534e6fa-7de7-3dd5-1dba-4e3fe36b7b7d",
                                 "outdoorTemperature": -10.0,
                                 "supplyPipeTemperature": 60.0,
-                                "returnPipeTemperature": 50.0
+                                "returnPipeTemperature": 45.0
                             }
                         ]
                     },
@@ -102,6 +102,18 @@
                                         "id": "790c8e1c-7fce-a053-b592-980d52a158c2",
                                         "startTime": "2023-10-26T01:00:25+03:00",
                                         "endTime": "2023-10-26T10:20:45+03:00",
+                                        "desiredTemperatureMode": 4
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "3dc84077-b3eb-47a2-c8d6-971e69d67cca",
+                                "day": 3,
+                                "windows": [
+                                    {
+                                        "id": "9e996cb9-11a3-e881-cb46-707e1657216f",
+                                        "startTime": "2023-11-02T21:00:23.027000+00:00",
+                                        "endTime": "2023-11-03T02:00:30.818000+00:00",
                                         "desiredTemperatureMode": 4
                                     }
                                 ]
