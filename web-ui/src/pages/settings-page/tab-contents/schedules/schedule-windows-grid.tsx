@@ -10,16 +10,13 @@ import { AddIcon, AdditionalMenuIcon, DeleteAllIcon } from '../../../../constant
 import { useSchedulesContext } from './schedules-context';
 import { useScreenSize } from '../../../../utils/media-query';
 import { showConfirmDialog } from '../../../../utils/dialogs';
-import { useParams } from 'react-router';
 import { ControlModeModel, ControlModes } from '../../../../models/regulator-settings/enums/control-mode-model';
 import { EditorPreparingEvent } from 'devextreme/ui/data_grid';
 
 export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => {
-    const { circuitId } = useParams();
-
     const { putSchedulesAsync } = useSchedulesContext();
     const scheduleWindowsRef = useRef<DataGrid<ScheduleWindowModel, any>>(null);
-    const { regulatorSettings, setRegulatorSettings } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings, circuitId } = useSettingPageContext();
     const { isXSmall } = useScreenSize();
 
     const temperatureModes = useMemo(() => {
@@ -66,7 +63,7 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                     onClick: async () => {
 
                         if (regulatorSettings) {
-                            const currentSchedule = regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId): 0].regulatorParameters.schedules.items.find(i => i.day === schedule.day);
+                            const currentSchedule = regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.schedules.items.find(i => i.day === schedule.day);
                             if (currentSchedule) {
                                 showConfirmDialog({
                                     title: formatMessage('confirm-title'),
@@ -113,7 +110,7 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                 type:'custom',
                 validationCallback: (options: ValidationCallbackData) => {
                     if (options.column.dataField === 'startTime' && options.data.startTime) {
-                        const currentSchedule = regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId): 0].regulatorParameters.schedules.items.find(i => i.day === schedule.day);
+                        const currentSchedule = regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.schedules.items.find(i => i.day === schedule.day);
 
                         if(currentSchedule) {
                             return  !currentSchedule!.windows.filter(w => w.id !== options.data.id).some(w => {
@@ -150,9 +147,7 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                     }
                 } }
                 >
-
                 <Column
-
                     dataField={ 'startTime' }
                     cssClass='schedule-time-picker'
                     dataType='datetime'

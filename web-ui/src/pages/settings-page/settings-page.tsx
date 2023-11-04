@@ -7,17 +7,15 @@ import TabPanel, { Item as TabPanelItem } from 'devextreme-react/tab-panel';
 import { ControlParametersForm, RegulationParametersForm, RtcDateTimeForm, ServiceForm, TemperatureGraphTabContent } from './tab-contents/index';
 import { SettingPageContextProvider, useSettingPageContext } from './settings-page-context';
 import { SchedulesTabContent } from './tab-contents/schedules/schedules-tab-content';
-import { useParams } from 'react-router';
 import { HeatingCircuitContent } from './tab-contents/heating-circuit-content/heating-circuit-content';
 import { HeatingCircuitTypes } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { useMemo } from 'react';
 
 export const SettingsPageInternal = () => {
-    const { circuitId } = useParams();
-    const { heatingCircuitType } = useSettingPageContext();
+    const { heatingCircuitType, circuitId } = useSettingPageContext();
 
     const pageHeaderTitle = useMemo (() => {
-        const currentCircuitId = circuitId ? parseInt(circuitId) + 1 : 1;
+        const currentCircuitId = circuitId +  1;
 
         if (!heatingCircuitType) {
             return `Настройки контура ${currentCircuitId}`;
@@ -35,7 +33,6 @@ export const SettingsPageInternal = () => {
             </PageHeader>
             <div className={ 'content-block' }>
                 <div className={ 'dx-card responsive-paddings' }>
-
                         <TabPanel width={ '100%' }  height={ '65vh' } loop>
                             <TabPanelItem title={ 'Общие' } >
                                 <HeatingCircuitContent />
@@ -64,7 +61,6 @@ export const SettingsPageInternal = () => {
                                 <RtcDateTimeForm />
                             </TabPanelItem>
                         </TabPanel>
-
                 </div>
             </div>
         </>

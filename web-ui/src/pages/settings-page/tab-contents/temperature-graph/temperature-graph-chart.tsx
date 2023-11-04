@@ -1,28 +1,34 @@
 import { useRef } from 'react';
-import Chart, { ArgumentAxis, CommonAxisSettings, CommonSeriesSettings, Grid, Label, Series, Title, Tooltip, ValueAxis } from 'devextreme-react/chart';
-import Form, { SimpleItem } from 'devextreme-react/form';
+import Chart, { ArgumentAxis, CommonAxisSettings, CommonSeriesSettings, Grid, Label, Series, Title, ValueAxis } from 'devextreme-react/chart';
 import { useTemperatureGraphContext } from './temperature-graph-context';
 
-const TooltipTemplate = (info) => {
-    // const id = info.point.data.id;
-    // const currentItem = regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId) : 0].regulatorParameters.temperatureGraph.items.find(i => i.id === id);
-    const currentItem = null;
 
-    return (
-        <Form formData={ currentItem } width={ 150 }>
-            <SimpleItem
-                dataField='returnPipeTemperature'
-                editorType='dxNumberBox'
-                label={ { visible: false } }
-                editorOptions={ { showSpinButtons: true, useLargeSpinButtons: true, onValueChanged: (e) => {
 
-                } } }
-                />
-        </Form>
-    )
-}
+// const TooltipTemplate = (info) => {
+
+//     const { regulatorSettings, circuitId } = useSettingPageContext();
+
+//     const currentItem = useMemo (() => {
+//         return regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.temperatureGraph.items.find(i => i.id === info.point.data.id);
+//     }, [circuitId, info.point.data.id, regulatorSettings?.heatingCircuits.items]);
+//     // const currentItem = null;
+
+//     return (
+//         <Form formData={ currentItem } width={ 150 } height={ 50 } >
+//             <SimpleItem
+//                 dataField='returnPipeTemperature'
+//                 editorType='dxSlider'
+//                 label={ { visible: false } }
+//                 editorOptions={ { showSpinButtons: true, useLargeSpinButtons: true, min: 0, max: 100, onValueChanged: (e) => {
+
+//                 } } }
+//                 />
+//         </Form>
+//     )
+// }
 
 export const TemperatureGraphChart = ({ dataSource }: { dataSource: any }) => {
+
     const chartRef = useRef<Chart>(null);
     const { chartArgumentAxisInverted } = useTemperatureGraphContext();
 
@@ -32,7 +38,7 @@ export const TemperatureGraphChart = ({ dataSource }: { dataSource: any }) => {
             dataSource={ dataSource }
             height={ '50vh' }
             onPointClick={ (e) => {
-                // e.target.showTooltip();
+                // setIsPopupSlider(true);
             } }
         >
             {/* <Tooltip

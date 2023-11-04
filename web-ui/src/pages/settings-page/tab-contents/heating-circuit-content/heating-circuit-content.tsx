@@ -1,6 +1,5 @@
 import { Form, GroupItem, SimpleItem } from 'devextreme-react/form';
 import { useRef } from 'react';
-import { useParams } from 'react-router-dom';
 import { useScreenSize } from '../../../../utils/media-query';
 import { useSettingPageContext } from '../../settings-page-context';
 import { useAppData } from '../../../../contexts/app-data/app-data';
@@ -9,11 +8,9 @@ import { HeatingCircuitTypes } from '../../../../models/regulator-settings/enums
 import { ValueChangedEvent } from 'devextreme/ui/select_box';
 
 export const HeatingCircuitContent = () => {
-    const { circuitId } = useParams();
-
     const dxHeatingCircuitFormRef = useRef<Form>(null);
     const { isXSmall, isSmall } = useScreenSize();
-    const { regulatorSettings, setHeatingCircuitType } = useSettingPageContext();
+    const { regulatorSettings, setHeatingCircuitType, circuitId } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
     return (
@@ -22,7 +19,7 @@ export const HeatingCircuitContent = () => {
             height={ '50vh' }
             width={ isXSmall || isSmall ? '100%' : 600 }
             ref={ dxHeatingCircuitFormRef }
-            formData={ regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId) : 0] }
+            formData={ regulatorSettings?.heatingCircuits.items[circuitId] }
             onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
                 const regulutorSettingsChange = {
                     regulatorSettings: regulatorSettings!,

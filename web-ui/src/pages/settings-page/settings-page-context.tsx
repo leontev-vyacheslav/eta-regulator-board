@@ -1,4 +1,4 @@
-import { Dispatch, createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { Dispatch, createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useAppData } from '../../contexts/app-data/app-data';
 import { RegulatorSettingsModel } from '../../models/regulator-settings/regulator-settings-model';
 import { HeatingCircuitTypeModel } from '../../models/regulator-settings/enums/heating-circuit-type-model';
@@ -11,13 +11,19 @@ type SettingPageContextModel = {
     heatingCircuitType: HeatingCircuitTypeModel | null;
     setHeatingCircuitType: Dispatch<React.SetStateAction<HeatingCircuitTypeModel| null>>;
 
-    refreshRegulatorSettingsAsync: () => Promise<void>
+    refreshRegulatorSettingsAsync: () => Promise<void>;
+
+    circuitId: number;
 }
 
 const SettingPageContext = createContext({} as SettingPageContextModel);
 
 function SettingPageContextProvider (props: any) {
-    const { circuitId } = useParams();
+    const { circuitIdParam } = useParams();
+
+    const circuitId = useMemo(() => {
+        return circuitIdParam ? parseInt(circuitIdParam) : 0;
+    }, [circuitIdParam]);
 
     const [regulatorSettings, setRegulatorSettings] = useState<RegulatorSettingsModel | null>(null);
     const [heatingCircuitType, setHeatingCircuitType] = useState<HeatingCircuitTypeModel | null>(null);
@@ -38,7 +44,7 @@ function SettingPageContextProvider (props: any) {
 
             if(regulatorSettings){
                 setRegulatorSettings(regulatorSettings);
-                const heatingCircuitType = regulatorSettings.heatingCircuits.items[circuitId ? parseInt(circuitId) : 0].type;
+                const heatingCircuitType = regulatorSettings.heatingCircuits.items[circuitId].type;
                 setHeatingCircuitType(heatingCircuitType);
             }
         }, 100);
@@ -52,7 +58,9 @@ function SettingPageContextProvider (props: any) {
             heatingCircuitType,
             setHeatingCircuitType,
 
-            refreshRegulatorSettingsAsync
+            refreshRegulatorSettingsAsync,
+
+            circuitId
         } } { ...props }>
             {props.children}
         </SettingPageContext.Provider>

@@ -1,13 +1,6 @@
 import { withNavigationWatcher } from '../contexts/navigation';
 import { HomePage,  SettingsPage, AboutPage, SignOutPage, DebugPage } from '../pages';
 
-/*
-const AboutPage = lazy(() => import('../pages/about/about'));
-const SignOutPage = lazy(() => import('../pages/sign-out/sign-out'));
-const OrganizationsPage = lazy(() => import('../pages/organizations/organizations'));
-const AdministratorsPage = lazy(() => import('../pages/administrators/administrators'));
-*/
-
 const routes = [
     {
         path: '/',
@@ -22,7 +15,7 @@ const routes = [
         component: DebugPage
     },
     {
-        path: '/settings/:circuitId',
+        path: '/settings/:circuitIdParam',
         component: SettingsPage,
     },
     {

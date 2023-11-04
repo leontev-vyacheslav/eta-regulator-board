@@ -4,13 +4,11 @@ import { useRef } from 'react';
 import { useSettingPageContext } from '../../settings-page-context';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import { useAppData } from '../../../../contexts/app-data/app-data';
-import { useParams } from 'react-router-dom';
 
 export const RegulationParametersForm = () => {
-    const { circuitId } = useParams();
     const dxRegulatorParametersFormRef = useRef<Form>(null);
     const { isXSmall, isSmall } = useScreenSize();
-    const { regulatorSettings } = useSettingPageContext();
+    const { regulatorSettings, circuitId } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
     return (
@@ -21,7 +19,7 @@ export const RegulationParametersForm = () => {
             width={ isXSmall || isSmall ? '100%' : 600 }
             scrollingEnabled={ true }
             colCount={ 1 }
-            formData={ regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId) : 0].regulatorParameters.regulationParameters }
+            formData={ regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.regulationParameters }
             ref={ dxRegulatorParametersFormRef }
             onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
                 const regulatorSettingsChange = {

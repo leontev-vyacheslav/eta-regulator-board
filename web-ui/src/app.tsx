@@ -19,25 +19,6 @@ import { WorkdatePickerProvider } from './contexts/workdate-context';
 
 function App() {
     const { user } = useAuth();
-    // const location = useLocation();
-    // const navigation = useNavigate();
-
-    // useBeforeUnload(() => {
-    //     console.log(location);
-    //     localStorage.stuff2 = Date.now();
-    //     localStorage.stuff = JSON.stringify(location);
-    // });
-
-    // useEffect(() => {
-    //     const a = parseInt(localStorage.stuff2);
-    //     const b = Date.now();
-    //     const d = b - a;
-
-    //     if (d < 3000) {
-    //         const location = JSON.parse(localStorage.stuff);
-    //         navigation(location.pathname)
-    //     }
-    // }, [navigation]);
 
     if (user === undefined) {
         return null;

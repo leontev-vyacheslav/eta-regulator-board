@@ -10,7 +10,7 @@
                 "type": 1,
                 "regulatorParameters": {
                     "controlParameters": {
-                        "controlMode": 1,
+                        "controlMode": 2,
                         "manualControlMode": 1,
                         "manualControlModeTemperatureSetpoint": 60.0,
                         "analogValveErrorSetpoint": 50.0,
@@ -133,7 +133,7 @@
             },
             {
                 "name": "\u041e\u0442\u043e\u043f\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0443\u0440 2",
-                "type": 3,
+                "type": 2,
                 "regulatorParameters": {
                     "controlParameters": {
                         "controlMode": 1,

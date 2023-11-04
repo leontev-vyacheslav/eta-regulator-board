@@ -9,12 +9,10 @@ import { showConfirmDialog } from '../../../../utils/dialogs';
 import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { useScreenSize } from '../../../../utils/media-query';
-import { useParams } from 'react-router-dom';
 import { useSettingPageContext } from '../../settings-page-context';
 
 const SchedulesTabContentInner = () => {
-    const { circuitId } = useParams();
-    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync, circuitId } = useSettingPageContext();
     const { putSchedulesAsync, schedulesDataGridRef } = useSchedulesContext();
     const { isXSmall, isSmall } = useScreenSize();
 
@@ -22,13 +20,13 @@ const SchedulesTabContentInner = () => {
 
         return new ArrayStore({
             key: 'id',
-            data: regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId): 0].regulatorParameters.schedules.items,
+            data: regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.schedules.items,
             onRemoved: async (values: ScheduleModel) => {
                 await putSchedulesAsync(values);
             },
 
             onInserted: async (values: ScheduleModel) => {
-                const item = regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId): 0].regulatorParameters.schedules.items.find(i => i.id === values.id);
+                const item = regulatorSettings?.heatingCircuits.items[circuitId ].regulatorParameters.schedules.items.find(i => i.id === values.id);
                 if (item) {
                     item.windows = []
                 }

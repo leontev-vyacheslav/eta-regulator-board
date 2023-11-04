@@ -8,15 +8,13 @@ import {  useMemo } from 'react';
 import { ValidationCallbackData, ValidationRule } from 'devextreme/common';
 import { formatMessage } from 'devextreme/localization';
 import { ScheduleWindowsGrid } from './schedule-windows-grid';
-import { useParams } from 'react-router-dom';
 import { useSchedulesContext } from './schedules-context';
 import { useScreenSize } from '../../../../utils/media-query';
 
 
 export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
-    const { circuitId } = useParams();
     const { isXSmall, isSmall } = useScreenSize();
-    const { regulatorSettings } = useSettingPageContext();
+    const { regulatorSettings, circuitId } = useSettingPageContext();
     const { schedulesDataGridRef, daysOfWeek } = useSchedulesContext();
 
     const dayOfWeekValidationRules = useMemo<ValidationRule[]>(() => {
@@ -29,7 +27,7 @@ export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
                 type: 'custom',
                 validationCallback: (options: ValidationCallbackData) =>
                 {
-                    const existedDays = regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId): 0].regulatorParameters.schedules.items.map(i => i.day);
+                    const existedDays = regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.schedules.items.map(i => i.day);
 
                     return !existedDays?.find(d => d === options.data.day);
                 },
@@ -39,8 +37,6 @@ export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
     }, [circuitId, regulatorSettings?.heatingCircuits.items]);
 
     return (
-        <>
-
             <DataGrid
                 className='app-grid schedules-grid'
                 key={ 'id' }
@@ -85,6 +81,5 @@ export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
                     render={ (e) => <ScheduleWindowsGrid schedule={ e.data } /> }
                 />
             </DataGrid>
-        </>
-    )
+    );
 }

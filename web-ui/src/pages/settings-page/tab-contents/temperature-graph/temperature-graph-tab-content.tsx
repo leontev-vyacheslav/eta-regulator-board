@@ -4,7 +4,6 @@ import { TempregatureGraphProvider, useTemperatureGraphContext } from './tempera
 import { AddIcon, AdditionalMenuIcon, AxisInvert2Icon, AxisInvertIcon, DeleteAllIcon, GraphIcon, RefreshIcon, TableIcon } from '../../../../constants/app-icons';
 import { TemperatureGraphItemModel } from '../../../../models/regulator-settings/temperature-graph-model';
 import { useScreenSize } from '../../../../utils/media-query';
-import { useParams } from 'react-router';
 import { useSettingPageContext } from '../../settings-page-context';
 import ArrayStore from 'devextreme/data/array_store';
 import { formatMessage } from 'devextreme/localization';
@@ -14,8 +13,7 @@ import { TemperatureGraphGrid } from './temperature-graph-grid';
 import { TemperatureGraphChart } from './temperature-graph-chart';
 
 const TemperatureGraphTabContentInner = () => {
-    const { circuitId } = useParams();
-    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync, circuitId } = useSettingPageContext();
     const { putTemparatureGraphAsync, setChartArgumentAxisInverted, chartArgumentAxisInverted, dataGridRef } = useTemperatureGraphContext();
     const { isXSmall, isSmall } = useScreenSize();
     const [isShowGraph, setIsShowGraph] = useState<boolean>(false);
@@ -23,7 +21,7 @@ const TemperatureGraphTabContentInner = () => {
     const temperatureGraphStore = useMemo(() => {
         const store = new ArrayStore({
             key: 'id',
-            data: regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId) : 0].regulatorParameters.temperatureGraph.items,
+            data: regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.temperatureGraph.items,
 
             onInserted: async (values: TemperatureGraphItemModel) => {
                 await putTemparatureGraphAsync(values);
@@ -34,7 +32,7 @@ const TemperatureGraphTabContentInner = () => {
             },
 
             onRemoving: async (key: any) => {
-                const removingItem = regulatorSettings?.heatingCircuits.items[circuitId ? parseInt(circuitId) : 0].regulatorParameters.temperatureGraph.items.find(i => i.id === key);
+                const removingItem = regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.temperatureGraph.items.find(i => i.id === key);
 
                 if (removingItem) {
                     (store as any).lastRemovingItem = removingItem;
@@ -125,7 +123,7 @@ const TemperatureGraphTabContentInner = () => {
                     <TemperatureGraphChart dataSource={ temperatureGraphStore } />
             }
         </div>
-    )
+    );
 }
 
 export const TemperatureGraphTabContent = () => {
