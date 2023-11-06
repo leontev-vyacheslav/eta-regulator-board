@@ -12,7 +12,6 @@ type SettingPageContextModel = {
     setHeatingCircuitType: Dispatch<React.SetStateAction<HeatingCircuitTypeModel| null>>;
 
     refreshRegulatorSettingsAsync: () => Promise<void>;
-
     circuitId: number;
 }
 
