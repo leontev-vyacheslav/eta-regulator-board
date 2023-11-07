@@ -45,3 +45,8 @@ def get(pin: int) -> bool:
 def get_all(pins: List[int]) -> List[bool]:
 
     return [get(p) for p in pins]
+
+
+def adc_chip_select():
+    set(6, False)
+    set(18, False)
