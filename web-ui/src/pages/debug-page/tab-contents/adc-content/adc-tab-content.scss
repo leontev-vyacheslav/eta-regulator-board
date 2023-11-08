@@ -1,0 +1,18 @@
+.adc-form {
+
+    textarea {
+        background-color: #282c34;
+        color: #abb2bf;
+        font-family: 'Consolas', 'Courier New', Courier, monospace !important;
+        font-size: 12px;
+        overflow: hidden;
+        padding: 5px 10px !important;
+    }
+
+    .dx-texteditor.dx-editor-filled.dx-state-disabled .dx-texteditor-input,
+    .dx-texteditor.dx-editor-filled.dx-state-readonly
+    .dx-texteditor-input,
+    .dx-texteditor.dx-editor-filled.dx-state-readonly.dx-state-hover .dx-texteditor-input {
+        color: #abb2bf;
+    }
+}

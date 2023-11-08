@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel';
 import { TestTabContent } from './tab-contents/test-content/test-tab-content';
 import { GpioTabContent } from './tab-contents/gpio-content/gpio-tab-content';
+import { AdcTabContent } from './tab-contents/adc-content/adc-tab-content';
 
 
 export const DebugPage = () => {
@@ -28,8 +29,11 @@ export const DebugPage = () => {
                                 <GpioTabContent />
                             : null}
                         </TabPanelItem>
+                        <TabPanelItem title='АЦП'>
+                            <AdcTabContent />
+                        </TabPanelItem>
                         <TabPanelItem title='Тестовый список'>
-                            {activeTabIndex === 1 ?
+                            {activeTabIndex === 2 ?
                                 <TestTabContent />
                             : null}
                         </TabPanelItem>

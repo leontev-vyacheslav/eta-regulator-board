@@ -2,6 +2,8 @@ import time
 
 from omega.ds1307 import DS1307
 
+#from omega.ds1307 import DS1307
+
 
 with DS1307(0x68) as rtc:
 

@@ -10,6 +10,7 @@ export default {
     rtc: '/api/rtc',
 
     gpio: '/api/gpio',
+    adc: '/api/adc',
 
     regulatorSettings: '/api/regulator-settings'
 };

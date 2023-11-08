@@ -5,12 +5,14 @@ import { AppDataContextRtcDataTimeEndpointsModel, useRtcDataTimeData } from './u
 import { AppDataContextRegulatorSettingsEndpointsModel, useRegulatorSettingsData } from './use-regulator-settings-data';
 import { AppDataContextAuthCheckEndpointsModel, useAuthData } from './use-auth-data';
 import { AppDataContextGpioEndpointsModel, useGpioData } from './use-gpio-data';
+import { AppDataContextAdcEndpointsModel, useAdcData } from './use-adc-data';
 
 export type AppDataContextModel = AppDataContextTestListEndpointsModel
     & AppDataContextRtcDataTimeEndpointsModel
     & AppDataContextRegulatorSettingsEndpointsModel
     & AppDataContextAuthCheckEndpointsModel
-    & AppDataContextGpioEndpointsModel;
+    & AppDataContextGpioEndpointsModel
+    & AppDataContextAdcEndpointsModel;
 
 const AppDataContext = createContext<AppDataContextModel>({} as AppDataContextModel);
 const useAppData = () => useContext(AppDataContext);
@@ -21,6 +23,7 @@ function AppDataProvider (props: AppBaseProviderProps) {
     const regulatorSettingsData = useRegulatorSettingsData();
     const authData = useAuthData();
     const gpioData  = useGpioData();
+    const adcData = useAdcData();
 
     return (
         <AppDataContext.Provider
@@ -29,7 +32,8 @@ function AppDataProvider (props: AppBaseProviderProps) {
                 ...rtcDateTimeData,
                 ...regulatorSettingsData,
                 ...authData,
-                ...gpioData
+                ...gpioData,
+                ...adcData
             } }
             { ...props }
         />
