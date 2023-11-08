@@ -44,7 +44,7 @@ class MCP3208:
 
     def read_avg(self, channel: int, measurements: int = 10):
 
-        if measurements < 1:
+        if 50 >= measurements >= 1:
             raise ValueError ('The number of measurement series must be greater than 0.')
 
         series_counter: int = measurements
