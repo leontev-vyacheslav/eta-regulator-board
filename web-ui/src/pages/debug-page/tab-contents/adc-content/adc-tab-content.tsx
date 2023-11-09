@@ -4,16 +4,35 @@ import { Form, GroupItem, SimpleItem, ButtonItem } from 'devextreme-react/form';
 import { useScreenSize } from '../../../../utils/media-query';
 import './adc-tab-content.scss'
 import TextArea from 'devextreme-react/text-area';
+
 import { useAppData } from '../../../../contexts/app-data/app-data';
+
+type AdcFormData = {
+    channel: number;
+    isReadContinually: boolean;
+    readContinuallyInterval: number;
+    timeoutObject: ReturnType<typeof setInterval> | null;
+    fromTemperarureSensor: boolean;
+}
+
+enum AdcReadMode {
+    Adc,
+    Temp
+}
 
 export const AdcTabContent = () => {
     const { isXSmall, isSmall } = useScreenSize();
-    const { getAdcValueAsync } = useAppData();
+    const { getAdcValueAsync, getTemperatureValueAsync } = useAppData();
+    const textAreaRef = useRef<TextArea>(null);
 
-    const formData = useMemo(() => {
+    const formData = useMemo<AdcFormData>(() => {
         return {
-            channel: 0
-        }
+            channel: 0,
+            isReadContinually: false,
+            readContinuallyInterval: 1,
+            timeoutObject: null,
+            fromTemperarureSensor: false,
+        } as  AdcFormData
     }, []);
 
     const channelList = useMemo(() => {
@@ -43,7 +62,15 @@ export const AdcTabContent = () => {
         }
     }, []);
 
-    const textAreaRef = useRef<TextArea>(null);
+    const showValueAsync = useCallback(async (mode: AdcReadMode) => {
+        const value = mode === AdcReadMode.Adc
+            ? await getAdcValueAsync(formData.channel)
+            : await getTemperatureValueAsync(formData.channel);
+
+        if (value) {
+            pushMessageToConsole(`Канал ${value?.channel}: ${value?.value.toFixed(3)}${ mode === AdcReadMode.Adc ? 'V' : '°C'}`);
+        }
+    }, [formData.channel, getAdcValueAsync, getTemperatureValueAsync, pushMessageToConsole]);
 
     return (
 
@@ -52,7 +79,6 @@ export const AdcTabContent = () => {
             className='app-form adc-form'
             style={ { height: '50vh' } }
             height={ '50vh' }
-
             width={ isXSmall || isSmall ? '100%' : 600 }
             scrollingEnabled={ true }
             colCount={ 1 }
@@ -70,16 +96,71 @@ export const AdcTabContent = () => {
                 />
 
                 <SimpleItem
-                    label={ { location: 'top', showColon: true, text: 'Терминал вывода' } }
+                    dataField='isReadContinually'
+                    editorType='dxSwitch'
+                    label={ { location: 'top', showColon: true, text: 'Считывать непрерывно' } }
+                    editorOptions={ {
+                        displayExpr: 'description',
+                        valueExpr: 'pin',
+                        items: channelList
+                    } }
+                />
+
+                <SimpleItem
+                    dataField='readContinuallyInterval'
+                    editorType='dxNumberBox'
+                    label={ { location: 'top', showColon: true, text: 'Интервал непрерываного чтения' } }
+                    editorOptions={ {
+                        min: 1,
+                        max: 10,
+                        step: 1,
+                        showSpinButtons: true,
+                    } }
+                />
+
+                <SimpleItem
+                    dataField='fromTemperarureSensor'
+                    editorType='dxSwitch'
+                    label={ { location: 'top', showColon: true, text: 'С температурного датчика' } }
+                    editorOptions={ {
+                        displayExpr: 'description',
+                        valueExpr: 'pin',
+                        items: channelList
+                    } }
+                />
+
+                <SimpleItem
+                    label={ { location: 'top', showColon: true, text: 'Консоль вывода' } }
                 >
                     <TextArea ref={ textAreaRef } height={ 90 } spellcheck={ false } readOnly />
                 </SimpleItem>
                 <ButtonItem buttonOptions={ {
                     text: 'Старт', onClick: async (e) => {
-                        const adcValue = await getAdcValueAsync(formData.channel);
-                        if (adcValue) {
-                            pushMessageToConsole(`Канал ${adcValue?.channel}: ${adcValue?.value.toFixed(3)}V`);
-                            e.event?.preventDefault();
+
+                        if (formData.fromTemperarureSensor) {
+                            await showValueAsync(AdcReadMode.Temp);
+
+                            return;
+                        }
+
+                        if(formData.timeoutObject) {
+                            clearInterval(formData.timeoutObject);
+                            formData.timeoutObject = null;
+                            e.component.option('text', 'Старт');
+
+                            return;
+                        }
+
+                        if (formData.isReadContinually) {
+                            e.component.option('text', 'Стоп');
+
+                            const timeoutObject = setInterval(async() => {
+                                await showValueAsync(AdcReadMode.Adc);
+                            }, 1000 * formData.readContinuallyInterval);
+
+                            formData.timeoutObject = timeoutObject;
+                        } else {
+                            await showValueAsync(AdcReadMode.Adc);
                         }
                     }
                 } }></ButtonItem>

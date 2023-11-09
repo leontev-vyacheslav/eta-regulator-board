@@ -24,7 +24,7 @@ class MCP3208:
 
     def read(self, channel: int) -> float:
 
-        if MCP3208.CHANNEL_AMOUNT - 1 <= channel <= 0:
+        if MCP3208.CHANNEL_AMOUNT - 1 < channel < 0:
             raise ValueError (f'MCP3208 channel must be in range 0-7, but it was appointed {channel}.')
 
         self._command[0] = 0x06 | ((channel >> 2) & 0x01)
@@ -44,7 +44,7 @@ class MCP3208:
 
     def read_avg(self, channel: int, measurements: int = 10):
 
-        if 50 >= measurements >= 1:
+        if 50 < measurements < 1:
             raise ValueError ('The number of measurement series must be greater than 0.')
 
         series_counter: int = measurements

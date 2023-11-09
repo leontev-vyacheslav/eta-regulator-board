@@ -55,6 +55,24 @@
                                 "outdoorTemperature": -10.0,
                                 "supplyPipeTemperature": 60.0,
                                 "returnPipeTemperature": 45.0
+                            },
+                            {
+                                "id": "2749b29e-d647-b779-2872-ae12c91f9518",
+                                "outdoorTemperature": -33.0,
+                                "supplyPipeTemperature": 120.0,
+                                "returnPipeTemperature": 33.0
+                            },
+                            {
+                                "id": "f2869cac-e297-ad7b-87ca-7751467ae02a",
+                                "outdoorTemperature": -32.0,
+                                "supplyPipeTemperature": 110.0,
+                                "returnPipeTemperature": 45.0
+                            },
+                            {
+                                "id": "9c5cca9b-18a0-e9a1-f496-f8dc441b5e11",
+                                "outdoorTemperature": -30.0,
+                                "supplyPipeTemperature": 100.0,
+                                "returnPipeTemperature": 40.0
                             }
                         ]
                     },

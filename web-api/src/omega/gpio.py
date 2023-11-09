@@ -1,6 +1,9 @@
 import subprocess
 from typing import List
 
+GPIO_Vp = 19
+CSGPIO = 18
+CS1 = 6
 
 def set(pin: int, state: bool) -> bool:
 
@@ -48,5 +51,5 @@ def get_all(pins: List[int]) -> List[bool]:
 
 
 def adc_chip_select():
-    set(6, False)
-    set(18, False)
+    set(CS1, False)
+    set(CSGPIO, False)

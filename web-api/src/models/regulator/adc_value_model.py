@@ -5,3 +5,9 @@ class AdcValueModel(AppBaseModel):
     channel: int
 
     value: float
+
+
+class TemperatureValueModel(AppBaseModel):
+    channel: int
+
+    value: float

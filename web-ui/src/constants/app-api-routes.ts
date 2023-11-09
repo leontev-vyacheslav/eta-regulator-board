@@ -11,6 +11,7 @@ export default {
 
     gpio: '/api/gpio',
     adc: '/api/adc',
+    temperature: '/api/temperature',
 
     regulatorSettings: '/api/regulator-settings'
 };
