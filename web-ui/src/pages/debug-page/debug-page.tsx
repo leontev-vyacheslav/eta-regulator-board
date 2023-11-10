@@ -5,7 +5,6 @@ import { DebugIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import { useState } from 'react';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel';
-import { TestTabContent } from './tab-contents/test-content/test-tab-content';
 import { GpioTabContent } from './tab-contents/gpio-content/gpio-tab-content';
 import { AdcTabContent } from './tab-contents/adc-content/adc-tab-content';
 

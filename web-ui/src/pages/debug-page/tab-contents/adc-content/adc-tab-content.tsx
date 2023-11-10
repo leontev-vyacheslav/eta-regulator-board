@@ -17,6 +17,7 @@ type AdcFormData = {
     isStartedReading: boolean
 }
 
+// eslint-disable-next-line no-unused-vars
 enum AdcReadMode {
     Adc = 1,
     Temp = 2
