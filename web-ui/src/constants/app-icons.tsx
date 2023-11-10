@@ -29,6 +29,8 @@ export { BsBoxArrowInLeft as  WorkDateBackwardIcon } from 'react-icons/bs';
 export { BsBoxArrowInRight as WorkDateForwardIcon } from 'react-icons/bs';
 export { IoTodayOutline as WorkDateTodayIcon } from 'react-icons/io5';
 export { IoCloseOutline as CloseIcon } from 'react-icons/io5';
+export { IoCloseCircleOutline as CloseCircleIcon } from 'react-icons/io5';
+
 export { RiFileExcel2Line as ExportToXlsxIcon } from 'react-icons/ri';
 export { MdMailOutline as EmailIcon } from 'react-icons/md';
 export { RiBatteryLine as LowPowerModeEnabledIcon } from 'react-icons/ri';
@@ -55,6 +57,9 @@ export { VscTable as TableIcon } from 'react-icons/vsc'
 
 export { TbArrowsExchange2 as AxisInvertIcon } from 'react-icons/tb'
 export { TbArrowsExchange as AxisInvert2Icon } from 'react-icons/tb'
+
+export { IoStopCircleOutline as StopIcon } from 'react-icons/io5'
+export { IoPlayCircleOutline as StartIcon } from 'react-icons/io5'
 
 
 import { MdMoreVert } from 'react-icons/md';

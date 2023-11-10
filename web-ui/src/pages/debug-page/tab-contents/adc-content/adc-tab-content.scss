@@ -2,12 +2,12 @@
 
     margin-top: 10px;
     padding: 5px;
-    
+
     textarea {
         background-color: #282c34;
         color: #abb2bf;
         font-family: 'Consolas', 'Courier New', Courier, monospace !important;
-        font-size: 12px;
+        font-size: 14px;
         overflow: hidden;
         padding: 5px 10px !important;
     }
@@ -17,5 +17,14 @@
     .dx-texteditor-input,
     .dx-texteditor.dx-editor-filled.dx-state-readonly.dx-state-hover .dx-texteditor-input {
         color: #abb2bf;
+    }
+
+    .adc-form_buttons {
+        display: flex;
+        justify-content: end;
+        .dx-field-item-content {
+            display: flex;
+            gap: 10px
+        }
     }
 }

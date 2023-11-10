@@ -5,8 +5,8 @@ import {
 
     SettingsIcon,
     CircuitIcon,
-    ManualModeIcon,
     RtcClockIcon,
+    DebugIcon,
 } from './app-icons';
 import { IconBaseProps } from 'react-icons/lib/cjs/iconBase';
 import { TreeViewItemModel } from '../models/tree-view-item';
@@ -40,7 +40,7 @@ export const navigation: TreeViewItemModel[] = [
     },
     {
         text: 'Ручной режим',
-        iconRender: (props: IconBaseProps) => <ManualModeIcon size={ 22 } { ...props } />,
+        iconRender: (props: IconBaseProps) => <DebugIcon size={ 22 } { ...props } />,
         path: '/debug',
         restricted: false,
     },

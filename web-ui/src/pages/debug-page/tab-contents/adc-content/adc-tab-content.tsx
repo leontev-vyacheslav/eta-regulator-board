@@ -1,11 +1,11 @@
-import { useCallback, useMemo, useRef } from 'react';
-import 'devextreme-react/text-area';
-import { Form, GroupItem, SimpleItem, ButtonItem } from 'devextreme-react/form';
-import { useScreenSize } from '../../../../utils/media-query';
 import './adc-tab-content.scss'
-import TextArea from 'devextreme-react/text-area';
-
+import { useCallback, useMemo, useState } from 'react';
+import 'devextreme-react/text-area';
+import { Form, GroupItem, SimpleItem } from 'devextreme-react/form';
+import { useScreenSize } from '../../../../utils/media-query';
 import { useAppData } from '../../../../contexts/app-data/app-data';
+import { Button } from 'devextreme-react/button';
+import { CloseCircleIcon, StartIcon, StopIcon } from '../../../../constants/app-icons';
 
 type AdcFormData = {
     channel: number;
@@ -13,26 +13,31 @@ type AdcFormData = {
     readContinuallyInterval: number;
     timeoutObject: ReturnType<typeof setInterval> | null;
     fromTemperarureSensor: boolean;
+    consoleContent: string,
+    isStartedReading: boolean
 }
 
 enum AdcReadMode {
-    Adc,
-    Temp
+    Adc = 1,
+    Temp = 2
 }
 
 export const AdcTabContent = () => {
     const { isXSmall, isSmall } = useScreenSize();
     const { getAdcValueAsync, getTemperatureValueAsync } = useAppData();
-    const textAreaRef = useRef<TextArea>(null);
+    const [isShowOutputConsole, setIsShowOutputConsole] = useState<boolean>(false);
+    const [isReadingEnabled, setIsReadingEnabled] = useState<boolean>(false);
 
     const formData = useMemo<AdcFormData>(() => {
         return {
             channel: 0,
-            isReadContinually: false,
+            isReadContinually: true,
             readContinuallyInterval: 1,
             timeoutObject: null,
             fromTemperarureSensor: false,
-        } as  AdcFormData
+            consoleContent: '',
+            isStartedReading: false
+        } as AdcFormData
     }, []);
 
     const channelList = useMemo(() => {
@@ -47,33 +52,122 @@ export const AdcTabContent = () => {
     }, []);
 
     const pushMessageToConsole = useCallback((message: string) => {
-        if (!textAreaRef || !textAreaRef.current) {
-            return;
-        }
 
-        let curentText = textAreaRef.current?.instance.option('value');
+        let curentText = formData.consoleContent ;
         curentText = `${curentText}${(curentText ? '\n' : '')}${message}`
-        textAreaRef.current?.instance.option('value', curentText);
+        formData.consoleContent =  curentText;
 
-        const mainElement = textAreaRef.current.instance.element();
-        const textAreaElement = mainElement.querySelector('textarea');
+        const textAreaElement = document.querySelector('textarea[name="consoleContent"]') as HTMLTextAreaElement;
         if (textAreaElement) {
+            textAreaElement.value = formData.consoleContent
             textAreaElement.scrollTop = textAreaElement.scrollHeight;
         }
-    }, []);
+    }, [formData]);
 
     const showValueAsync = useCallback(async (mode: AdcReadMode) => {
         const value = mode === AdcReadMode.Adc
             ? await getAdcValueAsync(formData.channel)
             : await getTemperatureValueAsync(formData.channel);
 
-        if (value) {
-            pushMessageToConsole(`Канал ${value?.channel}: ${value?.value.toFixed(3)}${ mode === AdcReadMode.Adc ? 'V' : '°C'}`);
+        if (value && formData.isStartedReading) {
+            pushMessageToConsole(`Канал ${value?.channel}: ${value?.value.toFixed(3)}${mode === AdcReadMode.Adc ? 'V' : '°C'}`);
         }
-    }, [formData.channel, getAdcValueAsync, getTemperatureValueAsync, pushMessageToConsole]);
+    }, [formData.channel, formData.isStartedReading, getAdcValueAsync, getTemperatureValueAsync, pushMessageToConsole]);
 
-    return (
+    const scrollConsoleToBottom = useCallback(() => {
+        const textAreaElement = document.querySelector('textarea[name="consoleContent"]') as HTMLTextAreaElement;
+        if (textAreaElement) {
+            textAreaElement.scrollTop = textAreaElement.scrollHeight;
+        }
+    }, []);
 
+    const clearTimer = useCallback(() => {
+        if (formData.timeoutObject) {
+            clearInterval(formData.timeoutObject);
+            formData.timeoutObject = null;
+        }
+    }, [formData]);
+
+    const start = useCallback(() => {
+        formData.isStartedReading = true;
+
+        setIsShowOutputConsole(true);
+        setIsReadingEnabled(true);
+
+        formData.timeoutObject = setInterval(async () => {
+            await showValueAsync(formData.fromTemperarureSensor ? AdcReadMode.Temp : AdcReadMode.Adc);
+        }, 1000 * formData.readContinuallyInterval);
+    }, [formData, showValueAsync]);
+
+    const close = useCallback(() => {
+        formData.isStartedReading = false;
+        formData.consoleContent = '';
+
+        clearTimer();
+
+        setIsReadingEnabled(false);
+        setIsShowOutputConsole(false);
+    }, [clearTimer, formData]);
+
+    const resume = useCallback(() => {
+        formData.isStartedReading = true;
+
+        scrollConsoleToBottom();
+
+        formData.timeoutObject = setInterval(async () => {
+            await showValueAsync(formData.fromTemperarureSensor ? AdcReadMode.Temp : AdcReadMode.Adc);
+        }, 1000 * formData.readContinuallyInterval);
+        setIsReadingEnabled(true);
+
+    }, [formData, scrollConsoleToBottom, showValueAsync]);
+
+    const stop = useCallback( () => {
+        formData.isStartedReading = false;
+        setIsReadingEnabled(false);
+
+        clearTimer();
+
+        setTimeout( () => {
+            scrollConsoleToBottom();
+        }, 500);
+
+    }, [clearTimer, formData, scrollConsoleToBottom]);
+
+    return (isShowOutputConsole
+        ?
+        <Form
+            formData={ formData }
+            className='app-form adc-form'
+            style={ { height: '50vh' } }
+            height={ '50vh' }
+        >
+            <GroupItem caption={ 'Результаты считывания' }>
+                <SimpleItem
+                    dataField='consoleContent'
+                    label={ { location: 'top', showColon: true, text: 'Консоль вывода' } }
+                    editorType='dxTextArea'
+                    editorOptions={ {
+                        height: '30vh', spellcheck:  false, readOnly: true
+                    } }
+                >
+                </SimpleItem>
+
+                <SimpleItem cssClass='adc-form_buttons'>
+                    {isReadingEnabled ? <Button width={ 115 } type='danger' onClick={ stop }>
+                        <StopIcon size={ 22 } /><span style={ { marginLeft: 5 } }>СТОП</span>
+                    </Button>
+                        :
+                        <Button width={ 145 } type='success' style= { { backgroundColor: '#FFC107 ' } } onClick={ resume }>
+                            <StartIcon size={ 22 } /><span style={ { marginLeft: 5 } }>ПРОДОЛЖИТЬ</span>
+                        </Button>
+                    }
+                    <Button width={ 115 } type='normal' onClick={ close }>
+                        <CloseCircleIcon size={ 22 } /><span style={ { marginLeft: 5 } }>ЗАКРЫТЬ</span>
+                    </Button>
+                </SimpleItem>
+            </GroupItem>
+        </Form>
+        :
         <Form
             formData={ formData }
             className='app-form adc-form'
@@ -94,22 +188,10 @@ export const AdcTabContent = () => {
                         items: channelList
                     } }
                 />
-
-                <SimpleItem
-                    dataField='isReadContinually'
-                    editorType='dxSwitch'
-                    label={ { location: 'top', showColon: true, text: 'Считывать непрерывно' } }
-                    editorOptions={ {
-                        displayExpr: 'description',
-                        valueExpr: 'pin',
-                        items: channelList
-                    } }
-                />
-
                 <SimpleItem
                     dataField='readContinuallyInterval'
                     editorType='dxNumberBox'
-                    label={ { location: 'top', showColon: true, text: 'Интервал непрерываного чтения' } }
+                    label={ { location: 'top', showColon: true, text: 'Интервал чтения' } }
                     editorOptions={ {
                         min: 1,
                         max: 10,
@@ -117,7 +199,6 @@ export const AdcTabContent = () => {
                         showSpinButtons: true,
                     } }
                 />
-
                 <SimpleItem
                     dataField='fromTemperarureSensor'
                     editorType='dxSwitch'
@@ -128,44 +209,12 @@ export const AdcTabContent = () => {
                         items: channelList
                     } }
                 />
-
-                <SimpleItem
-                    label={ { location: 'top', showColon: true, text: 'Консоль вывода' } }
-                >
-                    <TextArea ref={ textAreaRef } height={ 90 } spellcheck={ false } readOnly />
+                <SimpleItem cssClass='adc-form_buttons'>
+                    <Button width={ 115 } text='Старт' type='success' onClick={ start } >
+                        <StartIcon size={ 22 } /><span style={ { marginLeft: 5 } }>СТАРТ</span>
+                    </Button>
                 </SimpleItem>
-                <ButtonItem buttonOptions={ {
-                    text: 'Старт', onClick: async (e) => {
-
-                        if (formData.fromTemperarureSensor) {
-                            await showValueAsync(AdcReadMode.Temp);
-
-                            return;
-                        }
-
-                        if(formData.timeoutObject) {
-                            clearInterval(formData.timeoutObject);
-                            formData.timeoutObject = null;
-                            e.component.option('text', 'Старт');
-
-                            return;
-                        }
-
-                        if (formData.isReadContinually) {
-                            e.component.option('text', 'Стоп');
-
-                            const timeoutObject = setInterval(async() => {
-                                await showValueAsync(AdcReadMode.Adc);
-                            }, 1000 * formData.readContinuallyInterval);
-
-                            formData.timeoutObject = timeoutObject;
-                        } else {
-                            await showValueAsync(AdcReadMode.Adc);
-                        }
-                    }
-                } }></ButtonItem>
             </GroupItem>
         </Form>
-
     );
 }
