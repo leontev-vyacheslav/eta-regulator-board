@@ -1,11 +1,14 @@
 import { ReactComponent as ProgressGear } from '../../assets/progress-gears.svg';
 import LoadPanel from 'devextreme-react/load-panel';
 import './loader.scss';
+import { useSharedArea } from '../../contexts/shared-area';
 
 const Loader = () => {
+    const { loaderRef } = useSharedArea();
     return (
         <LoadPanel
-            visible={ true }
+        ref={ loaderRef }
+            visible={ false }
             position={ { of: 'body', offset: { x: 0, y: -50 } } }
             showPane={ true }
             shading={ true }

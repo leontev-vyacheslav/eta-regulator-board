@@ -1,7 +1,7 @@
 import './debug-page.scss';
 
 import AppConstants from '../../constants/app-constants';
-import { DebugIcon } from '../../constants/app-icons';
+import { InputOutputIcon, DebugIcon, AdcIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import { useState } from 'react';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel';
@@ -20,15 +20,34 @@ export const DebugPage = () => {
 
             <div className={ 'content-block' }>
                 <div className={ 'dx-card responsive-paddings' }>
-                    <TabPanel onSelectedIndexChange={ (value: number) => {
+                    <TabPanel
+                    swipeEnabled={ false }
+                    width={ '100%' }
+                    height={ '65vh' }
+                    loop
+                    onSelectedIndexChange={ (value: number) => {
                         setActiveTabIndex(value);
                     } }>
-                        <TabPanelItem title='Ввод/вывод'>
+                        <TabPanelItem title='Ввод/вывод' tabRender={ (e) => {
+                            return (
+                                <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
+                                    <InputOutputIcon size={ 18 } />
+                                    <span>{e.title}</span>
+                                </div>
+                            );
+                        } }>
                         {activeTabIndex === 0 ?
                                 <GpioTabContent />
                             : null}
                         </TabPanelItem>
-                        <TabPanelItem title='АЦП'>
+                        <TabPanelItem title='АЦП' tabRender={ (e) => {
+                            return (
+                                <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
+                                    <AdcIcon size={ 18 } />
+                                    <span>{e.title}</span>
+                                </div>
+                            );
+                        } }>
                         {activeTabIndex === 1 ?
                             <AdcTabContent />
                              : null}

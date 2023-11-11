@@ -1,4 +1,4 @@
-import  { createContext, useCallback, useContext, useRef, useState, createElement } from 'react';
+import  { createContext, useCallback, useContext, useRef, createElement } from 'react';
 import { confirm } from 'devextreme/ui/dialog';
 import { useAuth } from './auth';
 import ReactDOMServer from 'react-dom/server';
@@ -9,15 +9,16 @@ import { SharedAreaContextModel } from '../models/shared-area-context';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
 import TreeView from 'devextreme-react/tree-view';
 import { TreeViewItemModel } from '../models/tree-view-item';
+import LoadPanel from 'devextreme-react/load-panel';
 
 const SharedAreaContext = createContext<SharedAreaContextModel>({} as SharedAreaContextModel);
 const useSharedArea = () => useContext(SharedAreaContext);
 
 function SharedAreaProvider (props: AppBaseProviderProps) {
     const { children } = props;
-    const [isShowLoader, setIsShowLoader] = useState<boolean>(false);
     const { signOut } = useAuth();
     const treeViewRef = useRef<TreeView<TreeViewItemModel>>(null) ;
+    const loaderRef =  useRef<LoadPanel>(null) ;
 
     const signOutWithConfirm = useCallback<ProcFunc>(() => {
         const confirmSignOutContent = () => {
@@ -43,18 +44,18 @@ function SharedAreaProvider (props: AppBaseProviderProps) {
 
     const hideLoader = useCallback<ProcFunc>(() => {
         setTimeout(() => {
-            setIsShowLoader(false);
+            loaderRef.current?.instance.hide();
         }, 100);
     }, []);
 
     const showLoader = useCallback<ProcFunc>(() => {
-        setIsShowLoader(true);
+        loaderRef.current?.instance.show();
     }, []);
 
     return (
-        <SharedAreaContext.Provider value={ { signOutWithConfirm, showLoader, hideLoader, treeViewRef } } { ...props }>
-            { isShowLoader ? <Loader/> : null }
+        <SharedAreaContext.Provider value={ { signOutWithConfirm, showLoader, hideLoader, treeViewRef, loaderRef } } { ...props }>
             { children }
+            <Loader />
         </SharedAreaContext.Provider>
     );
 }

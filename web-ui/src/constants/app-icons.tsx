@@ -52,14 +52,25 @@ export { IoHandRightOutline as ManualModeIcon } from 'react-icons/io5';
 export { LuCalendarClock as RtcClockIcon } from 'react-icons/lu';
 
 
-export { VscGraphLine as GraphIcon } from 'react-icons/vsc'
-export { VscTable as TableIcon } from 'react-icons/vsc'
+export { VscGraphLine as GraphIcon } from 'react-icons/vsc';
+export { VscTable as TableIcon } from 'react-icons/vsc';
 
-export { TbArrowsExchange2 as AxisInvertIcon } from 'react-icons/tb'
-export { TbArrowsExchange as AxisInvert2Icon } from 'react-icons/tb'
+export { TbArrowsExchange2 as AxisInvertIcon } from 'react-icons/tb';
+export { TbArrowsExchange as AxisInvert2Icon } from 'react-icons/tb';
 
-export { IoStopCircleOutline as StopIcon } from 'react-icons/io5'
-export { IoPlayCircleOutline as StartIcon } from 'react-icons/io5'
+export { IoStopCircleOutline as StopIcon } from 'react-icons/io5';
+export { IoPlayCircleOutline as StartIcon } from 'react-icons/io5';
+
+export { AiOutlineUsb as InputOutputIcon } from 'react-icons/ai';
+export { IoHardwareChipOutline as AdcIcon } from 'react-icons/io5';
+export { IoHardwareChip as DacIcon } from 'react-icons/io5';
+export { IoCalendarOutline as SceduleIcon } from 'react-icons/io5';
+export { IoTimeOutline as RtcIcon } from 'react-icons/io5';
+export { LuSettings2 as RegulatorIcon } from 'react-icons/lu';
+export { MdOutlineManageHistory as ManageIcon } from 'react-icons/md';
+
+
+
 
 
 import { MdMoreVert } from 'react-icons/md';
