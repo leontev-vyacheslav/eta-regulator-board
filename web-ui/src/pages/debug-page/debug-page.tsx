@@ -3,14 +3,16 @@ import './debug-page.scss';
 import AppConstants from '../../constants/app-constants';
 import { InputOutputIcon, DebugIcon, AdcIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
-import { useState } from 'react';
+import {  useState } from 'react';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel';
 import { GpioTabContent } from './tab-contents/gpio-content/gpio-tab-content';
 import { AdcTabContent } from './tab-contents/adc-content/adc-tab-content';
+import { DebugPageContextProvider, useDebugPage } from './debug-page-content';
 
 
-export const DebugPage = () => {
+const DebugPageInternal = () => {
     const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
+    const { tabPanelRef } = useDebugPage();
 
     return (
         <>
@@ -21,13 +23,15 @@ export const DebugPage = () => {
             <div className={ 'content-block' }>
                 <div className={ 'dx-card responsive-paddings' }>
                     <TabPanel
-                    swipeEnabled={ false }
-                    width={ '100%' }
-                    height={ '65vh' }
-                    loop
-                    onSelectedIndexChange={ (value: number) => {
-                        setActiveTabIndex(value);
-                    } }>
+                        ref={ tabPanelRef }
+                        swipeEnabled={ false }
+                        width={ '100%' }
+                        height={ '65vh' }
+                        loop
+                        onSelectedIndexChange={ (value: number) => {
+                            setActiveTabIndex(value);
+                        } }
+                    >
                         <TabPanelItem title='Ввод/вывод' tabRender={ (e) => {
                             return (
                                 <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
@@ -60,3 +64,10 @@ export const DebugPage = () => {
     )
 };
 
+export const DebugPage = () => {
+    return (
+        <DebugPageContextProvider>
+            <DebugPageInternal />
+        </DebugPageContextProvider>
+    )
+}
