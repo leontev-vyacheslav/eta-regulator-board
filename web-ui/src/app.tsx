@@ -55,7 +55,6 @@ function Main() {
     const screenSizeClass = useScreenSizeClass();
     return (
         <BrowserRouter>
-
             <AuthProvider>
                 <SharedAreaProvider>
                     <AppDataProvider>
@@ -71,7 +70,6 @@ function Main() {
                     </AppDataProvider>
                 </SharedAreaProvider>
             </AuthProvider>
-
         </BrowserRouter>
     );
 }

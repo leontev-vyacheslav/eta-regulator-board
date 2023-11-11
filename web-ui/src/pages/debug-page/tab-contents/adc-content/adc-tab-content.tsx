@@ -1,11 +1,12 @@
 import './adc-tab-content.scss'
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import 'devextreme-react/text-area';
 import { Form, GroupItem, SimpleItem } from 'devextreme-react/form';
 import { useScreenSize } from '../../../../utils/media-query';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { Button } from 'devextreme-react/button';
 import { CloseCircleIcon, StartIcon, StopIcon } from '../../../../constants/app-icons';
+import { AdcReadModeModel } from '../../../../models/regulator-settings/enums/adc-read-mode';
 
 type AdcFormData = {
     channel: number;
@@ -17,17 +18,14 @@ type AdcFormData = {
     isStartedReading: boolean
 }
 
-// eslint-disable-next-line no-unused-vars
-enum AdcReadMode {
-    Adc = 1,
-    Temp = 2
-}
 
 export const AdcTabContent = () => {
     const { isXSmall, isSmall } = useScreenSize();
     const { getAdcValueAsync, getTemperatureValueAsync } = useAppData();
     const [isShowOutputConsole, setIsShowOutputConsole] = useState<boolean>(false);
     const [isReadingEnabled, setIsReadingEnabled] = useState<boolean>(false);
+    const adcReadingSettingFormRef = useRef<Form>(null);
+    const adcReadingResultsFormRef = useRef<Form>(null);
 
     const formData = useMemo<AdcFormData>(() => {
         return {
@@ -58,25 +56,37 @@ export const AdcTabContent = () => {
         curentText = `${curentText}${(curentText ? '\n' : '')}${message}`
         formData.consoleContent =  curentText;
 
-        const textAreaElement = document.querySelector('textarea[name="consoleContent"]') as HTMLTextAreaElement;
+        const textAreaElement = adcReadingResultsFormRef
+            .current
+            ?.instance
+            .getEditor('consoleContent')
+            ?.element()
+            .querySelector('textarea') as HTMLTextAreaElement;
+            
         if (textAreaElement) {
             textAreaElement.value = formData.consoleContent
             textAreaElement.scrollTop = textAreaElement.scrollHeight;
         }
     }, [formData]);
 
-    const showValueAsync = useCallback(async (mode: AdcReadMode) => {
-        const value = mode === AdcReadMode.Adc
+    const showValueAsync = useCallback(async (mode: AdcReadModeModel) => {
+        const value = mode === AdcReadModeModel.Adc
             ? await getAdcValueAsync(formData.channel)
             : await getTemperatureValueAsync(formData.channel);
 
         if (value && formData.isStartedReading) {
-            pushMessageToConsole(`Канал ${value?.channel}: ${value?.value.toFixed(3)}${mode === AdcReadMode.Adc ? 'V' : '°C'}`);
+            pushMessageToConsole(`Канал ${value?.channel}: ${value?.value.toFixed(3)}${mode === AdcReadModeModel.Adc ? 'V' : '°C'}`);
         }
     }, [formData.channel, formData.isStartedReading, getAdcValueAsync, getTemperatureValueAsync, pushMessageToConsole]);
 
     const scrollConsoleToBottom = useCallback(() => {
-        const textAreaElement = document.querySelector('textarea[name="consoleContent"]') as HTMLTextAreaElement;
+        const textAreaElement = adcReadingResultsFormRef
+            .current
+            ?.instance
+            .getEditor('consoleContent')
+            ?.element()
+            .querySelector('textarea') as HTMLTextAreaElement;
+
         if (textAreaElement) {
             textAreaElement.scrollTop = textAreaElement.scrollHeight;
         }
@@ -96,7 +106,7 @@ export const AdcTabContent = () => {
         setIsReadingEnabled(true);
 
         formData.timeoutObject = setInterval(async () => {
-            await showValueAsync(formData.fromTemperarureSensor ? AdcReadMode.Temp : AdcReadMode.Adc);
+            await showValueAsync(formData.fromTemperarureSensor ? AdcReadModeModel.Temp : AdcReadModeModel.Adc);
         }, 1000 * formData.readContinuallyInterval);
     }, [formData, showValueAsync]);
 
@@ -112,14 +122,13 @@ export const AdcTabContent = () => {
 
     const resume = useCallback(() => {
         formData.isStartedReading = true;
-
         scrollConsoleToBottom();
 
         formData.timeoutObject = setInterval(async () => {
-            await showValueAsync(formData.fromTemperarureSensor ? AdcReadMode.Temp : AdcReadMode.Adc);
+            await showValueAsync(formData.fromTemperarureSensor ? AdcReadModeModel.Temp : AdcReadModeModel.Adc);
         }, 1000 * formData.readContinuallyInterval);
-        setIsReadingEnabled(true);
 
+        setIsReadingEnabled(true);
     }, [formData, scrollConsoleToBottom, showValueAsync]);
 
     const stop = useCallback( () => {
@@ -137,6 +146,7 @@ export const AdcTabContent = () => {
     return (isShowOutputConsole
         ?
         <Form
+            ref = { adcReadingResultsFormRef }
             formData={ formData }
             className='app-form adc-form'
             style={ { height: '50vh' } }
@@ -152,24 +162,26 @@ export const AdcTabContent = () => {
                     } }
                 >
                 </SimpleItem>
-
                 <SimpleItem cssClass='adc-form_buttons'>
-                    {isReadingEnabled ? <Button width={ 115 } type='danger' onClick={ stop }>
-                        <StopIcon size={ 22 } /><span style={ { marginLeft: 5 } }>СТОП</span>
-                    </Button>
+                    {isReadingEnabled
+                        ?
+                        <Button width={ 115 } type='danger' onClick={ stop }>
+                            <StopIcon size={ 20 } /><span style={ { marginLeft: 5 } }>СТОП</span>
+                        </Button>
                         :
                         <Button width={ 145 } type='success' style= { { backgroundColor: '#FFC107 ' } } onClick={ resume }>
-                            <StartIcon size={ 22 } /><span style={ { marginLeft: 5 } }>ПРОДОЛЖИТЬ</span>
+                            <StartIcon size={ 20 } /><span style={ { marginLeft: 5 } }>ПРОДОЛЖИТЬ</span>
                         </Button>
                     }
                     <Button width={ 115 } type='normal' onClick={ close }>
-                        <CloseCircleIcon size={ 22 } /><span style={ { marginLeft: 5 } }>ЗАКРЫТЬ</span>
+                        <CloseCircleIcon size={ 20 } /><span style={ { marginLeft: 5 } }>ЗАКРЫТЬ</span>
                     </Button>
                 </SimpleItem>
             </GroupItem>
         </Form>
         :
         <Form
+            ref={ adcReadingSettingFormRef }
             formData={ formData }
             className='app-form adc-form'
             style={ { height: '50vh' } }
@@ -207,12 +219,23 @@ export const AdcTabContent = () => {
                     editorOptions={ {
                         displayExpr: 'description',
                         valueExpr: 'pin',
-                        items: channelList
+                        items: channelList,
+                        onValueChanged: (e) => {
+                            const readContinuallyIntervalNumberBox = adcReadingSettingFormRef.current?.instance.getEditor('readContinuallyInterval');
+                            if (readContinuallyIntervalNumberBox) {
+                                formData.readContinuallyInterval = e.value ? 2 : 1;
+                                readContinuallyIntervalNumberBox.option(
+                                    e.value
+                                    ? { min: 5, max: 50,  step: 2 } as any
+                                    : { min: 1, max: 10, step: 1 } as any
+                                );
+                            }
+                        }
                     } }
                 />
                 <SimpleItem cssClass='adc-form_buttons'>
                     <Button width={ 115 } text='Старт' type='success' onClick={ start } >
-                        <StartIcon size={ 22 } /><span style={ { marginLeft: 5 } }>СТАРТ</span>
+                        <StartIcon size={ 20 } /><span style={ { marginLeft: 5 } }>СТАРТ</span>
                     </Button>
                 </SimpleItem>
             </GroupItem>
