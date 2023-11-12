@@ -1,11 +1,13 @@
 import { IconTabProps } from '../../models/icon-tab-props';
 
-const IconTab = ({ tab, children }: IconTabProps) => {
+
+const IconTab = ({ tab, icon }: IconTabProps ) => {
     return (
-        <div style={ { display: 'grid', gridTemplateColumns: '20px 1fr', gridGap: 5, alignItems: 'center' } }>
-            { children }
-            <span className="dx-tab-text">{ tab.title }</span>
+        <div style={ { display: 'flex', alignItems: 'center', gap: 5 } }>
+            {icon}
+            <span>{tab.title}</span>
         </div>
     );
 }
-export default IconTab;
+
+export { IconTab };

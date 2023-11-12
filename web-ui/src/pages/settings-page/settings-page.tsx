@@ -10,6 +10,7 @@ import { SchedulesTabContent } from './tab-contents/schedules/schedules-tab-cont
 import { HeatingCircuitContent } from './tab-contents/heating-circuit-content/heating-circuit-content';
 import { HeatingCircuitTypes } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { useMemo } from 'react';
+import { IconTab } from '../../components/tab-utils/icon-tab';
 
 export const SettingsPageInternal = () => {
     const { heatingCircuitType, circuitId } = useSettingPageContext();
@@ -33,87 +34,38 @@ export const SettingsPageInternal = () => {
             </PageHeader>
             <div className={ 'content-block' }>
                 <div className={ 'dx-card responsive-paddings' }>
-                        <TabPanel
-                            width={ '100%' }
-                            height={ '65vh' }
-                            swipeEnabled={ false }
-                            loop>
-                            <TabPanelItem title={ 'Общие' } tabRender={ (e) => {
-                            return (
-                                <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
-                                    <SettingsIcon size={ 18 } />
-                                    <span>{e.title}</span>
-                                </div>
-                            );
-                        } }>
-                                <HeatingCircuitContent />
-                            </TabPanelItem>
-                            <TabPanelItem title={ 'Управление' } tabRender={ (e) => {
-                            return (
-                                <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
-                                    <ManageIcon size={ 18 } />
-                                    <span>{e.title}</span>
-                                </div>
-                            );
-                        } }>
-                                <ControlParametersForm />
-                            </TabPanelItem>
+                    <TabPanel
+                        width={ '100%' }
+                        height={ '65vh' }
+                        swipeEnabled={ false }
+                        loop>
+                        <TabPanelItem title={ 'Общие' } tabRender={ (e) => <IconTab tab={ e } icon={ <SettingsIcon size={ 18 } /> } /> }>
+                            <HeatingCircuitContent />
+                        </TabPanelItem>
+                        <TabPanelItem title={ 'Управление' } tabRender={ (e) => <IconTab tab={ e } icon={ <ManageIcon size={ 18 } /> } /> }>
+                            <ControlParametersForm />
+                        </TabPanelItem>
 
-                            <TabPanelItem title={ 'Регулятор' } tabRender={ (e) => {
-                            return (
-                                <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
-                                    <RegulatorIcon size={ 18 } />
-                                    <span>{e.title}</span>
-                                </div>
-                            );
-                        } }>
-                                <RegulationParametersForm  />
-                            </TabPanelItem>
+                        <TabPanelItem title={ 'Регулятор' } tabRender={ (e) => <IconTab tab={ e } icon={ <RegulatorIcon size={ 18 } /> } /> }>
+                            <RegulationParametersForm  />
+                        </TabPanelItem>
 
-                            <TabPanelItem title={ 'Темп. график' } tabRender={ (e) => {
-                            return (
-                                <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
-                                    <GraphIcon size={ 18 } />
-                                    <span>{e.title}</span>
-                                </div>
-                            );
-                        } }>
-                                <TemperatureGraphTabContent />
-                            </TabPanelItem>
+                        <TabPanelItem title={ 'Темп. график' } tabRender={ (e) => <IconTab tab={ e } icon={ <GraphIcon size={ 18 } /> } /> }>
+                            <TemperatureGraphTabContent />
+                        </TabPanelItem>
 
-                            <TabPanelItem title={ 'Расписания' } tabRender={ (e) => {
-                            return (
-                                <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
-                                    <ScheduleIcon size={ 18 } />
-                                    <span>{e.title}</span>
-                                </div>
-                            );
-                        } }>
-                                <SchedulesTabContent />
-                            </TabPanelItem>
+                        <TabPanelItem title={ 'Расписания' } tabRender={ (e) => <IconTab tab={ e } icon={ <ScheduleIcon size={ 18 } /> } /> }>
+                            <SchedulesTabContent />
+                        </TabPanelItem>
 
-                            <TabPanelItem title={ 'Сервис' } tabRender={ (e) => {
-                            return (
-                                <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
-                                    <ServiceIcon size={ 18 } />
-                                    <span>{e.title}</span>
-                                </div>
-                            );
-                        } }>
-                                <ServiceForm />
-                            </TabPanelItem>
+                        <TabPanelItem title={ 'Сервис' } tabRender={ (e) => <IconTab tab={ e } icon={ <ServiceIcon size={ 18 } /> } /> }>
+                            <ServiceForm />
+                        </TabPanelItem>
 
-                            <TabPanelItem title={ 'Даты и время' } tabRender={ (e) => {
-                            return (
-                                <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
-                                    <RtcClockIcon size={ 18 } />
-                                    <span>{e.title}</span>
-                                </div>
-                            );
-                        } }>
-                                <RtcDateTimeForm />
-                            </TabPanelItem>
-                        </TabPanel>
+                        <TabPanelItem title={ 'Даты и время' } tabRender={ (e) => <IconTab tab={ e } icon={ <RtcClockIcon size={ 18 } /> } /> }>
+                            <RtcDateTimeForm />
+                        </TabPanelItem>
+                    </TabPanel>
                 </div>
             </div>
         </>

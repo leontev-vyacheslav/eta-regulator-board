@@ -3,7 +3,6 @@ import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
 import { CloseCircleIcon, StartIcon, StopIcon } from '../../../../constants/app-icons';
 import { useAdc } from './adc-context';
 import { useCallback } from 'react';
-import { AdcReadModeModel } from '../../../../models/regulator-settings/enums/adc-read-mode';
 
 export const AdcReadingResultsForm = () => {
     const {
@@ -13,41 +12,34 @@ export const AdcReadingResultsForm = () => {
         isReadingEnabled,
         setIsShowOutputConsole,
         scrollConsoleToBottom,
-        clearTimer,
-        showValueAsync
+        setTimer,
+        clearTimer
     } = useAdc();
 
     const close = useCallback(() => {
         adcFormData.isStartedReading = false;
         adcFormData.consoleContent = '';
-
         clearTimer();
-
         setIsReadingEnabled(false);
         setIsShowOutputConsole(false);
     }, [adcFormData, clearTimer, setIsReadingEnabled, setIsShowOutputConsole]);
 
     const resume = useCallback(() => {
         adcFormData.isStartedReading = true;
-        scrollConsoleToBottom();
-
-        adcFormData.timeoutObject = setInterval(async () => {
-            await showValueAsync(adcFormData.fromTemperarureSensor ? AdcReadModeModel.Temp : AdcReadModeModel.Adc);
-        }, 1000 * adcFormData.readContinuallyInterval);
-
+        setTimer();
         setIsReadingEnabled(true);
-    }, [adcFormData, scrollConsoleToBottom, setIsReadingEnabled, showValueAsync]);
+        setTimeout( () => {
+            scrollConsoleToBottom();
+        }, 100);
+    }, [adcFormData, scrollConsoleToBottom, setIsReadingEnabled, setTimer]);
 
     const stop = useCallback( () => {
         adcFormData.isStartedReading = false;
         setIsReadingEnabled(false);
-
         clearTimer();
-
         setTimeout( () => {
             scrollConsoleToBottom();
-        }, 500);
-
+        }, 100);
     }, [adcFormData, clearTimer, scrollConsoleToBottom, setIsReadingEnabled]);
 
     return (

@@ -1,42 +1,13 @@
 import Form from 'devextreme-react/form';
-import { Dispatch, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { AdcReadModeModel } from '../../../../models/regulator-settings/enums/adc-read-mode';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { useDebugPage } from '../../debug-page-content';
+import { useSharedArea } from '../../../../contexts/shared-area';
+import { getUuidV4 } from '../../../../utils/uuid';
+import { AdcChannelModel, AdcContextModel, AdcFormDataModel } from '../../../../models/adc-channel-context-model';
 
-export type AdcChannelModel = {
-    id: string;
-    pin: number;
-    description: string
-}
 
-export type AdcFormDataModel = {
-    channel: number;
-    isReadContinually: boolean;
-    readContinuallyInterval: number;
-    timeoutObject: ReturnType<typeof setInterval> | null;
-    fromTemperarureSensor: boolean;
-    consoleContent: string,
-    isStartedReading: boolean
-}
-
-export type AdcContextModel = {
-    adcFormData:AdcFormDataModel;
-    adcChannelList: AdcChannelModel[];
-
-    adcReadingSettingsFormRef: React.RefObject<Form>;
-    adcReadingResultsFormRef: React.RefObject<Form>;
-
-    isShowOutputConsole: boolean;
-    setIsShowOutputConsole: Dispatch<React.SetStateAction<boolean>>;
-
-    isReadingEnabled: boolean;
-    setIsReadingEnabled: Dispatch<React.SetStateAction<boolean>>;
-
-    scrollConsoleToBottom: () => void;
-    clearTimer: () => void;
-    showValueAsync: (mode: AdcReadModeModel) => Promise<void>;
-};
 
 const AdcContext = createContext({} as AdcContextModel);
 
@@ -47,6 +18,17 @@ function AdcContextProvider(props: any) {
     const adcReadingSettingsFormRef = useRef<Form>(null);
     const adcReadingResultsFormRef = useRef<Form>(null);
     const { tabPanelRef } = useDebugPage();
+    const { disposedTimerDispatcher } = useSharedArea();
+
+
+    useEffect(() => {
+        disposedTimerDispatcher.current.initArea('AdcContext');
+
+        return () => {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            disposedTimerDispatcher.current.clearArea('AdcContext');
+        }
+    }, [disposedTimerDispatcher]);
 
     const adcChannelList = useMemo<AdcChannelModel[]>(() => {
         return [
@@ -64,7 +46,7 @@ function AdcContextProvider(props: any) {
             channel: 0,
             isReadContinually: true,
             readContinuallyInterval: 1,
-            timeoutObject: null,
+            timerUuid: null,
             fromTemperarureSensor: false,
             consoleContent: '',
             isStartedReading: false
@@ -103,13 +85,6 @@ function AdcContextProvider(props: any) {
         }
     }, [adcReadingResultsFormRef]);
 
-    const clearTimer = useCallback(() => {
-        if (adcFormData.timeoutObject) {
-            clearInterval(adcFormData.timeoutObject);
-            adcFormData.timeoutObject = null;
-        }
-    }, [adcFormData]);
-
     const showValueAsync = useCallback(async (mode: AdcReadModeModel) => {
         const value = mode === AdcReadModeModel.Adc
             ? await getAdcValueAsync(adcFormData.channel)
@@ -120,9 +95,28 @@ function AdcContextProvider(props: any) {
         }
     }, [adcFormData.channel, adcFormData.isStartedReading, getAdcValueAsync, getTemperatureValueAsync, pushMessageToConsole]);
 
+    const setTimer = useCallback(() => {
+        const disposedTimerUuid = getUuidV4();
+        adcFormData.timerUuid = disposedTimerUuid;
+        disposedTimerDispatcher.current.add('AdcContext', {
+            uuid: disposedTimerUuid,
+            timer: setInterval(async () => {
+                await showValueAsync(adcFormData.fromTemperarureSensor ? AdcReadModeModel.Temp : AdcReadModeModel.Adc);
+            }, 1000 * adcFormData.readContinuallyInterval)
+        });
+
+    }, [adcFormData, disposedTimerDispatcher, showValueAsync]);
+
+    const clearTimer = useCallback(() => {
+        if(adcFormData.timerUuid) {
+            disposedTimerDispatcher.current.remove('AdcContext', adcFormData.timerUuid);
+            adcFormData.timerUuid = null;
+        }
+    }, [adcFormData, disposedTimerDispatcher]);
+
     useEffect(() => {
-        tabPanelRef.current?.instance.on('onSelectedIndexChange', (value: number) => {
-            console.log(value);
+        tabPanelRef.current?.instance.on('selectionChanged', (e) => {
+            console.log(e);
         });
     }, [tabPanelRef]);
 
@@ -137,8 +131,9 @@ function AdcContextProvider(props: any) {
             isReadingEnabled,
             setIsReadingEnabled,
             scrollConsoleToBottom,
-            clearTimer,
-            showValueAsync
+            showValueAsync,
+            setTimer,
+            clearTimer
         } } { ...props }>
 
         </AdcContext.Provider>

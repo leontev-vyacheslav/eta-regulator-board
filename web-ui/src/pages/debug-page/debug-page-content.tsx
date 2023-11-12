@@ -8,7 +8,8 @@ export type DebugPageContexModel = {
 const DebugPageContex = createContext({} as DebugPageContexModel) ;
 
 function DebugPageContextProvider (props: any) {
-    const tabPanelRef = useRef<TabPanel<any, any>>(null)
+    const tabPanelRef = useRef<TabPanel<any, any>>(null);
+
     return (
         <DebugPageContex.Provider value={ {
             tabPanelRef

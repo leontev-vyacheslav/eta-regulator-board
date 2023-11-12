@@ -1,13 +1,13 @@
 import './debug-page.scss';
-
 import AppConstants from '../../constants/app-constants';
 import { InputOutputIcon, DebugIcon, AdcIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
-import {  useState } from 'react';
+import { useState } from 'react';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel';
 import { GpioTabContent } from './tab-contents/gpio-content/gpio-tab-content';
 import { AdcTabContent } from './tab-contents/adc-content/adc-tab-content';
 import { DebugPageContextProvider, useDebugPage } from './debug-page-content';
+import { IconTab } from '../../components/tab-utils/icon-tab';
 
 
 const DebugPageInternal = () => {
@@ -32,29 +32,19 @@ const DebugPageInternal = () => {
                             setActiveTabIndex(value);
                         } }
                     >
-                        <TabPanelItem title='Ввод/вывод' tabRender={ (e) => {
-                            return (
-                                <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
-                                    <InputOutputIcon size={ 18 } />
-                                    <span>{e.title}</span>
-                                </div>
-                            );
-                        } }>
-                        {activeTabIndex === 0 ?
-                                <GpioTabContent />
-                            : null}
+                        <TabPanelItem title='Ввод/вывод' tabRender={ (e) => <IconTab tab={ e } icon={ <InputOutputIcon size={ 18 } /> } /> }>
+                            {
+                                activeTabIndex === 0
+                                ? <GpioTabContent />
+                                : null
+                            }
                         </TabPanelItem>
-                        <TabPanelItem title='АЦП' tabRender={ (e) => {
-                            return (
-                                <div style={ { display: 'flex', alignItems: 'center', gap: 3 } }>
-                                    <AdcIcon size={ 18 } />
-                                    <span>{e.title}</span>
-                                </div>
-                            );
-                        } }>
-                        {activeTabIndex === 1 ?
-                            <AdcTabContent />
-                             : null}
+                        <TabPanelItem title='АЦП' tabRender={ (e) => <IconTab tab={ e } icon={ <AdcIcon size={ 18 } /> } /> } >
+                            {
+                                activeTabIndex === 1
+                                ? <AdcTabContent />
+                                : null
+                            }
                         </TabPanelItem>
 
                     </TabPanel>

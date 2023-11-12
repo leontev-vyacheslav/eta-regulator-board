@@ -10,15 +10,18 @@ import { AppBaseProviderProps } from '../models/app-base-provider-props';
 import TreeView from 'devextreme-react/tree-view';
 import { TreeViewItemModel } from '../models/tree-view-item';
 import LoadPanel from 'devextreme-react/load-panel';
+import { DisposedTimersDispatcher } from './disposed-timers-dispatcher';
 
 const SharedAreaContext = createContext<SharedAreaContextModel>({} as SharedAreaContextModel);
 const useSharedArea = () => useContext(SharedAreaContext);
+
 
 function SharedAreaProvider (props: AppBaseProviderProps) {
     const { children } = props;
     const { signOut } = useAuth();
     const treeViewRef = useRef<TreeView<TreeViewItemModel>>(null) ;
     const loaderRef =  useRef<LoadPanel>(null) ;
+    const disposedTimerDispatcher = useRef<DisposedTimersDispatcher>(new DisposedTimersDispatcher());
 
     const signOutWithConfirm = useCallback<ProcFunc>(() => {
         const confirmSignOutContent = () => {
@@ -53,7 +56,14 @@ function SharedAreaProvider (props: AppBaseProviderProps) {
     }, []);
 
     return (
-        <SharedAreaContext.Provider value={ { signOutWithConfirm, showLoader, hideLoader, treeViewRef, loaderRef } } { ...props }>
+        <SharedAreaContext.Provider value={ {
+                signOutWithConfirm,
+                treeViewRef,
+                showLoader,
+                hideLoader,
+                loaderRef,
+                disposedTimerDispatcher
+            } } { ...props }>
             { children }
             <Loader />
         </SharedAreaContext.Provider>

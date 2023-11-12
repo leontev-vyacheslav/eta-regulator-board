@@ -3,27 +3,19 @@ import { StartIcon } from '../../../../constants/app-icons';
 import Button from 'devextreme-react/button';
 import { useAdc } from './adc-context';
 import { useCallback } from 'react';
-import { AdcReadModeModel } from '../../../../models/regulator-settings/enums/adc-read-mode';
 import { useScreenSize } from '../../../../utils/media-query';
 
 
 export const AdcReadingSettingsForm = () => {
     const { isXSmall, isSmall } = useScreenSize();
-    const { adcFormData, adcChannelList, adcReadingSettingsFormRef, setIsReadingEnabled, setIsShowOutputConsole, showValueAsync } = useAdc();
-
+    const { adcFormData, adcChannelList, adcReadingSettingsFormRef, setIsReadingEnabled, setIsShowOutputConsole, setTimer } = useAdc();
 
     const start = useCallback(() => {
-        
         adcFormData.isStartedReading = true;
-
         setIsShowOutputConsole(true);
         setIsReadingEnabled(true);
-
-        adcFormData.timeoutObject = setInterval(async () => {
-            await showValueAsync(adcFormData.fromTemperarureSensor ? AdcReadModeModel.Temp : AdcReadModeModel.Adc);
-        }, 1000 * adcFormData.readContinuallyInterval);
-
-    }, [adcFormData, setIsReadingEnabled, setIsShowOutputConsole, showValueAsync]);
+        setTimer();
+    }, [adcFormData, setIsReadingEnabled, setIsShowOutputConsole, setTimer]);
 
     const onFromTemperarureSensorValueChanged = useCallback((e) => {
         const readContinuallyIntervalNumberBox = adcReadingSettingsFormRef.current?.instance.getEditor('readContinuallyInterval');
