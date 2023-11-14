@@ -5,8 +5,8 @@ import { useAppData } from '../../../../contexts/app-data/app-data';
 import { useDebugPage } from '../../debug-page-content';
 import { useSharedArea } from '../../../../contexts/shared-area';
 import { getUuidV4 } from '../../../../utils/uuid';
-import { AdcChannelModel, AdcContextModel, AdcFormDataModel } from '../../../../models/adc-channel-context-model';
-
+import { AdcChannelModel, AdcContextModel, AdcReadingResultsModel, AdcReadingSettingsModel } from '../../../../models/adc-channel-context-model';
+import { DisposedTimerModel } from '../../../../models/disposed-timer-storage-model';
 
 
 const AdcContext = createContext({} as AdcContextModel);
@@ -20,7 +20,6 @@ function AdcContextProvider(props: any) {
     const { tabPanelRef } = useDebugPage();
     const { disposedTimerDispatcher } = useSharedArea();
 
-
     useEffect(() => {
         disposedTimerDispatcher.current.initArea('AdcContext');
 
@@ -30,7 +29,7 @@ function AdcContextProvider(props: any) {
         }
     }, [disposedTimerDispatcher]);
 
-    const adcChannelList = useMemo<AdcChannelModel[]>(() => {
+    const channelList = useMemo<AdcChannelModel[]>(() => {
         return [
             { id: '453b87fb-8f2d-461f-bee9-239e2c7fbf17', pin: 0, description: 'Канал 0' },
             { id: '4ea8f075-1fc1-4b4a-a68f-30a47b9615d6', pin: 1, description: 'Канал 1' },
@@ -41,23 +40,26 @@ function AdcContextProvider(props: any) {
         ]
     }, []);
 
-    const adcFormData = useMemo<AdcFormDataModel>(() => {
+    const readingSettings = useMemo<AdcReadingSettingsModel>(() => {
         return {
             channel: 0,
-            isReadContinually: true,
             readContinuallyInterval: 1,
-            timerUuid: null,
             fromTemperarureSensor: false,
-            consoleContent: '',
-            isStartedReading: false
-        } as AdcFormDataModel
+        } as AdcReadingSettingsModel
     }, []);
 
-    const pushMessageToConsole = useCallback((message: string) => {
+    const readingResults = useMemo(() => {
+        return {
+            isStartedReading: false,
+            timerUuid: null,
+            consoleContent: ''
+        } as AdcReadingResultsModel
+    }, []);
 
-        let curentText = adcFormData.consoleContent ;
+    const writeMessage = useCallback((message: string) => {
+        let curentText = readingResults.consoleContent ;
         curentText = `${curentText}${(curentText ? '\n' : '')}${message}`
-        adcFormData.consoleContent =  curentText;
+        readingResults.consoleContent =  curentText;
 
         const textAreaElement = adcReadingResultsFormRef
             .current
@@ -67,12 +69,12 @@ function AdcContextProvider(props: any) {
             .querySelector('textarea') as HTMLTextAreaElement;
 
         if (textAreaElement) {
-            textAreaElement.value = adcFormData.consoleContent
+            textAreaElement.value = readingResults.consoleContent
             textAreaElement.scrollTop = textAreaElement.scrollHeight;
         }
-    }, [adcFormData, adcReadingResultsFormRef]);
+    }, [readingResults]);
 
-    const scrollConsoleToBottom = useCallback(() => {
+    const scrollBottom = useCallback(() => {
         const textAreaElement = adcReadingResultsFormRef
             .current
             ?.instance
@@ -85,34 +87,58 @@ function AdcContextProvider(props: any) {
         }
     }, [adcReadingResultsFormRef]);
 
-    const showValueAsync = useCallback(async (mode: AdcReadModeModel) => {
+    const writeValueAsync = useCallback(async (mode: AdcReadModeModel) => {
+        const startTime = performance.now();
+
         const value = mode === AdcReadModeModel.Adc
-            ? await getAdcValueAsync(adcFormData.channel)
-            : await getTemperatureValueAsync(adcFormData.channel);
+            ? await getAdcValueAsync(readingSettings.channel)
+            : await getTemperatureValueAsync(readingSettings.channel);
 
-        if (value && adcFormData.isStartedReading) {
-            pushMessageToConsole(`Канал ${value?.channel}: ${value?.value.toFixed(3)}${mode === AdcReadModeModel.Adc ? 'V' : '°C'}`);
+        const endTime = performance.now();
+
+        if (value && readingResults.isStartedReading) {
+            writeMessage(`Канал ${value?.channel}: ${value?.value.toFixed(3)}${mode === AdcReadModeModel.Adc ? 'V' : '°C'}. Вычисление: ${(endTime - startTime) .toFixed(0)} мсек.`);
         }
-    }, [adcFormData.channel, adcFormData.isStartedReading, getAdcValueAsync, getTemperatureValueAsync, pushMessageToConsole]);
+    }, [readingSettings.channel, readingResults.isStartedReading, getAdcValueAsync, getTemperatureValueAsync, writeMessage]);
 
-    const setTimer = useCallback(() => {
+
+    const setTimer = useCallback(async () => {
         const disposedTimerUuid = getUuidV4();
-        adcFormData.timerUuid = disposedTimerUuid;
-        disposedTimerDispatcher.current.add('AdcContext', {
-            uuid: disposedTimerUuid,
-            timer: setInterval(async () => {
-                await showValueAsync(adcFormData.fromTemperarureSensor ? AdcReadModeModel.Temp : AdcReadModeModel.Adc);
-            }, 1000 * adcFormData.readContinuallyInterval)
-        });
+        readingResults.timerUuid = disposedTimerUuid;
 
-    }, [adcFormData, disposedTimerDispatcher, showValueAsync]);
+        const disposedTimerModel = {
+            uuid: disposedTimerUuid,
+            intervalTimer: null,
+            timeoutTimerCancellationToken: false
+        } as DisposedTimerModel;
+
+        disposedTimerDispatcher.current.add('AdcContext', disposedTimerModel);
+
+        const internalTimeoutTimer = async () => {
+            await writeValueAsync(readingSettings.fromTemperarureSensor ? AdcReadModeModel.Temp : AdcReadModeModel.Adc);
+            const startTime = performance.now();
+            let endTime = startTime;
+
+            const timer = setTimeout(() => {
+                clearTimeout(timer);
+                if (!disposedTimerModel.timeoutTimerCancellationToken) {
+                    endTime = performance.now();
+                    writeMessage(`Ожидание: ${(endTime - startTime).toFixed(0)} мсек.`);
+                    internalTimeoutTimer();
+                }
+            }, 1000 * readingSettings.readContinuallyInterval);
+        };
+
+        await internalTimeoutTimer();
+
+    }, [disposedTimerDispatcher, readingResults, readingSettings.fromTemperarureSensor, readingSettings.readContinuallyInterval, writeMessage, writeValueAsync]);
 
     const clearTimer = useCallback(() => {
-        if(adcFormData.timerUuid) {
-            disposedTimerDispatcher.current.remove('AdcContext', adcFormData.timerUuid);
-            adcFormData.timerUuid = null;
+        if(readingResults.timerUuid) {
+            disposedTimerDispatcher.current.remove('AdcContext', readingResults.timerUuid);
+            readingResults.timerUuid = null;
         }
-    }, [adcFormData, disposedTimerDispatcher]);
+    }, [readingResults, disposedTimerDispatcher]);
 
     useEffect(() => {
         tabPanelRef.current?.instance.on('selectionChanged', (e) => {
@@ -122,16 +148,18 @@ function AdcContextProvider(props: any) {
 
     return (
         <AdcContext.Provider value={ {
-            adcFormData,
-            adcChannelList,
+            readingSettings,
+            readingResults,
+
+            channelList,
             adcReadingSettingsFormRef,
             adcReadingResultsFormRef,
             isShowOutputConsole,
             setIsShowOutputConsole,
             isReadingEnabled,
             setIsReadingEnabled,
-            scrollConsoleToBottom,
-            showValueAsync,
+            scrollBottom,
+            writeValueAsync,
             setTimer,
             clearTimer
         } } { ...props }>

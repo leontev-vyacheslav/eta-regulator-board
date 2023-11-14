@@ -27,8 +27,12 @@ export class DisposedTimersDispatcher {
 
         if (area) {
             area.items.forEach(t => {
-                if (t.timer) {
-                    clearInterval(t.timer);
+                if (t.intervalTimer) {
+                    clearInterval(t.intervalTimer);
+                } else {
+                    if (!t.timeoutTimerCancellationToken) {
+                        t.timeoutTimerCancellationToken = true;
+                    }
                 }
             })
         }
@@ -47,7 +51,13 @@ export class DisposedTimersDispatcher {
         if (area) {
             const disposedTimer = area.items.find(t => t.uuid === uuid);
             if(disposedTimer) {
-                clearInterval(disposedTimer.timer);
+                if(disposedTimer.intervalTimer) {
+                    clearInterval(disposedTimer.intervalTimer);
+                } else {
+                    if (!disposedTimer.timeoutTimerCancellationToken) {
+                        disposedTimer.timeoutTimerCancellationToken = true;
+                    }
+                }
             }
         }
     }

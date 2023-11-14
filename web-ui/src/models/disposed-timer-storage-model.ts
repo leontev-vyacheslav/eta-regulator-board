@@ -4,7 +4,8 @@ export type DisposedTimersStorageModel = {
 
 export type DisposedTimerModel = {
     uuid: string;
-    timer: ReturnType<typeof setInterval>;
+    intervalTimer: ReturnType<typeof setInterval> | null;
+    timeoutTimerCancellationToken: boolean;
 }
 
 export type DisposedTimersStorageAreaModel = {

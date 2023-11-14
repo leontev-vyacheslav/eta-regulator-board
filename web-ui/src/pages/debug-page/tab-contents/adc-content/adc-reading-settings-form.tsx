@@ -8,32 +8,32 @@ import { useScreenSize } from '../../../../utils/media-query';
 
 export const AdcReadingSettingsForm = () => {
     const { isXSmall, isSmall } = useScreenSize();
-    const { adcFormData, adcChannelList, adcReadingSettingsFormRef, setIsReadingEnabled, setIsShowOutputConsole, setTimer } = useAdc();
+    const { readingSettings, readingResults, channelList, adcReadingSettingsFormRef, setIsReadingEnabled, setIsShowOutputConsole, setTimer } = useAdc();
 
     const start = useCallback(() => {
-        adcFormData.isStartedReading = true;
+        readingResults.isStartedReading = true;
         setIsShowOutputConsole(true);
         setIsReadingEnabled(true);
         setTimer();
-    }, [adcFormData, setIsReadingEnabled, setIsShowOutputConsole, setTimer]);
+    }, [readingResults, setIsReadingEnabled, setIsShowOutputConsole, setTimer]);
 
     const onFromTemperarureSensorValueChanged = useCallback((e) => {
         const readContinuallyIntervalNumberBox = adcReadingSettingsFormRef.current?.instance.getEditor('readContinuallyInterval');
         if (readContinuallyIntervalNumberBox) {
-            adcFormData.readContinuallyInterval = e.value ? 2 : 1;
+            readingSettings.readContinuallyInterval = e.value ? 2 : 1;
 
             readContinuallyIntervalNumberBox.option(
                 e.value
-                ? { value: adcFormData.readContinuallyInterval,  min: 5, max: 50,  step: 2 } as any
-                : { value: adcFormData.readContinuallyInterval, min: 1, max: 10, step: 1 } as any
+                ? { value: readingSettings.readContinuallyInterval,  min: 5, max: 50,  step: 2 } as any
+                : { value: readingSettings.readContinuallyInterval, min: 1, max: 10, step: 1 } as any
             );
         }
-    }, [adcFormData, adcReadingSettingsFormRef]);
+    }, [readingSettings, adcReadingSettingsFormRef]);
 
     return (
         <Form
             ref={ adcReadingSettingsFormRef }
-            formData={ adcFormData }
+            formData={ readingSettings }
             className='app-form adc-form'
             style={ { height: '50vh' } }
             height={ '50vh' }
@@ -49,7 +49,7 @@ export const AdcReadingSettingsForm = () => {
                     editorOptions={ {
                         displayExpr: 'description',
                         valueExpr: 'pin',
-                        items: adcChannelList
+                        items: channelList
                     } }
                 />
                 <SimpleItem

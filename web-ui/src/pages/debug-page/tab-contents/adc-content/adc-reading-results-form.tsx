@@ -3,52 +3,58 @@ import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
 import { CloseCircleIcon, StartIcon, StopIcon } from '../../../../constants/app-icons';
 import { useAdc } from './adc-context';
 import { useCallback } from 'react';
+import { useScreenSize } from '../../../../utils/media-query';
 
 export const AdcReadingResultsForm = () => {
+    const { isXSmall, isSmall } = useScreenSize();
+
     const {
-        adcFormData,
+        readingResults,
         adcReadingResultsFormRef,
         setIsReadingEnabled,
         isReadingEnabled,
         setIsShowOutputConsole,
-        scrollConsoleToBottom,
+        scrollBottom,
         setTimer,
         clearTimer
     } = useAdc();
 
     const close = useCallback(() => {
-        adcFormData.isStartedReading = false;
-        adcFormData.consoleContent = '';
+        readingResults.isStartedReading = false;
+        readingResults.consoleContent = '';
         clearTimer();
         setIsReadingEnabled(false);
         setIsShowOutputConsole(false);
-    }, [adcFormData, clearTimer, setIsReadingEnabled, setIsShowOutputConsole]);
+    }, [readingResults, clearTimer, setIsReadingEnabled, setIsShowOutputConsole]);
 
     const resume = useCallback(() => {
-        adcFormData.isStartedReading = true;
+        readingResults.isStartedReading = true;
         setTimer();
         setIsReadingEnabled(true);
         setTimeout( () => {
-            scrollConsoleToBottom();
+            scrollBottom();
         }, 100);
-    }, [adcFormData, scrollConsoleToBottom, setIsReadingEnabled, setTimer]);
+    }, [readingResults, scrollBottom, setIsReadingEnabled, setTimer]);
 
     const stop = useCallback( () => {
-        adcFormData.isStartedReading = false;
+        readingResults.isStartedReading = false;
         setIsReadingEnabled(false);
         clearTimer();
         setTimeout( () => {
-            scrollConsoleToBottom();
+            scrollBottom();
         }, 100);
-    }, [adcFormData, clearTimer, scrollConsoleToBottom, setIsReadingEnabled]);
+    }, [readingResults, setIsReadingEnabled, clearTimer, scrollBottom]);
 
     return (
         <Form
             ref = { adcReadingResultsFormRef }
-            formData={ adcFormData }
+            formData={ readingResults }
             className='app-form adc-form'
             style={ { height: '50vh' } }
             height={ '50vh' }
+            width={ isXSmall || isSmall ? '100%' : 600 }
+            scrollingEnabled={ true }
+            colCount={ 1 }
         >
             <GroupItem caption={ 'Результаты считывания' }>
                 <SimpleItem

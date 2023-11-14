@@ -8,19 +8,23 @@ export type AdcChannelModel = {
     description: string
 }
 
-export type AdcFormDataModel = {
+export type AdcReadingSettingsModel = {
     channel: number;
-    isReadContinually: boolean;
     readContinuallyInterval: number;
-    timerUuid: string | null;
     fromTemperarureSensor: boolean;
-    consoleContent: string,
+}
+
+export type AdcReadingResultsModel = {
+    timerUuid: string | null;
+    consoleContent: string;
     isStartedReading: boolean
 }
 
 export type AdcContextModel = {
-    adcFormData:AdcFormDataModel;
-    adcChannelList: AdcChannelModel[];
+    readingSettings: AdcReadingSettingsModel;
+    readingResults: AdcReadingResultsModel;
+    
+    channelList: AdcChannelModel[];
 
     adcReadingSettingsFormRef: React.RefObject<Form>;
     adcReadingResultsFormRef: React.RefObject<Form>;
@@ -31,8 +35,8 @@ export type AdcContextModel = {
     isReadingEnabled: boolean;
     setIsReadingEnabled: Dispatch<React.SetStateAction<boolean>>;
 
-    scrollConsoleToBottom: () => void;
-    showValueAsync: (mode: AdcReadModeModel) => Promise<void>;
+    scrollBottom: () => void;
+    writeValueAsync: (mode: AdcReadModeModel) => Promise<void>;
 
     setTimer: () => void
     clearTimer: () => void;
