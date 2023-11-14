@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import Chart, { ArgumentAxis, CommonAxisSettings, CommonSeriesSettings, Grid, Label, Series, Title, ValueAxis } from 'devextreme-react/chart';
 import { useTemperatureGraphContext } from './temperature-graph-context';
+import { useScreenSize } from '../../../../utils/media-query';
 
 
 
@@ -28,16 +29,19 @@ import { useTemperatureGraphContext } from './temperature-graph-context';
 // }
 
 export const TemperatureGraphChart = ({ dataSource }: { dataSource: any }) => {
-
+    const { isXSmall, isSmall } = useScreenSize();
     const chartRef = useRef<Chart>(null);
     const { chartArgumentAxisInverted } = useTemperatureGraphContext();
 
     return (
         <Chart
+        className='test-chart'
             ref={ chartRef }
             dataSource={ dataSource }
             height={ '50vh' }
-            onPointClick={ (e) => {
+
+            width={ isXSmall || isSmall ? '100%' : 600 }
+            onPointClick={ () => {
                 // setIsPopupSlider(true);
             } }
         >

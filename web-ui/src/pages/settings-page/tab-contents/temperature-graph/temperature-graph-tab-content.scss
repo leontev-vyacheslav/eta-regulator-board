@@ -7,3 +7,15 @@
         padding: 0 8px 0 8px;
     }
 }
+
+.screen-large, .screen-medium {
+    .test-chart {
+        width: 600px;
+    }
+}
+
+.screen-small, .screen-x-small {
+    .test-chart {
+        width: 100%;
+    }
+}

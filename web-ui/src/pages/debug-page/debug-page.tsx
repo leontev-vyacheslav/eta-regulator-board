@@ -1,6 +1,6 @@
 import './debug-page.scss';
 import AppConstants from '../../constants/app-constants';
-import { InputOutputIcon, DebugIcon, AdcIcon } from '../../constants/app-icons';
+import { InputOutputIcon, DebugIcon, AdcIcon, DacIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import { useState } from 'react';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel';
@@ -8,6 +8,7 @@ import { GpioTabContent } from './tab-contents/gpio-content/gpio-tab-content';
 import { AdcTabContent } from './tab-contents/adc-content/adc-tab-content';
 import { DebugPageContextProvider, useDebugPage } from './debug-page-content';
 import { IconTab } from '../../components/tab-utils/icon-tab';
+import { DacTabContent } from './tab-contents/dac-content/dac-tab-content';
 
 
 const DebugPageInternal = () => {
@@ -47,6 +48,13 @@ const DebugPageInternal = () => {
                             }
                         </TabPanelItem>
 
+                        <TabPanelItem title='ЦАП' tabRender={ (e) => <IconTab tab={ e } icon={ <DacIcon size={ 18 } /> } />  }>
+                            {
+                                activeTabIndex === 2
+                                ? <DacTabContent />
+                                : null
+                            }
+                        </TabPanelItem>
                     </TabPanel>
                 </div>
             </div>
