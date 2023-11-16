@@ -15,6 +15,7 @@ import { locale, loadMessages } from 'devextreme/localization';
 import ContentAuth from './content-auth';
 import ContentNonAuth from './content-non-auth';
 import { WorkdatePickerProvider } from './contexts/workdate-context';
+import Loader from './components/loader/loader';
 
 
 function App() {
@@ -63,6 +64,7 @@ function Main() {
                                 <NavigationProvider>
                                     <div className={ `app ${screenSizeClass}` }>
                                         <App />
+                                        <Loader />
                                     </div>
                                 </NavigationProvider>
                             </WorkdatePickerProvider>

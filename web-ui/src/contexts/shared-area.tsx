@@ -3,7 +3,6 @@ import { confirm } from 'devextreme/ui/dialog';
 import { useAuth } from './auth';
 import ReactDOMServer from 'react-dom/server';
 import AppConstants from '../constants/app-constants';
-import Loader from '../components/loader/loader';
 import { ProcFunc } from '../models/primitive-type';
 import { SharedAreaContextModel } from '../models/shared-area-context';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
@@ -47,12 +46,20 @@ function SharedAreaProvider (props: AppBaseProviderProps) {
 
     const hideLoader = useCallback<ProcFunc>(() => {
         setTimeout(() => {
-            loaderRef.current?.instance.hide();
+            const loaderWrapper = document.querySelector('.dx-overlay-wrapper.dx-loadpanel-wrapper');
+
+            if(loaderWrapper){
+                (loaderWrapper  as HTMLDivElement).style.display = 'none'
+            }
         }, 100);
     }, []);
 
     const showLoader = useCallback<ProcFunc>(() => {
-        loaderRef.current?.instance.show();
+        const loaderWrapper = document.querySelector('.dx-overlay-wrapper.dx-loadpanel-wrapper');
+
+        if(loaderWrapper){
+            (loaderWrapper  as HTMLDivElement).style.display = 'block'
+        }
     }, []);
 
     return (
@@ -65,7 +72,7 @@ function SharedAreaProvider (props: AppBaseProviderProps) {
                 disposedTimerDispatcher
             } } { ...props }>
             { children }
-            <Loader />
+
         </SharedAreaContext.Provider>
     );
 }

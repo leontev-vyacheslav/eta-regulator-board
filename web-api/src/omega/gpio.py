@@ -53,3 +53,8 @@ def get_all(pins: List[int]) -> List[bool]:
 def adc_chip_select():
     set(CS1, False)
     set(CSGPIO, False)
+
+
+def dac_chip_select():
+    set(CS1, False)
+    set(CSGPIO, True)

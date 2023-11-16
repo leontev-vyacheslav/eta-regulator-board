@@ -8,7 +8,7 @@
         "**/Thumbs.db": true,
         "**/node_modules": false,
         "**/chrome": true,
-        "**/build": true
+        "**/build": false
     },
     "typescript.preferences.quoteStyle": "single",
     "javascript.preferences.quoteStyle": "single",

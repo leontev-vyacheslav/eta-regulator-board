@@ -4,7 +4,7 @@ from spidev import SpiDev
 
 class MCP3208:
     BIT_DEPTH: int = 12
-    ADC_FULL_RANGE: int = 2 ** BIT_DEPTH - 1
+    FULL_RANGE: int = 2 ** BIT_DEPTH - 1
     SPI_MAX_SPEED: int = 1000000
     REFERENCE_VOLTAGE: float = 3.3
     CHANNEL_AMOUNT: int = 8
@@ -24,8 +24,8 @@ class MCP3208:
 
     def read(self, channel: int) -> float:
 
-        if MCP3208.CHANNEL_AMOUNT - 1 < channel < 0:
-            raise ValueError (f'MCP3208 channel must be in range 0-7, but it was appointed {channel}.')
+        if channel < 0 or channel > MCP3208.CHANNEL_AMOUNT - 1:
+            raise ValueError(f'{MCP3208.__name__} channel must be in range 0-{MCP3208.CHANNEL_AMOUNT - 1}, but it was appointed {channel}.')
 
         self._command[0] = 0x06 | ((channel >> 2) & 0x01)
         self._command[1] = (channel & 0x03) << 6
@@ -38,7 +38,7 @@ class MCP3208:
                          ((raw_value[2] & 0x40) << 4) |
                          ((raw_value[2] & 0x20) << 6))
 
-        voltage_value = (MCP3208.REFERENCE_VOLTAGE * adc_value) / MCP3208.ADC_FULL_RANGE
+        voltage_value = (MCP3208.REFERENCE_VOLTAGE * adc_value) / MCP3208.FULL_RANGE
 
         return voltage_value
 
