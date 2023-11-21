@@ -24,10 +24,7 @@ class MCP4922 :
         if channel < 0 or channel > MCP4922.CHANNEL_AMOUNT - 1:
             raise ValueError(f'{MCP4922.__name__} channel must be in range 0-{MCP4922.CHANNEL_AMOUNT - 1}, but it was appointed {channel}.')
 
-        output = 0x3000 if channel == 0 else 0xb000
-
-        output |= value
-        self._command[0] = (output >> 8) & 0xff
-        self._command[1] = output & 0xff
+        self._command[0] =  (channel << 7) | 0x00 | (0x01 << 5) | (0x01 << 4) | (value >> 8)
+        self._command[1] =  value & 0xFF
 
         self._bus.xfer3(self._command, 0)
