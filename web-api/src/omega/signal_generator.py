@@ -1,27 +1,29 @@
 import math
-from multiprocessing import Event
 import time
-from omega import gpio
+from abc import ABC
+from multiprocessing import Event
 
+from omega import gpio
 from omega.mcp4922 import MCP4922
 
 
-class SignalGenerator:
+class SignalGenerator(ABC):
 
     AMPLIFIER_GAIN = 3
 
     def __init__(self, event: Event) -> None:
         self._event = event
 
-    @staticmethod
-    def _sleep(duration):
+    def _sleep(self, duration) -> None:
         now = time.perf_counter()
         end = now + duration
         while now < end:
             now = time.perf_counter()
 
 
-    def sin(self, channel: int, freq: int, amplitude: float):
+class SinSignalGenerator(SignalGenerator):
+
+    def generate(self, channel: int, freq: int, amplitude: float) -> None:
 
         period = 1 / freq
         samples = 100
@@ -34,16 +36,17 @@ class SignalGenerator:
 
         with MCP4922() as dac:
             while True:
+                s = time.perf_counter()
+
                 if self._event.is_set():
                     break
 
-                s = time.perf_counter()
                 value = (math.sin(t) + 1) * k
                 dac.write(channel, int(value))
                 t += step
 
                 if t > 2 * math.pi:
                     t = 0.0
-                    #break
+
                 e = time.perf_counter()
-                SignalGenerator._sleep((dt - (e - s)) / 30 )
+                self._sleep((dt - (e - s)) / 30)

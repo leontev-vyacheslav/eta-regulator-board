@@ -1,18 +1,33 @@
-from multiprocessing import Process, Event
+import time
 from typing import Optional
+from multiprocessing import Process, Event
 
 from flask_pydantic import validate
 
 from app import app
 from models.regulator.active_signal_model import AciveSignalGenModel, AciveSignalProcessGenModel
-from omega.signal_generator import SignalGenerator
+from omega.signal_generator import SinSignalGenerator
 from responses.json_response import JsonResponse
+from utils.debug_helper import is_debug
 
 active_signal_process_gen: Optional[AciveSignalProcessGenModel] = None
 
-def signal_process_function(event: Event):
-    s = SignalGenerator(event)
-    s.sin(0, 100, 9.9)
+
+def signal_generator_factory_method(event: Event, singnal_id: int):
+    if singnal_id == 1:
+        signal_generator = SinSignalGenerator(event)
+        signal_generator.generate(0, 100, 9.9)
+    else:
+        pass
+
+
+def dummy_signal_generator_factory_method(event: Event, singnal_id: int):
+    if singnal_id == 1:
+        while True:
+            if event.is_set():
+                break
+    else:
+        pass
 
 
 @app.api_route('/dac/signal/<signal_id>', methods=['GET'])
@@ -22,12 +37,15 @@ def get_started_signal_gen(signal_id: int):
     global active_signal_process_gen
 
     if active_signal_process_gen is not None:
-        active_signal_process_gen.process.terminate()
+        active_signal_process_gen.event.set()
+        time.sleep(1)
 
     event = Event()
+    target = dummy_signal_generator_factory_method if is_debug() else signal_generator_factory_method
+
     signal_process = Process(
-        target=signal_process_function,
-        args=(event, ),
+        target=target,
+        args=(event, signal_id),
         daemon=False
     )
     signal_process.start()

@@ -1,7 +1,7 @@
 import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
 import { DacContexProvider, useDac } from './dac-context';
 import { useScreenSize } from '../../../../utils/media-query';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Button from 'devextreme-react/button';
 import { StartIcon, StopIcon } from '../../../../constants/app-icons';
 import { useAppData } from '../../../../contexts/app-data/app-data';
@@ -20,6 +20,8 @@ const DacTabContentInternal = () => {
         };
     }, []);
 
+    const r = useRef<boolean>(false);
+
     const start = useCallback(async () => {
         const startedSignal = await getStartedSignalGenAsync(1);
 
@@ -32,14 +34,18 @@ const DacTabContentInternal = () => {
     }, [getStartedSignalGenAsync]);
 
     const stop = useCallback(async () => {
-        const deletedSignal = await deleteActiveSignalGenAsync();
+        r.current = true;
+        try {
+            const deletedSignal = await deleteActiveSignalGenAsync();
+            proclaim({
+                type: 'warning',
+                message: `Удален активный генератор с pid ${deletedSignal?.pid}.`
+            });
+            setActiveSignalGen(null);
+        } finally {
+            r.current = false;
+        }
 
-        proclaim({
-            type: 'warning',
-            message: `Удален активный генератор с pid ${deletedSignal?.pid}.`
-        });
-
-        setActiveSignalGen(null);
     }, [deleteActiveSignalGenAsync]);
 
     useEffect(() => {
@@ -51,6 +57,9 @@ const DacTabContentInternal = () => {
 
     useEffect(() => {
         const intervalTimer = setInterval(async () => {
+            if(r.current) {
+                return
+            }
             const activeSignalGen = await getActiveSignalGenAsync();
             setActiveSignalGen(activeSignalGen);
         }, 1000);

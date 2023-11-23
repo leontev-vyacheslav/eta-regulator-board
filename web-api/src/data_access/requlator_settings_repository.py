@@ -23,8 +23,6 @@ class RegulatorSettingsRepository():
     def __init__(self, app=None, **kwargs):
         self._options = kwargs
 
-        # self.settings: RegulatorSettingsModel = self._get_default_settings()
-
         if app is not None:
             self.init_app(app)
 
