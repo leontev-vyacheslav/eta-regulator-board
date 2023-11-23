@@ -45,11 +45,19 @@ const DacTabContentInternal = () => {
     useEffect(() => {
         (async () => {
             const activeSignalGen = await getActiveSignalGenAsync();
-            if (activeSignalGen) {
-                setActiveSignalGen(activeSignalGen)
-            }
+            setActiveSignalGen(activeSignalGen);
         })();
     }, [getActiveSignalGenAsync]);
+
+    useEffect(() => {
+        const intervalTimer = setInterval(async () => {
+            const activeSignalGen = await getActiveSignalGenAsync();
+            setActiveSignalGen(activeSignalGen);
+        }, 1000);
+
+        return () => clearInterval(intervalTimer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Form

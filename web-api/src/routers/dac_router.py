@@ -1,6 +1,6 @@
 import math
 import time
-from multiprocessing import Process
+from multiprocessing import Process, Event
 from typing import Optional
 
 from flask_pydantic import validate
@@ -14,7 +14,7 @@ from responses.json_response import JsonResponse
 active_signal_process_gen: Optional[AciveSignalProcessGenModel] = None
 
 
-def signal_process_function(signal_id):
+def signal_process_function(event: Event):
     AMPLIFIER_GAIN = 3
 
     def _sleep(duration):
@@ -37,6 +37,9 @@ def signal_process_function(signal_id):
 
         with MCP4922() as dac:
             while True:
+                if event.is_set():
+                    break
+
                 s = time.perf_counter()
                 value = (math.sin(t) + 1) * k
                 dac.write(channel, int(value))
@@ -46,9 +49,10 @@ def signal_process_function(signal_id):
                     t = 0.0
                     #break
                 e = time.perf_counter()
-                _sleep((dt - (e - s)) / 30 )
+                _sleep((dt - (e - s)) / 30)
 
     _sin(0, 100, 9.9)
+
 
 @app.api_route('/dac/signal/<signal_id>', methods=['GET'])
 @validate(response_by_alias=True)
@@ -59,15 +63,17 @@ def get_started_signal_gen(signal_id: int):
     if active_signal_process_gen is not None:
         active_signal_process_gen.process.terminate()
 
+    event = Event()
     signal_process = Process(
         target=signal_process_function,
-        args=(signal_id, ),
+        args=(event, ),
         daemon=False
     )
     signal_process.start()
 
     active_signal_process_gen = AciveSignalProcessGenModel(
         process=signal_process,
+        event=event,
         signal_id=signal_id
     )
 
@@ -113,8 +119,8 @@ def delete_active_signal_gen():
             pid=active_signal_process_gen.process.pid,
             signal_id=active_signal_process_gen.signal_id
         )
-        active_signal_process_gen.process.terminate()
-        active_signal_process_gen.process.kill()
+        active_signal_process_gen.event.set()
+
         active_signal_process_gen = None
 
     return JsonResponse(
