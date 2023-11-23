@@ -16,7 +16,7 @@ const DacContext = createContext({} as DacContextModel);
 function DacContexProvider(props: any) {
     const dacFormRef = useRef<Form>(null);
     const testSignalList = useMemo<TestSignalModel[]>(() => [
-        { id: 1, description: 'Синусоида, 1 Гц' }
+        { id: 1, description: 'Синусоида, 100 Гц' }
     ], []);
 
     return (

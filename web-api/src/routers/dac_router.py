@@ -1,5 +1,3 @@
-import math
-import time
 from multiprocessing import Process, Event
 from typing import Optional
 
@@ -7,51 +5,14 @@ from flask_pydantic import validate
 
 from app import app
 from models.regulator.active_signal_model import AciveSignalGenModel, AciveSignalProcessGenModel
-from omega import gpio
-from omega.mcp4922 import MCP4922
+from omega.signal_generator import SignalGenerator
 from responses.json_response import JsonResponse
 
 active_signal_process_gen: Optional[AciveSignalProcessGenModel] = None
 
-
 def signal_process_function(event: Event):
-    AMPLIFIER_GAIN = 3
-
-    def _sleep(duration):
-        now = time.perf_counter()
-        end = now + duration
-        while now < end:
-            now = time.perf_counter()
-
-    def _sin(channel: int, freq: int, amplitude: float):
-
-        period = 1 / freq
-        samples = 100
-        t = 0.0
-        step = 2 * math.pi / samples
-        dt = (period / samples)
-
-        #start_time = time.perf_counter()
-        k = (MCP4922.FULL_RANGE // 2) * (amplitude / (MCP4922.REFERENCE_VOLTAGE * AMPLIFIER_GAIN))
-        gpio.dac_chip_select()
-
-        with MCP4922() as dac:
-            while True:
-                if event.is_set():
-                    break
-
-                s = time.perf_counter()
-                value = (math.sin(t) + 1) * k
-                dac.write(channel, int(value))
-                t += step
-
-                if t > 2 * math.pi:
-                    t = 0.0
-                    #break
-                e = time.perf_counter()
-                _sleep((dt - (e - s)) / 30)
-
-    _sin(0, 100, 9.9)
+    s = SignalGenerator(event)
+    s.sin(0, 100, 9.9)
 
 
 @app.api_route('/dac/signal/<signal_id>', methods=['GET'])

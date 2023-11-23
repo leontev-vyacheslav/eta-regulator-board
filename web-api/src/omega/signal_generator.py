@@ -1,4 +1,5 @@
 import math
+from multiprocessing import Event
 import time
 from omega import gpio
 
@@ -9,6 +10,9 @@ class SignalGenerator:
 
     AMPLIFIER_GAIN = 3
 
+    def __init__(self, event: Event) -> None:
+        self._event = event
+
     @staticmethod
     def _sleep(duration):
         now = time.perf_counter()
@@ -17,8 +21,7 @@ class SignalGenerator:
             now = time.perf_counter()
 
 
-    @staticmethod
-    def sin(channel: int, freq: int, amplitude: float):
+    def sin(self, channel: int, freq: int, amplitude: float):
 
         period = 1 / freq
         samples = 100
@@ -26,12 +29,14 @@ class SignalGenerator:
         step = 2 * math.pi / samples
         dt = (period / samples)
 
-        #start_time = time.perf_counter()
         k = (MCP4922.FULL_RANGE // 2) * (amplitude / (MCP4922.REFERENCE_VOLTAGE * SignalGenerator.AMPLIFIER_GAIN))
         gpio.dac_chip_select()
 
         with MCP4922() as dac:
             while True:
+                if self._event.is_set():
+                    break
+
                 s = time.perf_counter()
                 value = (math.sin(t) + 1) * k
                 dac.write(channel, int(value))
@@ -42,9 +47,3 @@ class SignalGenerator:
                     #break
                 e = time.perf_counter()
                 SignalGenerator._sleep((dt - (e - s)) / 30 )
-
-        # print(time.perf_counter() - start_time)
-
-
-
-SignalGenerator.sin(0, 100, 9.9)
