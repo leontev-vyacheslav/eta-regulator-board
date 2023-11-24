@@ -5,22 +5,22 @@ from flask_pydantic import validate
 
 from app import app
 from models.app_background_process_model import AppBackgroundProcessModel
-from models.regulator.active_signal_gen_model import AciveSignalGenModel
+from models.regulator.active_signal_gen_model import ActiveSignalGenModel
 from omega.signal_generator import SinSignalGenerator
 from responses.json_response import JsonResponse
 from utils.debug_helper import is_debug
 
 
-def signal_generator_factory_method(event: Event, singnal_id: int):
-    if singnal_id == 1:
+def signal_generator_factory_method(event: Event, signal_id: int):
+    if signal_id == 1:
         signal_generator = SinSignalGenerator(event)
         signal_generator.generate(0, 100, 9.9)
     else:
         pass
 
 
-def dummy_signal_generator_factory_method(event: Event, singnal_id: int):
-    if singnal_id == 1:
+def dummy_signal_generator_factory_method(event: Event, signal_id: int):
+    if signal_id == 1:
         while True:
             if event.is_set():
                 break
@@ -57,7 +57,7 @@ def get_started_signal_gen(signal_id: int):
     app.app_background_processes.append(active_signal_process_gen)
 
     return JsonResponse(
-        response=AciveSignalGenModel(
+        response=ActiveSignalGenModel(
             pid=active_signal_process_gen.process.pid,
             signal_id=signal_id
         ),
@@ -71,7 +71,7 @@ def get_active_signal_gen():
     active_signal_process_gen = next((p for p in app.app_background_processes if p.name == 'active_signal'), None)
 
     if active_signal_process_gen is not None:
-        active_signal_gen = AciveSignalGenModel(
+        active_signal_gen = ActiveSignalGenModel(
             pid=active_signal_process_gen.process.pid,
             signal_id=active_signal_process_gen.data['signal_id']
         )
@@ -86,7 +86,7 @@ def get_active_signal_gen():
 
 @app.api_route('/dac/signal', methods=['DELETE'])
 def delete_active_signal_gen():
-    active_signal_gen = AciveSignalGenModel(
+    active_signal_gen = ActiveSignalGenModel(
         pid=0,
         signal_id=0
     )
@@ -94,7 +94,7 @@ def delete_active_signal_gen():
     active_signal_process_gen = next((p for p in app.app_background_processes if p.name == 'active_signal'), None)
 
     if active_signal_process_gen is not None:
-        active_signal_gen = AciveSignalGenModel(
+        active_signal_gen = ActiveSignalGenModel(
             pid=active_signal_process_gen.process.pid,
             signal_id=active_signal_process_gen.data['signal_id']
         )

@@ -2,20 +2,16 @@ from datetime import datetime
 
 from models.common.signin_model import SigninModel
 from models.regulator.control_parameters_model import ControlParametersModel
-from models.regulator.emergency_verification_model import EmergencyVerificationModel
-from models.regulator.enums.system_type_model import SystemTypeModel
-from models.regulator.enums.valve_position_state_model import ValvePositionStateModel
 from models.regulator.gpio_set_model import GpioSetModel
 from models.regulator.heating_circuits_model import HeatingCircuitModel, HeatingCircuitsModel
 from models.regulator.regulation_parameters_model import RegulationParametersModel
 from models.regulator.regulator_parameters_model import RegulatorParametersModel
 from models.regulator.enums.regulator_state_model import RegulatorStateModel
-from models.regulator.regulator_programms_model import RegulatorProgrammsModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.regulator.rtc_datetime_model import RtcDateTimeModel
-from models.regulator.schedules_model import ScheduleModel, ScheduleWindowModel, SchelulesModel
+from models.regulator.schedules_model import ScheduleModel, ScheduleWindowModel, SchedulesModel
 from models.regulator.service_model import HardwareInfoModel, RegulatorOwnerModel, ServiceModel, SoftwareInfoModel
-from models.regulator.tempetrature_graph_model import TemperatureGraphItemModel, TemperatureGraphModel
+from models.regulator.temperature_graph_model import TemperatureGraphItemModel, TemperatureGraphModel
 
 
 class RegulatorSettingsRepository():
@@ -70,20 +66,8 @@ class RegulatorSettingsRepository():
                             ),
                             regulation_parameters=RegulationParametersModel(),
 
-                            emergency_verification=EmergencyVerificationModel(),
 
-                            programms=RegulatorProgrammsModel(
-                                system_type=SystemTypeModel.INDEPENDENT,
-                                control_circulation_pumps=True,
-                                heat_system_off=False,
-                                monitoring_circulation_pumps=False,
-                                switching_circulation_pumps=False,
-                                switching_circulation_pumps_period=12,
-                                valve_position_by_outdoor_temperature_error=ValvePositionStateModel.HALTING,
-                                valve_position_by_supply_temperature_error=ValvePositionStateModel.HALTING
-                            ),
-
-                            schedules=SchelulesModel(items=[
+                            schedules=SchedulesModel(items=[
                                 ScheduleModel(
                                     id='5895f8bf-9fb4-468b-bdac-cbf2010a72f0',
                                     day=1,

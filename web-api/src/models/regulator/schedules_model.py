@@ -22,5 +22,5 @@ class ScheduleModel(AppBaseModel):
 
 
 # Расписания
-class SchelulesModel(AppBaseModel):
+class SchedulesModel(AppBaseModel):
     items: List[ScheduleModel] = []

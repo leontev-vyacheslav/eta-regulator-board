@@ -5,7 +5,7 @@ import pathlib
 from typing import Callable, List, Optional, Any, Union
 
 from flask import Flask
-from data_access.requlator_settings_repository import RegulatorSettingsRepository
+from data_access.regulator_settings_repository import RegulatorSettingsRepository
 
 from models.app_config_model import AppConfigModel
 from models.app_background_process_model import AppBackgroundProcessModel

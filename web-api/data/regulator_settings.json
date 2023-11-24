@@ -76,16 +76,7 @@
                             }
                         ]
                     },
-                    "programms": {
-                        "systemType": 1,
-                        "heatSystemOff": false,
-                        "controlCirculationPumps": true,
-                        "switchingCirculationPumps": false,
-                        "switchingCirculationPumpsPeriod": 12,
-                        "monitoringCirculationPumps": false,
-                        "valvePositionBySupplyTemperatureError": 1,
-                        "valvePositionByOutdoorTemperatureError": 1
-                    },
+
                     "schedules": {
                         "items": [
                             {
@@ -157,8 +148,7 @@
                         "calculationPeriod": 19.0,
                         "pulseDurationValve": 4.0,
                         "driveUnitAnalogControl": true
-                    },
-                    "emergencyVerification": {}
+                    }
                 }
             },
             {
@@ -208,16 +198,6 @@
                             }
                         ]
                     },
-                    "programms": {
-                        "systemType": 1,
-                        "heatSystemOff": false,
-                        "controlCirculationPumps": true,
-                        "switchingCirculationPumps": false,
-                        "switchingCirculationPumpsPeriod": 12,
-                        "monitoringCirculationPumps": false,
-                        "valvePositionBySupplyTemperatureError": 1,
-                        "valvePositionByOutdoorTemperatureError": 1
-                    },
                     "schedules": {
                         "items": [
                             {
@@ -265,8 +245,7 @@
                         "calculationPeriod": 17.0,
                         "pulseDurationValve": 3.0,
                         "driveUnitAnalogControl": true
-                    },
-                    "emergencyVerification": {}
+                    }
                 }
             }
         ]

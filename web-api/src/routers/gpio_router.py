@@ -1,7 +1,7 @@
 from flask_pydantic import validate
 
 from app import app
-from data_access.requlator_settings_repository import RegulatorSettingsRepository
+from data_access.regulator_settings_repository import RegulatorSettingsRepository
 from models.regulator.gpio_set_model import GpioItemModel, GpioSetModel
 from omega import gpio
 from responses.json_response import JsonResponse
