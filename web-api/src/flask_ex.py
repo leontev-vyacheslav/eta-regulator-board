@@ -2,12 +2,13 @@ from logging import Logger
 import logging
 import os
 import pathlib
-from typing import Callable, Optional, Any, Union
+from typing import Callable, List, Optional, Any, Union
 
 from flask import Flask
 from data_access.requlator_settings_repository import RegulatorSettingsRepository
 
 from models.app_config_model import AppConfigModel
+from models.app_background_process_model import AppBackgroundProcessModel
 
 
 class FlaskEx(Flask):
@@ -42,6 +43,8 @@ class FlaskEx(Flask):
 
         self.worker_logger: Logger = self._init_worker_logger()
         self.app_config = self._init_app_config()
+        self.app_background_processes: List[AppBackgroundProcessModel] = []
+
         # self.regulator_settings_repository = RegulatorSettingsRepository()
 
     def api_route(self, rule: str, **options: Any) -> Callable:

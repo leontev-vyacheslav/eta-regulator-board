@@ -6,7 +6,7 @@
             "immediately": false
         },
         {
-            "name": "background_worker2",
+            "name": "background_processes_watcher",
             "interval": 60,
             "immediately": false
         }
