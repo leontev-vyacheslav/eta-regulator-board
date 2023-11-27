@@ -13,10 +13,11 @@ export type TestSignalModel = {
 
 const DacContext = createContext({} as DacContextModel);
 
-function DacContexProvider(props: any) {
+function DacContextProvider(props: any) {
     const dacFormRef = useRef<Form>(null);
     const testSignalList = useMemo<TestSignalModel[]>(() => [
-        { id: 1, description: 'Синусоида, 100 Гц' }
+        { id: 1, description: 'Синусоида, 100 Гц' },
+        { id: 2, description: 'Пилообразный сигнал, 100 Гц' },
     ], []);
 
     return (
@@ -29,4 +30,4 @@ function DacContexProvider(props: any) {
 
 const useDac = () => useContext(DacContext);
 
-export { DacContexProvider, useDac };
+export { DacContextProvider, useDac };

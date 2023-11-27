@@ -1,8 +1,10 @@
 from threading import Lock
 from time import sleep
 from datetime import datetime
+from typing import List
 
 from flask_ex import FlaskEx
+from models.app_background_process_model import AppBackgroundProcessModel
 from utils.debug_helper import is_debug
 
 
@@ -12,22 +14,32 @@ def background_processes_watcher(app: FlaskEx, interval: float, immediately: boo
         if not immediately:
             sleep(interval)
 
-        active_signal_process_gen = next((p for p in app.app_background_processes), None)
+        removing_processes: List[AppBackgroundProcessModel] = []
 
-        if active_signal_process_gen is not None:
-            utc_now = datetime.utcnow()
-            duration = utc_now - active_signal_process_gen.creation_date
-            if duration.seconds > 60:
-                pid = active_signal_process_gen.process.pid
-                if is_debug():
-                    active_signal_process_gen.process.terminate()
+        for background_process in app.app_background_processes:
+            if background_process is not None:
+                utc_now = datetime.utcnow()
+                duration = utc_now - background_process.creation_date
+                if duration.seconds > background_process.lifetime:
+                    removing_processes.append(background_process)
 
-                active_signal_process_gen.event.set()
-                app.app_background_processes.remove(active_signal_process_gen)
+        for removing_process in removing_processes:
+            if not removing_process.process.is_alive():
+                app.app_background_processes.remove(removing_process)
+                continue
 
-                app.worker_logger.info(
-                    f'The active signal generator process with pid {pid} was forcibly stopped.'
-                )
+            pid = removing_process.process.pid
+
+            if is_debug():
+                removing_process.process.terminate()
+
+            removing_process.cancellation_event.set()
+
+            app.app_background_processes.remove(removing_process)
+
+            app.worker_logger.info(
+                f'The active background process "{removing_process.name}" with pid {pid} was forcibly stopped.'
+            )
 
         app.worker_logger.info(
             'Worker \'background_processes_watcher\' is alive.'

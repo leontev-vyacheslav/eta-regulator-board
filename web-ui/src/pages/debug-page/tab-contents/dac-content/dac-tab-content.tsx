@@ -1,5 +1,5 @@
 import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
-import { DacContexProvider, useDac } from './dac-context';
+import { DacContextProvider, useDac } from './dac-context';
 import { useScreenSize } from '../../../../utils/media-query';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Button from 'devextreme-react/button';
@@ -13,17 +13,16 @@ const DacTabContentInternal = () => {
     const { isXSmall, isSmall } = useScreenSize();
     const { getStartedSignalGenAsync, getActiveSignalGenAsync, deleteActiveSignalGenAsync } = useAppData();
     const [activeSignalGen, setActiveSignalGen] = useState<ActiveSignalGenModel | null>(null);
+    const intervalTimerLock = useRef<boolean>(false);
 
     const formData = useMemo(() => {
         return {
-            testSignal: 1
+            testSignal: 1,
         };
     }, []);
 
-    const r = useRef<boolean>(false);
-
     const start = useCallback(async () => {
-        const startedSignal = await getStartedSignalGenAsync(1);
+        const startedSignal = await getStartedSignalGenAsync(formData.testSignal);
 
         proclaim({
             type: 'success',
@@ -31,10 +30,10 @@ const DacTabContentInternal = () => {
         });
 
         setActiveSignalGen(startedSignal);
-    }, [getStartedSignalGenAsync]);
+    }, [formData.testSignal, getStartedSignalGenAsync]);
 
     const stop = useCallback(async () => {
-        r.current = true;
+        intervalTimerLock.current = true;
         try {
             const deletedSignal = await deleteActiveSignalGenAsync();
             proclaim({
@@ -43,7 +42,7 @@ const DacTabContentInternal = () => {
             });
             setActiveSignalGen(null);
         } finally {
-            r.current = false;
+            intervalTimerLock.current = false;
         }
 
     }, [deleteActiveSignalGenAsync]);
@@ -57,7 +56,7 @@ const DacTabContentInternal = () => {
 
     useEffect(() => {
         const intervalTimer = setInterval(async () => {
-            if(r.current) {
+            if(intervalTimerLock.current) {
                 return
             }
             const activeSignalGen = await getActiveSignalGenAsync();
@@ -112,8 +111,8 @@ const DacTabContentInternal = () => {
 
 export const DacTabContent = () => {
     return (
-        <DacContexProvider>
+        <DacContextProvider>
             <DacTabContentInternal />
-        </DacContexProvider>
+        </DacContextProvider>
     )
 }

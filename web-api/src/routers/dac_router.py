@@ -6,26 +6,34 @@ from flask_pydantic import validate
 from app import app
 from models.app_background_process_model import AppBackgroundProcessModel
 from models.regulator.active_signal_gen_model import ActiveSignalGenModel
-from omega.signal_generator import SinSignalGenerator
+from omega.signal_generators.sawtooth_signal_generator import SawToothSignalGenerator
+from omega.signal_generators.sin_wave_signal_generator import SinWaveSignalGenerator
 from responses.json_response import JsonResponse
 from utils.debug_helper import is_debug
 
 
-def signal_generator_factory_method(event: Event, signal_id: int):
+def signal_generator_factory_method(cancellation_event: Event, signal_id: int):
     if signal_id == 1:
-        signal_generator = SinSignalGenerator(event)
-        signal_generator.generate(0, 100, 9.9)
+        SinWaveSignalGenerator(cancellation_event) \
+            .generate(0, 100, 9.9)
+    elif signal_id == 2:
+        SawToothSignalGenerator(cancellation_event) \
+            .generate(0, 100, 9.9)
     else:
-        pass
+        raise ValueError('с')
 
 
-def dummy_signal_generator_factory_method(event: Event, signal_id: int):
+def dummy_signal_generator_factory_method(cancellation_event: Event, signal_id: int):
     if signal_id == 1:
         while True:
-            if event.is_set():
+            if cancellation_event.is_set():
+                break
+    elif signal_id == 2:
+        while True:
+            if cancellation_event.is_set():
                 break
     else:
-        pass
+        raise ValueError('The valid signal_id is out of range.')
 
 
 @app.api_route('/dac/signal/<signal_id>', methods=['GET'])
@@ -35,7 +43,7 @@ def get_started_signal_gen(signal_id: int):
     active_signal_process_gen = next((p for p in app.app_background_processes if p.name == 'active_signal'), None)
 
     if active_signal_process_gen is not None:
-        active_signal_process_gen.event.set()
+        active_signal_process_gen.cancellation_event.set()
         time.sleep(1)
 
     event = Event()
@@ -51,7 +59,8 @@ def get_started_signal_gen(signal_id: int):
     active_signal_process_gen = AppBackgroundProcessModel(
         name='active_signal',
         process=signal_process,
-        event=event,
+        cancellation_event=event,
+        lifetime=60,
         data={'signal_id': signal_id}
     )
     app.app_background_processes.append(active_signal_process_gen)
@@ -98,11 +107,11 @@ def delete_active_signal_gen():
             pid=active_signal_process_gen.process.pid,
             signal_id=active_signal_process_gen.data['signal_id']
         )
-        active_signal_process_gen.event.set()
 
         if is_debug():
             active_signal_process_gen.process.terminate()
 
+        active_signal_process_gen.cancellation_event.set()
         app.app_background_processes.remove(active_signal_process_gen)
 
     return JsonResponse(
