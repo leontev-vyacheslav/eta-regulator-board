@@ -5,3 +5,5 @@ class ActiveSignalGenModel(AppBaseModel):
     pid: int
 
     signal_id: int
+
+    lifetime: int

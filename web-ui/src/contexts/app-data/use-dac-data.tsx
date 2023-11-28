@@ -6,10 +6,12 @@ import { useAuthHttpRequest } from './use-auth-http-request';
 
 
 export type ActiveSignalGenModel = {
-    pid: number
+    pid: number;
+    signalId: number,
+    lifetime: number
 };
 
-export type GetStartedSignalGenAsyncFunc = (signalId: number) => Promise<ActiveSignalGenModel | null>;
+export type GetStartedSignalGenAsyncFunc = (signalId: number, lifetime: number) => Promise<ActiveSignalGenModel | null>;
 export type GetActiveSignalGenAsyncFunc = () => Promise<ActiveSignalGenModel | null>;
 export type DeleteActiveSignalGenAsyncFunc = () => Promise<ActiveSignalGenModel | null>;
 
@@ -22,9 +24,9 @@ export type AppDataContextDacEndpointsModel = {
 export const useDacData = () => {
     const authHttpRequest = useAuthHttpRequest();
 
-    const getStartedSignalGenAsync = useCallback<GetStartedSignalGenAsyncFunc>(async (signalId: number) => {
+    const getStartedSignalGenAsync = useCallback<GetStartedSignalGenAsyncFunc>(async (signalId: number, lifetime: number) => {
         const response = await authHttpRequest({
-            url: `${routes.host}${routes.dac}/signal/${signalId}`,
+            url: `${routes.host}${routes.dac}/signal/${signalId}/${lifetime}`,
             method: HttpConstants.Methods.Get as Method,
         }, true);
 

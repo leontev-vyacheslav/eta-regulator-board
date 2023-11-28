@@ -17,12 +17,13 @@ const DacTabContentInternal = () => {
 
     const formData = useMemo(() => {
         return {
-            testSignal: 1,
+            signalId: 1,
+            lifetime: 60
         };
     }, []);
 
     const start = useCallback(async () => {
-        const startedSignal = await getStartedSignalGenAsync(formData.testSignal);
+        const startedSignal = await getStartedSignalGenAsync(formData.signalId, formData.lifetime);
 
         proclaim({
             type: 'success',
@@ -30,7 +31,7 @@ const DacTabContentInternal = () => {
         });
 
         setActiveSignalGen(startedSignal);
-    }, [formData.testSignal, getStartedSignalGenAsync]);
+    }, [formData, getStartedSignalGenAsync]);
 
     const stop = useCallback(async () => {
         intervalTimerLock.current = true;
@@ -61,6 +62,7 @@ const DacTabContentInternal = () => {
             }
             const activeSignalGen = await getActiveSignalGenAsync();
             setActiveSignalGen(activeSignalGen);
+
         }, 1000);
 
         return () => clearInterval(intervalTimer)
@@ -80,17 +82,42 @@ const DacTabContentInternal = () => {
         >
             <GroupItem caption={ 'Тестовые сигналы' }>
                 <SimpleItem
-                    dataField='testSignal'
+                    dataField='signalId'
                     editorType='dxSelectBox'
                     label={ { location: 'top', showColon: true, text: 'Сигнал' } }
                     editorOptions={ {
                         displayExpr: 'description',
                         valueExpr: 'id',
-                        items: testSignalList
+                        items: testSignalList,
+                        disabled: activeSignalGen
+                    } }
+                />
+                 <SimpleItem
+                    dataField='lifetime'
+                    editorType='dxNumberBox'
+                    label={ { location: 'top', showColon: true, text: 'Время непрерывной генерации (сек)' } }
+                    editorOptions={ {
+                        min: 10,
+                        max: 300,
+                        step: 10,
+                        showSpinButtons: true,
+                        disabled: activeSignalGen
                     } }
                 />
 
-                <SimpleItem></SimpleItem>
+                <SimpleItem
+                >
+                    {
+                        activeSignalGen
+                        ? <div style={ { marginBottom: 10, marginTop: 10 } }>
+                            <div>Запущен фоновый процесс с pid {activeSignalGen.pid}.</div>
+                            <div>Время исполнения процесса {activeSignalGen.lifetime} сек.</div>
+                        </div>
+
+                        : <span>Нет активных фоновых процессов</span>
+                    }
+
+                </SimpleItem>
                 <SimpleItem cssClass='adc-form_buttons'>
                     {
                         activeSignalGen

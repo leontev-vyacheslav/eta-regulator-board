@@ -18,6 +18,7 @@ function DacContextProvider(props: any) {
     const testSignalList = useMemo<TestSignalModel[]>(() => [
         { id: 1, description: 'Синусоида, 100 Гц' },
         { id: 2, description: 'Пилообразный сигнал, 100 Гц' },
+        { id: 3, description: 'Прямоугольный сигнал, 100 Гц' },
     ], []);
 
     return (
