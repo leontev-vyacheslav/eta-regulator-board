@@ -1,32 +1,19 @@
 import { useRef } from 'react';
-import Chart, { ArgumentAxis, CommonAxisSettings, CommonSeriesSettings, Grid, Label, Series, Title, ValueAxis } from 'devextreme-react/chart';
+import Chart, { ArgumentAxis, CommonAxisSettings, Grid, Legend, Series, Title, Tooltip, ValueAxis } from 'devextreme-react/chart';
 import { useTemperatureGraphContext } from './temperature-graph-context';
 import { useScreenSize } from '../../../../utils/media-query';
+import { getUuidV4 } from '../../../../utils/uuid';
 
 
+const TooltipTemplate = (info: any) => {
 
-// const TooltipTemplate = (info) => {
-
-//     const { regulatorSettings, circuitId } = useSettingPageContext();
-
-//     const currentItem = useMemo (() => {
-//         return regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.temperatureGraph.items.find(i => i.id === info.point.data.id);
-//     }, [circuitId, info.point.data.id, regulatorSettings?.heatingCircuits.items]);
-//     // const currentItem = null;
-
-//     return (
-//         <Form formData={ currentItem } width={ 150 } height={ 50 } >
-//             <SimpleItem
-//                 dataField='returnPipeTemperature'
-//                 editorType='dxSlider'
-//                 label={ { visible: false } }
-//                 editorOptions={ { showSpinButtons: true, useLargeSpinButtons: true, min: 0, max: 100, onValueChanged: (e) => {
-
-//                 } } }
-//                 />
-//         </Form>
-//     )
-// }
+    return (
+        <div data-guid={ getUuidV4() }>
+            <div>Температура наружного воздуха: {` ${info.point.data.outdoorTemperature}`} °C</div>
+            <div>Температура носителя: {info.seriesName === 'supplyPipe' ? `${info.point.data.supplyPipeTemperature}` : `${info.point.data.returnPipeTemperature}`} °C`</div>
+        </div>
+    )
+}
 
 export const TemperatureGraphChart = ({ dataSource }: { dataSource: any }) => {
     const { isXSmall, isSmall } = useScreenSize();
@@ -35,56 +22,67 @@ export const TemperatureGraphChart = ({ dataSource }: { dataSource: any }) => {
 
     return (
         <Chart
-        className='test-chart'
+            className='test-chart'
             ref={ chartRef }
             dataSource={ dataSource }
             height={ '50vh' }
-
             width={ isXSmall || isSmall ? '100%' : 600 }
-            onPointClick={ () => {
-                // setIsPopupSlider(true);
-            } }
         >
-            {/* <Tooltip
+            <Tooltip
                 enabled
+                arrowLength={ 5 }
                 opacity={ 1 }
-                interactive
                 contentRender={ TooltipTemplate }
-            /> */}
-            <Series
-                argumentField="outdoorTemperature"
-                valueField="supplyPipeTemperature"
-                showInLegend={ false }
-                color={ '#f5564a' }
-                type='spline'
-
             />
             <Series
+                name='supplyPipe'
+                argumentField="outdoorTemperature"
+                valueField="supplyPipeTemperature"
+                showInLegend={ true }
+                color={ '#f5564a' }
+                type='spline'
+                point={ { visible: false } }
+            >
+
+            </Series>
+
+            <Series
+                name='returnPipe'
                 argumentField="outdoorTemperature"
                 valueField="returnPipeTemperature"
-                showInLegend={ false }
+                showInLegend={ true }
                 color={ '#1db2f5' }
                 type='spline'
+                point={ { visible: false } }
             />
             <ArgumentAxis inverted={ chartArgumentAxisInverted }>
                 <Grid />
-                <Title text='Температура наружнего воздуха, °C'  font={ { size: 12 } }/>
+                <Title text='Температура наружного воздуха, °C' font={ { size: 12 } } />
             </ArgumentAxis>
 
             <ValueAxis>
                 <Grid />
-                <Title text='Температура носителя, °C'  font={ { size: 12 } }/>
+                <Title text='Температура носителя, °C' font={ { size: 12 } } />
             </ValueAxis>
 
             <CommonAxisSettings>
                 <Grid visible />
             </CommonAxisSettings>
 
-            <CommonSeriesSettings>
-                <Label visible customizeText={ (arg) => {
-                    return arg.valueText + '°C';
-                } } />
-            </CommonSeriesSettings>
+            <Legend
+                visible={ true }
+                customizeText={ (seriesInfo: {
+                    seriesColor: string;
+                    seriesIndex: number;
+                    seriesName: any;
+                }) => {
+                    return seriesInfo.seriesName === 'supplyPipe' ? 'Подача' : 'Обратка'
+                } }
+                position='inside'
+                verticalAlignment='bottom'
+                horizontalAlignment='center'
+                itemTextPosition='right'
+            />
         </Chart>
     );
 }

@@ -39,7 +39,7 @@ export const navigation: TreeViewItemModel[] = [
         ]
     },
     {
-        text: 'Ручной режим',
+        text: 'Отладка',
         iconRender: (props: IconBaseProps) => <DebugIcon size={ 22 } { ...props } />,
         path: '/debug',
         restricted: false,

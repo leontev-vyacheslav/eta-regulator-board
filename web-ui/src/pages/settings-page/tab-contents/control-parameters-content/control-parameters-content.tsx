@@ -109,14 +109,14 @@ export const ControlParametersForm = () => {
                     } }
                 />
                 <SimpleItem
-                    dataField='roomTemperartureInfluence'
+                    dataField='roomTemperatureInfluence'
                     label={ { location: 'top', showColon: true, text: 'Влияние темп. помещения' } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ { showSpinButtons: true, min: 0, max: 50  } }
                     />
 
                 <SimpleItem
-                    dataField='returnPipeTemperatureInfluience'
+                    dataField='returnPipeTemperatureInfluence'
                     label={ { location: 'top', showColon: true, text: 'Влияние темп. обратки' } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ { showSpinButtons: true, min: 0, max: 50 } } />

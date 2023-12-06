@@ -13,7 +13,7 @@ export type GetOwnerInfoDataAsyncFunc = () => Promise<OwnerInfoModel | null>;
 export type AppDataContextAuthCheckEndpointsModel = {
     getAuthCheckDataAsync: GetAuthCheckDataAsyncFunc;
 
-    getOnwnerInfoDataAsync: GetOwnerInfoDataAsyncFunc;
+    getOwnerInfoDataAsync: GetOwnerInfoDataAsyncFunc;
 }
 
 export const useAuthData = () => {
@@ -34,7 +34,7 @@ export const useAuthData = () => {
         return null;
     }, [authHttpRequest]);
 
-    const getOnwnerInfoDataAsync = useCallback<GetOwnerInfoDataAsyncFunc>(async (): Promise<OwnerInfoModel | null> => {
+    const getOwnerInfoDataAsync = useCallback<GetOwnerInfoDataAsyncFunc>(async (): Promise<OwnerInfoModel | null> => {
         const response = await authHttpRequest({
             url: `${routes.host}${routes.accountOwnerInfo}`,
             method: HttpConstants.Methods.Get as Method,
@@ -51,6 +51,6 @@ export const useAuthData = () => {
 
     return {
         getAuthCheckDataAsync,
-        getOnwnerInfoDataAsync
+        getOwnerInfoDataAsync
     };
 }

@@ -8,21 +8,21 @@ import { OwnerInfoModel } from '../../models/data/owner-info-model';
 import { proclaim } from '../../utils/proclaim';
 import './signin-form.scss';
 
-export const SinginForm = () => {
+export const SigninForm = () => {
     const [ownerInfo, setOwnerInfo] = useState<OwnerInfoModel | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
     const { signIn } = useAuth();
-    const { getOnwnerInfoDataAsync } = useAuthData();
+    const { getOwnerInfoDataAsync } = useAuthData();
 
     useEffect(() => {
         (async () => {
-            const ownerInfo = await getOnwnerInfoDataAsync();
+            const ownerInfo = await getOwnerInfoDataAsync();
             if (ownerInfo) {
                 setOwnerInfo(ownerInfo)
             }
         })();
-    }, [getOnwnerInfoDataAsync])
+    }, [getOwnerInfoDataAsync])
 
     const formData = useRef<SigninFormModel>(
         (

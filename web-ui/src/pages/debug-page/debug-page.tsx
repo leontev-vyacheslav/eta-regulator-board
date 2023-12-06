@@ -17,7 +17,7 @@ const DebugPageInternal = () => {
 
     return (
         <>
-            <PageHeader caption={ 'Ручной режим' }>
+            <PageHeader caption={ 'Отладка' }>
                 <DebugIcon size={ AppConstants.headerIconSize } />
             </PageHeader>
 

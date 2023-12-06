@@ -18,9 +18,9 @@ export type ControlParametersModel = {
 
     frostProtectionTemperature: number;
 
-    roomTemperartureInfluence: number;
+    roomTemperatureInfluence: number;
 
-    returnPipeTemperatureInfluience: number;
+    returnPipeTemperatureInfluence: number;
 
     supplyPipeMinTemperature: number;
 

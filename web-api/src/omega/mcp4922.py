@@ -1,7 +1,7 @@
 #pylint: disable=no-name-in-module
 from spidev import SpiDev
 
-class MCP4922 :
+class MCP4922:
     BIT_DEPTH: int = 12
     FULL_RANGE: int = 2 ** BIT_DEPTH - 1
     SPI_MAX_SPEED: int = 1000000

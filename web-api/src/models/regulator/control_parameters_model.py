@@ -30,10 +30,10 @@ class ControlParametersModel(AppBaseModel):
     frost_protection_temperature: float = 5.0
 
     # Влияние температуры помещения = 2.0
-    room_temperarture_influence: float = 2.0
+    room_temperature_influence: float = 2.0
 
     # Влияние температуры обратки = 1.0
-    return_pipe_temperature_influience: float = 1.0
+    return_pipe_temperature_influence: float = 1.0
 
     # Минимальная температура подачи = 30.0
     supply_pipe_min_temperature: float = 30.0
