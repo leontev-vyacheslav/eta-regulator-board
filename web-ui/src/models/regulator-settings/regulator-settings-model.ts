@@ -11,8 +11,6 @@ export type RegulatorSettingsModel = {
 
     signIn: SigninModel;
 
-    // regulatorParameters: RegulatorParametersModel;
-
     heatingCircuits: HeatingCircuitsModel;
 
     gpioSet: GpioSetModel;

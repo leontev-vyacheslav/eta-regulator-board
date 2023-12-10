@@ -4,21 +4,21 @@ import { ManualControlModeModel } from './enums/manual-control-mode-model'
 export type ControlParametersModel = {
     controlMode: ControlModeModel;
 
-    manualControlMode: ManualControlModeModel;
+    manualControlMode?: ManualControlModeModel;
 
-    manualControlModeTemperatureSetpoint: number;
+    manualControlModeTemperatureSetpoint?: number;
 
     analogValveErrorSetpoint: number;
 
-    summerModeTransitionTemperature: number;
+    summerModeTransitionTemperature?: number;
 
     comfortTemperature: number;
 
     economicalTemperature: number;
 
-    frostProtectionTemperature: number;
+    frostProtectionTemperature?: number;
 
-    roomTemperatureInfluence: number;
+    roomTemperatureInfluence?: number;
 
     returnPipeTemperatureInfluence: number;
 

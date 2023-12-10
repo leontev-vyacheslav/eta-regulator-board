@@ -17,7 +17,7 @@ export const AdcReadingSettingsForm = () => {
         setTimer();
     }, [readingResults, setIsReadingEnabled, setIsShowOutputConsole, setTimer]);
 
-    const onFromTemperarureSensorValueChanged = useCallback((e) => {
+    const onFromTemperatureSensorValueChanged = useCallback((e) => {
         const readContinuallyIntervalNumberBox = adcReadingSettingsFormRef.current?.instance.getEditor('readContinuallyInterval');
         if (readContinuallyIntervalNumberBox) {
             readingSettings.readContinuallyInterval = e.value ? 2 : 1;
@@ -64,11 +64,11 @@ export const AdcReadingSettingsForm = () => {
                     } }
                 />
                 <SimpleItem
-                    dataField='fromTemperarureSensor'
+                    dataField='fromTemperatureSensor'
                     editorType='dxSwitch'
                     label={ { location: 'top', showColon: true, text: 'С температурного датчика' } }
                     editorOptions={ {
-                        onValueChanged: onFromTemperarureSensorValueChanged
+                        onValueChanged: onFromTemperatureSensorValueChanged
                     } }
                 />
                 <SimpleItem cssClass='adc-form_buttons'>

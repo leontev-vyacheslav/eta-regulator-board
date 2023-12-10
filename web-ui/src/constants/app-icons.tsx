@@ -64,13 +64,12 @@ export { IoPlayCircleOutline as StartIcon } from 'react-icons/io5';
 export { AiOutlineUsb as InputOutputIcon } from 'react-icons/ai';
 export { IoHardwareChipOutline as AdcIcon } from 'react-icons/io5';
 export { IoHardwareChip as DacIcon } from 'react-icons/io5';
-export { IoCalendarOutline as SceduleIcon } from 'react-icons/io5';
+export { IoCalendarOutline as ScheduleIcon2 } from 'react-icons/io5';
 export { IoTimeOutline as RtcIcon } from 'react-icons/io5';
 export { LuSettings2 as RegulatorIcon } from 'react-icons/lu';
 export { MdOutlineManageHistory as ManageIcon } from 'react-icons/md';
-
-
-
+export { IoDownloadOutline  as DownloadIcon2 } from 'react-icons/io5';
+export { IoReloadSharp  as ResetIcon } from 'react-icons/io5';
 
 
 import { MdMoreVert } from 'react-icons/md';

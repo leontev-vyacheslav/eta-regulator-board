@@ -17,10 +17,10 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
         };
     }, [isXSmall]);
 
-    const [сolumCaptions, setColumCaptions] = useState(defaultColumCaptions);
+    const [columnCaptions, setColumnCaptions] = useState(defaultColumCaptions);
 
     useEffect(() => {
-        setColumCaptions(defaultColumCaptions);
+        setColumnCaptions(defaultColumCaptions);
     }, [defaultColumCaptions]);
 
     const outdoorTemperatureValidationRules = useMemo<ValidationRule[]>(() => {
@@ -101,7 +101,7 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
     return (
         <DataGrid
             ref={ dataGridRef }
-            className='app-grid temperagure-graph-grid'
+            className='app-grid temperature-graph-grid'
             showColumnLines
             width={ isXSmall || isSmall ? '100%' : 600 }
             dataSource={ dataSource }
@@ -112,7 +112,7 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
             <Column
                 dataType='string'
                 dataField='outdoorTemperature'
-                caption={ сolumCaptions.outdoorTemperatureColCaption }
+                caption={ columnCaptions.outdoorTemperatureColCaption }
                 allowSorting={ true }
                 sortOrder='asc'
                 validationRules={ outdoorTemperatureValidationRules }
@@ -122,7 +122,7 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
             <Column
                 dataType='number'
                 dataField='supplyPipeTemperature'
-                caption={ сolumCaptions.supplyPipeTemperatureColCaption }
+                caption={ columnCaptions.supplyPipeTemperatureColCaption }
                 allowSorting={ false }
                 validationRules={ supplyPipeTemperatureValidationRules }
             />
@@ -130,7 +130,7 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
             <Column
                 dataType='number'
                 dataField='returnPipeTemperature'
-                caption={ сolumCaptions.returnPipeTemperature }
+                caption={ columnCaptions.returnPipeTemperature }
                 allowSorting={ false }
                 validationRules={ returnPipeTemperatureValidationRules }
             />
