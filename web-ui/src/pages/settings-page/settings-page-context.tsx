@@ -1,7 +1,7 @@
 import { Dispatch, createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useAppData } from '../../contexts/app-data/app-data';
 import { RegulatorSettingsModel } from '../../models/regulator-settings/regulator-settings-model';
-import { HeatingCircuitTypeModel } from '../../models/regulator-settings/enums/heating-circuit-type-model';
+import { HeatingCircuitTypeModel, HeatingCircuitTypes, HeatingCircuitTypesItem } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { useParams } from 'react-router-dom';
 
 type SettingPageContextModel = {
@@ -12,6 +12,7 @@ type SettingPageContextModel = {
     setHeatingCircuitType: Dispatch<React.SetStateAction<HeatingCircuitTypeModel| null>>;
 
     refreshRegulatorSettingsAsync: () => Promise<void>;
+    currentHeatingCircuitType: HeatingCircuitTypesItem | undefined;
     circuitId: number;
 }
 
@@ -26,6 +27,10 @@ function SettingPageContextProvider (props: any) {
 
     const [regulatorSettings, setRegulatorSettings] = useState<RegulatorSettingsModel | null>(null);
     const [heatingCircuitType, setHeatingCircuitType] = useState<HeatingCircuitTypeModel | null>(null);
+
+    const currentHeatingCircuitType = useMemo(() => {
+        return HeatingCircuitTypes.find(t => t.id === heatingCircuitType);
+    }, [heatingCircuitType]);
 
     const { getRegulatorSettingsAsync } = useAppData();
 
@@ -58,6 +63,8 @@ function SettingPageContextProvider (props: any) {
             setHeatingCircuitType,
 
             refreshRegulatorSettingsAsync,
+
+            currentHeatingCircuitType,
 
             circuitId
         } } { ...props }>

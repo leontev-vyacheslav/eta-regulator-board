@@ -1,133 +1,147 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import TreeView from 'devextreme-react/tree-view';
 import * as events from 'devextreme/events';
-import { navigation } from '../../constants/app-navigation';
+import { sideNavigationMenuItems } from '../../constants/app-navigation';
 import { useNavigation } from '../../contexts/navigation';
 import { useScreenSize } from '../../utils/media-query';
 import { useSharedArea } from '../../contexts/shared-area';
 import { TreeViewItemModel } from '../../models/tree-view-item';
 import { SideNavigationMenuProps } from '../../models/side-navigation-menu-props';
-
-import './side-navigation-menu.scss';
 import { useWorkdatePicker } from '../../contexts/workdate-context';
 
+import './side-navigation-menu.scss';
+
 export default function SideNavigationMenu(props: SideNavigationMenuProps) {
-  const {
-    children,
-    selectedItemChanged,
-    openMenu,
-    compactMode,
-    onMenuReady
-  } = props;
+    const {
+        children,
+        selectedItemChanged,
+        openMenu,
+        compactMode,
+        onMenuReady
+    } = props;
 
-  const { isLarge } = useScreenSize();
-  const { signOutWithConfirm, treeViewRef } = useSharedArea();
-  const { showWorkDatePicker } = useWorkdatePicker();
-  const { navigationData: { currentPath } } = useNavigation();
+    const { isLarge } = useScreenSize();
+    const { signOutWithConfirm, treeViewRef } = useSharedArea();
+    const { showWorkDatePicker } = useWorkdatePicker();
+    const { navigationData: { currentPath } } = useNavigation();
 
-  const wrapperRef = useRef();
+    const wrapperRef = useRef();
 
-  function normalizePath() {
-    return navigation
-      .filter(i => !i.restricted)
-      .map((item) => {
-        if (item.path && !(/^\//.test(item.path))) {
-          item.path = `/${item.path}`;
-        }
-        if (item.items) {
-          item.items = item.items.filter(i => !i.restricted)
-        }
-        return { ...item, expanded: isLarge } as TreeViewItemModel
-      });
-  }
-
-  const items: TreeViewItemModel[] = useMemo<TreeViewItemModel[]>(
-    normalizePath,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  const getWrapperRef = useCallback((element) => {
-    const prevElement = wrapperRef.current;
-    if (prevElement) {
-      events.off(prevElement, 'dxclick');
+    function normalizePath() {
+        return sideNavigationMenuItems
+            .filter(i => !i.restricted)
+            .map((item) => {
+                if (item.path && !(/^\//.test(item.path))) {
+                    item.path = `/${item.path}`;
+                }
+                if (item.items) {
+                    item.items = item.items.filter(i => !i.restricted)
+                }
+                return { ...item, expanded: isLarge } as TreeViewItemModel
+            });
     }
-    wrapperRef.current = element;
-    events.on(element, 'dxclick', () => {
-      openMenu();
-    });
-  }, [openMenu]);
 
-  useEffect(() => {
-    (async () => {
-      const treeView = treeViewRef.current?.instance;
-      if (treeView) {
-        if (currentPath !== undefined) {
-          treeView.selectItem(currentPath as any);
-          try {
-            await treeView.expandItem(currentPath as any);
-          } catch (ex) {
-            //
-          }
-        }
-        if (compactMode) {
-          treeView.collapseAll();
-        }
-      }
-    })();
-  }, [currentPath, compactMode, treeViewRef]);
-
-  const TreeViewItemContent = (e: TreeViewItemModel) => {
-    return (
-      <>
-        {e.iconRender ? <i className="dx-icon">{e.iconRender({})}</i> : null}
-        <span>{e.text}</span>
-      </>
+    const items: TreeViewItemModel[] = useMemo<TreeViewItemModel[]>(
+        normalizePath,
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
     );
-  }
 
-  return (
-    <div className={ 'dx-swatch-additional side-navigation-menu' } ref={ getWrapperRef }>
-      {children}
-      <div className={ 'menu-container' }>
-        <TreeView
-          ref={ treeViewRef }
-          items={ items as TreeViewItemModel[] }
-          keyExpr={ 'path' }
-          selectionMode={ 'single' }
-          itemRender={ TreeViewItemContent }
-          focusStateEnabled={ true }
-          expandEvent={ 'click' }
-          onItemClick={ event => {
-            if (event.itemData) {
-              const treeViewItem = event.itemData as TreeViewItemModel;
-              selectedItemChanged(event);
+    const getWrapperRef = useCallback((element) => {
+        const prevElement = wrapperRef.current;
+        if (prevElement) {
+            events.off(prevElement, 'dxclick');
+        }
+        wrapperRef.current = element;
+        events.on(element, 'dxclick', () => {
+            openMenu();
+        });
+    }, [openMenu]);
 
-              if (treeViewItem.command === 'workDate') {
-                showWorkDatePicker();
-
-                return;
-              }
-
-              if (treeViewItem.command === 'exit') {
-                signOutWithConfirm();
-
-                return;
-              }
-
-              if (treeViewRef.current) {
-                setTimeout(() => {
-                  treeViewRef.current!.instance.selectItem(event.itemData!);
-                }, 100)
-              }
+    useEffect(() => {
+        (async () => {
+            const treeView = treeViewRef.current?.instance;
+            if (treeView) {
+                if (currentPath !== undefined) {
+                    treeView.selectItem(currentPath as any);
+                    try {
+                        await treeView.expandItem(currentPath as any);
+                    } catch (ex) {
+                        //
+                    }
+                }
+                if (compactMode) {
+                    treeView.collapseAll();
+                }
             }
-          } }
-          onContentReady={ () => {
-            onMenuReady();
-          } }
-          width={ '100%' }
-        />
-      </div>
-    </div>
-  );
+        })();
+    }, [currentPath, compactMode, treeViewRef]);
+
+    const TreeViewItemContent = (e: TreeViewItemModel) => {
+        return (
+            <>
+                {e.iconRender ? <i className="dx-icon">{e.iconRender({})}</i> : null}
+                <span>{e.text}</span>
+            </>
+        );
+    }
+
+    return (
+        <div className={ 'dx-swatch-additional side-navigation-menu' } ref={ getWrapperRef }>
+            {children}
+            <div className={ 'menu-container' }>
+                <TreeView
+                    ref={ treeViewRef }
+                    items={ items as TreeViewItemModel[] }
+                    keyExpr={ 'path' }
+                    selectionMode={ 'single' }
+                    itemRender={ TreeViewItemContent }
+                    focusStateEnabled={ true }
+                    expandEvent={ 'click' }
+                    onItemClick={ async event => {
+                        if (!event.itemData) {
+
+                            return;
+                        }
+
+                        const treeViewItem = event.itemData as TreeViewItemModel;
+
+                        if (treeViewItem.items && treeViewItem.items.length > 0) {
+                            if (!event.node!.expanded) {
+                                await treeViewRef.current!.instance.collapseItem(treeViewItem);
+                            } else {
+                                await treeViewRef.current!.instance.expandItem(treeViewItem);
+                            }
+
+                            return;
+                        }
+
+                        selectedItemChanged(event);
+
+                        if (treeViewItem.command === 'workDate') {
+                            showWorkDatePicker();
+
+                            return;
+                        }
+
+                        if (treeViewItem.command === 'exit') {
+                            signOutWithConfirm();
+
+                            return;
+                        }
+
+                        if (treeViewRef.current) {
+                            setTimeout(() => {
+                                treeViewRef.current!.instance.selectItem(event.itemData!);
+                            }, 100)
+                        }
+                    } }
+                    onContentReady={ () => {
+                        onMenuReady();
+                    } }
+                    width={ '100%' }
+                />
+            </div>
+        </div>
+    );
 }

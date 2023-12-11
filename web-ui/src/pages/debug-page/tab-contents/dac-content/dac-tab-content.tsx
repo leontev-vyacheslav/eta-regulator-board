@@ -1,5 +1,5 @@
 import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
-import { DacContexProvider, useDac } from './dac-context';
+import { DacContextProvider, useDac } from './dac-context';
 import { useScreenSize } from '../../../../utils/media-query';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Button from 'devextreme-react/button';
@@ -13,17 +13,17 @@ const DacTabContentInternal = () => {
     const { isXSmall, isSmall } = useScreenSize();
     const { getStartedSignalGenAsync, getActiveSignalGenAsync, deleteActiveSignalGenAsync } = useAppData();
     const [activeSignalGen, setActiveSignalGen] = useState<ActiveSignalGenModel | null>(null);
+    const intervalTimerLock = useRef<boolean>(false);
 
     const formData = useMemo(() => {
         return {
-            testSignal: 1
+            signalId: 1,
+            lifetime: 60
         };
     }, []);
 
-    const r = useRef<boolean>(false);
-
     const start = useCallback(async () => {
-        const startedSignal = await getStartedSignalGenAsync(1);
+        const startedSignal = await getStartedSignalGenAsync(formData.signalId, formData.lifetime);
 
         proclaim({
             type: 'success',
@@ -31,10 +31,10 @@ const DacTabContentInternal = () => {
         });
 
         setActiveSignalGen(startedSignal);
-    }, [getStartedSignalGenAsync]);
+    }, [formData, getStartedSignalGenAsync]);
 
     const stop = useCallback(async () => {
-        r.current = true;
+        intervalTimerLock.current = true;
         try {
             const deletedSignal = await deleteActiveSignalGenAsync();
             proclaim({
@@ -43,7 +43,7 @@ const DacTabContentInternal = () => {
             });
             setActiveSignalGen(null);
         } finally {
-            r.current = false;
+            intervalTimerLock.current = false;
         }
 
     }, [deleteActiveSignalGenAsync]);
@@ -57,11 +57,12 @@ const DacTabContentInternal = () => {
 
     useEffect(() => {
         const intervalTimer = setInterval(async () => {
-            if(r.current) {
+            if(intervalTimerLock.current) {
                 return
             }
             const activeSignalGen = await getActiveSignalGenAsync();
             setActiveSignalGen(activeSignalGen);
+
         }, 1000);
 
         return () => clearInterval(intervalTimer)
@@ -81,17 +82,42 @@ const DacTabContentInternal = () => {
         >
             <GroupItem caption={ 'Тестовые сигналы' }>
                 <SimpleItem
-                    dataField='testSignal'
+                    dataField='signalId'
                     editorType='dxSelectBox'
                     label={ { location: 'top', showColon: true, text: 'Сигнал' } }
                     editorOptions={ {
                         displayExpr: 'description',
                         valueExpr: 'id',
-                        items: testSignalList
+                        items: testSignalList,
+                        disabled: activeSignalGen
+                    } }
+                />
+                 <SimpleItem
+                    dataField='lifetime'
+                    editorType='dxNumberBox'
+                    label={ { location: 'top', showColon: true, text: 'Время непрерывной генерации (сек)' } }
+                    editorOptions={ {
+                        min: 10,
+                        max: 300,
+                        step: 10,
+                        showSpinButtons: true,
+                        disabled: activeSignalGen
                     } }
                 />
 
-                <SimpleItem></SimpleItem>
+                <SimpleItem
+                >
+                    {
+                        activeSignalGen
+                        ? <div style={ { marginBottom: 10, marginTop: 10 } }>
+                            <div>Запущен фоновый процесс с pid {activeSignalGen.pid}.</div>
+                            <div>Время исполнения процесса {activeSignalGen.lifetime} сек.</div>
+                        </div>
+
+                        : <span>Нет активных фоновых процессов</span>
+                    }
+
+                </SimpleItem>
                 <SimpleItem cssClass='adc-form_buttons'>
                     {
                         activeSignalGen
@@ -112,8 +138,8 @@ const DacTabContentInternal = () => {
 
 export const DacTabContent = () => {
     return (
-        <DacContexProvider>
+        <DacContextProvider>
             <DacTabContentInternal />
-        </DacContexProvider>
+        </DacContextProvider>
     )
 }

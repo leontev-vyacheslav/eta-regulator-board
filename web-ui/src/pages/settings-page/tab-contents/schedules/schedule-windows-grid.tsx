@@ -2,7 +2,7 @@ import DataGrid, { Column, Editing, Lookup } from 'devextreme-react/data-grid';
 import { ValidationCallbackData, ValidationRule } from 'devextreme/common';
 import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
-import { ScheduleModel, ScheduleWindowModel } from '../../../../models/regulator-settings/schelules-model';
+import { ScheduleModel, ScheduleWindowModel } from '../../../../models/regulator-settings/schedules-model';
 import ArrayStore from 'devextreme/data/array_store';
 import { useSettingPageContext } from '../../settings-page-context';
 import { useCallback, useMemo, useRef } from 'react';

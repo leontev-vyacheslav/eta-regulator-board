@@ -3,7 +3,7 @@ import { SchedulesContextProvider, useSchedulesContext } from './schedules-conte
 import { SchedulesGrid } from './schedules-grid'
 import { useCallback, useMemo } from 'react';
 import { AddIcon, AdditionalMenuIcon, DeleteAllIcon, RefreshIcon } from '../../../../constants/app-icons';
-import { ScheduleModel } from '../../../../models/regulator-settings/schelules-model';
+import { ScheduleModel } from '../../../../models/regulator-settings/schedules-model';
 import ArrayStore from 'devextreme/data/array_store';
 import { showConfirmDialog } from '../../../../utils/dialogs';
 import { formatMessage } from 'devextreme/localization';

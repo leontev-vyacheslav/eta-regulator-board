@@ -11,7 +11,7 @@ export type AdcChannelModel = {
 export type AdcReadingSettingsModel = {
     channel: number;
     readContinuallyInterval: number;
-    fromTemperarureSensor: boolean;
+    fromTemperatureSensor: boolean;
 }
 
 export type AdcReadingResultsModel = {
@@ -23,7 +23,7 @@ export type AdcReadingResultsModel = {
 export type AdcContextModel = {
     readingSettings: AdcReadingSettingsModel;
     readingResults: AdcReadingResultsModel;
-    
+
     channelList: AdcChannelModel[];
 
     adcReadingSettingsFormRef: React.RefObject<Form>;

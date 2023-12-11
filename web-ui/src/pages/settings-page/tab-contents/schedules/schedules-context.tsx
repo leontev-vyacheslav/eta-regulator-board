@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useMemo, useRef } from 'react';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { useSettingPageContext } from '../../settings-page-context';
 import DataGrid from 'devextreme-react/data-grid';
-import { ScheduleModel } from '../../../../models/regulator-settings/schelules-model';
+import { ScheduleModel } from '../../../../models/regulator-settings/schedules-model';
 
 export type SchedulesContextModel = {
 

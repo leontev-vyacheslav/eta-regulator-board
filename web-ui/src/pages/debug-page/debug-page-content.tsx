@@ -1,21 +1,21 @@
 import { TabPanel } from 'devextreme-react';
 import React, { createContext, useContext, useRef } from 'react';
 
-export type DebugPageContexModel = {
+export type DebugPageContextModel = {
     tabPanelRef: React.RefObject<TabPanel<any, any>>;
 };
 
-const DebugPageContex = createContext({} as DebugPageContexModel) ;
+const DebugPageContext = createContext({} as DebugPageContextModel) ;
 
 function DebugPageContextProvider (props: any) {
     const tabPanelRef = useRef<TabPanel<any, any>>(null);
 
     return (
-        <DebugPageContex.Provider value={ {
+        <DebugPageContext.Provider value={ {
             tabPanelRef
         } } { ...props } />
     );
 }
-const useDebugPage = () => useContext(DebugPageContex);
+const useDebugPage = () => useContext(DebugPageContext);
 
 export { DebugPageContextProvider, useDebugPage };

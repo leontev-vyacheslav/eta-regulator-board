@@ -3,7 +3,7 @@ from flask import make_response, request, jsonify
 import jwt
 
 from app import app
-from data_access.requlator_settings_repository import RegulatorSettingsRepository
+from data_access.regulator_settings_repository import RegulatorSettingsRepository
 from models.common.message_model import MessageModel
 from responses.json_response import JsonResponse
 

@@ -13,6 +13,8 @@ export const HeatingCircuitContent = () => {
     const { regulatorSettings, setHeatingCircuitType, circuitId } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
+
+
     return (
         <Form
             className='app-form setting-form'
@@ -21,7 +23,7 @@ export const HeatingCircuitContent = () => {
             ref={ dxHeatingCircuitFormRef }
             formData={ regulatorSettings?.heatingCircuits.items[circuitId] }
             onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
-                const regulutorSettingsChange = {
+                const regulatorSettingsChange = {
                     regulatorSettings: regulatorSettings!,
                     changeLogItem: {
                         dataField: e.dataField!,
@@ -30,7 +32,7 @@ export const HeatingCircuitContent = () => {
                         value: e.value
                     }
                 }
-                await putRegulatorSettingsAsync(regulutorSettingsChange);
+                await putRegulatorSettingsAsync(regulatorSettingsChange);
             } }
         >
             <GroupItem caption='Контур'>
@@ -52,6 +54,11 @@ export const HeatingCircuitContent = () => {
                     label={ { location: 'top', showColon: true, text: 'Наименование' } }
                     editorType='dxTextBox'
                 />
+                {/* <SimpleItem cssClass='form-buttons'>
+                    <Button width={ 115 } type='normal' onClick={ downloadRegulatorSettings }>
+                        <DownloadIcon size={ 20 } /><span style={ { marginLeft: 5 } }>Выгрузить</span>
+                    </Button>
+                </SimpleItem> */}
             </GroupItem>
         </Form>
     );

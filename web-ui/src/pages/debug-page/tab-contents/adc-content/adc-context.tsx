@@ -44,7 +44,7 @@ function AdcContextProvider(props: any) {
         return {
             channel: 0,
             readContinuallyInterval: 1,
-            fromTemperarureSensor: false,
+            fromTemperatureSensor: false,
         } as AdcReadingSettingsModel
     }, []);
 
@@ -115,7 +115,7 @@ function AdcContextProvider(props: any) {
         disposedTimerDispatcher.current.add('AdcContext', disposedTimerModel);
 
         const internalTimeoutTimer = async () => {
-            await writeValueAsync(readingSettings.fromTemperarureSensor ? AdcReadModeModel.Temp : AdcReadModeModel.Adc);
+            await writeValueAsync(readingSettings.fromTemperatureSensor ? AdcReadModeModel.Temp : AdcReadModeModel.Adc);
             const startTime = performance.now();
             let endTime = startTime;
 
@@ -131,7 +131,7 @@ function AdcContextProvider(props: any) {
 
         await internalTimeoutTimer();
 
-    }, [disposedTimerDispatcher, readingResults, readingSettings.fromTemperarureSensor, readingSettings.readContinuallyInterval, writeMessage, writeValueAsync]);
+    }, [disposedTimerDispatcher, readingResults, readingSettings.fromTemperatureSensor, readingSettings.readContinuallyInterval, writeMessage, writeValueAsync]);
 
     const clearTimer = useCallback(() => {
         if(readingResults.timerUuid) {

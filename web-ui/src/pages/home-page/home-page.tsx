@@ -2,9 +2,11 @@ import './home-page.scss';
 import AppConstants from '../../constants/app-constants';
 import { HomeIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
+import { Mnemoschema } from '../../components/mnemoschema/mnemoschema';
+import { useScreenSize } from '../../utils/media-query';
 
 export const HomePage = () => {
-
+    const { isXSmall, isSmall } = useScreenSize();
     return (
         <>
             <PageHeader caption={ 'Главная' }>
@@ -12,7 +14,8 @@ export const HomePage = () => {
             </PageHeader>
             <div className={ 'content-block' }>
                 <div className={ 'dx-card responsive-paddings home-page-content' }>
-                    <div className={ 'logos-container' }>
+                    <Mnemoschema width={ isXSmall || isSmall ? 'auto' : 500 } />
+                    {/* <div className={ 'logos-container' }>
                         <div>{AppConstants.appInfo.companyName}</div>
                     </div>
                     <p>
@@ -36,7 +39,7 @@ export const HomePage = () => {
                             {AppConstants.appInfo.companyName}
                         </a>
                         <span>.</span>
-                    </p>
+                    </p> */}
                 </div>
             </div>
         </>

@@ -4,6 +4,25 @@ export enum HeatingCircuitTypeModel {
     ventilation = 3
 }
 
+export type HeatingCircuitTypesItem = {
+    id: HeatingCircuitTypeModel;
+    description: string;
+    shotDescription: string;
+    settings: {
+        comfortTemperatureMin?: number;
+        comfortTemperatureMax?: number;
+
+        economicalTemperatureMin?: number;
+        economicalTemperatureMax?: number;
+
+        manualControlModeTemperatureSetpointMin?: number;
+        manualControlModeTemperatureSetpointMax?: number;
+
+        analogValveErrorSetpointMin?: number;
+        analogValveErrorSetpointMax?: number;
+    }
+}
+
 export const HeatingCircuitTypes = [
     {
         id: HeatingCircuitTypeModel.heating,
@@ -12,8 +31,15 @@ export const HeatingCircuitTypes = [
         settings: {
             comfortTemperatureMin: 15,
             comfortTemperatureMax: 30,
+
             economicalTemperatureMin: 15,
-            economicalTemperatureMax: 30
+            economicalTemperatureMax: 30,
+
+            manualControlModeTemperatureSetpointMin: 30,
+            manualControlModeTemperatureSetpointMax: 150,
+
+            analogValveErrorSetpointMin: 0,
+            analogValveErrorSetpointMax: 100
         }
     },
     {
@@ -23,8 +49,12 @@ export const HeatingCircuitTypes = [
         settings: {
             comfortTemperatureMin: 30,
             comfortTemperatureMax: 80,
+
             economicalTemperatureMin: 30,
-            economicalTemperatureMax: 80
+            economicalTemperatureMax: 80,
+
+            analogValveErrorSetpointMin: 0,
+            analogValveErrorSetpointMax: 100
         }
     },
     {
@@ -34,8 +64,15 @@ export const HeatingCircuitTypes = [
         settings: {
             comfortTemperatureMin: 30,
             comfortTemperatureMax: 150,
+
             economicalTemperatureMin: 30,
-            economicalTemperatureMax: 150
+            economicalTemperatureMax: 150,
+
+            manualControlModeTemperatureSetpointMin: 40,
+            manualControlModeTemperatureSetpointMax: 110,
+
+            analogValveErrorSetpointMin: 0,
+            analogValveErrorSetpointMax: 100
         }
     }
 ]

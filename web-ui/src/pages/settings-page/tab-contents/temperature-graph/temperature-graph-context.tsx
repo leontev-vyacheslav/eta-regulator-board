@@ -5,7 +5,7 @@ import { useAppData } from '../../../../contexts/app-data/app-data';
 import DataGrid from 'devextreme-react/data-grid';
 
 export type TemperatureGraphContextModel = {
-    putTemparatureGraphAsync: (values: TemperatureGraphItemModel) => Promise<void>;
+    putTemperatureGraphAsync: (values: TemperatureGraphItemModel) => Promise<void>;
 
     chartArgumentAxisInverted: boolean;
     setChartArgumentAxisInverted: Dispatch<React.SetStateAction<boolean>>;
@@ -15,13 +15,13 @@ export type TemperatureGraphContextModel = {
 
 const TemperatureGraphContext = createContext({} as TemperatureGraphContextModel);
 
-function TempregatureGraphProvider(props: any) {
+function TemperatureGraphProvider(props: any) {
     const { regulatorSettings } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
     const [chartArgumentAxisInverted, setChartArgumentAxisInverted] = useState<boolean>(false);
     const dataGridRef = useRef<DataGrid<TemperatureGraphItemModel>>(null);
 
-    const putTemparatureGraphAsync = useCallback(async (values: TemperatureGraphItemModel) => {
+    const putTemperatureGraphAsync = useCallback(async (values: TemperatureGraphItemModel) => {
 
         const regulatorSettingsChange = {
             regulatorSettings: regulatorSettings!,
@@ -38,7 +38,7 @@ function TempregatureGraphProvider(props: any) {
 
     return (
         <TemperatureGraphContext.Provider value={ {
-            putTemparatureGraphAsync,
+            putTemperatureGraphAsync,
             chartArgumentAxisInverted,
             setChartArgumentAxisInverted,
             dataGridRef
@@ -48,4 +48,4 @@ function TempregatureGraphProvider(props: any) {
 
 const useTemperatureGraphContext = () => useContext(TemperatureGraphContext);
 
-export { TempregatureGraphProvider, useTemperatureGraphContext };
+export { TemperatureGraphProvider, useTemperatureGraphContext };
