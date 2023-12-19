@@ -39,6 +39,6 @@
             ],
             "editor.foldingHighlight": true,
         },
-        "svg.preview.background": "transparent",
+        "svg.preview.background": "white",
     }
 }

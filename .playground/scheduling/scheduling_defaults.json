@@ -1,0 +1,206 @@
+[
+    {
+        "id": "63070387-b180-4e87-9cc7-c904cf8efa76",
+        "day": 1,
+        "windows": [
+            {
+                "id": "2227b4ae-39b7-4246-9324-4a88c58d2992",
+                "startTime": "2023-12-10T21:00:00.000Z",
+                "endTime": "2023-12-11T02:00:00.000Z",
+                "desiredTemperatureMode": 3
+            },
+            {
+                "id": "c06be280-b65c-4a09-a378-1f9c8a2b66fb",
+                "startTime": "2023-12-11T02:00:00.000Z",
+                "endTime": "2023-12-11T07:00:00.000Z",
+                "desiredTemperatureMode": 2
+            },
+            {
+                "id": "77427163-4abf-444c-824b-6ac9fc459ab6",
+                "startTime": "2023-12-11T07:00:00.000Z",
+                "endTime": "2023-12-11T13:00:00.000Z",
+                "desiredTemperatureMode": 3
+            },
+            {
+                "id": "791deefa-7d3a-49a3-bf9a-002f8901289e",
+                "startTime": "2023-12-11T13:00:00.000Z",
+                "endTime": "2023-12-11T18:00:00.000Z",
+                "desiredTemperatureMode": 2
+            },
+            {
+                "id": "f05e6ebe-4019-4a21-9e1e-7f54a8444de5",
+                "startTime": "2023-12-11T18:00:00.000Z",
+                "endTime": "2023-12-11T20:59:59.000Z",
+                "desiredTemperatureMode": 3
+            }
+        ]
+    },
+    {
+        "id": "89295b1d-923c-45fe-9bf4-50ad320cf7c8",
+        "day": 2,
+        "windows": [
+            {
+                "id": "6bf513a8-f08d-4dbc-979a-077046ee9328",
+                "startTime": "2023-12-10T21:00:00.000Z",
+                "endTime": "2023-12-11T02:00:00.000Z",
+                "desiredTemperatureMode": 3
+            },
+            {
+                "id": "39b5ee3e-347b-48b5-a2af-da6fe425966e",
+                "startTime": "2023-12-11T02:00:00.000Z",
+                "endTime": "2023-12-11T07:00:00.000Z",
+                "desiredTemperatureMode": 2
+            },
+            {
+                "id": "4ab6aeb9-2cf7-4dbc-9c70-46a7577969dc",
+                "startTime": "2023-12-11T07:00:00.000Z",
+                "endTime": "2023-12-11T13:00:00.000Z",
+                "desiredTemperatureMode": 3
+            },
+            {
+                "id": "2a7467ef-3834-4e10-8ba4-22941db74f8a",
+                "startTime": "2023-12-11T13:00:00.000Z",
+                "endTime": "2023-12-11T18:00:00.000Z",
+                "desiredTemperatureMode": 2
+            },
+            {
+                "id": "ae30f390-f33f-4791-b3f1-aedcc23f623d",
+                "startTime": "2023-12-11T18:00:00.000Z",
+                "endTime": "2023-12-11T20:59:59.000Z",
+                "desiredTemperatureMode": 3
+            }
+        ]
+    },
+    {
+        "id": "8d9a5077-ac83-45d3-8ba5-18762aac2c67",
+        "day": 3,
+        "windows": [
+            {
+                "id": "50b33b9f-3977-46b7-8e93-e6fe3e91b54e",
+                "startTime": "2023-12-10T21:00:00.000Z",
+                "endTime": "2023-12-11T02:00:00.000Z",
+                "desiredTemperatureMode": 3
+            },
+            {
+                "id": "b3b679de-dee3-4e45-b62d-0b849a480613",
+                "startTime": "2023-12-11T02:00:00.000Z",
+                "endTime": "2023-12-11T07:00:00.000Z",
+                "desiredTemperatureMode": 2
+            },
+            {
+                "id": "4b2e6abc-15c0-494f-9461-6295b431cd6b",
+                "startTime": "2023-12-11T07:00:00.000Z",
+                "endTime": "2023-12-11T13:00:00.000Z",
+                "desiredTemperatureMode": 3
+            },
+            {
+                "id": "eb6a0245-aae7-4390-addc-060ab6958b5a",
+                "startTime": "2023-12-11T13:00:00.000Z",
+                "endTime": "2023-12-11T18:00:00.000Z",
+                "desiredTemperatureMode": 2
+            },
+            {
+                "id": "61c9031d-464f-41f1-a5c0-8e3c795ddf79",
+                "startTime": "2023-12-11T18:00:00.000Z",
+                "endTime": "2023-12-11T20:59:59.000Z",
+                "desiredTemperatureMode": 3
+            }
+        ]
+    },
+    {
+        "id": "51094036-3332-40f8-94f0-076e446e2550",
+        "day": 4,
+        "windows": [
+            {
+                "id": "fe76762d-b598-4e52-b02e-5dfcdcc56158",
+                "startTime": "2023-12-10T21:00:00.000Z",
+                "endTime": "2023-12-11T02:00:00.000Z",
+                "desiredTemperatureMode": 3
+            },
+            {
+                "id": "b2a0dced-351e-4c3b-84f6-5490d2299f17",
+                "startTime": "2023-12-11T02:00:00.000Z",
+                "endTime": "2023-12-11T07:00:00.000Z",
+                "desiredTemperatureMode": 2
+            },
+            {
+                "id": "c50d0969-507a-430c-ba1b-17375632007e",
+                "startTime": "2023-12-11T07:00:00.000Z",
+                "endTime": "2023-12-11T13:00:00.000Z",
+                "desiredTemperatureMode": 3
+            },
+            {
+                "id": "158306ff-3915-4f4a-b7eb-dfb224ce3d13",
+                "startTime": "2023-12-11T13:00:00.000Z",
+                "endTime": "2023-12-11T18:00:00.000Z",
+                "desiredTemperatureMode": 2
+            },
+            {
+                "id": "2c0b38e2-351b-4c10-806e-132a36960b2e",
+                "startTime": "2023-12-11T18:00:00.000Z",
+                "endTime": "2023-12-11T20:59:59.000Z",
+                "desiredTemperatureMode": 3
+            }
+        ]
+    },
+    {
+        "id": "19101ee2-3fa4-457c-9451-586ec198b11d",
+        "day": 5,
+        "windows": [
+            {
+                "id": "aa4449b5-8a69-4a54-b6c4-586de4110606",
+                "startTime": "2023-12-10T21:00:00.000Z",
+                "endTime": "2023-12-11T02:00:00.000Z",
+                "desiredTemperatureMode": 3
+            },
+            {
+                "id": "020a22d0-6aec-4339-b07c-274e8cbec55f",
+                "startTime": "2023-12-11T02:00:00.000Z",
+                "endTime": "2023-12-11T07:00:00.000Z",
+                "desiredTemperatureMode": 2
+            },
+            {
+                "id": "16940593-a704-4414-b346-514e25589951",
+                "startTime": "2023-12-11T07:00:00.000Z",
+                "endTime": "2023-12-11T13:00:00.000Z",
+                "desiredTemperatureMode": 3
+            },
+            {
+                "id": "0251d184-33be-4ce3-a103-46067f04e057",
+                "startTime": "2023-12-11T13:00:00.000Z",
+                "endTime": "2023-12-11T18:00:00.000Z",
+                "desiredTemperatureMode": 2
+            },
+            {
+                "id": "2ddf2345-5b1e-49c8-b260-2de1fe94df8d",
+                "startTime": "2023-12-11T18:00:00.000Z",
+                "endTime": "2023-12-11T20:59:59.000Z",
+                "desiredTemperatureMode": 3
+            }
+        ]
+    },
+    {
+        "id": "deebf10a-1771-4da4-82b3-d969d8e42b9e",
+        "day": 6,
+        "windows": [
+            {
+                "id": "b4e18647-b1bb-4036-a6e7-d6332eceb4ce",
+                "startTime": "2023-12-10T21:00:00.000Z",
+                "endTime": "2023-12-11T20:59:59.000Z",
+                "desiredTemperatureMode": 2
+            }
+        ]
+    },
+    {
+        "id": "ff73b7d6-ff29-43ec-abf9-aa3357558546",
+        "day": 7,
+        "windows": [
+            {
+                "id": "141a0e50-2add-4d99-85bc-cdf7d57b54e4",
+                "startTime": "2023-12-10T21:00:00.000Z",
+                "endTime": "2023-12-11T20:59:59.000Z",
+                "desiredTemperatureMode": 2
+            }
+        ]
+    }
+]

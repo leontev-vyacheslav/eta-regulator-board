@@ -71,6 +71,8 @@ export { MdOutlineManageHistory as ManageIcon } from 'react-icons/md';
 export { IoDownloadOutline  as DownloadIcon2 } from 'react-icons/io5';
 export { IoReloadSharp  as ResetIcon } from 'react-icons/io5';
 
+export { AiFillFire  as HeatSysIcon } from 'react-icons/ai';
+export { IoWater  as HotWaterIcon } from 'react-icons/io5';
 
 import { MdMoreVert } from 'react-icons/md';
 export const GridAdditionalMenuIcon = () => <MdMoreVert style={ { cursor: 'pointer' } } size={ 18 } />
