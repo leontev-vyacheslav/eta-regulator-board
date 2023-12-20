@@ -52,6 +52,22 @@ const propsInject = {
                     if(node.type === 'element' && node.name === 'animateTransform' && node.attributes.id === 'pump_dynamic_animation') {
                         node.attributes.dur = "{ props.pumpOn ? '2.0s': 'indefinite' }";
                     }
+
+                    if (parentNode && parentNode.attributes && (parentNode.attributes.id === 'valve_M1_pos_txt' || parentNode.attributes.id === 'valve_M2_pos_txt')) {
+                        const tspan = node.children.find(child => child.name === 'tspan');
+                        node.attributes.x = '310'
+                        if (tspan) {
+                            tspan.children = [{type: 'text', value: 'props.valvePosition'}];
+                        }
+                    }
+
+                    if (node.attributes.id === 'valve_M1_up' || node.attributes.id === 'valve_M2_up') {
+                        node.attributes.style = node.attributes.style.replace('display:inline', 'display:props.valveDirection === 1 ? \'inline\': \'none\'')
+                    }
+
+                    if (node.attributes.id === 'valve_M1_dn' || node.attributes.id === 'valve_M2_dn') {
+                        node.attributes.style = node.attributes.style.replace('display:inline', 'display:props.valveDirection === 2 ? \'inline\': \'none\'')
+                    }
                 }
             }
         }
@@ -65,7 +81,7 @@ const pumpAnimationInject = {
         return {
             element: {
                 enter: (node, parentNode) => {
-                    if (node.attributes.id == "pump_dynamic") {
+                    if (node.attributes.id == 'pump_dynamic') {
                         const circleElement = node.children.find(child => child.name == 'circle');
                         if (!circleElement) {
                             throw ReferenceError('circle element not found (pump_dynamic)')
@@ -183,24 +199,24 @@ module.exports = {
             pumpAnimationInject,
             propsInject,
             {
-                name: "removeXMLNS"
+                name: 'removeXMLNS'
             },
             {
-                name: "removeEditorsNSData",
+                name: 'removeEditorsNSData',
                 params: {
-                    additionalNamespaces: ["inkscape", "sodipodi", "xml"]
+                    additionalNamespaces: ['inkscape', 'sodipodi', 'xml']
                 }
             },
             {
-                name: "removeElementsByAttr",
+                name: 'removeElementsByAttr',
                 params: {
-                    id: ["namedview3691"]
+                    id: ['namedview3691']
                 }
             },
             {
-                name: "removeAttrs",
+                name: 'removeAttrs',
                 params: {
-                    attrs: ["space", "nodetypes", "docname", "shapeInside"]
+                    attrs: ['space', 'nodetypes', 'docname', 'shapeInside']
                 }
             },
             {
@@ -208,7 +224,20 @@ module.exports = {
                 params: {
                     remove: true,
                     minify: false,
-                    preserve: ["T_air", "T1", "T2", "T3", "T4", "pump_dynamic"],
+                    preserve: [
+                        'T_air',
+                        'T1',
+                        'T2',
+                        'T3',
+                        'T4',
+                        'pump_dynamic',
+                        'valve_M1_pos_txt',
+                        'valve_M1_dn',
+                        'valve_M1_up',
+                        'valve_M2_pos_txt',
+                        'valve_M2_dn',
+                        'valve_M2_up',
+                    ],
                     preservePrefixes: [],
                     force: true
                 }

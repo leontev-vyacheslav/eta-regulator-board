@@ -7,6 +7,7 @@ import { useRef, useState } from 'react';
 import { IconTab } from '../../components/tab-utils/icon-tab';
 import { HeatSysMnemoschema } from './tab-contents/heat-sys-content/heat-sys-mnemoschema';
 import { HotWaterMnemoschema } from './tab-contents/hot-water-content/hot-water-mnemoschema';
+import { ValveDirectionModel } from '../../models/regulator-settings/enums/valve-direction-model';
 
 export const HomePage = () => {
     const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
@@ -36,6 +37,8 @@ export const HomePage = () => {
                                         supplyPipeTemperature={ 110.5 }
                                         returnPipeTemperature={ 90.35 }
                                         outdoorTemperature={ -18.5 }
+                                        valvePosition={ 53.5 }
+                                        valveDirection={ ValveDirectionModel.up }
                                     />
                                     : null
                             }
@@ -48,6 +51,8 @@ export const HomePage = () => {
                                         pumpOn={ false }
                                         supplyPipeTemperature={ 93.6 }
                                         returnPipeTemperature={ 66.5 }
+                                        valvePosition={ 67.8 }
+                                        valveDirection={ ValveDirectionModel.up }
                                     />
                                     : null
                             }

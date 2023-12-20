@@ -1366,17 +1366,17 @@
     <polygon
        class="st71"
        points="468.91,83.73 462.1,81.15 462.1,86.3 "
-       id="valve_M2_dn"
+       id="valve_M2_up"
        style="display:inline;fill:url(#SVGID_51_-4)"
        transform="matrix(0,-0.39309697,0.72359494,0,-26.041453,191.67765)"
-       inkscape:label="#valve_M2_dn" />
+       inkscape:label="#valve_M2_up" />
     <polygon
        class="st71"
        points="468.91,83.73 462.1,81.15 462.1,86.3 "
-       id="valve_M2_up"
+       id="valve_M2_dn"
        style="display:inline;fill:url(#SVGID_51_-4-0)"
        transform="matrix(0,0.39309697,0.72359494,0,-26.033784,-170.57004)"
-       inkscape:label="#valve_M2_up" />
+       inkscape:label="#valve_M2_dn" />
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-55.79532,-10.746162)"

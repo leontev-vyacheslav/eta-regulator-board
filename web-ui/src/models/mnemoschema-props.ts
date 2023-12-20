@@ -1,3 +1,5 @@
+import { ValveDirectionModel } from './regulator-settings/enums/valve-direction-model';
+
 export type MnemoschemaProps = {
     pumpOn: boolean;
 
@@ -5,5 +7,9 @@ export type MnemoschemaProps = {
 
     returnPipeTemperature: number;
 
-    outdoorTemperature?: number
+    outdoorTemperature?: number,
+
+    valvePosition: number,
+
+    valveDirection: ValveDirectionModel
 }

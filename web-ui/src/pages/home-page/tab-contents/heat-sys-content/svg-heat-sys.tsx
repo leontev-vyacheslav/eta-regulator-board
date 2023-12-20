@@ -2179,8 +2179,9 @@ const SvgHeatSystem = (props) => (
             <polygon
                 className="st71"
                 points="462.1,86.3 468.91,83.73 462.1,81.15 "
+                id="valve_M1_up"
                 style={ {
-                    display: 'inline',
+                    display: props.valveDirection === 1 ? 'inline': 'none',
                     fill: 'url(#SVGID_51_-4)',
                 } }
                 transform="matrix(0,-0.39309697,0.72359494,0,-26.409893,201.74834)"
@@ -2188,8 +2189,9 @@ const SvgHeatSystem = (props) => (
             <polygon
                 className="st71"
                 points="462.1,86.3 468.91,83.73 462.1,81.15 "
+                id="valve_M1_dn"
                 style={ {
-                    display: 'inline',
+                    display: props.valveDirection === 2 ? 'inline': 'none',
                     fill: 'url(#SVGID_51_-4-0)',
                 } }
                 transform="matrix(0,0.39309697,0.72359494,0,-26.402224,-160.49935)"
@@ -2197,6 +2199,7 @@ const SvgHeatSystem = (props) => (
             <text
                 xmlSpace="preserve"
                 transform="matrix(0.26458333,0,0,0.26458333,-56.16376,-0.6754731)"
+                id="valve_M1_pos_txt"
                 style={ {
                     fontSize: 8,
                     textAlign: 'center',
@@ -2211,12 +2214,12 @@ const SvgHeatSystem = (props) => (
                     strokeDasharray: 'none',
                     strokeOpacity: 1,
                 } }>
-                <tspan x={ 304.82095 } y={ 72.263376 }>
+                <tspan x={ 310 } y={ 72.263376 }>
                     <tspan
                         style={ {
                             fill: '#000000',
                         } }>
-                        {'0~100%'}
+                        {props.valvePosition}, %
                     </tspan>
                 </tspan>
             </text>

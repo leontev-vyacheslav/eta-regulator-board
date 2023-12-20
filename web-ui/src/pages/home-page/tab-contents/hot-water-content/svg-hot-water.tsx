@@ -2014,8 +2014,9 @@ const SvgHotWater = (props) => (
             <polygon
                 className="st71"
                 points="468.91,83.73 462.1,81.15 462.1,86.3 "
+                id="valve_M2_up"
                 style={ {
-                    display: 'inline',
+                    display: props.valveDirection === 1 ? 'inline': 'none',
                     fill: 'url(#SVGID_51_-4)',
                 } }
                 transform="matrix(0,-0.39309697,0.72359494,0,-26.041453,191.67765)"
@@ -2023,8 +2024,9 @@ const SvgHotWater = (props) => (
             <polygon
                 className="st71"
                 points="468.91,83.73 462.1,81.15 462.1,86.3 "
+                id="valve_M2_dn"
                 style={ {
-                    display: 'inline',
+                    display: props.valveDirection === 2 ? 'inline': 'none',
                     fill: 'url(#SVGID_51_-4-0)',
                 } }
                 transform="matrix(0,0.39309697,0.72359494,0,-26.033784,-170.57004)"
@@ -2032,6 +2034,7 @@ const SvgHotWater = (props) => (
             <text
                 xmlSpace="preserve"
                 transform="matrix(0.26458333,0,0,0.26458333,-55.79532,-10.746162)"
+                id="valve_M2_pos_txt"
                 style={ {
                     fontSize: 8,
                     textAlign: 'center',
@@ -2046,12 +2049,12 @@ const SvgHotWater = (props) => (
                     strokeDasharray: 'none',
                     strokeOpacity: 1,
                 } }>
-                <tspan x={ 304.82095 } y={ 72.263376 }>
+                <tspan x={ 310 } y={ 72.263376 }>
                     <tspan
                         style={ {
                             fill: '#000000',
                         } }>
-                        {'0~100%'}
+                        {props.valvePosition}, %
                     </tspan>
                 </tspan>
             </text>

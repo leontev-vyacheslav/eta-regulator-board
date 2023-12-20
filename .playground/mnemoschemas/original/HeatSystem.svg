@@ -1410,17 +1410,17 @@
     <polygon
        class="st71"
        points="462.1,86.3 468.91,83.73 462.1,81.15 "
-       id="valve_M1_dn"
+       id="valve_M1_up"
        style="display:inline;fill:url(#SVGID_51_-4)"
        transform="matrix(0,-0.39309697,0.72359494,0,-26.409893,201.74834)"
-       inkscape:label="#valve_M1_dn" />
+       inkscape:label="#valve_M1_up" />
     <polygon
        class="st71"
        points="462.1,86.3 468.91,83.73 462.1,81.15 "
-       id="valve_M1_up"
+       id="valve_M1_dn"
        style="display:inline;fill:url(#SVGID_51_-4-0)"
        transform="matrix(0,0.39309697,0.72359494,0,-26.402224,-160.49935)"
-       inkscape:label="#valve_M1_up" />
+       inkscape:label="#valve_M1_dn" />
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-56.16376,-0.6754731)"
