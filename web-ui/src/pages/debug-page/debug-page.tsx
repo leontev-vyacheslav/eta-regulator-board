@@ -27,7 +27,7 @@ const DebugPageInternal = () => {
                         ref={ tabPanelRef }
                         swipeEnabled={ false }
                         width={ '100%' }
-                        height={ '65vh' }
+                        height={ AppConstants.pageHeight }
                         loop
                         onSelectedIndexChange={ (value: number) => {
                             setActiveTabIndex(value);

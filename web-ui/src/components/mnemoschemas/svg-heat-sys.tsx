@@ -2204,6 +2204,7 @@ const SvgHeatSystem = (props) => (
                     fontSize: 8,
                     textAlign: 'center',
                     whiteSpace: 'pre',
+                    
                     display: 'inline',
                     fill: '#2196F3',
                     fillOpacity: 1,
@@ -2219,7 +2220,7 @@ const SvgHeatSystem = (props) => (
                         style={ {
                             fill: '#000000',
                         } }>
-                        {props.valvePosition}, %
+                        {props.valvePosition}%
                     </tspan>
                 </tspan>
             </text>

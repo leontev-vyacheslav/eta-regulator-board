@@ -4,10 +4,11 @@ import { formatMessage } from 'devextreme/localization';
 import { useEffect, useMemo, useState } from 'react';
 import { useScreenSize } from '../../../../utils/media-query';
 import { useTemperatureGraphContext } from './temperature-graph-context';
+import AppConstants from '../../../../constants/app-constants';
 
 export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
     const { dataGridRef } = useTemperatureGraphContext()
-    const { isXSmall, isSmall } = useScreenSize();
+    const { isXSmall } = useScreenSize();
 
     const defaultColumCaptions = useMemo(() => {
         return {
@@ -103,9 +104,8 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
             ref={ dataGridRef }
             className='app-grid temperature-graph-grid'
             showColumnLines
-            width={ isXSmall || isSmall ? '100%' : 600 }
             dataSource={ dataSource }
-            height={ '50vh' }
+            height={ AppConstants.formHeight }
         >
             <Selection mode='single' />
 

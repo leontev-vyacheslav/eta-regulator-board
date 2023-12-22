@@ -22,3 +22,29 @@
 .screen-x-small .about-app-info {
   width: 100%;
 }
+
+.screen-x-small, .screen-small
+{
+  .debug-form {
+    .dx-field-item-content.dx-field-item-content-location-bottom {
+      width: 100%;
+    }
+  }
+  .debug-list {
+    width: 100%;
+  }
+}
+
+
+.screen-x-large, .screen-large
+{
+  .debug-list {
+    width: 800px;
+  }
+  .debug-form {
+    .dx-field-item-content.dx-field-item-content-location-bottom {
+      width: 800px;
+    }
+  }
+
+}

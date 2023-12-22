@@ -3,10 +3,9 @@ import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
 import { CloseCircleIcon, StartIcon, StopIcon } from '../../../../constants/app-icons';
 import { useAdc } from './adc-context';
 import { useCallback } from 'react';
-import { useScreenSize } from '../../../../utils/media-query';
+import AppConstants from '../../../../constants/app-constants';
 
 export const AdcReadingResultsForm = () => {
-    const { isXSmall, isSmall } = useScreenSize();
 
     const {
         readingResults,
@@ -49,10 +48,9 @@ export const AdcReadingResultsForm = () => {
         <Form
             ref = { adcReadingResultsFormRef }
             formData={ readingResults }
-            className='app-form adc-form'
+            className='app-form debug-form adc-form'
             style={ { height: '50vh' } }
-            height={ '50vh' }
-            width={ isXSmall || isSmall ? '100%' : 600 }
+            height={ AppConstants.formHeight }
             scrollingEnabled={ true }
             colCount={ 1 }
         >

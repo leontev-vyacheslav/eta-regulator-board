@@ -18,7 +18,10 @@ const AppConstants = {
         borderGreyColor: '#a3a3a3',
         themeBaseAccent: '#FF5722',
         baseDarkgreyTextColor: '#464646'
-    }
+    },
+    pageHeight: '65vh',
+    formHeight: '55vh',
+    chartHeight: '50vh'
 };
 
 export default AppConstants;

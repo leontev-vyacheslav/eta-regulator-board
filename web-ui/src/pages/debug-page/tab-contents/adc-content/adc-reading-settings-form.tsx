@@ -3,11 +3,10 @@ import { StartIcon } from '../../../../constants/app-icons';
 import Button from 'devextreme-react/button';
 import { useAdc } from './adc-context';
 import { useCallback } from 'react';
-import { useScreenSize } from '../../../../utils/media-query';
+import AppConstants from '../../../../constants/app-constants';
 
 
 export const AdcReadingSettingsForm = () => {
-    const { isXSmall, isSmall } = useScreenSize();
     const { readingSettings, readingResults, channelList, adcReadingSettingsFormRef, setIsReadingEnabled, setIsShowOutputConsole, setTimer } = useAdc();
 
     const start = useCallback(() => {
@@ -34,10 +33,9 @@ export const AdcReadingSettingsForm = () => {
         <Form
             ref={ adcReadingSettingsFormRef }
             formData={ readingSettings }
-            className='app-form adc-form'
-            style={ { height: '50vh' } }
-            height={ '50vh' }
-            width={ isXSmall || isSmall ? '100%' : 600 }
+            className='app-form debug-form adc-form'
+            // style={ { height: '50vh' } }
+            height={ AppConstants.formHeight }
             scrollingEnabled={ true }
             colCount={ 1 }
         >

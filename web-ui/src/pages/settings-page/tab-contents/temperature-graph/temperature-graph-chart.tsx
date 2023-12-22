@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import Chart, { ArgumentAxis, CommonAxisSettings, Grid, Legend, Series, Title, Tooltip, ValueAxis } from 'devextreme-react/chart';
 import { useTemperatureGraphContext } from './temperature-graph-context';
-import { useScreenSize } from '../../../../utils/media-query';
 import { getUuidV4 } from '../../../../utils/uuid';
+import AppConstants from '../../../../constants/app-constants';
 
 
 const TooltipTemplate = (info: any) => {
@@ -16,17 +16,15 @@ const TooltipTemplate = (info: any) => {
 }
 
 export const TemperatureGraphChart = ({ dataSource }: { dataSource: any }) => {
-    const { isXSmall, isSmall } = useScreenSize();
     const chartRef = useRef<Chart>(null);
     const { chartArgumentAxisInverted } = useTemperatureGraphContext();
 
     return (
         <Chart
-            className='test-chart'
+            className='temperature-graph-chart'
             ref={ chartRef }
             dataSource={ dataSource }
-            height={ '50vh' }
-            width={ isXSmall || isSmall ? '100%' : 600 }
+            height={ AppConstants.chartHeight }
         >
             <Tooltip
                 enabled

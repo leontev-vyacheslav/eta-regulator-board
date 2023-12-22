@@ -1,5 +1,4 @@
 import { Form, GroupItem, SimpleItem } from 'devextreme-react/form';
-import { useScreenSize } from '../../../../utils/media-query';
 import {  useRef } from 'react';
 import { useSettingPageContext } from '../../settings-page-context';
 import { ControlModeModel, ControlModes } from '../../../../models/regulator-settings/enums/control-mode-model';
@@ -8,18 +7,17 @@ import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { formatMessage } from 'devextreme/localization';
 import { HeatingCircuitTypeModel } from '../../../../models/regulator-settings/enums/heating-circuit-type-model';
+import AppConstants from '../../../../constants/app-constants';
 
 export const ControlParametersForm = () => {
     const dxControlParametersFormRef = useRef<Form>(null);
-    const { isXSmall, isSmall } = useScreenSize();
     const { regulatorSettings, heatingCircuitType, circuitId, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
     return regulatorSettings ?
         <Form
             className='app-form setting-form'
-            height={ '50vh' }
-            width={ isXSmall || isSmall ? '100%' : 600 }
+            height={ AppConstants.formHeight }
             scrollingEnabled={ true }
             colCount={ 1 }
             formData={ regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.controlParameters }

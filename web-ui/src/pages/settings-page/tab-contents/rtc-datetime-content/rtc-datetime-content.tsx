@@ -1,21 +1,19 @@
 import { useRef } from 'react';
 import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
-import { useScreenSize } from '../../../../utils/media-query';
 import { useAppSettings } from '../../../../contexts/app-settings';
 import { useAppData } from '../../../../contexts/app-data/app-data';
+import AppConstants from '../../../../constants/app-constants';
 
 export const RtcDateTimeForm = () => {
     const dxRtcDateTimeFormRef = useRef<Form>(null);
-    const { isXSmall, isSmall } = useScreenSize();
     const { appSettingsData } = useAppSettings();
     const { putRtcDateTimeAsync } = useAppData();
 
     return (
         <Form
             className={ 'app-form setting-form' }
-            height={ '50vh' }
-            width={ isXSmall || isSmall ? '100%' : 600 }
+            height={ AppConstants.formHeight }
             scrollingEnabled={ true }
             colCount={ 1 }
             formData={ appSettingsData }

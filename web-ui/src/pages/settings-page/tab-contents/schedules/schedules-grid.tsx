@@ -9,11 +9,11 @@ import { ValidationCallbackData, ValidationRule } from 'devextreme/common';
 import { formatMessage } from 'devextreme/localization';
 import { ScheduleWindowsGrid } from './schedule-windows-grid';
 import { useSchedulesContext } from './schedules-context';
-import { useScreenSize } from '../../../../utils/media-query';
+
+import AppConstants from '../../../../constants/app-constants';
 
 
 export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
-    const { isXSmall, isSmall } = useScreenSize();
     const { regulatorSettings, circuitId } = useSettingPageContext();
     const { schedulesDataGridRef, daysOfWeek } = useSchedulesContext();
 
@@ -42,10 +42,9 @@ export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
                 key={ 'id' }
                 ref={ schedulesDataGridRef }
                 dataSource={ dataSource }
-                height={ '50vh' }
+                height={ AppConstants.formHeight }
                 showColumnHeaders={ false }
                 toolbar={ { visible: false } }
-                width={ isXSmall || isSmall ? '100%' : 600 }
             >
                 <Column type='detailExpand' width={ 50 } />
                 <Column

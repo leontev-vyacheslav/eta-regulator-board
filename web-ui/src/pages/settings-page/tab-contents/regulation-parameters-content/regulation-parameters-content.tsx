@@ -1,13 +1,12 @@
 import Form, { SimpleItem } from 'devextreme-react/form';
-import { useScreenSize } from '../../../../utils/media-query';
 import { useRef } from 'react';
 import { useSettingPageContext } from '../../settings-page-context';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import { useAppData } from '../../../../contexts/app-data/app-data';
+import AppConstants from '../../../../constants/app-constants';
 
 export const RegulationParametersForm = () => {
     const dxRegulatorParametersFormRef = useRef<Form>(null);
-    const { isXSmall, isSmall } = useScreenSize();
     const { regulatorSettings, circuitId, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
@@ -15,8 +14,7 @@ export const RegulationParametersForm = () => {
         <Form
 
             className='app-form setting-form'
-            height={ '50vh' }
-            width={ isXSmall || isSmall ? '100%' : 600 }
+            height={ AppConstants.formHeight }
             scrollingEnabled={ true }
             colCount={ 1 }
             formData={ regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.regulationParameters }

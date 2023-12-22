@@ -8,13 +8,11 @@ import ArrayStore from 'devextreme/data/array_store';
 import { showConfirmDialog } from '../../../../utils/dialogs';
 import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
-import { useScreenSize } from '../../../../utils/media-query';
 import { useSettingPageContext } from '../../settings-page-context';
 
 const SchedulesTabContentInner = () => {
     const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync, circuitId } = useSettingPageContext();
     const { putSchedulesAsync, schedulesDataGridRef } = useSchedulesContext();
-    const { isXSmall, isSmall } = useScreenSize();
 
     const schedulesStore = useMemo(() => {
 
@@ -86,7 +84,7 @@ const SchedulesTabContentInner = () => {
 
     return (
         <div className='setting-form'>
-            <PageToolbar title={ formatMessage('schedules-title') } menuItems={ menuItems } style={ { width:  isXSmall || isSmall ? '100%' : 600 } } />
+            <PageToolbar title={ formatMessage('schedules-title') } menuItems={ menuItems } />
             <SchedulesGrid dataSource={ schedulesStore } />
         </div>
     );

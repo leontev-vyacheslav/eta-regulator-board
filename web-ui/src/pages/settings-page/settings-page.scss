@@ -14,11 +14,12 @@
   }
 }
 .setting-form {
-  margin-top: 10px;
+  margin-top: 7px;
   padding: 5px;
 
   .dx-field-item-label {
     pointer-events: none;
+    padding-top: 5px;
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 3px;
@@ -28,6 +29,47 @@
     svg {
       color: grey
     }
+  }
+
+}
+.screen-x-small, .screen-small
+{
+  .setting-form {
+    .dx-field-item-content.dx-field-item-content-location-bottom {
+      width: 100%;
+    }
+  }
+  .temperature-graph-chart {
+    width: 100%;
+  }
+  .temperature-graph-grid {
+    width: 100%;
+  }
+  .schedules-grid {
+    width: 100%;
+  }
+  .app-page-toolbar {
+    width: 100%;
+  }
+}
+.screen-x-large, .screen-large
+{
+  .setting-form {
+    .dx-field-item-content.dx-field-item-content-location-bottom {
+      width: 800px;
+    }
+  }
+  .temperature-graph-chart {
+    width: 800px;
+  }
+  .schedules-grid {
+    width: 800px;
+  }
+  .temperature-graph-grid {
+    width: 800px;
+  }
+  .app-page-toolbar {
+    width: 800px;
   }
 }
 

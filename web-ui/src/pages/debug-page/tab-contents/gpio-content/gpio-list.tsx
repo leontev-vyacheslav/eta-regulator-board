@@ -1,14 +1,13 @@
+import { Ref, forwardRef } from 'react';
 import { List } from 'devextreme-react/list';
 import Switch from 'devextreme-react/switch';
-import { Ref } from 'react';
 import { GpioItemModel } from '../../../../models/regulator-settings/gpio-set-model';
 import { useGpioData } from '../../../../contexts/app-data/use-gpio-data';
 import { useGpioTabContext } from './gpio-tab-context';
-import React from 'react';
 import { formatMessage } from 'devextreme/localization';
-import { useScreenSize } from '../../../../utils/media-query';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { useGpioListMenuItems } from './use-gpio-list-menu-items';
+import AppConstants from '../../../../constants/app-constants';
 
 export type GpioListProps = { innerRef?: Ref<List<GpioItemModel>> }
 
@@ -33,17 +32,15 @@ const GpioListItem = ({ gpioItem }: {gpioItem: GpioItemModel}) => {
 
 export const GpioListInner = ({ innerRef }: GpioListProps) => {
     const { gpioSet } = useGpioTabContext();
-    const { isXSmall, isSmall } = useScreenSize();
     const listMenuItems = useGpioListMenuItems();
 
     return (
         gpioSet ?
         <>
-            <PageToolbar title={ 'Элементы ввода/вывода' } menuItems={ listMenuItems } style={ { width: isXSmall || isSmall ? '100%' : 600  } } />
+            <PageToolbar title={ 'Элементы ввода/вывода' } menuItems={ listMenuItems } />
             <List
-                height={ '50vh' }
-                width={ isXSmall || isSmall ? '100%' : 600 }
-                className='app-list gpio-list'
+                height={ AppConstants.formHeight }
+                className='app-list debug-list gpio-list'
                 ref={ innerRef }
                 dataSource={ gpioSet?.items }
                 itemRender={ (gpioItem: GpioItemModel) => {
@@ -53,10 +50,10 @@ export const GpioListInner = ({ innerRef }: GpioListProps) => {
                 } }
             />
         </>
-        : <div className='dx-empty-message' style={ { height: '50vh', /*width: isXSmall || isSmall ? '100%' : 600*/ } }>{formatMessage('dxCollectionWidget-noDataText')}</div>
+        : <div className='dx-empty-message' style={ { height: '50vh', } }>{formatMessage('dxCollectionWidget-noDataText')}</div>
     );
 }
 
-export const GpioList = React.forwardRef<List<GpioItemModel>, GpioListProps>((props, ref) =>
+export const GpioList = forwardRef<List<GpioItemModel>, GpioListProps>((props, ref) =>
   <GpioListInner { ...props } innerRef={ ref }/>
 );

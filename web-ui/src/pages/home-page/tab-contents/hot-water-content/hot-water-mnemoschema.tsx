@@ -1,9 +1,9 @@
 import { MnemoschemaProps } from '../../../../models/mnemoschema-props'
-import { useMnemoschemaWidth } from '../use-apply-width-mnemoschema';
-import SvgHotWater from './svg-hot-water'
+import { useMnemoschemaWidth } from '../../../../components/mnemoschemas/use-mnemoschema-width';
+import SvgHotWater from '../../../../components/mnemoschemas/svg-hot-water'
 
 export const HotWaterMnemoschema = (props: MnemoschemaProps) => {
-    const width = useMnemoschemaWidth();
+    const width = useMnemoschemaWidth({ onHomePage: true });
 
     return (
         <>

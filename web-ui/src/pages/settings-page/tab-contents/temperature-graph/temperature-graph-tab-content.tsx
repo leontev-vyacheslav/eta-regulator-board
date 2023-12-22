@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react';
 import { TemperatureGraphProvider, useTemperatureGraphContext } from './temperature-graph-context';
 import { AddIcon, AdditionalMenuIcon, AxisInvert2Icon, AxisInvertIcon, DeleteAllIcon, GraphIcon, RefreshIcon, TableIcon } from '../../../../constants/app-icons';
 import { TemperatureGraphItemModel } from '../../../../models/regulator-settings/temperature-graph-model';
-import { useScreenSize } from '../../../../utils/media-query';
 import { useSettingPageContext } from '../../settings-page-context';
 import ArrayStore from 'devextreme/data/array_store';
 import { formatMessage } from 'devextreme/localization';
@@ -15,7 +14,6 @@ import { TemperatureGraphChart } from './temperature-graph-chart';
 const TemperatureGraphTabContentInner = () => {
     const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync, circuitId } = useSettingPageContext();
     const { putTemperatureGraphAsync, setChartArgumentAxisInverted, chartArgumentAxisInverted, dataGridRef } = useTemperatureGraphContext();
-    const { isXSmall, isSmall } = useScreenSize();
     const [isShowGraph, setIsShowGraph] = useState<boolean>(false);
 
     const temperatureGraphStore = useMemo(() => {
@@ -114,7 +112,7 @@ const TemperatureGraphTabContentInner = () => {
 
     return (
         <div className='setting-form'>
-            <PageToolbar title={ formatMessage('temperature-graph-title') } menuItems={ menuItems } style={ { width: isXSmall || isSmall ? '100%' : 600 } } />
+            <PageToolbar title={ formatMessage('temperature-graph-title') } menuItems={ menuItems } />
             {
                 !isShowGraph
                     ?

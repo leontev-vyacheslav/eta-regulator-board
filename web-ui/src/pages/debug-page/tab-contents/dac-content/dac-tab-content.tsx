@@ -1,16 +1,15 @@
 import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
 import { DacContextProvider, useDac } from './dac-context';
-import { useScreenSize } from '../../../../utils/media-query';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Button from 'devextreme-react/button';
 import { StartIcon, StopIcon } from '../../../../constants/app-icons';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { proclaim } from '../../../../utils/proclaim';
 import { ActiveSignalGenModel } from '../../../../contexts/app-data/use-dac-data';
+import AppConstants from '../../../../constants/app-constants';
 
 const DacTabContentInternal = () => {
     const { dacFormRef, testSignalList } = useDac();
-    const { isXSmall, isSmall } = useScreenSize();
     const { getStartedSignalGenAsync, getActiveSignalGenAsync, deleteActiveSignalGenAsync } = useAppData();
     const [activeSignalGen, setActiveSignalGen] = useState<ActiveSignalGenModel | null>(null);
     const intervalTimerLock = useRef<boolean>(false);
@@ -73,10 +72,9 @@ const DacTabContentInternal = () => {
         <Form
             ref={ dacFormRef }
             formData={ formData }
-            className='app-form adc-form'
+            className='app-form debug-form  adc-form'
             style={ { height: '50vh' } }
-            height={ '50vh' }
-            width={ isXSmall || isSmall ? '100%' : 600 }
+            height={ AppConstants.formHeight }
             scrollingEnabled={ true }
             colCount={ 1 }
         >

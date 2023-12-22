@@ -1,26 +1,24 @@
 import { Form, GroupItem, SimpleItem } from 'devextreme-react/form';
 import { useRef } from 'react';
-import { useScreenSize } from '../../../../utils/media-query';
 import { useSettingPageContext } from '../../settings-page-context';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import { HeatingCircuitTypes } from '../../../../models/regulator-settings/enums/heating-circuit-type-model';
 import { ValueChangedEvent } from 'devextreme/ui/select_box';
+import { MnemoschemaWrapper } from './mnemoschema-wrapper';
+import AppConstants from '../../../../constants/app-constants';
 
 export const HeatingCircuitContent = () => {
     const dxHeatingCircuitFormRef = useRef<Form>(null);
-    const { isXSmall, isSmall } = useScreenSize();
     const { regulatorSettings, setHeatingCircuitType, circuitId } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
-
-
 
     return (
         <Form
             className='app-form setting-form'
-            height={ '50vh' }
-            width={ isXSmall || isSmall ? '100%' : 600 }
+            height={ AppConstants.formHeight }
             ref={ dxHeatingCircuitFormRef }
+            scrollingEnabled={ true }
             formData={ regulatorSettings?.heatingCircuits.items[circuitId] }
             onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
                 const regulatorSettingsChange = {
@@ -53,12 +51,13 @@ export const HeatingCircuitContent = () => {
                     dataField='name'
                     label={ { location: 'top', showColon: true, text: 'Наименование' } }
                     editorType='dxTextBox'
+
                 />
-                {/* <SimpleItem cssClass='form-buttons'>
-                    <Button width={ 115 } type='normal' onClick={ downloadRegulatorSettings }>
-                        <DownloadIcon size={ 20 } /><span style={ { marginLeft: 5 } }>Выгрузить</span>
-                    </Button>
-                </SimpleItem> */}
+                <SimpleItem
+                    cssClass='heating-circuit-mnemoschema'
+                    label={ { location: 'top', showColon: true, text: 'Мнемосхема' } } >
+                    <MnemoschemaWrapper />
+                </SimpleItem>
             </GroupItem>
         </Form>
     );

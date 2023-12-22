@@ -15,7 +15,6 @@ import { useAppData } from '../../contexts/app-data/app-data';
 import { MenuItemModel } from '../../models/menu-item-model';
 import { formatMessage } from 'devextreme/localization';
 import { showConfirmDialog } from '../../utils/dialogs';
-import { RegulatorSettingsModel } from '../../models/regulator-settings/regulator-settings-model';
 
 export const SettingsPageInternal = () => {
     const { heatingCircuitType, circuitId, setRegulatorSettings } = useSettingPageContext();
@@ -151,7 +150,7 @@ export const SettingsPageInternal = () => {
                     <TabPanel
                         ref={ tabPanelRef }
                         width={ '100%' }
-                        height={ '65vh' }
+                        height={ AppConstants.pageHeight }
                         swipeEnabled={ false }
                         loop>
                         <TabPanelItem title={ 'Общие' } tabRender={ (e) => <IconTab tab={ e } icon={ <SettingsIcon size={ 18 } /> } /> }>

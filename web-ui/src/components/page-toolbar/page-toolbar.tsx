@@ -5,7 +5,7 @@ import { MainMenu } from '../menu/main-menu/main-menu';
 export const PageToolbar = ({ title,  menuItems, style }: { title?: string, menuItems: MenuItemModel[], style?: CSSProperties }) => {
 
   return (
-    <div style={ { ...{ display: 'flex', justifyContent: 'flex-end' }, ...style } }>
+    <div className='app-page-toolbar' style={ { ...{ display: 'flex', justifyContent: 'flex-end' }, ...style } }>
       <div style={ { flex: 1 } }>
         <label className='dx-field-item-label dx-field-item-label-location-top'>
           <span className='dx-field-item-label-content'>

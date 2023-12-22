@@ -1,21 +1,19 @@
 import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
-import { useScreenSize } from '../../../../utils/media-query';
 import { useRef } from 'react';
 import { useSettingPageContext } from '../../settings-page-context';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
+import AppConstants from '../../../../constants/app-constants';
 
 export const ServiceForm = () => {
     const dxServiceFormRef = useRef<Form>(null);
-    const { isXSmall, isSmall } = useScreenSize();
     const { regulatorSettings } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
     return (
         <Form
             className={ 'app-form setting-form' }
-            height={ '50vh' }
-            width={ isXSmall || isSmall ? '100%' : 600 }
+            height={ AppConstants.formHeight }
             scrollingEnabled={ true }
             colCount={ 1 }
             formData={ regulatorSettings?.service }
