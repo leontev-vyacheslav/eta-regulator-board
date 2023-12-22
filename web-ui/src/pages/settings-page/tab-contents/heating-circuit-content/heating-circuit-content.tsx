@@ -7,10 +7,12 @@ import { HeatingCircuitTypes } from '../../../../models/regulator-settings/enums
 import { ValueChangedEvent } from 'devextreme/ui/select_box';
 import { MnemoschemaWrapper } from './mnemoschema-wrapper';
 import AppConstants from '../../../../constants/app-constants';
+import { showConfirmDialogEx } from '../../../../utils/dialogs';
+import { formatMessage } from 'devextreme/localization';
 
 export const HeatingCircuitContent = () => {
     const dxHeatingCircuitFormRef = useRef<Form>(null);
-    const { regulatorSettings, setHeatingCircuitType, circuitId } = useSettingPageContext();
+    const { regulatorSettings, setHeatingCircuitType, circuitId, heatingCircuitType, applyDefaultHeatCircuitSettingsAsync } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
     return (
@@ -36,14 +38,38 @@ export const HeatingCircuitContent = () => {
             <GroupItem caption='Контур'>
                 <SimpleItem
                     dataField='type'
-                    label={ { location: 'top', showColon: true, text: 'Тип',  } }
+                    label={ { location: 'top', showColon: true, text: 'Тип' } }
                     editorType='dxSelectBox'
                     editorOptions={ {
                         items: HeatingCircuitTypes,
                         valueExpr: 'id',
                         displayExpr: 'description',
                         onValueChanged: (e: ValueChangedEvent) => {
-                            setHeatingCircuitType(e.value);
+                            if (e.value == heatingCircuitType) {
+                                return;
+                            }
+                            if (e.event) {
+                                const innerCallback = async (dialogResult?: boolean) => {
+                                    if (dialogResult) {
+                                        await applyDefaultHeatCircuitSettingsAsync(e.value);
+                                    }
+
+                                    setHeatingCircuitType(e.value);
+                                };
+
+                                showConfirmDialogEx({
+                                    title: formatMessage('confirm-title'),
+                                    iconName: 'ResetIcon',
+                                    iconSize: 32,
+                                    callback: innerCallback,
+                                    textRender: () => {
+                                        return <>{formatMessage('confirm-dialog-se-default-heating-circuit-settings')}</>;
+                                    }
+                                });
+                            }
+                            else {
+                                setHeatingCircuitType(e.value);
+                            }
                         } }
                     }
                 />

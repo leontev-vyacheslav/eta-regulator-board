@@ -36,6 +36,7 @@ function App() {
             'confirm-dialog-delete-all-schedule-windows': 'Вы действительно хотите удалить все окна?',
             'confirm-dialog-delete-all-points': 'Вы действительно хотите удалить все точки?',
             'confirm-dialog-reset-heating-circuit-settings': 'Вы действительно хотите сбросить настройки текущего контура?',
+            'confirm-dialog-se-default-heating-circuit-settings': 'Применить настройки по-умолчанию в соответствии с типом контура?',
             'menu-item-delete-all-schedules': 'Удалить все дни...',
             'menu-item-delete-all-schedule-windows': 'Удалить все окна...',
             'menu-item-delete-all-points': 'Удалить все точки...',

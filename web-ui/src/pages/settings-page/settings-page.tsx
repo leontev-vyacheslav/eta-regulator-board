@@ -17,8 +17,8 @@ import { formatMessage } from 'devextreme/localization';
 import { showConfirmDialog } from '../../utils/dialogs';
 
 export const SettingsPageInternal = () => {
-    const { heatingCircuitType, circuitId, setRegulatorSettings } = useSettingPageContext();
-    const { getRegulatorSettingsAsFile, getDefaultHeatingCircuitsSettingsAsync, putRegulatorSettingsAsync } = useAppData();
+    const { heatingCircuitType, circuitId, applyDefaultHeatCircuitSettingsAsync } = useSettingPageContext();
+    const { getRegulatorSettingsAsFile } = useAppData();
     const tabPanelRef = useRef<TabPanel>(null);
 
     const pageHeaderTitle = useMemo(() => {
@@ -55,51 +55,24 @@ export const SettingsPageInternal = () => {
         }, 100);
     }, [getRegulatorSettingsAsFile]);
 
-    const applyDefaultRegulatorSettingsAsync = useCallback(async () => {
+    const resetRegulatorSettingsAsync = useCallback(async () => {
 
-        const inner = async () => {
-            const heatingCircuitSettings = await getDefaultHeatingCircuitsSettingsAsync(heatingCircuitType!);
-
-            setRegulatorSettings(previous => {
-                if (!previous) {
-                    return previous;
-                }
-
-                previous!.heatingCircuits.items = [
-                    ...previous!.heatingCircuits.items.filter(i => i.type !== heatingCircuitType),
-                    heatingCircuitSettings
-                ].sort((a, b) => a.type - b.type);
-
-                (async () => {
-                    const regulatorSettingsChange = {
-                        regulatorSettings: previous,
-                        changeLogItem: {
-                            dataField: 'all',
-                            datetime: new Date(),
-                            path: 'regulatorSettings?.heatingCircuits.items',
-                            value: ''
-                        }
-                    }
-
-                    await putRegulatorSettingsAsync(regulatorSettingsChange);
-                })();
-
-                return { ...previous };
-            });
+        const innerCallback = async () => {
+            await applyDefaultHeatCircuitSettingsAsync(heatingCircuitType!);
         };
 
         showConfirmDialog({
             title: formatMessage('confirm-title'),
             iconName: 'ResetIcon',
             iconSize: 32,
-            callback: inner,
+            callback: innerCallback,
             textRender: () => {
                 return <> {formatMessage('confirm-dialog-reset-heating-circuit-settings')} </>;
             }
         });
 
 
-    }, [getDefaultHeatingCircuitsSettingsAsync, heatingCircuitType, putRegulatorSettingsAsync, setRegulatorSettings]);
+    }, [applyDefaultHeatCircuitSettingsAsync, heatingCircuitType]);
 
     const menuItems = useMemo(() => {
         return [
@@ -109,7 +82,7 @@ export const SettingsPageInternal = () => {
                     {
                         text: 'Сброс настроек контура...',
                         icon: () => <ResetIcon size={ 20 } />,
-                        onClick: applyDefaultRegulatorSettingsAsync
+                        onClick: resetRegulatorSettingsAsync
                     },
                     {
                         text: 'Выгрузить все настройки',
@@ -119,7 +92,7 @@ export const SettingsPageInternal = () => {
                 ]
             }
         ] as MenuItemModel[];
-    }, [applyDefaultRegulatorSettingsAsync, downloadRegulatorSettingsAsync]);
+    }, [resetRegulatorSettingsAsync, downloadRegulatorSettingsAsync]);
 
     useEffect(() => {
         const temperatureGraphTabHtmlElement: HTMLDivElement | null = document.querySelector('.dx-item.dx-tab:has(* #temperature-graph-tab-icon)');

@@ -36,6 +36,14 @@ const showConfirmDialog = ({ title, iconName, iconSize, iconColor, textRender, c
     });
 }
 
+const showConfirmDialogEx = ({ title, iconName, iconSize, iconColor, textRender, callback }: SimpleDialogModel) => {
+    confirm(dialogContentRender({ iconName, iconSize, iconColor, textRender }), title).then((dialogResult) => {
+            if (callback) {
+                callback(dialogResult);
+            }
+    });
+}
+
 const showAlertDialog = ({ title, iconName, iconSize, iconColor, textRender, callback }: SimpleDialogModel) => {
     alert(dialogContentRender({ iconName, iconSize, iconColor, textRender }), title).then(() => {
         if (callback) {
@@ -133,4 +141,4 @@ const showPromptDialog = ({ title, iconName, iconSize, iconColor, textRender, ca
 };
 
 
-export { showConfirmDialog, showAlertDialog, showPromptDialog };
+export { showConfirmDialog, showAlertDialog, showPromptDialog, showConfirmDialogEx };

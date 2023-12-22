@@ -562,10 +562,10 @@
                     },
                     "regulationParameters": {
                         "proportionalityFactor": 70.0,
-                        "integrationFactor": 29.0,
+                        "integrationFactor": 30.0,
                         "differentiationFactor": 30.0,
                         "calculationPeriod": 25.0,
-                        "pulseDurationValve": 4.0,
+                        "pulseDurationValve": 5.0,
                         "driveUnitAnalogControl": false
                     }
                 }

@@ -1577,7 +1577,7 @@ const SvgHeatSystem = (props) => (
                     display: 'inline',
                     strokeWidth: 0.261937,
                 } }>
-                {props.returnPipeTemperature}, °C
+                {props.returnPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C
             </text>
         </g>
         <g>
@@ -1880,7 +1880,7 @@ const SvgHeatSystem = (props) => (
                     display: 'inline',
                     strokeWidth: 0.261937,
                 } }>
-                {props.supplyPipeTemperature}, °C
+                {props.supplyPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C
             </text>
         </g>
         <g
@@ -2172,7 +2172,7 @@ const SvgHeatSystem = (props) => (
                     display: 'inline',
                     strokeWidth: 0.261937,
                 } }>
-                {props.outdoorTemperature}, °C
+                {props.outdoorTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C
             </text>
         </g>
         <g>
@@ -2220,7 +2220,7 @@ const SvgHeatSystem = (props) => (
                         style={ {
                             fill: '#000000',
                         } }>
-                        {props.valvePosition}%
+                        {props.valvePosition.toLocaleString(undefined, { minimumFractionDigits: 1 })}%
                     </tspan>
                 </tspan>
             </text>
