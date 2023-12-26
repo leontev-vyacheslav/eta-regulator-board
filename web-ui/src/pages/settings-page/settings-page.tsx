@@ -58,12 +58,12 @@ export const SettingsPageInternal = () => {
     const resetRegulatorSettingsAsync = useCallback(async () => {
 
         const innerCallback = async () => {
-            await applyDefaultHeatCircuitSettingsAsync(heatingCircuitType!);
+            await applyDefaultHeatCircuitSettingsAsync(heatingCircuitType!, );
         };
 
         showConfirmDialog({
             title: formatMessage('confirm-title'),
-            iconName: 'ResetIcon',
+            iconName: 'SettingsIcon',
             iconSize: 32,
             callback: innerCallback,
             textRender: () => {

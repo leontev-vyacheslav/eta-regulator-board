@@ -1,6 +1,7 @@
 {
     "items": [
         {
+            "id": "a3b865b3-63a8-47ea-84ef-adfbae1a4346",
             "name": "Контур ЦО",
             "type": 1,
             "regulatorParameters": {
@@ -566,6 +567,7 @@
             }
         },
         {
+            "id": "52af8b6b-14cf-4fc1-9884-68e6aca28e71",
             "name": "Контур ГСВ",
             "type": 2,
             "regulatorParameters": {
@@ -596,6 +598,7 @@
             }
         },
         {
+            "id": "45265846-21bb-4e78-96df-fdb55cb76b63",
             "name": "Контур ВЕНТ",
             "type": 3,
             "regulatorParameters": {

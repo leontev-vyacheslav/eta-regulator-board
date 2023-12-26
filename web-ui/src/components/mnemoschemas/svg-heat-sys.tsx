@@ -1,5 +1,5 @@
-const SvgHeatSystem = (props) => (
-    <svg width="auto" viewBox="10 5 80 60" xmlnsXlink="http://www.w3.org/1999/xlink" { ...props }>
+const SvgHeatSystem = (props: any) => (
+    <svg width={ props.width } viewBox="10 5 80 60" xmlnsXlink="http://www.w3.org/1999/xlink">
         <defs>
             <rect x={ 241.37161 } y={ 24.601337 } width={ 106.76052 } height={ 21.81628 } />
             <rect x={ 299.85782 } y={ 64.984665 } width={ 39.454975 } height={ 12.532757 } id="rect23643" />
@@ -2204,7 +2204,7 @@ const SvgHeatSystem = (props) => (
                     fontSize: 8,
                     textAlign: 'center',
                     whiteSpace: 'pre',
-                    
+
                     display: 'inline',
                     fill: '#2196F3',
                     fillOpacity: 1,

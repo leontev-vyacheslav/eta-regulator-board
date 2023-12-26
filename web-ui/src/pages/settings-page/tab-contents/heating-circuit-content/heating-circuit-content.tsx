@@ -59,7 +59,7 @@ export const HeatingCircuitContent = () => {
 
                                 showConfirmDialogEx({
                                     title: formatMessage('confirm-title'),
-                                    iconName: 'ResetIcon',
+                                    iconName: 'SettingsIcon',
                                     iconSize: 32,
                                     callback: innerCallback,
                                     textRender: () => {

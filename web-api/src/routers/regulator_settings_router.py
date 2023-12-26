@@ -1,7 +1,8 @@
 from typing import Optional
+import uuid
 from flask import send_file
 from flask_pydantic import validate
-from models.regulator.heating_circuits_model import HeatingCircuitsModel
+from models.regulator.heating_circuits_model import HeatingCircuitModel
 from responses.json_response import JsonResponse
 
 from app import app
@@ -47,7 +48,8 @@ def get_regulator_settings_as_file():
 def get_default_heating_circuits_settings(heating_circuit_type: int):
     regulator_settings_repository = app.get_regulator_settings_repository()
     default_heating_circuit_settings_list = regulator_settings_repository.get_default_heating_circuits_settings()
-    default_heating_circuit_settings: Optional[HeatingCircuitsModel] = next(
+
+    default_heating_circuit_settings: Optional[HeatingCircuitModel] = next(
         (
             settings
             for settings in default_heating_circuit_settings_list.items
@@ -55,5 +57,11 @@ def get_default_heating_circuits_settings(heating_circuit_type: int):
         ),
         None
     )
+
+    if default_heating_circuit_settings is None:
+        raise ValueError(f'Heating circuit type {heating_circuit_type} not found')
+
+    default_heating_circuit_settings.modify_identifiers()
+
 
     return default_heating_circuit_settings

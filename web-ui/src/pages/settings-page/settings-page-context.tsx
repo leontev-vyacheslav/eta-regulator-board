@@ -51,10 +51,16 @@ function SettingPageContextProvider (props: any) {
                 return previous;
             }
 
-            previous!.heatingCircuits.items = [
-                ...previous!.heatingCircuits.items.filter(i => i.type !== heatingCircuitType),
-                heatingCircuitSettings
-            ].sort((a, b) => a.type - b.type);
+            previous!.heatingCircuits.items = circuitId === 0
+                ? [
+                    heatingCircuitSettings,
+                    ...previous!.heatingCircuits.items.filter((_, index) => index !== circuitId),
+                ]
+                : [
+                    ...previous!.heatingCircuits.items.filter((_, index) => index !== circuitId),
+                    heatingCircuitSettings,
+                ];
+
 
             (async () => {
                 const regulatorSettingsChange = {
@@ -72,7 +78,7 @@ function SettingPageContextProvider (props: any) {
 
             return { ...previous };
         });
-    }, [getDefaultHeatingCircuitsSettingsAsync, putRegulatorSettingsAsync]);
+    }, [circuitId, getDefaultHeatingCircuitsSettingsAsync, putRegulatorSettingsAsync]);
 
     useEffect(() => {
         setTimeout(async() => {

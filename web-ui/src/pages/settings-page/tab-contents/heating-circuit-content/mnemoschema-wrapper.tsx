@@ -17,7 +17,7 @@ export const MnemoschemaWrapper = () => {
 
     return (
         currentHeatingCircuitType
-            ? currentHeatingCircuitType.id === HeatingCircuitTypeModel.heating
+            ? currentHeatingCircuitType.id === HeatingCircuitTypeModel.heating || currentHeatingCircuitType.id === HeatingCircuitTypeModel.ventilation
                 ? <SvgHeatSystem  { ...defaultMnemoschemaProps } width={ width } viewBox={ '10 10 80 60' } />
                 : <SvgHotWater { ...defaultMnemoschemaProps } width={ width } viewBox={ '10 5 80 60' }/>
             : <div style={ { height: 250 } } className='dx-empty-message'>{formatMessage('dxDataGrid-noDataText')}</div>

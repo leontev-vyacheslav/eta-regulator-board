@@ -7,7 +7,7 @@ export const useMnemoschemaWidth = ({ onHomePage }: { onHomePage: boolean }) => 
 
     return useMemo<string | number>(() => {
         if (isXSmall) {
-            return 'auto';
+            return '100%';
         }
 
         if (onHomePage) {
