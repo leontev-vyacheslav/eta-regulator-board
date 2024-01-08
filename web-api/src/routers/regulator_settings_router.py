@@ -1,5 +1,4 @@
 from typing import Optional
-import uuid
 from flask import send_file
 from flask_pydantic import validate
 from models.regulator.heating_circuits_model import HeatingCircuitModel
@@ -32,11 +31,12 @@ def put_regulator_settings(body: RegulatorSettingsChangeModel):
         response=regulator_settings_repository.settings, status=200
     )
 
+
 @app.api_route('/regulator-settings/download', methods=['GET'])
 @authorize
 def get_regulator_settings_as_file():
     return send_file(
-        path_or_file = app.get_regulator_settings_repository().data_path,
+        path_or_file=app.get_regulator_settings_repository().data_path,
         mimetype='application/json',
         download_name='regulator_settings.json'
     )
@@ -63,5 +63,17 @@ def get_default_heating_circuits_settings(heating_circuit_type: int):
 
     default_heating_circuit_settings.modify_identifiers()
 
-
     return default_heating_circuit_settings
+
+
+@app.api_route('/regulator-settings/reset', methods=['GET'])
+@validate(response_by_alias=True)
+@authorize
+def get_reset_default_heating_circuits_settings():
+    regulator_settings_repository = app.get_regulator_settings_repository()
+    default_heating_circuit_settings_list = regulator_settings_repository.get_default_heating_circuits_settings()
+
+    for default_heating_circuit_settings in default_heating_circuit_settings_list.items:
+        default_heating_circuit_settings.modify_identifiers()
+
+    return default_heating_circuit_settings_list
