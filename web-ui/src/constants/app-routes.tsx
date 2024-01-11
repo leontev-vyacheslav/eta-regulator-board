@@ -1,5 +1,5 @@
 import { withNavigationWatcher } from '../contexts/navigation';
-import { HomePage, SettingsPage, AboutPage, SignOutPage, DebugPage } from '../pages';
+import { HomePage, SettingsPage, AboutPage, SignOutPage, DebugPage, AppSettingsPage } from '../pages';
 
 const routes = [
     {
@@ -11,12 +11,16 @@ const routes = [
         component: HomePage,
     },
     {
-        path: '/debug',
+        path: '/debug/:modeIdParam',
         component: DebugPage
     },
     {
         path: '/settings/:circuitIdParam',
         component: SettingsPage,
+    },
+    {
+        path: '/app-settings',
+        component: AppSettingsPage,
     },
     {
         path: '/about',

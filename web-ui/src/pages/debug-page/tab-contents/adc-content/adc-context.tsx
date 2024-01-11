@@ -12,6 +12,7 @@ import { DisposedTimerModel } from '../../../../models/disposed-timer-storage-mo
 const AdcContext = createContext({} as AdcContextModel);
 
 function AdcContextProvider(props: any) {
+    const { modeId } = useDebugPage();
     const { getAdcValueAsync, getTemperatureValueAsync } = useAppData();
     const [isShowOutputConsole, setIsShowOutputConsole] = useState<boolean>(false);
     const [isReadingEnabled, setIsReadingEnabled] = useState<boolean>(false);
@@ -30,15 +31,24 @@ function AdcContextProvider(props: any) {
     }, [disposedTimerDispatcher]);
 
     const channelList = useMemo<AdcChannelModel[]>(() => {
-        return [
-            { id: '453b87fb-8f2d-461f-bee9-239e2c7fbf17', pin: 0, description: 'Канал 0' },
-            { id: '4ea8f075-1fc1-4b4a-a68f-30a47b9615d6', pin: 1, description: 'Канал 1' },
-            { id: '6f9486da-2add-4157-a083-d46604d48e47', pin: 2, description: 'Канал 2' },
-            { id: 'b25a5b95-cc68-4b35-ad9e-aa7fe6c9d2e7', pin: 3, description: 'Канал 3' },
-            { id: 'c70c5d5b-adb2-47bb-8249-12ad89c42a95', pin: 4, description: 'Канал 4' },
-            { id: 'a90a9023-004f-495b-97cd-c1a36e74dcf9', pin: 5, description: 'Канал 5' },
-        ]
-    }, []);
+        return modeId === 1 ?
+            [
+                { id: '981d6639-06fb-425f-9895-5eaa9c03683b', pin: 0, description: 'Температура наружного воздуха' },
+                { id: '2dedb607-bfbe-4963-a91e-6930f4f16ba9', pin: 1, description: 'Температура в помещении' },
+                { id: '4627273a-ba41-4a4e-a0b8-0f24b7cdfbb1', pin: 2, description: 'Температура подачи контура 1' },
+                { id: 'fe93836a-e3d7-492a-bd1c-eb7e66fc6767', pin: 3, description: 'Температура обратки контура 1' },
+                { id: 'e8879aed-3b2a-4097-b500-390072957f2e', pin: 4, description: 'Температура подачи контура 2' },
+                { id: 'aaff00fb-d900-4cb9-996f-12ee42efd7f6', pin: 5, description: 'Температура обратки контура 2' },
+            ]
+            : [
+                { id: '4b8efd8c-df05-4be3-9baf-dac258204d0d', pin: 0, description: 'Канал 0' },
+                { id: '860b6504-ec9b-4bda-ac14-dc889bf8ca1f', pin: 1, description: 'Канал 1' },
+                { id: '02e34e16-d0ce-4161-90f9-95bf3988acc2', pin: 2, description: 'Канал 2' },
+                { id: '9160e035-2560-4ce5-919c-8fb86eba6b6a', pin: 3, description: 'Канал 3' },
+                { id: '2f513445-e7ff-4fdc-8b4a-06dc3fd2021f', pin: 4, description: 'Канал 4' },
+                { id: '8ba0e486-710d-4d21-a9f8-5bf3a8a92c06', pin: 5, description: 'Канал 5' },
+            ]
+    }, [modeId]);
 
     const readingSettings = useMemo<AdcReadingSettingsModel>(() => {
         return {

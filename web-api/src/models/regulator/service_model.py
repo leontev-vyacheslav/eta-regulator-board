@@ -22,3 +22,5 @@ class ServiceModel(AppBaseModel):
     software_info: SoftwareInfoModel
 
     hardware_info: HardwareInfoModel
+
+    allow_debug_mode: bool

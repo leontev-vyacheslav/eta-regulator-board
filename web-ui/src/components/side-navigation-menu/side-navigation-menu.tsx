@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import TreeView from 'devextreme-react/tree-view';
+import { TreeView } from 'devextreme-react/tree-view';
 import * as events from 'devextreme/events';
-import { sideNavigationMenuItems } from '../../constants/app-navigation';
+import { useSideNavigationMenuItems } from '../../constants/app-navigation';
 import { useNavigation } from '../../contexts/navigation';
 import { useScreenSize } from '../../utils/media-query';
 import { useSharedArea } from '../../contexts/shared-area';
@@ -26,25 +26,25 @@ export default function SideNavigationMenu(props: SideNavigationMenuProps) {
     const { navigationData: { currentPath } } = useNavigation();
 
     const wrapperRef = useRef();
-
-    function normalizePath() {
-        return sideNavigationMenuItems
-            .filter(i => !i.restricted)
-            .map((item) => {
-                if (item.path && !(/^\//.test(item.path))) {
-                    item.path = `/${item.path}`;
-                }
-                if (item.items) {
-                    item.items = item.items.filter(i => !i.restricted)
-                }
-                return { ...item, expanded: isLarge } as TreeViewItemModel
-            });
-    }
+    const sideNavigationMenuItems = useSideNavigationMenuItems();
 
     const items: TreeViewItemModel[] = useMemo<TreeViewItemModel[]>(
-        normalizePath,
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
+        () => {
+            return sideNavigationMenuItems
+                .filter(i => !i.restricted)
+                .filter(i => i.visible === undefined || i.visible === true)
+                .map((item) => {
+                    if (item.path && !(/^\//.test(item.path))) {
+                        item.path = `/${item.path}`;
+                    }
+                    if (item.items) {
+                        item.items = item.items.filter(i => !i.restricted)
+                    }
+                    return { ...item, expanded: isLarge } as TreeViewItemModel
+                });
+        },
+
+        [isLarge, sideNavigationMenuItems]
     );
 
     const getWrapperRef = useCallback((element) => {

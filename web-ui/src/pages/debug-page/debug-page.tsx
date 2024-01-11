@@ -1,6 +1,6 @@
 import './debug-page.scss';
 import AppConstants from '../../constants/app-constants';
-import { InputOutputIcon, DebugIcon, AdcIcon, DacIcon } from '../../constants/app-icons';
+import { InputOutputIcon, DebugIcon, AdcIcon, DacIcon, ManualModeIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import { useState } from 'react';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel';
@@ -13,12 +13,12 @@ import { DacTabContent } from './tab-contents/dac-content/dac-tab-content';
 
 const DebugPageInternal = () => {
     const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
-    const { tabPanelRef } = useDebugPage();
+    const { tabPanelRef, modeId } = useDebugPage();
 
     return (
         <>
-            <PageHeader caption={ 'Отладка' }>
-                <DebugIcon size={ AppConstants.headerIconSize } />
+            <PageHeader caption={ modeId === 1 ? 'Ручной режим' : 'Отладка' }>
+                { modeId === 1 ? <ManualModeIcon size={ AppConstants.headerIconSize } /> : <DebugIcon size={ AppConstants.headerIconSize } /> }
             </PageHeader>
 
             <div className={ 'content-block' }>
@@ -33,14 +33,20 @@ const DebugPageInternal = () => {
                             setActiveTabIndex(value);
                         } }
                     >
-                        <TabPanelItem title='Ввод/вывод' tabRender={ (e) => <IconTab tab={ e } icon={ <InputOutputIcon size={ 18 } /> } /> }>
+                        <TabPanelItem
+                            title={ modeId === 1 ? 'Дискретные выходы' : 'Ввод/вывод' }
+                            tabRender={ (e) => <IconTab tab={ e } icon={ <InputOutputIcon size={ 18 } /> } /> }
+                        >
                             {
                                 activeTabIndex === 0
                                 ? <GpioTabContent />
                                 : null
                             }
                         </TabPanelItem>
-                        <TabPanelItem title='АЦП' tabRender={ (e) => <IconTab tab={ e } icon={ <AdcIcon size={ 18 } /> } /> } >
+                        <TabPanelItem
+                            title={ modeId === 1 ? 'Датчики' : 'АЦП' }
+                            tabRender={ (e) => <IconTab tab={ e } icon={ <AdcIcon size={ 18 } /> } /> }
+                        >
                             {
                                 activeTabIndex === 1
                                 ? <AdcTabContent />
@@ -48,7 +54,10 @@ const DebugPageInternal = () => {
                             }
                         </TabPanelItem>
 
-                        <TabPanelItem title='ЦАП' tabRender={ (e) => <IconTab tab={ e } icon={ <DacIcon size={ 18 } /> } />  }>
+                        <TabPanelItem
+                            title={ modeId === 1 ? 'Аналоговые выходы' : 'ЦАП' }
+                            tabRender={ (e) => <IconTab tab={ e } icon={ <DacIcon size={ 18 } /> } /> }
+                        >
                             {
                                 activeTabIndex === 2
                                 ? <DacTabContent />

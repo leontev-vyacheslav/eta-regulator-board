@@ -7,8 +7,11 @@ import { useAppData } from '../../../../contexts/app-data/app-data';
 import { proclaim } from '../../../../utils/proclaim';
 import { ActiveSignalGenModel } from '../../../../contexts/app-data/use-dac-data';
 import AppConstants from '../../../../constants/app-constants';
+import { useDebugPage } from '../../debug-page-content';
+import { formatMessage } from 'devextreme/localization';
 
 const DacTabContentInternal = () => {
+
     const { dacFormRef, testSignalList } = useDac();
     const { getStartedSignalGenAsync, getActiveSignalGenAsync, deleteActiveSignalGenAsync } = useAppData();
     const [activeSignalGen, setActiveSignalGen] = useState<ActiveSignalGenModel | null>(null);
@@ -135,9 +138,15 @@ const DacTabContentInternal = () => {
 }
 
 export const DacTabContent = () => {
+    const { modeId } = useDebugPage();
+
     return (
         <DacContextProvider>
-            <DacTabContentInternal />
+            {
+                modeId === 1
+                ? <div className='dx-empty-message' style={ { height: AppConstants.formHeight } }>{formatMessage('dxDataGrid-noDataText')}</div>
+                : <DacTabContentInternal />
+            }
         </DacContextProvider>
     )
 }

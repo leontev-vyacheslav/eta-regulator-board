@@ -2,17 +2,22 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import { AppSettingsContextModel, AppSettingsDataContextModel } from '../models/app-settings-context';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
 import { useAppData } from './app-data/app-data';
+import { RegulatorSettingsModel } from '../models/regulator-settings/regulator-settings-model';
+import { useAuth } from './auth';
 
 const AppSettingsContext = createContext<AppSettingsContextModel>({} as AppSettingsContextModel);
 
 const useAppSettings = () => useContext(AppSettingsContext);
 
 function AppSettingsProvider(props: AppBaseProviderProps) {
-    const { getRtcDateTimeAsync } = useAppData();
+    const { getRtcDateTimeAsync, getRegulatorSettingsAsync } = useAppData();
+    const { user } = useAuth();
 
     const [appSettingsData, setAppSettingsData] = useState<AppSettingsDataContextModel>({
         isShowFooter: true,
     });
+
+   const [regulatorSettings, setRegulatorSettings] = useState<RegulatorSettingsModel | null>(null);
 
     const updateWorkDateAsync = useCallback(async () => {
         const rtcDateTime = await getRtcDateTimeAsync();
@@ -22,6 +27,24 @@ function AppSettingsProvider(props: AppBaseProviderProps) {
                 });
             }
     }, [getRtcDateTimeAsync]);
+
+    const refreshRegulatorSettingsAsync = useCallback(async () => {
+        const regulatorSettings = await getRegulatorSettingsAsync();
+
+            if(regulatorSettings){
+                setRegulatorSettings(regulatorSettings)
+            }
+    }, [getRegulatorSettingsAsync]);
+
+    useEffect(() => {
+        (async () => {
+            const regulatorSettings = await getRegulatorSettingsAsync();
+            // don't delete an artificial dependency from 'user'
+            if(regulatorSettings && user){
+                setRegulatorSettings(regulatorSettings);
+            }
+        })();
+    }, [getRegulatorSettingsAsync, user]);
 
     useEffect(() => {
         (async () => {
@@ -41,7 +64,9 @@ function AppSettingsProvider(props: AppBaseProviderProps) {
     return <AppSettingsContext.Provider value={ {
         appSettingsData,
         setAppSettingsData,
-        updateWorkDateAsync
+        updateWorkDateAsync,
+        regulatorSettings,
+        setRegulatorSettings, refreshRegulatorSettingsAsync
     } } { ...props } />;
 }
 

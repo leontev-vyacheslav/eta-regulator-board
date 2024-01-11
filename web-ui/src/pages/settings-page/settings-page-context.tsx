@@ -3,6 +3,7 @@ import { useAppData } from '../../contexts/app-data/app-data';
 import { RegulatorSettingsModel } from '../../models/regulator-settings/regulator-settings-model';
 import { HeatingCircuitTypeModel, HeatingCircuitTypes, HeatingCircuitTypesItem } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { useParams } from 'react-router-dom';
+import { useAppSettings } from '../../contexts/app-settings';
 
 type SettingPageContextModel = {
     regulatorSettings: RegulatorSettingsModel | null;
@@ -26,22 +27,14 @@ function SettingPageContextProvider (props: any) {
         return circuitIdParam ? parseInt(circuitIdParam) : 0;
     }, [circuitIdParam]);
 
-    const [regulatorSettings, setRegulatorSettings] = useState<RegulatorSettingsModel | null>(null);
+    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useAppSettings();
     const [heatingCircuitType, setHeatingCircuitType] = useState<HeatingCircuitTypeModel | null>(null);
 
     const currentHeatingCircuitType = useMemo(() => {
         return HeatingCircuitTypes.find(t => t.id === heatingCircuitType);
     }, [heatingCircuitType]);
 
-    const { getRegulatorSettingsAsync, getDefaultHeatingCircuitsSettingsAsync, putRegulatorSettingsAsync } = useAppData();
-
-    const refreshRegulatorSettingsAsync = useCallback(async () => {
-        const regulatorSettings = await getRegulatorSettingsAsync();
-
-            if(regulatorSettings){
-                setRegulatorSettings(regulatorSettings)
-            }
-    }, [getRegulatorSettingsAsync]);
+    const { getDefaultHeatingCircuitsSettingsAsync, putRegulatorSettingsAsync } = useAppData();
 
     const applyDefaultHeatCircuitSettingsAsync = useCallback(async (heatingCircuitType: HeatingCircuitTypeModel) => {
         const heatingCircuitSettings = await getDefaultHeatingCircuitsSettingsAsync(heatingCircuitType);
@@ -78,19 +71,16 @@ function SettingPageContextProvider (props: any) {
 
             return { ...previous };
         });
-    }, [circuitId, getDefaultHeatingCircuitsSettingsAsync, putRegulatorSettingsAsync]);
+    }, [circuitId, getDefaultHeatingCircuitsSettingsAsync, putRegulatorSettingsAsync, setRegulatorSettings]);
 
     useEffect(() => {
         setTimeout(async() => {
-            const regulatorSettings = await getRegulatorSettingsAsync();
-
             if(regulatorSettings){
-                setRegulatorSettings(regulatorSettings);
                 const heatingCircuitType = regulatorSettings.heatingCircuits.items[circuitId].type;
                 setHeatingCircuitType(heatingCircuitType);
             }
         }, 100);
-    }, [circuitId, getRegulatorSettingsAsync]);
+    }, [circuitId, regulatorSettings]);
 
     return (
         <SettingPageContext.Provider value={ {

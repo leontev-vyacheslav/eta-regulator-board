@@ -3,6 +3,8 @@ from models.abstracts.app_base_model import AppBaseModel
 
 from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.enums.manual_control_mode_model import ManualControlModeModel
+from models.regulator.enums.outdoor_temperature_sensor_failure_action_type_model import OutdoorTemperatureSensorFailureActionTypeModel
+from models.regulator.enums.supply_pipe_temperature_sensor_failure_action_type_model import SupplyPipeTemperatureSensorFailureActionTypeModel
 
 
 class ControlParametersModel(AppBaseModel):
@@ -10,6 +12,10 @@ class ControlParametersModel(AppBaseModel):
     control_mode: ControlModeModel
 
     manual_control_mode: Optional[ManualControlModeModel]
+
+    outdoor_temperature_sensor_failure_action: Optional[OutdoorTemperatureSensorFailureActionTypeModel]
+
+    supply_pipe_temperature_sensor_failure_action: Optional[SupplyPipeTemperatureSensorFailureActionTypeModel]
 
     manual_control_mode_temperature_setpoint: Optional[float]
 

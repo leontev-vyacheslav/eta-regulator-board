@@ -12,7 +12,7 @@ import { formatMessage } from 'devextreme/localization';
 
 export const HeatingCircuitContent = () => {
     const dxHeatingCircuitFormRef = useRef<Form>(null);
-    const { regulatorSettings, setHeatingCircuitType, circuitId, heatingCircuitType, applyDefaultHeatCircuitSettingsAsync } = useSettingPageContext();
+    const { regulatorSettings, setHeatingCircuitType, setRegulatorSettings, circuitId, heatingCircuitType, applyDefaultHeatCircuitSettingsAsync } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
     return (
@@ -33,6 +33,14 @@ export const HeatingCircuitContent = () => {
                     }
                 }
                 await putRegulatorSettingsAsync(regulatorSettingsChange);
+
+                if (e.dataField === 'name') {
+                    setRegulatorSettings(previous => {
+                        previous!.heatingCircuits.items = [...previous!.heatingCircuits.items];
+
+                        return previous;
+                    });
+                }
             } }
         >
             <GroupItem caption='Контур'>

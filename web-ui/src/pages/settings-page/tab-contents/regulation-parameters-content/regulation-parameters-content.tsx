@@ -29,7 +29,6 @@ export const RegulationParametersForm = () => {
                         value: e.value
                     }
                 }
-
                 await putRegulatorSettingsAsync(regulatorSettingsChange);
             } }
         >
@@ -54,13 +53,13 @@ export const RegulationParametersForm = () => {
 
             <SimpleItem
                 dataField='calculationPeriod'
-                label={ { location: 'top', showColon: true, text: `Период расчета (${ currentHeatingCircuitType!.shotDescription })` } }
+                label={ { location: 'top', showColon: true, text: `Период расчета, 100мс (${ currentHeatingCircuitType!.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ { showSpinButtons: true, min: 1, max: 50 } } />
 
             <SimpleItem
                 dataField='pulseDurationValve'
-                label={ { location: 'top', showColon: true, text: `Длительность импульса регулирующего клапана (${ currentHeatingCircuitType!.shotDescription })` } }
+                label={ { location: 'top', showColon: true, text: `Длител. импульса регулирующего клапана, с (${ currentHeatingCircuitType!.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ { showSpinButtons: true, min: 1, max: 20 } } />
 

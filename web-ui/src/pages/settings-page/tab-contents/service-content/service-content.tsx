@@ -7,7 +7,7 @@ import AppConstants from '../../../../constants/app-constants';
 
 export const ServiceForm = () => {
     const dxServiceFormRef = useRef<Form>(null);
-    const { regulatorSettings } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
     return (
@@ -28,8 +28,15 @@ export const ServiceForm = () => {
                         value: e.value
                     }
                 }
-
                 await putRegulatorSettingsAsync(regulatorSettingsChange);
+
+                if (e.dataField === 'allowDebugMode') {
+                    setRegulatorSettings(previous => {
+                        previous!.service = { ...previous!.service };
+
+                        return previous;
+                    });
+                }
             } }
         >
 
@@ -65,6 +72,13 @@ export const ServiceForm = () => {
                     editorOptions={ {
                         readOnly: true
                     } } />
+            </GroupItem>
+            <GroupItem caption='Служебные'>
+                <SimpleItem
+                    dataField={ 'allowDebugMode' }
+                    label={ { location: 'top', showColon: true, text: 'Режим отладки' } }
+                    editorType={ 'dxSwitch' }
+                />
             </GroupItem>
         </Form>
     );

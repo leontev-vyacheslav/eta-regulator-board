@@ -27,7 +27,7 @@ export const useRegulatorSettingsData = () => {
         const response = await authHttpRequest({
             url: `${routes.host}${routes.regulatorSettings}`,
             method: HttpConstants.Methods.Get as Method,
-        });
+        }, false, true );
 
         if (response && response.status === HttpConstants.StatusCodes.Ok) {
 

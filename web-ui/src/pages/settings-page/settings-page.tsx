@@ -71,7 +71,6 @@ export const SettingsPageInternal = () => {
             }
         });
 
-
     }, [applyDefaultHeatCircuitSettingsAsync, heatingCircuitType]);
 
     const menuItems = useMemo(() => {
@@ -99,7 +98,7 @@ export const SettingsPageInternal = () => {
 
         if (temperatureGraphTabHtmlElement) {
             if(heatingCircuitType === HeatingCircuitTypeModel.hotWater) {
-                temperatureGraphTabHtmlElement.style.display =  'none';
+                temperatureGraphTabHtmlElement.style.display = 'none';
             } else {
                 temperatureGraphTabHtmlElement.style.removeProperty('display');
             }
@@ -138,7 +137,7 @@ export const SettingsPageInternal = () => {
                             <RegulationParametersForm />
                         </TabPanelItem>
 
-                        <TabPanelItem title={ 'Темп. график' } tabRender={ (e) => <IconTab tab={ e } icon={ <GraphIcon id='temperature-graph-tab-icon' size={ 18 }  /> } /> }>
+                        <TabPanelItem title={ 'Темп. график' } tabRender={ (e) => <IconTab tab={ e } icon={ <GraphIcon id='temperature-graph-tab-icon' size={ 18 } /> } /> }>
                             <TemperatureGraphTabContent />
                         </TabPanelItem>
 

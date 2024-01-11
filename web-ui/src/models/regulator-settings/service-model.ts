@@ -26,4 +26,6 @@ export type ServiceModel = {
     softwareInfo: SoftwareInfoModel;
 
     hardwareInfo: HardwareInfoModel;
+
+    allowDebugMode: boolean;
 }

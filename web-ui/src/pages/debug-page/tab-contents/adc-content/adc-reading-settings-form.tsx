@@ -4,9 +4,11 @@ import Button from 'devextreme-react/button';
 import { useAdc } from './adc-context';
 import { useCallback } from 'react';
 import AppConstants from '../../../../constants/app-constants';
+import { useDebugPage } from '../../debug-page-content';
 
 
 export const AdcReadingSettingsForm = () => {
+    const { modeId } = useDebugPage();
     const { readingSettings, readingResults, channelList, adcReadingSettingsFormRef, setIsReadingEnabled, setIsShowOutputConsole, setTimer } = useAdc();
 
     const start = useCallback(() => {
@@ -43,7 +45,7 @@ export const AdcReadingSettingsForm = () => {
                 <SimpleItem
                     dataField='channel'
                     editorType='dxSelectBox'
-                    label={ { location: 'top', showColon: true, text: 'Номер канала' } }
+                    label={ { location: 'top', showColon: true, text: 'Наименование канала' } }
                     editorOptions={ {
                         displayExpr: 'description',
                         valueExpr: 'pin',
@@ -66,7 +68,9 @@ export const AdcReadingSettingsForm = () => {
                     editorType='dxSwitch'
                     label={ { location: 'top', showColon: true, text: 'С температурного датчика' } }
                     editorOptions={ {
-                        onValueChanged: onFromTemperatureSensorValueChanged
+                        onValueChanged: onFromTemperatureSensorValueChanged,
+                        defaultValue: modeId == 1,
+                        readOnly:  modeId == 1,
                     } }
                 />
                 <SimpleItem cssClass='adc-form_buttons'>

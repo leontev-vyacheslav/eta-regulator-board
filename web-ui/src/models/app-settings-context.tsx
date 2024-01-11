@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { RegulatorSettingsModel } from './regulator-settings/regulator-settings-model';
 
 export type AppSettingsModel = {
   workDate?: Date;
@@ -14,4 +15,10 @@ export type AppSettingsContextModel = {
   setAppSettingsData: Dispatch<SetStateAction<AppSettingsDataContextModel>>;
 
   updateWorkDateAsync: () => Promise<void>;
+
+  regulatorSettings: RegulatorSettingsModel | null;
+
+  setRegulatorSettings: Dispatch<SetStateAction<RegulatorSettingsModel | null>>;
+
+  refreshRegulatorSettingsAsync: () => Promise<void>;
 }

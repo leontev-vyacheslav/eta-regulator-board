@@ -8,14 +8,16 @@
     }
 }
 
-.screen-large, .screen-medium {
-    .test-chart {
-        width: 600px;
-    }
-}
-
-.screen-small, .screen-x-small {
-    .test-chart {
-        width: 100%;
+.temperature-graph-tooltip {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 5px;
+    div {
+        display: flex;
+        gap: 10px;
+        &:nth-last-child(2) {
+            flex: 1
+        }
     }
 }

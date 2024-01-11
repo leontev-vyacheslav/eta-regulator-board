@@ -8,16 +8,18 @@ import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { useGpioListMenuItems } from './use-gpio-list-menu-items';
 import AppConstants from '../../../../constants/app-constants';
+import { useDebugPage } from '../../debug-page-content';
 
 export type GpioListProps = { innerRef?: Ref<List<GpioItemModel>> }
 
 const GpioListItem = ({ gpioItem }: {gpioItem: GpioItemModel}) => {
+    const { modeId } = useDebugPage();
     const { putGpioAsync } = useGpioData();
 
     return (
         <div className='gpio-list-item' key={ gpioItem.pin }>
             <div className='gpio-list-item__pin'>GPIO{gpioItem.pin}:</div>
-            <div className='gpio-list-item__description'>{gpioItem.description}</div>
+            <div className='gpio-list-item__description'>{modeId === 1 ? gpioItem.manualModeDescription: gpioItem.debugModeDescription }</div>
             <div className='gpio-list-item__switch' >
                 <Switch defaultValue={ gpioItem.state } onValueChanged={ async (e) => {
                     const gpio = await putGpioAsync(gpioItem.pin, e.value);

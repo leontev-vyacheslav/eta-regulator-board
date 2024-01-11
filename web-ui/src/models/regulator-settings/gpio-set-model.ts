@@ -1,5 +1,7 @@
 export type GpioItemModel = {
-    description?: string | null;
+    debugModeDescription?: string | null;
+
+    manualModeDescription?: string | null;
 
     pin: number;
 

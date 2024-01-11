@@ -7,7 +7,7 @@ import { useAuth } from '../auth';
 import { httpClientBase } from './http-client-base';
 import { proclaim } from '../../utils/proclaim';
 
-export type AxiosWithCredentialsFunc = (config: AxiosRequestConfig, suppressLoader?: boolean) => Promise<AxiosResponse | undefined>;
+export type AxiosWithCredentialsFunc = (config: AxiosRequestConfig, suppressLoader?: boolean, suppressShowUnauthorized?: boolean) => Promise<AxiosResponse | undefined>;
 
 export const useAuthHttpRequest = () => {
     const { getUserAuthDataFromStorage, signOut } = useAuth();
@@ -15,7 +15,7 @@ export const useAuthHttpRequest = () => {
 
     const axiosWithCredentials = useCallback<AxiosWithCredentialsFunc>(
 
-        async (config: AxiosRequestConfig, suppressLoader: boolean = false) => {
+        async (config: AxiosRequestConfig, suppressLoader: boolean = false, suppressShowUnauthorized: boolean = false) => {
             let response: AxiosResponse<any, any> | null | AxiosResponse<unknown, any> | undefined = null;
             const userAuthData = getUserAuthDataFromStorage();
             config = config || {};
@@ -36,11 +36,13 @@ export const useAuthHttpRequest = () => {
                 response = (error as AxiosError).response;
                 if (response?.status === 401) {
                     await signOut();
-                    proclaim({
-                        type: 'error',
-                        message: response.data.message,
-                    });
-
+                    
+                    if (!suppressShowUnauthorized) {
+                        proclaim({
+                            type: 'error',
+                            message: response.data.message,
+                        });
+                    }
                 } else {
                     proclaim({
                         type: 'error',

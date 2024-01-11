@@ -4,7 +4,6 @@ from app import app
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
 from models.regulator.gpio_set_model import GpioItemModel, GpioSetModel
 from omega import gpio
-from responses.json_response import JsonResponse
 from utils.debug_helper import is_debug
 
 
@@ -13,15 +12,12 @@ from utils.debug_helper import is_debug
 def put_gpio(pin: int, state: bool):
     value = gpio.set(pin, state) if not is_debug() else state
 
-    return JsonResponse(
-        response=GpioItemModel(
-            description=None,
-            pin=pin,
-            state=value
-        ),
-        status=200
+    return GpioItemModel(
+        debug_mode_description=None,
+        manual_mode_description=None,
+        pin=pin,
+        state=value
     )
-
 
 @app.api_route('/gpio/<pin>', methods=['GET'])
 @validate(response_by_alias=True)
@@ -36,13 +32,11 @@ def get_gpio(pin: int):
             False
         )
 
-    return JsonResponse(
-        response=GpioItemModel(
-            description=None,
-            pin=pin,
-            state=value
-        ),
-        status=200
+    return GpioItemModel(
+        debug_mode_description=None,
+        manual_mode_description=None,
+        pin=pin,
+        state=value
     )
 
 
@@ -57,7 +51,8 @@ def get_gpio_set():
 
         gpio_set = GpioSetModel(items=[
             GpioItemModel(
-                description=gpio_item.description,
+                debug_mode_description=gpio_item.debug_mode_description,
+                manual_mode_description=gpio_item.manual_mode_description,
                 pin=gpio_item.pin,
                 state=current_state
             )
@@ -66,4 +61,4 @@ def get_gpio_set():
     else:
         gpio_set = regulator_settings.gpio_set
 
-    return JsonResponse(response=gpio_set, status=200)
+    return gpio_set

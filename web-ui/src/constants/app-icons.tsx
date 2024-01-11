@@ -50,17 +50,12 @@ export { IoTodayOutline as DayOfWeekIcon } from 'react-icons/io5';
 export { VscCircuitBoard as CircuitIcon } from 'react-icons/vsc';
 export { IoHandRightOutline as ManualModeIcon } from 'react-icons/io5';
 export { LuCalendarClock as RtcClockIcon } from 'react-icons/lu';
-
-
 export { VscGraphLine as GraphIcon } from 'react-icons/vsc';
 export { VscTable as TableIcon } from 'react-icons/vsc';
-
 export { TbArrowsExchange2 as AxisInvertIcon } from 'react-icons/tb';
-export { TbArrowsExchange as AxisInvert2Icon } from 'react-icons/tb';
-
+export { TbArrowsExchange as AxisInvert2Icon } from 'react-icons/tb'
 export { IoStopCircleOutline as StopIcon } from 'react-icons/io5';
 export { IoPlayCircleOutline as StartIcon } from 'react-icons/io5';
-
 export { AiOutlineUsb as InputOutputIcon } from 'react-icons/ai';
 export { IoHardwareChipOutline as AdcIcon } from 'react-icons/io5';
 export { IoHardwareChip as DacIcon } from 'react-icons/io5';
@@ -70,9 +65,13 @@ export { LuSettings2 as RegulatorIcon } from 'react-icons/lu';
 export { MdOutlineManageHistory as ManageIcon } from 'react-icons/md';
 export { IoDownloadOutline  as DownloadIcon2 } from 'react-icons/io5';
 export { IoReloadSharp  as ResetIcon } from 'react-icons/io5';
-
-export { AiFillFire  as HeatSysIcon } from 'react-icons/ai';
-export { IoWater  as HotWaterIcon } from 'react-icons/io5';
+export { AiOutlineFire  as HeatSysIcon } from 'react-icons/ai';
+export { IoWaterOutline  as HotWaterIcon } from 'react-icons/io5';
+export { MdOutlineWindPower  as VentilationIcon } from 'react-icons/md';
+export { IoSunnyOutline as OutdoorIcon } from 'react-icons/io5';
+export { IoMdLogIn as SupplyPipeIcon } from 'react-icons/io';
+export { IoMdLogOut as ReturnPipeIcon } from 'react-icons/io';
+export { MdOutlineSettingsApplications as AppSettingsIcon } from 'react-icons/md';
 
 import { MdMoreVert } from 'react-icons/md';
 export const GridAdditionalMenuIcon = () => <MdMoreVert style={ { cursor: 'pointer' } } size={ 18 } />
