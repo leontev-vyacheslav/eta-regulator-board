@@ -1,11 +1,15 @@
-export type SignInAsyncFunc = (password: string) => Promise<void>;
+import { SignInModel } from './signin-model';
+
+export type SignInAsyncFunc = (singIn: SignInModel) => Promise<void>;
 export type SignOutAsyncFunc = () => Promise<void>;
 export type GetUserAuthDataFromStorageFunc = () => AuthUserModel | null;
 
 export type AuthUserModel = {
-  token: string;
+  role: number;
 
-  exp: number;
+  login: string;
+
+  token: string;
 }
 
 export type AuthContextModel = {

@@ -1,12 +1,16 @@
 {
     "regulatorState": 1,
-    "signin": {
-        "password": "1234567890"
+    "accounts": {
+        "items":[
+            {"role": 1, "login": "Admin", "password": "c775e7b757ede630cd0aa1113bd102661ab38829ca52a6422ab782862f268646"},
+            {"role": 2, "login": "Operator", "password": "17756315ebd47b7110359fc7b168179bf6f2df3646fcc888bc8aa05c78b38ac1"},
+            {"role": 3, "login": "Guest", "password": "9af15b336e6a9619928537df30b2e6a2376569fcf9d7e773eccede65606529a0"}
+        ]
     },
     "heatingCircuits": {
         "items": [
             {
-                "id": "b828662e-783b-4de0-98e3-a4e658321c40",
+                "id": "2150f017-010b-4046-9297-0e33738425fb",
                 "name": "Контур ЦО",
                 "type": 1,
                 "regulatorParameters": {
@@ -30,331 +34,331 @@
                     "temperatureGraph": {
                         "items": [
                             {
-                                "id": "1ea1b903-b22d-4e48-9e34-8a0100ff7bc1",
+                                "id": "a970fdc1-e466-4f1e-a4f9-0dce2f48042c",
                                 "outdoorTemperature": 20.0,
                                 "supplyPipeTemperature": 20.0,
                                 "returnPipeTemperature": 20.0
                             },
                             {
-                                "id": "7992e3cb-744c-4b61-8d0b-4ae838171840",
+                                "id": "bd2e9aef-ee47-4dc4-b2e7-6fcd020c64ef",
                                 "outdoorTemperature": 19.0,
                                 "supplyPipeTemperature": 20.9,
                                 "returnPipeTemperature": 21.4
                             },
                             {
-                                "id": "4732936d-4b60-4617-b30f-1503d21ff56a",
+                                "id": "5250994e-0b13-4e0c-ad31-ab015ce97b72",
                                 "outdoorTemperature": 18.0,
                                 "supplyPipeTemperature": 21.8,
                                 "returnPipeTemperature": 22.8
                             },
                             {
-                                "id": "59496a75-5d26-4720-969c-ac02bbf00cd1",
+                                "id": "8a01cc3b-b3b6-4c8f-9f30-0c529bf0d83d",
                                 "outdoorTemperature": 17.0,
                                 "supplyPipeTemperature": 22.8,
                                 "returnPipeTemperature": 24.2
                             },
                             {
-                                "id": "f5e739c9-71de-4e90-9ded-c69b796e4d9c",
+                                "id": "bead24ca-2efd-4338-89fc-10a610121558",
                                 "outdoorTemperature": 16.0,
                                 "supplyPipeTemperature": 23.7,
                                 "returnPipeTemperature": 25.6
                             },
                             {
-                                "id": "8c9938f6-0e12-49c1-aeb8-568eeff0c06c",
+                                "id": "b321bdc9-d7d4-4fe8-be79-d4c3d96637ed",
                                 "outdoorTemperature": 15.0,
                                 "supplyPipeTemperature": 24.6,
                                 "returnPipeTemperature": 26.9
                             },
                             {
-                                "id": "d4005f8b-239a-43b0-876d-0424627443e1",
+                                "id": "6b29c83c-c52f-404b-bfaa-1041901d21e6",
                                 "outdoorTemperature": 14.0,
                                 "supplyPipeTemperature": 25.6,
                                 "returnPipeTemperature": 28.3
                             },
                             {
-                                "id": "991a750b-5091-46a3-8fff-c871d364b9b7",
+                                "id": "a2837a19-24b9-4bbf-ae0d-b52ee82e80b0",
                                 "outdoorTemperature": 13.0,
                                 "supplyPipeTemperature": 26.5,
                                 "returnPipeTemperature": 29.7
                             },
                             {
-                                "id": "536677d0-7e07-44ad-8a35-acfb09207f43",
+                                "id": "ab4feb36-de2d-445d-a036-0e573d3726b3",
                                 "outdoorTemperature": 12.0,
                                 "supplyPipeTemperature": 27.4,
                                 "returnPipeTemperature": 31.1
                             },
                             {
-                                "id": "1a255199-ed44-424b-85ca-c38b24d64634",
+                                "id": "cd3b4344-4de9-4e81-8766-888ed8df659b",
                                 "outdoorTemperature": 11.0,
                                 "supplyPipeTemperature": 28.3,
                                 "returnPipeTemperature": 32.5
                             },
                             {
-                                "id": "3eb20280-cbc8-4b0b-a55a-19ce58812753",
+                                "id": "cd36e228-e0e2-4a9b-b946-a003d6824cf3",
                                 "outdoorTemperature": 10.0,
                                 "supplyPipeTemperature": 29.3,
                                 "returnPipeTemperature": 33.9
                             },
                             {
-                                "id": "2ec95147-074e-4920-bbd4-16b7244397c6",
+                                "id": "6c1c24d2-1171-46bd-8416-ba4864cd7435",
                                 "outdoorTemperature": 9.0,
                                 "supplyPipeTemperature": 30.2,
                                 "returnPipeTemperature": 35.3
                             },
                             {
-                                "id": "ed6df6ff-7d92-4e5b-8422-f729905990e5",
+                                "id": "6fdbc988-344a-4e4e-9083-1a379d0c06fe",
                                 "outdoorTemperature": 8.0,
                                 "supplyPipeTemperature": 31.1,
                                 "returnPipeTemperature": 36.7
                             },
                             {
-                                "id": "0e73443d-e2f5-4b53-8d80-2f0f9bc391f8",
+                                "id": "03715c21-3df8-4748-8676-fb5ab687e4de",
                                 "outdoorTemperature": 7.0,
                                 "supplyPipeTemperature": 32.0,
                                 "returnPipeTemperature": 38.1
                             },
                             {
-                                "id": "250b538f-9c5d-4967-9bac-32a913b6ceb7",
+                                "id": "92bf4543-abda-4d37-9aa0-933808152658",
                                 "outdoorTemperature": 6.0,
                                 "supplyPipeTemperature": 33.0,
                                 "returnPipeTemperature": 39.4
                             },
                             {
-                                "id": "72e9514f-2a92-417f-be55-79f6d74eca85",
+                                "id": "b11341a1-54b5-4f64-8089-d32efdff11b0",
                                 "outdoorTemperature": 5.0,
                                 "supplyPipeTemperature": 33.9,
                                 "returnPipeTemperature": 40.8
                             },
                             {
-                                "id": "41f67fe5-3740-4969-8a51-5598187f4bf0",
+                                "id": "d8b26050-e803-42e9-9ef6-3b84cdd59508",
                                 "outdoorTemperature": 4.0,
                                 "supplyPipeTemperature": 34.8,
                                 "returnPipeTemperature": 42.2
                             },
                             {
-                                "id": "6e70fb72-2049-4829-83aa-44f916fee1cd",
+                                "id": "e506a127-cc24-4509-866a-bb34fb5aa91b",
                                 "outdoorTemperature": 3.0,
                                 "supplyPipeTemperature": 35.7,
                                 "returnPipeTemperature": 43.6
                             },
                             {
-                                "id": "0fc0a106-2940-4d32-b86b-2e7f37087eaa",
+                                "id": "1c1c1fad-b082-4c87-aaae-de35283b44fa",
                                 "outdoorTemperature": 2.0,
                                 "supplyPipeTemperature": 36.7,
                                 "returnPipeTemperature": 45.0
                             },
                             {
-                                "id": "22342165-6ff2-4cc5-ada6-1ed0affd21e0",
+                                "id": "b711feb7-1e6f-4996-8c36-519af11c96f8",
                                 "outdoorTemperature": 1.0,
                                 "supplyPipeTemperature": 37.6,
                                 "returnPipeTemperature": 46.4
                             },
                             {
-                                "id": "31bd9edb-ea69-48fc-a087-108ae1d2f02a",
+                                "id": "ee42c80e-3e13-4402-b9d6-ec8093442433",
                                 "outdoorTemperature": 0.0,
                                 "supplyPipeTemperature": 38.5,
                                 "returnPipeTemperature": 47.8
                             },
                             {
-                                "id": "18b90e9a-240e-4425-b36a-190cd160842a",
+                                "id": "110e8817-420a-4b6d-907a-3530390c1f93",
                                 "outdoorTemperature": -1.0,
                                 "supplyPipeTemperature": 39.4,
                                 "returnPipeTemperature": 49.2
                             },
                             {
-                                "id": "4806a2be-6a2f-4a0b-b8a9-e35ebd918a84",
+                                "id": "6edc70b3-0101-483f-a972-e9b4f555d060",
                                 "outdoorTemperature": -2.0,
                                 "supplyPipeTemperature": 40.4,
                                 "returnPipeTemperature": 50.6
                             },
                             {
-                                "id": "45b04e22-eee2-4e2e-8b58-39d5bfdb47f6",
+                                "id": "15566411-33ca-4171-aa68-538888b85713",
                                 "outdoorTemperature": -3.0,
                                 "supplyPipeTemperature": 41.3,
                                 "returnPipeTemperature": 51.9
                             },
                             {
-                                "id": "5989ff35-bdc7-4216-a062-8fb51ef7748f",
+                                "id": "0f1de28e-f9fd-4551-97fd-8b0bfee2ea5b",
                                 "outdoorTemperature": -4.0,
                                 "supplyPipeTemperature": 42.2,
                                 "returnPipeTemperature": 53.3
                             },
                             {
-                                "id": "dfc61277-5cdf-4e88-b1bc-fd3b7fc32f02",
+                                "id": "fc0d9163-f0bb-4ac7-ba8c-5047211a012f",
                                 "outdoorTemperature": -5.0,
                                 "supplyPipeTemperature": 43.1,
                                 "returnPipeTemperature": 54.7
                             },
                             {
-                                "id": "1af5b512-d403-4641-bb4a-5fc5d31c6ca9",
+                                "id": "7282798f-a3cf-4b12-85d9-26ce0e7ed38e",
                                 "outdoorTemperature": -6.0,
                                 "supplyPipeTemperature": 44.1,
                                 "returnPipeTemperature": 56.1
                             },
                             {
-                                "id": "528a9cf4-59b5-42c3-bb72-a5b5c9e355c0",
+                                "id": "d43f98e5-8b1c-4121-8b6a-2ee305d11a93",
                                 "outdoorTemperature": -7.0,
                                 "supplyPipeTemperature": 45.0,
                                 "returnPipeTemperature": 57.5
                             },
                             {
-                                "id": "bead9eaa-0594-41e7-95fd-a93d90a0445c",
+                                "id": "75884869-5452-4af2-b44e-beccc6e5f620",
                                 "outdoorTemperature": -8.0,
                                 "supplyPipeTemperature": 45.9,
                                 "returnPipeTemperature": 58.9
                             },
                             {
-                                "id": "836e2e61-7417-48e4-af64-e36e371b2927",
+                                "id": "93ecc7c7-7cd9-4191-8ada-467b7297a9da",
                                 "outdoorTemperature": -9.0,
                                 "supplyPipeTemperature": 46.8,
                                 "returnPipeTemperature": 60.3
                             },
                             {
-                                "id": "4163e501-bbd1-47cf-a38b-b98b76916a23",
+                                "id": "ef6910cd-a724-4190-8bca-7c6ceb80133f",
                                 "outdoorTemperature": -10.0,
                                 "supplyPipeTemperature": 47.8,
                                 "returnPipeTemperature": 61.7
                             },
                             {
-                                "id": "8f61d31e-7420-4414-beba-fe738982c8db",
+                                "id": "01b2273b-ac77-484f-afb6-ae783d589ce7",
                                 "outdoorTemperature": -11.0,
                                 "supplyPipeTemperature": 48.7,
                                 "returnPipeTemperature": 63.1
                             },
                             {
-                                "id": "150010ee-cdb3-4618-b538-ce1ea2320cfb",
+                                "id": "4b6bf753-e6b8-46eb-9ab6-4a203d4799cf",
                                 "outdoorTemperature": -12.0,
                                 "supplyPipeTemperature": 49.6,
                                 "returnPipeTemperature": 64.4
                             },
                             {
-                                "id": "476bda4f-72c4-4e53-8ca7-80d62c0ecaa5",
+                                "id": "e4b7f590-9801-41b3-91af-436252575ca8",
                                 "outdoorTemperature": -13.0,
                                 "supplyPipeTemperature": 50.6,
                                 "returnPipeTemperature": 65.8
                             },
                             {
-                                "id": "53380963-ac45-4d6e-9597-a853837579cc",
+                                "id": "f328dca7-f37f-4d3a-b0ef-127924346e8c",
                                 "outdoorTemperature": -14.0,
                                 "supplyPipeTemperature": 51.5,
                                 "returnPipeTemperature": 67.2
                             },
                             {
-                                "id": "51c65ff0-be47-43be-b51e-51e322275ad6",
+                                "id": "eb2e2dd8-bc8b-4b76-bd29-6e0227692c03",
                                 "outdoorTemperature": -15.0,
                                 "supplyPipeTemperature": 52.4,
                                 "returnPipeTemperature": 68.6
                             },
                             {
-                                "id": "375b3620-14d7-45ce-8a7c-cabb3e648cda",
+                                "id": "9b84b877-bdf0-49e3-84f2-290ea267a64d",
                                 "outdoorTemperature": -16.0,
                                 "supplyPipeTemperature": 53.3,
                                 "returnPipeTemperature": 70.0
                             },
                             {
-                                "id": "214ec53c-2f16-4ad6-b063-6a6396d00707",
+                                "id": "405ba7d3-34ab-4078-9048-aa961956f3f6",
                                 "outdoorTemperature": -17.0,
                                 "supplyPipeTemperature": 54.3,
                                 "returnPipeTemperature": 71.4
                             },
                             {
-                                "id": "9b676518-2933-4497-ad5c-243cb524f559",
+                                "id": "ed9f4a45-d533-448a-bc81-8afafb0b3fbe",
                                 "outdoorTemperature": -18.0,
                                 "supplyPipeTemperature": 55.2,
                                 "returnPipeTemperature": 72.8
                             },
                             {
-                                "id": "6d309cd2-5d24-4c9e-b2b5-d3c222d7e2da",
+                                "id": "71a7cb89-8654-4eda-86e4-9638b675b880",
                                 "outdoorTemperature": -19.0,
                                 "supplyPipeTemperature": 56.1,
                                 "returnPipeTemperature": 74.2
                             },
                             {
-                                "id": "c405d193-959c-4077-8f9c-1deef6a2c60f",
+                                "id": "9c0f0ec7-c3be-47e3-a13b-6c89bc7802f0",
                                 "outdoorTemperature": -20.0,
                                 "supplyPipeTemperature": 57.0,
                                 "returnPipeTemperature": 75.6
                             },
                             {
-                                "id": "a8c7da69-c029-4aeb-b55d-211c44d093ba",
+                                "id": "802744a2-8b4e-425f-99a8-50613bc09a99",
                                 "outdoorTemperature": -21.0,
                                 "supplyPipeTemperature": 58.0,
                                 "returnPipeTemperature": 76.9
                             },
                             {
-                                "id": "1297220c-029b-4e78-8cea-ed2d1d8c22da",
+                                "id": "2db082a2-d0e7-45de-88cd-969faa7ee977",
                                 "outdoorTemperature": -22.0,
                                 "supplyPipeTemperature": 58.9,
                                 "returnPipeTemperature": 78.3
                             },
                             {
-                                "id": "cd88fd12-9204-45bb-8640-442a78b3a75a",
+                                "id": "690f7e4d-866e-481f-8e1b-8fba552ff4f4",
                                 "outdoorTemperature": -23.0,
                                 "supplyPipeTemperature": 59.8,
                                 "returnPipeTemperature": 79.7
                             },
                             {
-                                "id": "1edf117a-f2e4-48d7-bcd9-8784bace164d",
+                                "id": "eae1e689-1922-4806-95c5-bc425df59bd9",
                                 "outdoorTemperature": -24.0,
                                 "supplyPipeTemperature": 60.7,
                                 "returnPipeTemperature": 81.1
                             },
                             {
-                                "id": "b351dfb7-3520-44f9-b023-d29af9e62d26",
+                                "id": "d65fd5b2-d8cf-443f-9f14-144e6ca64a77",
                                 "outdoorTemperature": -25.0,
                                 "supplyPipeTemperature": 61.7,
                                 "returnPipeTemperature": 82.5
                             },
                             {
-                                "id": "2b383d03-4cf2-42f2-a010-dcc6cdb39e6a",
+                                "id": "a14ec86d-dc81-40a5-97fd-1855d19d91d4",
                                 "outdoorTemperature": -26.0,
                                 "supplyPipeTemperature": 62.6,
                                 "returnPipeTemperature": 83.9
                             },
                             {
-                                "id": "06063db3-c230-48f7-a450-84791904efa5",
+                                "id": "b156119f-6702-4dc2-862f-2272d7347e50",
                                 "outdoorTemperature": -27.0,
                                 "supplyPipeTemperature": 63.5,
                                 "returnPipeTemperature": 85.3
                             },
                             {
-                                "id": "e94953f8-2c02-4dfe-bd06-39adc75b49f1",
+                                "id": "5c81d7db-0067-49ab-b85a-1717619390f6",
                                 "outdoorTemperature": -28.0,
                                 "supplyPipeTemperature": 64.4,
                                 "returnPipeTemperature": 86.7
                             },
                             {
-                                "id": "5a77213d-bb51-4f48-b745-88ab331a6c80",
+                                "id": "8bbeb1be-5aa5-499e-89ca-2fd4fdd808d9",
                                 "outdoorTemperature": -29.0,
                                 "supplyPipeTemperature": 65.4,
                                 "returnPipeTemperature": 88.1
                             },
                             {
-                                "id": "14e725e2-c6a7-4f0e-960e-062eccd00daf",
+                                "id": "7ebe7f5d-5159-42b8-b570-1bb394dcd93f",
                                 "outdoorTemperature": -30.0,
                                 "supplyPipeTemperature": 66.3,
                                 "returnPipeTemperature": 89.4
                             },
                             {
-                                "id": "66bb2a0e-11aa-40cc-9a55-914299556f1f",
+                                "id": "b183bbaa-6b26-4d45-a195-9699cf2140e5",
                                 "outdoorTemperature": -31.0,
                                 "supplyPipeTemperature": 67.2,
                                 "returnPipeTemperature": 90.8
                             },
                             {
-                                "id": "c7e6addb-fcfe-4a1b-ab25-51d66d1f6ee1",
+                                "id": "edd79e22-41e5-4e1a-9fe7-566effcc23c1",
                                 "outdoorTemperature": -32.0,
                                 "supplyPipeTemperature": 68.1,
                                 "returnPipeTemperature": 92.2
                             },
                             {
-                                "id": "5ad520fd-7f7b-42b2-ba59-21a1cc822d10",
+                                "id": "ab3f0d49-9927-4532-a7c8-a70722c3e87e",
                                 "outdoorTemperature": -33.0,
                                 "supplyPipeTemperature": 69.1,
                                 "returnPipeTemperature": 93.6
                             },
                             {
-                                "id": "18ff01b9-cfef-4332-9be5-cff20d6f04ce",
+                                "id": "4e50bedb-59ac-4900-ab83-62aed83764e6",
                                 "outdoorTemperature": -34.0,
                                 "supplyPipeTemperature": 70.0,
                                 "returnPipeTemperature": 95.0
@@ -364,35 +368,35 @@
                     "schedules": {
                         "items": [
                             {
-                                "id": "6e844a78-aa47-4f04-99e1-3bf3569ccbca",
+                                "id": "0483d767-3cbf-4e6f-b37b-f1de67650680",
                                 "day": 1,
                                 "windows": [
                                     {
-                                        "id": "9029de3e-2965-4597-b782-1b7a943b8785",
+                                        "id": "edcee7c1-c1bf-4a9c-b42b-cb245a16d0f4",
                                         "startTime": "2023-12-10T21:00:00+00:00",
                                         "endTime": "2023-12-11T02:00:00+00:00",
                                         "desiredTemperatureMode": 3
                                     },
                                     {
-                                        "id": "a0516574-1b51-4a14-a217-eeb7bd1e46a4",
+                                        "id": "95dcd4fc-e517-420d-96b1-76c838a9f198",
                                         "startTime": "2023-12-11T02:00:00+00:00",
                                         "endTime": "2023-12-11T07:00:00+00:00",
                                         "desiredTemperatureMode": 2
                                     },
                                     {
-                                        "id": "4165264c-f2b2-4275-9562-c0fe218f0319",
+                                        "id": "cf764997-bc53-4824-b190-b27ae4829185",
                                         "startTime": "2023-12-11T07:00:00+00:00",
                                         "endTime": "2023-12-11T13:00:00+00:00",
                                         "desiredTemperatureMode": 3
                                     },
                                     {
-                                        "id": "19acdb80-4a83-492a-9ae0-a74e36a16cf7",
+                                        "id": "aab41080-6494-4d0b-a5db-1e4e8923afab",
                                         "startTime": "2023-12-11T13:00:00+00:00",
                                         "endTime": "2023-12-11T18:00:00+00:00",
                                         "desiredTemperatureMode": 2
                                     },
                                     {
-                                        "id": "e89c7440-bff8-4843-b5c0-5933bde61259",
+                                        "id": "d67bba93-eae5-458c-a0bb-6e7474fa1dc1",
                                         "startTime": "2023-12-11T18:00:00+00:00",
                                         "endTime": "2023-12-11T20:59:59+00:00",
                                         "desiredTemperatureMode": 3
@@ -400,35 +404,35 @@
                                 ]
                             },
                             {
-                                "id": "8fc74ef1-af1c-4620-a623-c6a9a3e2c067",
+                                "id": "29403eae-5734-4e7d-aece-794f3f2ca79f",
                                 "day": 2,
                                 "windows": [
                                     {
-                                        "id": "61e0079d-71ae-44ea-b262-b59724f4b660",
+                                        "id": "fa5beb64-e4cb-4663-b972-f28efd43e4c5",
                                         "startTime": "2023-12-10T21:00:00+00:00",
                                         "endTime": "2023-12-11T02:00:00+00:00",
                                         "desiredTemperatureMode": 3
                                     },
                                     {
-                                        "id": "af134541-7dc4-4bb2-bcfa-f9e40e857c12",
+                                        "id": "258854b8-6312-4d89-8291-dbc6b775bbc7",
                                         "startTime": "2023-12-11T02:00:00+00:00",
                                         "endTime": "2023-12-11T07:00:00+00:00",
                                         "desiredTemperatureMode": 2
                                     },
                                     {
-                                        "id": "bcc6ac5f-f2b8-42ea-a9f3-b63a02bb6548",
+                                        "id": "196f5736-a735-46f3-ae94-adaa57fedd28",
                                         "startTime": "2023-12-11T07:00:00+00:00",
                                         "endTime": "2023-12-11T13:00:00+00:00",
                                         "desiredTemperatureMode": 3
                                     },
                                     {
-                                        "id": "ac8965db-de0e-47fb-adcf-da9d460968ef",
+                                        "id": "49973a50-658c-4a86-82f5-a1293585a958",
                                         "startTime": "2023-12-11T13:00:00+00:00",
                                         "endTime": "2023-12-11T18:00:00+00:00",
                                         "desiredTemperatureMode": 2
                                     },
                                     {
-                                        "id": "a20fa13a-e8eb-4b47-a4c5-eb24be8c1584",
+                                        "id": "a7c30a73-8c37-4fd7-ac54-81be3a9796f3",
                                         "startTime": "2023-12-11T18:00:00+00:00",
                                         "endTime": "2023-12-11T20:59:59+00:00",
                                         "desiredTemperatureMode": 3
@@ -436,35 +440,35 @@
                                 ]
                             },
                             {
-                                "id": "c11c5a5f-7494-4974-a64d-bf339e12c41c",
+                                "id": "4a36c9c0-3b85-4b26-9664-5ffc9678729b",
                                 "day": 3,
                                 "windows": [
                                     {
-                                        "id": "5c681708-1984-4fc8-94d3-317efb965e83",
+                                        "id": "6326a359-289e-405c-833c-7fe61ef6709b",
                                         "startTime": "2023-12-10T21:00:00+00:00",
                                         "endTime": "2023-12-11T02:00:00+00:00",
                                         "desiredTemperatureMode": 3
                                     },
                                     {
-                                        "id": "c9b66525-4bec-48aa-8536-31e12572329f",
+                                        "id": "03f06c23-f57d-4b81-b927-c0c7f82ff428",
                                         "startTime": "2023-12-11T02:00:00+00:00",
                                         "endTime": "2023-12-11T07:00:00+00:00",
                                         "desiredTemperatureMode": 2
                                     },
                                     {
-                                        "id": "bf1faa53-2efc-47cd-9725-ca8928855224",
+                                        "id": "06276237-7358-4bd8-b27f-465fa357e268",
                                         "startTime": "2023-12-11T07:00:00+00:00",
                                         "endTime": "2023-12-11T13:00:00+00:00",
                                         "desiredTemperatureMode": 3
                                     },
                                     {
-                                        "id": "2153cd82-a99b-4e7c-863c-932fbddc9768",
+                                        "id": "e1da66d8-e75e-4483-85e3-1ac450d8120f",
                                         "startTime": "2023-12-11T13:00:00+00:00",
                                         "endTime": "2023-12-11T18:00:00+00:00",
                                         "desiredTemperatureMode": 2
                                     },
                                     {
-                                        "id": "706a7533-78e0-426f-8248-cfa607f0e6f5",
+                                        "id": "a84bd750-de7a-42d5-87a3-2b94fcb28462",
                                         "startTime": "2023-12-11T18:00:00+00:00",
                                         "endTime": "2023-12-11T20:59:59+00:00",
                                         "desiredTemperatureMode": 3
@@ -472,35 +476,35 @@
                                 ]
                             },
                             {
-                                "id": "bda83ee4-3a69-4183-ab4d-9cef93443a32",
+                                "id": "71fd62f1-5bcc-4278-b308-61d803e505e0",
                                 "day": 4,
                                 "windows": [
                                     {
-                                        "id": "519d5fe4-f544-4883-b227-e50f208bb87b",
+                                        "id": "15c267cc-6f64-473d-b6ba-3d5ddcc0e7ad",
                                         "startTime": "2023-12-10T21:00:00+00:00",
                                         "endTime": "2023-12-11T02:00:00+00:00",
                                         "desiredTemperatureMode": 3
                                     },
                                     {
-                                        "id": "5c14982b-6ba0-49e6-ada4-8928fd7cfdc6",
+                                        "id": "ceec6b96-867c-46a3-a043-e45df09b2274",
                                         "startTime": "2023-12-11T02:00:00+00:00",
                                         "endTime": "2023-12-11T07:00:00+00:00",
                                         "desiredTemperatureMode": 2
                                     },
                                     {
-                                        "id": "c1378cee-3e9c-4104-ad76-216930852844",
+                                        "id": "7e524009-1852-40b4-93f5-1f105b6031fa",
                                         "startTime": "2023-12-11T07:00:00+00:00",
                                         "endTime": "2023-12-11T13:00:00+00:00",
                                         "desiredTemperatureMode": 3
                                     },
                                     {
-                                        "id": "350b104f-be28-4b27-89a3-650394035d33",
+                                        "id": "e2dc50af-127c-4c65-a568-e558818850b6",
                                         "startTime": "2023-12-11T13:00:00+00:00",
                                         "endTime": "2023-12-11T18:00:00+00:00",
                                         "desiredTemperatureMode": 2
                                     },
                                     {
-                                        "id": "0557452c-db2f-4644-b6fa-0ce20daeb974",
+                                        "id": "4f1869a7-b9ce-46b4-8f0f-0a694e273d3d",
                                         "startTime": "2023-12-11T18:00:00+00:00",
                                         "endTime": "2023-12-11T20:59:59+00:00",
                                         "desiredTemperatureMode": 3
@@ -508,35 +512,35 @@
                                 ]
                             },
                             {
-                                "id": "603140c0-2485-4b06-8598-f90e7c16107d",
+                                "id": "a944a973-3510-43d2-8d96-45675a8eed35",
                                 "day": 5,
                                 "windows": [
                                     {
-                                        "id": "ec4f6b0d-e13e-4d82-8920-07046d609b6d",
+                                        "id": "cc328195-30a2-4fae-bb0d-d45965e00eb2",
                                         "startTime": "2023-12-10T21:00:00+00:00",
                                         "endTime": "2023-12-11T02:00:00+00:00",
                                         "desiredTemperatureMode": 3
                                     },
                                     {
-                                        "id": "ff5ea30d-6b93-4e30-89df-8e58b21f3f9d",
+                                        "id": "a7c7af83-16a7-4536-87ef-f9f7c0dc6fc1",
                                         "startTime": "2023-12-11T02:00:00+00:00",
                                         "endTime": "2023-12-11T07:00:00+00:00",
                                         "desiredTemperatureMode": 2
                                     },
                                     {
-                                        "id": "8542d315-da03-422e-9ffa-c29aa4948d4b",
+                                        "id": "eb22c559-809f-4bb9-b34f-1b859592062d",
                                         "startTime": "2023-12-11T07:00:00+00:00",
                                         "endTime": "2023-12-11T13:00:00+00:00",
                                         "desiredTemperatureMode": 3
                                     },
                                     {
-                                        "id": "c4d9c6f7-180e-4d18-99df-171b999b4438",
+                                        "id": "e4be0027-4d6c-421b-b0d2-2f6411321f6b",
                                         "startTime": "2023-12-11T13:00:00+00:00",
                                         "endTime": "2023-12-11T18:00:00+00:00",
                                         "desiredTemperatureMode": 2
                                     },
                                     {
-                                        "id": "21c66dbf-9184-436b-9f6e-a52708e2c415",
+                                        "id": "af1de34c-e38d-46fa-b189-2da7119ea1c4",
                                         "startTime": "2023-12-11T18:00:00+00:00",
                                         "endTime": "2023-12-11T20:59:59+00:00",
                                         "desiredTemperatureMode": 3
@@ -544,11 +548,11 @@
                                 ]
                             },
                             {
-                                "id": "25709421-74cb-4109-8443-3142b484eb1d",
+                                "id": "79225599-21c2-4522-a6ff-bd6190b474d7",
                                 "day": 6,
                                 "windows": [
                                     {
-                                        "id": "1b34edcb-2dd3-4be0-bc97-a302e4b156ad",
+                                        "id": "2b69fe42-4245-40cc-9be5-ad8a779ec91f",
                                         "startTime": "2023-12-10T21:00:00+00:00",
                                         "endTime": "2023-12-11T20:59:59+00:00",
                                         "desiredTemperatureMode": 2
@@ -556,11 +560,11 @@
                                 ]
                             },
                             {
-                                "id": "d2235929-bd2f-48b5-a1de-73468959696a",
+                                "id": "11dbcfc8-ceb9-40a1-8270-72d3f9301650",
                                 "day": 7,
                                 "windows": [
                                     {
-                                        "id": "ab649b1a-6c73-4134-b775-97ae99cf4669",
+                                        "id": "f2ee9938-8473-471d-8bd8-6cfac4f877e2",
                                         "startTime": "2023-12-10T21:00:00+00:00",
                                         "endTime": "2023-12-11T20:59:59+00:00",
                                         "desiredTemperatureMode": 2
@@ -661,7 +665,7 @@
     },
     "service": {
         "regulatorOwner": {
-            "name": "ETA24-1",
+            "name": "ETA24",
             "phoneNumber": "9274484333"
         },
         "softwareInfo": {

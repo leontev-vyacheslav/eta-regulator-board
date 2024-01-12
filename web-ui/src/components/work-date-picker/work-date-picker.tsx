@@ -2,7 +2,7 @@ import React from 'react';
 import DateBox from 'devextreme-react/date-box';
 import { useAppSettings } from '../../contexts/app-settings';
 import { WorkDatePickerProps } from '../../models/work-date-picker-props';
-import { useRtcDataTimeData } from '../../contexts/app-data/use-rtc-datatime-data';
+import { useRtcDataTimeData } from '../../contexts/app-data/use-rtc-datetime-data';
 
 const WorkDatePicker = ({ innerRef, onClosed }: WorkDatePickerProps) => {
   const { putRtcDateTimeAsync } = useRtcDataTimeData();

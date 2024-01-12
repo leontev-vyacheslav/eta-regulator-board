@@ -12,22 +12,31 @@ def authorize(f):
     @wraps(f)
     def decorator(*args, **kwargs):
         token = None
-        if 'Authorization' in request.headers:
-            token = request.headers['Authorization'].replace('Bearer ', '')
+        requested_user = None
 
-        if not token:
+        if 'Authorization' in request.headers and 'X-ETA-Requested-User' in request.headers:
+            token = request.headers['Authorization'].replace('Bearer ', '')
+            requested_user = request.headers['X-ETA-Requested-User']
+
+        if not token or not requested_user:
             return make_response(
                 jsonify({'message': 'The access token is invalid.'}),
                 401
             )
+
         try:
             regulator_settings_repository: RegulatorSettingsRepository = app.extensions['regulator_settings_repository']
             regulator_settings = regulator_settings_repository.settings
 
-            mac_address = regulator_settings.service.hardware_info.onion_mac_address
-            password = regulator_settings.signin.password
+            account = next((acc for acc in regulator_settings.accounts.items if acc.login == requested_user) , None)
+            if not account:
+                return make_response(
+                    jsonify({'message': 'Account was not found.'}),
+                    401
+                )
 
-            data = jwt.decode(token, password, algorithms=["HS256"])
+            mac_address = regulator_settings.service.hardware_info.onion_mac_address
+            data = jwt.decode(token, account.password, algorithms=["HS256"])
 
             if data is not None:
                 auth_mac_address = data.get('mac_address')

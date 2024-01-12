@@ -10,6 +10,7 @@ import {
     AuthUserModel
 } from '../models/auth-context';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
+import { SignInModel } from '../models/signin-model';
 
 const AuthContext = createContext<AuthContextModel>({ } as AuthContextModel);
 const useAuth = () => useContext(AuthContext);
@@ -37,13 +38,11 @@ function AuthProvider (props: AppBaseProviderProps) {
         setUser(userAuthData);
     }, [getUserAuthDataFromStorage]);
 
-    const signIn = useCallback<SignInAsyncFunc>(async (password: string) => {
+    const signIn = useCallback<SignInAsyncFunc>(async (signIn: SignInModel) => {
         let userAuthData = null;
         try {
             const response = await axios.post(
-                `${routes.host}${routes.accountSignIn}`, {
-                    password: password
-                }
+                `${routes.host}${routes.accountSignIn}`, signIn
             );
 
             if (response && response.status === HttpConstants.StatusCodes.Created && response.data) {
@@ -52,7 +51,7 @@ function AuthProvider (props: AppBaseProviderProps) {
                     localStorage.setItem('@userAuthData', JSON.stringify(userAuthData));
                 }
             }
-            
+
             setUser(userAuthData);
         } catch (error) {
             console.log(`The authentication process was failed with error: ${(error as Error).message}`);

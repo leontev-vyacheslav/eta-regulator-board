@@ -45,9 +45,7 @@ export const ServiceForm = () => {
                     dataField={ 'regulatorOwner.name' }
                     label={ { location: 'top', showColon: true, text: 'Собственник' } }
                     editorType={ 'dxTextBox' }
-                    editorOptions={ {
-
-                    } } />
+                />
                 <SimpleItem
                     dataField={ 'regulatorOwner.phoneNumber' }
                     label={ { location: 'top', showColon: true, text: 'Телефон' } }

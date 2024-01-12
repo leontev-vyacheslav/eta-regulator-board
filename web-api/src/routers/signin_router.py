@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from hashlib import sha256
 from flask_pydantic import validate
 import jwt
 
@@ -6,33 +7,44 @@ from app import app
 from models.common.owner_info_model import OwnerInfoModel
 from models.common.auth_user_model import AuthUserModel
 from models.common.message_model import MessageModel
-from models.common.signin_model import SigninModel
+from models.common.signin_model import SignInModel
 from responses.json_response import JsonResponse
 from utils.auth_helper import authorize
 
 
 @app.route('/sign-in', methods=['POST'])
 @validate()
-def signin(body: SigninModel):
-    user_password = body.password
+def signin(body: SignInModel):
     regulator_settings = app.get_regulator_settings()
 
-    password = regulator_settings.signin.password
+    account = next((acc for acc in regulator_settings.accounts.items if acc.login == body.login), None)
+
+    if account is None:
+        return JsonResponse(
+            response=MessageModel(message='The login is failed. The user was not found.'),
+            status=401
+        )
+
+    hashed_signin_password = sha256(body.password.encode(encoding='utf-8')).hexdigest()
     mac_address = regulator_settings.service.hardware_info.onion_mac_address
 
-    if user_password == password:
+    if hashed_signin_password == account.password:
         token = jwt.encode({
             'mac_address': mac_address,
-            'exp': datetime.utcnow() + timedelta(minutes = 30)
-        }, password)
+            'exp': datetime.utcnow() + timedelta(minutes=30)
+        }, account.password)
 
         return JsonResponse(
-            response=AuthUserModel(token=token),
+            response=AuthUserModel(
+                role=account.role,
+                login=account.login,
+                token=token
+            ),
             status=201
         )
 
     return JsonResponse(
-        response=MessageModel(message='A singin is failed. The pass key is wrong.'),
+        response=MessageModel(message='The login is failed. The password is wrong.'),
         status=401
     )
 
@@ -59,12 +71,3 @@ def auth_check():
         status=200
     )
 
-@app.route('/owner-info', methods=['GET'])
-@validate()
-def get_owner_info():
-    regulator_settings = app.get_regulator_settings()
-
-    return  JsonResponse(
-        response=OwnerInfoModel(name=regulator_settings.service.regulator_owner.name),
-        status=200
-    )

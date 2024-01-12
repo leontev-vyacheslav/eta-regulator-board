@@ -6,23 +6,19 @@ from models.regulator.enums.regulator_state_model import RegulatorStateModel
 from models.regulator.gpio_set_model import GpioSetModel
 from models.regulator.heating_circuits_model import HeatingCircuitsModel
 from models.regulator.service_model import ServiceModel
-from models.common.signin_model import SigninModel
+from models.common.accounts_model import AccountsModel
 
 
 class RegulatorSettingsModel(AppBaseModel):
 
-    # Пуск
     regulator_state: RegulatorStateModel
 
-    # Вход в систему
-    signin: SigninModel
+    accounts: AccountsModel
 
     heating_circuits: HeatingCircuitsModel
 
-    # Ввод/вывод
     gpio_set: GpioSetModel
 
-    # Сервис
     service: ServiceModel
 
 

@@ -24,6 +24,7 @@ export const useAuthHttpRequest = () => {
 
             if (userAuthData) {
                 config.headers.Authorization = `Bearer ${userAuthData.token}`;
+                config.headers['X-ETA-Requested-User'] = userAuthData.login
             }
 
             try {
@@ -36,7 +37,7 @@ export const useAuthHttpRequest = () => {
                 response = (error as AxiosError).response;
                 if (response?.status === 401) {
                     await signOut();
-                    
+
                     if (!suppressShowUnauthorized) {
                         proclaim({
                             type: 'error',

@@ -1,44 +1,29 @@
-import { useState, useRef, useCallback, FormEvent, useEffect } from 'react';
+import './signin-form.scss';
+import { useState, useCallback, FormEvent, useMemo } from 'react';
 import Form, { Item, Label, ButtonItem, ButtonOptions, RequiredRule } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import { useAuth } from '../../contexts/auth';
-import { SigninFormModel } from '../../models/signin-form-model';
-import { useAuthData } from '../../contexts/app-data/use-auth-data';
-import { OwnerInfoModel } from '../../models/data/owner-info-model';
 import { proclaim } from '../../utils/proclaim';
-import './signin-form.scss';
+import { SignInModel } from '../../models/signin-model';
 
 export const SigninForm = () => {
-    const [ownerInfo, setOwnerInfo] = useState<OwnerInfoModel | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-
     const { signIn } = useAuth();
-    const { getOwnerInfoDataAsync } = useAuthData();
 
-    useEffect(() => {
-        (async () => {
-            const ownerInfo = await getOwnerInfoDataAsync();
-            if (ownerInfo) {
-                setOwnerInfo(ownerInfo)
-            }
-        })();
-    }, [getOwnerInfoDataAsync])
-
-    const formData = useRef<SigninFormModel>(
-        (
+    const formData = useMemo<SignInModel>( () => {
+        return (
             process.env.NODE_ENV === 'production'
-                ? { password: '1234567890' }
-                : { password: '1234567890' }
-        ) as SigninFormModel
-    );
+                ? { login: 'Admin', password: '1234567890' }
+                : { login: 'Admin', password: '1234567890' }
+        ) as SignInModel
+    }, []);
 
     const onSubmit = useCallback(async (e: FormEvent) => {
         e.preventDefault();
-        if (formData.current) {
-            const { password } = formData.current;
+        if (formData) {
             setLoading(true);
             try {
-                await signIn(password!);
+                await signIn(formData);
                 proclaim({
                     type: 'success',
                     message: 'Пользователь успешно выполнил вход.'
@@ -52,13 +37,13 @@ export const SigninForm = () => {
             }
             setLoading(false);
         }
-    }, [signIn]);
+    }, [formData, signIn]);
 
     return (
         <form className={ 'signin-form' } onSubmit={ onSubmit }>
-            <Form formData={ formData.current } disabled={ loading }>
+            <Form formData={ formData } disabled={ loading }>
 
-                <Item dataField={ 'user' } editorType={ 'dxTextBox' } editorOptions={ { disabled: true, stylingMode: 'filled', value: ownerInfo ? ownerInfo.name : 'ETA24' } }>
+                <Item dataField={ 'login' } editorType={ 'dxTextBox' } editorOptions={ { stylingMode: 'filled' } }>
                     <Label visible={ false } />
                 </Item>
 
