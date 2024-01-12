@@ -9,9 +9,11 @@ import { showConfirmDialog } from '../../../../utils/dialogs';
 import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { useSettingPageContext } from '../../settings-page-context';
+import { useAppSettings } from '../../../../contexts/app-settings';
 
 const SchedulesTabContentInner = () => {
-    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync, circuitId } = useSettingPageContext();
+    const { refreshRegulatorSettingsAsync } = useAppSettings();
+    const { regulatorSettings, setRegulatorSettings, circuitId } = useSettingPageContext();
     const { putSchedulesAsync, schedulesDataGridRef } = useSchedulesContext();
 
     const schedulesStore = useMemo(() => {
@@ -63,7 +65,6 @@ const SchedulesTabContentInner = () => {
 
                          showConfirmDialog({
                             title: formatMessage('confirm-title'),
-
                             iconName: 'DeleteAllIcon',
                             iconSize: 32,
                             callback: async () => {

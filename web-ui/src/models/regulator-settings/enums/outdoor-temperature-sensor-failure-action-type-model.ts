@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: OFF */
+
 export enum OutdoorTemperatureSensorFailureActionTypeModel {
     noAction = 1,
     closeValve = 2,

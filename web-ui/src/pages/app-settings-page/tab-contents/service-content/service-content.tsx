@@ -1,13 +1,13 @@
 import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
 import { useRef } from 'react';
-import { useSettingPageContext } from '../../settings-page-context';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import AppConstants from '../../../../constants/app-constants';
+import { useAppSettings } from '../../../../contexts/app-settings';
 
 export const ServiceForm = () => {
     const dxServiceFormRef = useRef<Form>(null);
-    const { regulatorSettings, setRegulatorSettings } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings } = useAppSettings();
     const { putRegulatorSettingsAsync } = useAppData();
 
     return (

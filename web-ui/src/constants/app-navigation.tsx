@@ -10,7 +10,7 @@ import {
     HeatSysIcon,
     HotWaterIcon,
     VentilationIcon,
-    AppSettingsIcon,
+    AppIcon,
 } from './app-icons';
 import { IconBaseProps } from 'react-icons/lib/cjs/iconBase';
 import { TreeViewItemModel } from '../models/tree-view-item';
@@ -61,7 +61,7 @@ export const useSideNavigationMenuItems = () => {
                     }, {
                         id: 'app-settings',
                         text: 'Приложение',
-                        iconRender: (props: IconBaseProps) => <AppSettingsIcon size={ 22 } { ...props } />,
+                        iconRender: (props: IconBaseProps) => <AppIcon size={ 22 } { ...props } />,
                         path: '/app-settings',
                     }
                 ]

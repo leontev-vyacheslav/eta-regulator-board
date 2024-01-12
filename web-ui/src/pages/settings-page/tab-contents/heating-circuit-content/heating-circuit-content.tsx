@@ -1,5 +1,5 @@
-import { Form, GroupItem, SimpleItem } from 'devextreme-react/form';
 import { useRef } from 'react';
+import { Form, GroupItem, SimpleItem } from 'devextreme-react/form';
 import { useSettingPageContext } from '../../settings-page-context';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
@@ -12,7 +12,7 @@ import { formatMessage } from 'devextreme/localization';
 
 export const HeatingCircuitContent = () => {
     const dxHeatingCircuitFormRef = useRef<Form>(null);
-    const { regulatorSettings, setHeatingCircuitType, setRegulatorSettings, circuitId, heatingCircuitType, applyDefaultHeatCircuitSettingsAsync } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings, circuitId, applyDefaultHeatCircuitSettingsAsync, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
     return (
@@ -50,10 +50,10 @@ export const HeatingCircuitContent = () => {
                     editorType='dxSelectBox'
                     editorOptions={ {
                         items: HeatingCircuitTypes,
-                        valueExpr: 'id',
+                        valueExpr: 'type',
                         displayExpr: 'description',
                         onValueChanged: (e: ValueChangedEvent) => {
-                            if (e.value == heatingCircuitType) {
+                            if (e.value == currentHeatingCircuitType.type) {
                                 return;
                             }
                             if (e.event) {
@@ -61,8 +61,10 @@ export const HeatingCircuitContent = () => {
                                     if (dialogResult) {
                                         await applyDefaultHeatCircuitSettingsAsync(e.value);
                                     }
-
-                                    setHeatingCircuitType(e.value);
+                                    setRegulatorSettings((previous) => {
+                                        previous!.heatingCircuits.items[circuitId].type = e.value
+                                        return { ...previous! };
+                                    })
                                 };
 
                                 showConfirmDialogEx({
@@ -71,12 +73,15 @@ export const HeatingCircuitContent = () => {
                                     iconSize: 32,
                                     callback: innerCallback,
                                     textRender: () => {
-                                        return <>{formatMessage('confirm-dialog-se-default-heating-circuit-settings')}</>;
+                                        return <>{formatMessage('confirm-dialog-default-heating-circuit-settings')}</>;
                                     }
                                 });
                             }
                             else {
-                                setHeatingCircuitType(e.value);
+                                setRegulatorSettings((previous) => {
+                                    previous!.heatingCircuits.items[circuitId].type = e.value
+                                    return { ...previous! };
+                                })
                             }
                         } }
                     }

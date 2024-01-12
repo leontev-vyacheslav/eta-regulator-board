@@ -4,11 +4,11 @@ import { AdditionalMenuIcon, DownloadIcon, GraphIcon, ManageIcon, RegulatorIcon,
 import PageHeader from '../../components/page-header/page-header';
 import AppConstants from '../../constants/app-constants';
 import TabPanel, { Item as TabPanelItem } from 'devextreme-react/tab-panel';
-import { ControlParametersForm, RegulationParametersForm, RtcDateTimeForm, ServiceForm, TemperatureGraphTabContent } from './tab-contents/index';
+import { ControlParametersForm, RegulationParametersForm,  TemperatureGraphTabContent } from './tab-contents/index';
 import { SettingPageContextProvider, useSettingPageContext } from './settings-page-context';
 import { SchedulesTabContent } from './tab-contents/schedules/schedules-tab-content';
 import { HeatingCircuitContent } from './tab-contents/heating-circuit-content/heating-circuit-content';
-import { HeatingCircuitTypeModel, HeatingCircuitTypes } from '../../models/regulator-settings/enums/heating-circuit-type-model';
+import { HeatingCircuitTypeModel } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { IconTab } from '../../components/tab-utils/icon-tab';
 import { useAppData } from '../../contexts/app-data/app-data';
@@ -17,21 +17,14 @@ import { formatMessage } from 'devextreme/localization';
 import { showConfirmDialog } from '../../utils/dialogs';
 
 export const SettingsPageInternal = () => {
-    const { heatingCircuitType, circuitId, applyDefaultHeatCircuitSettingsAsync } = useSettingPageContext();
+    const { circuitId, applyDefaultHeatCircuitSettingsAsync, currentHeatingCircuitType } = useSettingPageContext();
     const { getRegulatorSettingsAsFile } = useAppData();
     const tabPanelRef = useRef<TabPanel>(null);
 
     const pageHeaderTitle = useMemo(() => {
-        const currentCircuitId = circuitId + 1;
 
-        if (!heatingCircuitType) {
-            return `Настройки контура ${currentCircuitId}`;
-        }
-        const currentHeatingCircuitType = HeatingCircuitTypes.find(t => t.id === heatingCircuitType);
-
-        return `Настройки контура ${currentCircuitId} (${currentHeatingCircuitType!.shotDescription})`;
-
-    }, [circuitId, heatingCircuitType]);
+        return `Настройки контура ${circuitId + 1} (${currentHeatingCircuitType.shotDescription})`;
+    }, [circuitId, currentHeatingCircuitType]);
 
     const downloadRegulatorSettingsAsync = useCallback(async () => {
         const data = await getRegulatorSettingsAsFile();
@@ -58,7 +51,7 @@ export const SettingsPageInternal = () => {
     const resetRegulatorSettingsAsync = useCallback(async () => {
 
         const innerCallback = async () => {
-            await applyDefaultHeatCircuitSettingsAsync(heatingCircuitType!, );
+            await applyDefaultHeatCircuitSettingsAsync(currentHeatingCircuitType.type);
         };
 
         showConfirmDialog({
@@ -71,7 +64,7 @@ export const SettingsPageInternal = () => {
             }
         });
 
-    }, [applyDefaultHeatCircuitSettingsAsync, heatingCircuitType]);
+    }, [applyDefaultHeatCircuitSettingsAsync, currentHeatingCircuitType]);
 
     const menuItems = useMemo(() => {
         return [
@@ -97,20 +90,20 @@ export const SettingsPageInternal = () => {
         const temperatureGraphTabHtmlElement: HTMLDivElement | null = document.querySelector('.dx-item.dx-tab:has(* #temperature-graph-tab-icon)');
 
         if (temperatureGraphTabHtmlElement) {
-            if(heatingCircuitType === HeatingCircuitTypeModel.hotWater) {
+            if(currentHeatingCircuitType.type === HeatingCircuitTypeModel.hotWater) {
                 temperatureGraphTabHtmlElement.style.display = 'none';
             } else {
                 temperatureGraphTabHtmlElement.style.removeProperty('display');
             }
         }
 
-        if(heatingCircuitType === HeatingCircuitTypeModel.hotWater) {
+        if(currentHeatingCircuitType.type === HeatingCircuitTypeModel.hotWater) {
             const selectedIndexTab = tabPanelRef.current?.instance.option('selectedIndex');
             if(selectedIndexTab === 3) {
                 tabPanelRef.current?.instance.option('selectedIndex', 0);
             }
         }
-    }, [heatingCircuitType]);
+    }, [currentHeatingCircuitType]);
 
     return (
         <>
@@ -143,14 +136,6 @@ export const SettingsPageInternal = () => {
 
                         <TabPanelItem title={ 'Расписания' } tabRender={ (e) => <IconTab tab={ e } icon={ <ScheduleIcon size={ 18 } /> } /> }>
                             <SchedulesTabContent />
-                        </TabPanelItem>
-
-                        <TabPanelItem  title={ 'Сервис' } tabRender={ (e) => <IconTab tab={ e } icon={ <ServiceIcon size={ 18 } /> } /> }>
-                            <ServiceForm />
-                        </TabPanelItem>
-
-                        <TabPanelItem title={ 'Даты и время' } tabRender={ (e) => <IconTab tab={ e } icon={ <RtcClockIcon size={ 18 } /> } /> }>
-                            <RtcDateTimeForm />
                         </TabPanelItem>
                     </TabPanel>
                 </div>

@@ -144,7 +144,7 @@ export const DacTabContent = () => {
         <DacContextProvider>
             {
                 modeId === 1
-                ? <div className='dx-empty-message' style={ { height: AppConstants.formHeight } }>{formatMessage('dxDataGrid-noDataText')}</div>
+                ? <div className='dx-empty-message' style={ { height: AppConstants.formHeight } }>{formatMessage('dxCollectionWidget-noDataText')}</div>
                 : <DacTabContentInternal />
             }
         </DacContextProvider>

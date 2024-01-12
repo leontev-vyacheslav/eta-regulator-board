@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: OFF */
+
 export enum ControlModeModel {
     auto = 1,
     comfort = 2,

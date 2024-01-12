@@ -65,13 +65,15 @@ export { LuSettings2 as RegulatorIcon } from 'react-icons/lu';
 export { MdOutlineManageHistory as ManageIcon } from 'react-icons/md';
 export { IoDownloadOutline  as DownloadIcon2 } from 'react-icons/io5';
 export { IoReloadSharp  as ResetIcon } from 'react-icons/io5';
+
 export { AiOutlineFire  as HeatSysIcon } from 'react-icons/ai';
 export { IoWaterOutline  as HotWaterIcon } from 'react-icons/io5';
 export { MdOutlineWindPower  as VentilationIcon } from 'react-icons/md';
+export { AiOutlineAppstore as AppIcon } from 'react-icons/ai';
 export { IoSunnyOutline as OutdoorIcon } from 'react-icons/io5';
 export { IoMdLogIn as SupplyPipeIcon } from 'react-icons/io';
 export { IoMdLogOut as ReturnPipeIcon } from 'react-icons/io';
-export { MdOutlineSettingsApplications as AppSettingsIcon } from 'react-icons/md';
+
 
 import { MdMoreVert } from 'react-icons/md';
 export const GridAdditionalMenuIcon = () => <MdMoreVert style={ { cursor: 'pointer' } } size={ 18 } />

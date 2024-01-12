@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: OFF */
+
 export enum ManualControlModeModel {
     valve = 1,
     temperature = 2

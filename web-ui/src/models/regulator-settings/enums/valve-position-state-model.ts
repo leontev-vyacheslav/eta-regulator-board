@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: OFF */
+
 export enum ValvePositionStateModel {
     halting = 1,
     opening = 2,

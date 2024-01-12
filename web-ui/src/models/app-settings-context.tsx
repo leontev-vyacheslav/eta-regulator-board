@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { RegulatorSettingsModel } from './regulator-settings/regulator-settings-model';
+import { HeatingCircuitIndexModel } from './regulator-settings/enums/heating-circuit-type-model';
 
 export type AppSettingsModel = {
   workDate?: Date;
@@ -21,4 +22,6 @@ export type AppSettingsContextModel = {
   setRegulatorSettings: Dispatch<SetStateAction<RegulatorSettingsModel | null>>;
 
   refreshRegulatorSettingsAsync: () => Promise<void>;
+
+  getHeatingCircuitName: (index: HeatingCircuitIndexModel) => string;
 }

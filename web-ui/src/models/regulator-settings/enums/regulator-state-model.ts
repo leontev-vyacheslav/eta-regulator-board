@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: OFF */
+
 export enum RegulatorStateModel {
     on = 1,
     off =2

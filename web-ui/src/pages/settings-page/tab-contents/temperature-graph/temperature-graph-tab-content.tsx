@@ -10,9 +10,11 @@ import { showConfirmDialog } from '../../../../utils/dialogs';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { TemperatureGraphGrid } from './temperature-graph-grid';
 import { TemperatureGraphChart } from './temperature-graph-chart';
+import { useAppSettings } from '../../../../contexts/app-settings';
 
 const TemperatureGraphTabContentInner = () => {
-    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync, circuitId } = useSettingPageContext();
+    const { refreshRegulatorSettingsAsync } = useAppSettings();
+    const { regulatorSettings, setRegulatorSettings, circuitId } = useSettingPageContext();
     const { putTemperatureGraphAsync, setChartArgumentAxisInverted, chartArgumentAxisInverted, dataGridRef } = useTemperatureGraphContext();
     const [isShowGraph, setIsShowGraph] = useState<boolean>(false);
 

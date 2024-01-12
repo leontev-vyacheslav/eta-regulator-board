@@ -1,3 +1,10 @@
+/* eslint no-unused-vars: OFF */
+
+export enum HeatingCircuitIndexModel {
+    firstCircuit = 0,
+    secondCircuit = 1
+}
+
 export enum HeatingCircuitTypeModel {
     heating = 1,
     hotWater = 2,
@@ -5,7 +12,7 @@ export enum HeatingCircuitTypeModel {
 }
 
 export type HeatingCircuitTypesItem = {
-    id: HeatingCircuitTypeModel;
+    type: HeatingCircuitTypeModel;
     description: string;
     shotDescription: string;
     settings: {
@@ -25,7 +32,7 @@ export type HeatingCircuitTypesItem = {
 
 export const HeatingCircuitTypes = [
     {
-        id: HeatingCircuitTypeModel.heating,
+        type: HeatingCircuitTypeModel.heating,
         description: 'Отопление',
         shotDescription: 'ЦО',
         settings: {
@@ -43,7 +50,7 @@ export const HeatingCircuitTypes = [
         }
     },
     {
-        id: HeatingCircuitTypeModel.hotWater,
+        type: HeatingCircuitTypeModel.hotWater,
         description: 'Горячее водоснабжение',
         shotDescription: 'ГВС',
         settings: {
@@ -58,7 +65,7 @@ export const HeatingCircuitTypes = [
         }
     },
     {
-        id: HeatingCircuitTypeModel.ventilation,
+        type: HeatingCircuitTypeModel.ventilation,
         description: 'Вентиляция',
         shotDescription: 'ВЕНТ',
         settings: {
@@ -75,4 +82,4 @@ export const HeatingCircuitTypes = [
             analogValveErrorSetpointMax: 100
         }
     }
-]
+] as HeatingCircuitTypesItem[]

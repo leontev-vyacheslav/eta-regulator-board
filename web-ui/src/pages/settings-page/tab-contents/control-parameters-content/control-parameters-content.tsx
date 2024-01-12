@@ -13,7 +13,7 @@ import { SupplyPipeTemperatureSensorFailureActionTypes } from '../../../../model
 
 export const ControlParametersForm = () => {
     const dxControlParametersFormRef = useRef<Form>(null);
-    const { regulatorSettings, heatingCircuitType, circuitId, currentHeatingCircuitType } = useSettingPageContext();
+    const { regulatorSettings, circuitId, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 
     return regulatorSettings ?
@@ -41,63 +41,63 @@ export const ControlParametersForm = () => {
             <GroupItem caption={ 'Режимы' }>
                 <SimpleItem
                     dataField='controlMode'
-                    label={ { location: 'top', showColon: true, text: `Режим управления (${ currentHeatingCircuitType!.shotDescription })` } }
+                    label={ { location: 'top', showColon: true, text: `Режим управления (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxSelectBox' }
-                    editorOptions={ { items: ControlModes.filter(c => heatingCircuitType === HeatingCircuitTypeModel.heating || c.id !== ControlModeModel.protect), valueExpr: 'id', displayExpr: 'description' } } />
+                    editorOptions={ { items: ControlModes.filter(c => currentHeatingCircuitType.type === HeatingCircuitTypeModel.heating || c.id !== ControlModeModel.protect), valueExpr: 'id', displayExpr: 'description' } } />
 
-                {heatingCircuitType !== HeatingCircuitTypeModel.hotWater
+                {currentHeatingCircuitType.type !== HeatingCircuitTypeModel.hotWater
                     ? <SimpleItem
                         dataField='manualControlMode'
-                        label={ { location: 'top', showColon: true, text: `Режим ручного управления (${ currentHeatingCircuitType!.shotDescription })` } }
+                        label={ { location: 'top', showColon: true, text: `Режим ручного управления (${ currentHeatingCircuitType.shotDescription })` } }
                         editorType={ 'dxSelectBox' }
                         editorOptions={ { items: ManualControlModes, valueExpr: 'id', displayExpr: 'description' } } />
                     : null
                 }
-                {heatingCircuitType !== HeatingCircuitTypeModel.hotWater
+                {currentHeatingCircuitType.type !== HeatingCircuitTypeModel.hotWater
                     ? <SimpleItem
                             dataField='outdoorTemperatureSensorFailureAction'
-                            label={ { location: 'top', showColon: true, text: `Действие при отказе датчика температуры нар.воздуха (${ currentHeatingCircuitType!.shotDescription })` } }
+                            label={ { location: 'top', showColon: true, text: `Действие при отказе датчика температуры нар.воздуха (${ currentHeatingCircuitType.shotDescription })` } }
                             editorType={ 'dxSelectBox' }
                             editorOptions={ { items: OutdoorTemperatureSensorFailureActionTypes, valueExpr: 'id', displayExpr: 'description' } } />
                     : null
                 }
                 <SimpleItem
                         dataField='supplyPipeTemperatureSensorFailureAction'
-                        label={ { location: 'top', showColon: true, text: `Действие при отказе датчика температуры подачи (${ currentHeatingCircuitType!.shotDescription })` } }
+                        label={ { location: 'top', showColon: true, text: `Действие при отказе датчика температуры подачи (${ currentHeatingCircuitType.shotDescription })` } }
                         editorType={ 'dxSelectBox' }
                         editorOptions={ { items: SupplyPipeTemperatureSensorFailureActionTypes, valueExpr: 'id', displayExpr: 'description' } } />
 
             </GroupItem>
 
             <GroupItem caption={ 'Уставки' }>
-                {heatingCircuitType !== HeatingCircuitTypeModel.hotWater ? <SimpleItem
+                {currentHeatingCircuitType.type !== HeatingCircuitTypeModel.hotWater ? <SimpleItem
                     dataField='manualControlModeTemperatureSetpoint'
-                    label={ { location: 'top', showColon: true, text: `Уставка поддерживаемой темп. ручного режима, °C (${ currentHeatingCircuitType!.shotDescription })` } }
+                    label={ { location: 'top', showColon: true, text: `Уставка поддерживаемой темп. ручного режима, °C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
                         showSpinButtons: true,
-                        min: currentHeatingCircuitType!.settings.manualControlModeTemperatureSetpointMin,
-                        max: currentHeatingCircuitType!.settings.manualControlModeTemperatureSetpointMax,
+                        min: currentHeatingCircuitType.settings.manualControlModeTemperatureSetpointMin,
+                        max: currentHeatingCircuitType.settings.manualControlModeTemperatureSetpointMax,
                     } } />
                     : null
                 }
 
                 <SimpleItem
                     dataField='analogValveErrorSetpoint'
-                    label={ { location: 'top', showColon: true, text: `Положение аналог.клапана в режиме аварии, % (${ currentHeatingCircuitType!.shotDescription })` } }
+                    label={ { location: 'top', showColon: true, text: `Положение аналог.клапана в режиме аварии, % (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
                         showSpinButtons: true,
-                        min: currentHeatingCircuitType!.settings.analogValveErrorSetpointMin,
-                        max: currentHeatingCircuitType!.settings.analogValveErrorSetpointMax,
+                        min: currentHeatingCircuitType.settings.analogValveErrorSetpointMin,
+                        max: currentHeatingCircuitType.settings.analogValveErrorSetpointMax,
                     } } />
             </GroupItem>
 
             <GroupItem caption={ 'Температуры' }>
-                {heatingCircuitType !== HeatingCircuitTypeModel.hotWater ?
+                {currentHeatingCircuitType.type !== HeatingCircuitTypeModel.hotWater ?
                     <SimpleItem
                         dataField='summerModeTransitionTemperature'
-                        label={ { location: 'top', showColon: true, text: `Температура перехода в летний режим, °C (${ currentHeatingCircuitType!.shotDescription })` } }
+                        label={ { location: 'top', showColon: true, text: `Температура перехода в летний режим, °C (${ currentHeatingCircuitType.shotDescription })` } }
                         editorType={ 'dxNumberBox' }
                         editorOptions={ { showSpinButtons: true, min: 5, max: 15 } } />
                     : null
@@ -105,28 +105,28 @@ export const ControlParametersForm = () => {
 
                 <SimpleItem
                     dataField='comfortTemperature'
-                    label={ { location: 'top', showColon: true, text: `Температура комфортная, °C (${ currentHeatingCircuitType!.shotDescription })` } }
+                    label={ { location: 'top', showColon: true, text: `Температура комфортная, °C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
                         showSpinButtons: true,
-                        min: currentHeatingCircuitType!.settings.comfortTemperatureMin,
-                        max: currentHeatingCircuitType!.settings.comfortTemperatureMax,
+                        min: currentHeatingCircuitType.settings.comfortTemperatureMin,
+                        max: currentHeatingCircuitType.settings.comfortTemperatureMax,
                     } } />
 
                 <SimpleItem
                     dataField='economicalTemperature'
-                    label={ { location: 'top', showColon: true, text: `Температура экономная, °C (${ currentHeatingCircuitType!.shotDescription })` } }
+                    label={ { location: 'top', showColon: true, text: `Температура экономная, °C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
                         showSpinButtons: true,
-                        min: currentHeatingCircuitType!.settings.economicalTemperatureMin,
-                        max: currentHeatingCircuitType!.settings.economicalTemperatureMax,
+                        min: currentHeatingCircuitType.settings.economicalTemperatureMin,
+                        max: currentHeatingCircuitType.settings.economicalTemperatureMax,
                     } }
                 />
-                {heatingCircuitType === HeatingCircuitTypeModel.heating ?
+                {currentHeatingCircuitType.type === HeatingCircuitTypeModel.heating ?
                     <SimpleItem
                         dataField='frostProtectionTemperature'
-                        label={ { location: 'top', showColon: true, text: `Температура защиты от замерзания, °C (${ currentHeatingCircuitType!.shotDescription })` } }
+                        label={ { location: 'top', showColon: true, text: `Температура защиты от замерзания, °C (${ currentHeatingCircuitType.shotDescription })` } }
                         editorType={ 'dxNumberBox' }
                         editorOptions={ {
                             showSpinButtons: true,
@@ -136,10 +136,10 @@ export const ControlParametersForm = () => {
                     />
                     : null
                 }
-                 {heatingCircuitType === HeatingCircuitTypeModel.heating
+                 {currentHeatingCircuitType.type === HeatingCircuitTypeModel.heating
                     ? <SimpleItem
                         dataField='roomTemperatureInfluence'
-                        label={ { location: 'top', showColon: true, text:  `Влияние темп. помещения, 0.1°C (${ currentHeatingCircuitType!.shotDescription })` } }
+                        label={ { location: 'top', showColon: true, text:  `Влияние темп. помещения, 0.1°C (${ currentHeatingCircuitType.shotDescription })` } }
                         editorType={ 'dxNumberBox' }
                         editorOptions={ { showSpinButtons: true, min: 0, max: 50 } }
                     />
@@ -148,19 +148,19 @@ export const ControlParametersForm = () => {
 
                 <SimpleItem
                     dataField='returnPipeTemperatureInfluence'
-                    label={ { location: 'top', showColon: true, text: `Влияние темп. обратки, 0.1°C (${ currentHeatingCircuitType!.shotDescription })` } }
+                    label={ { location: 'top', showColon: true, text: `Влияние темп. обратки, 0.1°C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ { showSpinButtons: true, min: 0, max: 50 } } />
 
                 <SimpleItem
                     dataField='supplyPipeMinTemperature'
-                    label={ { location: 'top', showColon: true, text:  `Минимальная температура подачи, °C (${ currentHeatingCircuitType!.shotDescription })` } }
+                    label={ { location: 'top', showColon: true, text:  `Минимальная температура подачи, °C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ { showSpinButtons: true, min: 30, max: 150 } } />
 
                 <SimpleItem
                     dataField='supplyPipeMaxTemperature'
-                    label={ { location: 'top', showColon: true, text: `Максимальная температура подачи, °C (${ currentHeatingCircuitType!.shotDescription })` } }
+                    label={ { location: 'top', showColon: true, text: `Максимальная температура подачи, °C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ { showSpinButtons: true, min: 30, max: 150 } } />
             </GroupItem>
@@ -168,7 +168,7 @@ export const ControlParametersForm = () => {
             <GroupItem caption={ 'Насосы' }>
                 <SimpleItem
                     dataField='controlCirculationPump'
-                    label={ { location: 'top', showColon: true, text: `Управление циркуляционным насосом (${ currentHeatingCircuitType!.shotDescription })` } }
+                    label={ { location: 'top', showColon: true, text: `Управление циркуляционным насосом (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxSwitch' }
                     editorOptions={ { items: [1, 2] } } />
             </GroupItem>

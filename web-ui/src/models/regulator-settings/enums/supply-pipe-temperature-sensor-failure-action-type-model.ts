@@ -1,4 +1,6 @@
 
+/* eslint no-unused-vars: OFF */
+
 export enum SupplyPipeTemperatureSensorFailureActionTypeModel {
     noAction = 1,
     closeValve = 2,

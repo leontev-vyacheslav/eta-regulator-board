@@ -34,38 +34,38 @@ export const RegulationParametersForm = () => {
         >
             <SimpleItem
                 dataField='proportionalityFactor'
-                label={ { location: 'top', showColon: true, text: `Коэффициент пропорциональности (${ currentHeatingCircuitType!.shotDescription })` } }
+                label={ { location: 'top', showColon: true, text: `Коэффициент пропорциональности (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
 
             <SimpleItem
                 dataField='integrationFactor'
 
-                label={ { location: 'top', showColon: true, text: `Коэффициент интегрирования (${ currentHeatingCircuitType!.shotDescription })` } }
+                label={ { location: 'top', showColon: true, text: `Коэффициент интегрирования (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
 
             <SimpleItem
                 dataField='differentiationFactor'
-                label={ { location: 'top', showColon: true, text: `Коэффициент дифференцирования (${ currentHeatingCircuitType!.shotDescription })` } }
+                label={ { location: 'top', showColon: true, text: `Коэффициент дифференцирования (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
 
             <SimpleItem
                 dataField='calculationPeriod'
-                label={ { location: 'top', showColon: true, text: `Период расчета, 100мс (${ currentHeatingCircuitType!.shotDescription })` } }
+                label={ { location: 'top', showColon: true, text: `Период расчета, 100мс (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ { showSpinButtons: true, min: 1, max: 50 } } />
 
             <SimpleItem
                 dataField='pulseDurationValve'
-                label={ { location: 'top', showColon: true, text: `Длител. импульса регулирующего клапана, с (${ currentHeatingCircuitType!.shotDescription })` } }
+                label={ { location: 'top', showColon: true, text: `Длител. импульса регулирующего клапана, с (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ { showSpinButtons: true, min: 1, max: 20 } } />
 
             <SimpleItem
                 dataField='driveUnitAnalogControl'
-                label={ { location: 'top', showColon: true, text: `Привод с аналоговым управлением (${ currentHeatingCircuitType!.shotDescription })` } }
+                label={ { location: 'top', showColon: true, text: `Привод с аналоговым управлением (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxSwitch' } />
 
         </Form>

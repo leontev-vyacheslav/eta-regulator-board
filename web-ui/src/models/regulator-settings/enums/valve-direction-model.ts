@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: OFF */
+
 export enum ValveDirectionModel {
     up = 1,
     down = 2
