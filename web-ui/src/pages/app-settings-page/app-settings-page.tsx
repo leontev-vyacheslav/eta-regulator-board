@@ -1,10 +1,11 @@
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel';
 import PageHeader from '../../components/page-header/page-header';
 import AppConstants from '../../constants/app-constants';
-import { RtcClockIcon, ServiceIcon, AppIcon } from '../../constants/app-icons';
+import { RtcClockIcon, ServiceIcon, AppIcon, InformationIcon } from '../../constants/app-icons';
 import { IconTab } from '../../components/tab-utils/icon-tab';
-import { ServiceForm } from './tab-contents/service-content/service-content';
+import { InformationForm } from './tab-contents/information-content/information-content';
 import { RtcDateTimeForm } from '../settings-page/tab-contents';
+import { ServiceForm } from './tab-contents/service-content/service-content';
 
 export const AppSettingsPage = () => {
     return (
@@ -20,11 +21,14 @@ export const AppSettingsPage = () => {
                         swipeEnabled={ false }
                         loop
                     >
-                        <TabPanelItem title={ 'Сервис' } tabRender={ (e) => <IconTab tab={ e } icon={ <ServiceIcon size={ 18 } /> } /> }>
-                            <ServiceForm />
+                        <TabPanelItem title={ 'Информация' } tabRender={ (e) => <IconTab tab={ e } icon={ <InformationIcon size={ 18 } /> } /> }>
+                            <InformationForm />
                         </TabPanelItem>
                         <TabPanelItem title={ 'Даты и время' } tabRender={ (e) => <IconTab tab={ e } icon={ <RtcClockIcon size={ 18 } /> } /> }>
                             <RtcDateTimeForm />
+                        </TabPanelItem>
+                        <TabPanelItem title={ 'Сервис' } tabRender={ (e) => <IconTab tab={ e } icon={ <ServiceIcon size={ 18 } /> } /> }>
+                            <ServiceForm />
                         </TabPanelItem>
                     </TabPanel>
                 </div>

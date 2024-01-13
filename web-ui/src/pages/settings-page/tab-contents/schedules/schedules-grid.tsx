@@ -11,10 +11,12 @@ import { ScheduleWindowsGrid } from './schedule-windows-grid';
 import { useSchedulesContext } from './schedules-context';
 
 import AppConstants from '../../../../constants/app-constants';
+import { useAppSettings } from '../../../../contexts/app-settings';
 
 
 export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
-    const { regulatorSettings, circuitId } = useSettingPageContext();
+    const { regulatorSettings } = useAppSettings();
+    const { circuitId } = useSettingPageContext();
     const { schedulesDataGridRef, daysOfWeek } = useSchedulesContext();
 
     const dayOfWeekValidationRules = useMemo<ValidationRule[]>(() => {

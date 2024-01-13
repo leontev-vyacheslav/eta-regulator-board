@@ -1,14 +1,10 @@
-import { Dispatch, createContext, useCallback, useContext, useMemo } from 'react';
+import { createContext, useCallback, useContext, useMemo } from 'react';
 import { useAppData } from '../../contexts/app-data/app-data';
-import { RegulatorSettingsModel } from '../../models/regulator-settings/regulator-settings-model';
 import { HeatingCircuitTypeModel, HeatingCircuitTypes, HeatingCircuitTypesItem } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { useParams } from 'react-router-dom';
 import { useAppSettings } from '../../contexts/app-settings';
 
 type SettingPageContextModel = {
-    regulatorSettings: RegulatorSettingsModel | null;
-    setRegulatorSettings: Dispatch<React.SetStateAction<RegulatorSettingsModel | null>>;
-
     circuitId: number;
     currentHeatingCircuitType: HeatingCircuitTypesItem;
     applyDefaultHeatCircuitSettingsAsync: (heatingCircuitType: HeatingCircuitTypeModel) => Promise<void>;
@@ -18,6 +14,7 @@ const SettingPageContext = createContext({} as SettingPageContextModel);
 
 function SettingPageContextProvider (props: any) {
     const { circuitIdParam } = useParams();
+    const { getDefaultHeatingCircuitsSettingsAsync, putRegulatorSettingsAsync } = useAppData();
     const { regulatorSettings, setRegulatorSettings } = useAppSettings();
 
     const circuitId = useMemo(() => {
@@ -27,8 +24,6 @@ function SettingPageContextProvider (props: any) {
     const currentHeatingCircuitType = useMemo(() => {
         return HeatingCircuitTypes.find(t => t.type === regulatorSettings!.heatingCircuits.items[circuitId].type)!;
     }, [circuitId, regulatorSettings]);
-
-    const { getDefaultHeatingCircuitsSettingsAsync, putRegulatorSettingsAsync } = useAppData();
 
     const applyDefaultHeatCircuitSettingsAsync = useCallback(async (heatingCircuitType: HeatingCircuitTypeModel) => {
         const heatingCircuitSettings = await getDefaultHeatingCircuitsSettingsAsync(heatingCircuitType);
@@ -68,13 +63,9 @@ function SettingPageContextProvider (props: any) {
 
     return (
         <SettingPageContext.Provider value={ {
-            regulatorSettings,
-            setRegulatorSettings,
-
+            circuitId,
             currentHeatingCircuitType,
             applyDefaultHeatCircuitSettingsAsync,
-
-            circuitId
         } } { ...props }>
             {props.children}
         </SettingPageContext.Provider>

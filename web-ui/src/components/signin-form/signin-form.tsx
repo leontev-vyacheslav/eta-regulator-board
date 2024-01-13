@@ -11,11 +11,7 @@ export const SigninForm = () => {
     const { signIn } = useAuth();
 
     const formData = useMemo<SignInModel>( () => {
-        return (
-            process.env.NODE_ENV === 'production'
-                ? { login: 'Admin', password: '1234567890' }
-                : { login: 'Admin', password: '1234567890' }
-        ) as SignInModel
+        return {} as SignInModel
     }, []);
 
     const onSubmit = useCallback(async (e: FormEvent) => {
@@ -42,16 +38,13 @@ export const SigninForm = () => {
     return (
         <form className={ 'signin-form' } onSubmit={ onSubmit }>
             <Form formData={ formData } disabled={ loading }>
-
                 <Item dataField={ 'login' } editorType={ 'dxTextBox' } editorOptions={ { stylingMode: 'filled' } }>
                     <Label visible={ false } />
                 </Item>
-
                 <Item dataField={ 'password' } editorType={ 'dxTextBox' } editorOptions={ { stylingMode: 'filled', placeholder: 'Пароль', mode: 'password' } }>
                     <RequiredRule message="Требуется пароль" />
                     <Label visible={ false } />
                 </Item>
-
                 <ButtonItem>
                     <ButtonOptions width={ '100%' } type={ 'default' } useSubmitBehavior={ true }>
                         <span className="dx-button-text">

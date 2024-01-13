@@ -10,9 +10,7 @@ export type TreeViewItemModel = {
   iconRender: (props: IconBaseProps) => JSX.Element;
 
   expanded?: boolean;
-
-  restricted: boolean;
-
+  
   command?: string;
 
   items?: TreeViewItemModel[];

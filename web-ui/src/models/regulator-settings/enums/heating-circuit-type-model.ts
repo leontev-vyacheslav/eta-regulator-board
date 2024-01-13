@@ -1,8 +1,8 @@
 /* eslint no-unused-vars: OFF */
 
 export enum HeatingCircuitIndexModel {
-    firstCircuit = 0,
-    secondCircuit = 1
+    first = 0,
+    second = 1
 }
 
 export enum HeatingCircuitTypeModel {

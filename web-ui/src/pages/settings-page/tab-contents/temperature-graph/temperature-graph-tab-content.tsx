@@ -13,8 +13,8 @@ import { TemperatureGraphChart } from './temperature-graph-chart';
 import { useAppSettings } from '../../../../contexts/app-settings';
 
 const TemperatureGraphTabContentInner = () => {
-    const { refreshRegulatorSettingsAsync } = useAppSettings();
-    const { regulatorSettings, setRegulatorSettings, circuitId } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useAppSettings();
+    const { circuitId } = useSettingPageContext();
     const { putTemperatureGraphAsync, setChartArgumentAxisInverted, chartArgumentAxisInverted, dataGridRef } = useTemperatureGraphContext();
     const [isShowGraph, setIsShowGraph] = useState<boolean>(false);
 

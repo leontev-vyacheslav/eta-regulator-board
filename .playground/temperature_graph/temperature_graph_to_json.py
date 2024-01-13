@@ -18,8 +18,8 @@ for row in work_sheet['A1:G55']:
     temperature_graph.append({
         "id": str(uuid4()),
         "outdoorTemperature": row[0].value,
-        "supplyPipeTemperature": round(-0.926 * float(row[0].value) + 38.516, 1),
-        "returnPipeTemperature": round(-1.389 * float(row[0].value) + 47.774, 1)
+        "supplyPipeTemperature": round(-1.389 * float(row[0].value) + 47.774, 1),
+        "returnPipeTemperature": round(-0.926 * float(row[0].value) + 38.516, 1)
     })
 
 json_text = dumps(temperature_graph, indent=4)

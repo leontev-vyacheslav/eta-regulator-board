@@ -1,8 +1,8 @@
 import { createContext, useCallback, useContext, useMemo, useRef } from 'react';
 import { useAppData } from '../../../../contexts/app-data/app-data';
-import { useSettingPageContext } from '../../settings-page-context';
 import DataGrid from 'devextreme-react/data-grid';
 import { ScheduleModel } from '../../../../models/regulator-settings/schedules-model';
+import { useAppSettings } from '../../../../contexts/app-settings';
 
 export type SchedulesContextModel = {
 
@@ -17,7 +17,7 @@ const SchedulesContext = createContext<SchedulesContextModel>({} as SchedulesCon
 
 function SchedulesContextProvider(props: any) {
     const { putRegulatorSettingsAsync } = useAppData();
-    const { regulatorSettings } = useSettingPageContext();
+    const { regulatorSettings } = useAppSettings();
     const schedulesDataGridRef = useRef<DataGrid<ScheduleModel, any>>(null)
 
     const putSchedulesAsync = useCallback(async (values: any) => {

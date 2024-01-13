@@ -11,14 +11,14 @@ const AppSettingsContext = createContext<AppSettingsContextModel>({} as AppSetti
 const useAppSettings = () => useContext(AppSettingsContext);
 
 function AppSettingsProvider(props: AppBaseProviderProps) {
+    const [regulatorSettings, setRegulatorSettings] = useState<RegulatorSettingsModel | null>(null);
+
     const { getRtcDateTimeAsync, getRegulatorSettingsAsync } = useAppData();
     const { user } = useAuth();
 
     const [appSettingsData, setAppSettingsData] = useState<AppSettingsDataContextModel>({
         isShowFooter: true,
     });
-
-    const [regulatorSettings, setRegulatorSettings] = useState<RegulatorSettingsModel | null>(null);
 
     const getHeatingCircuitName = useCallback((index: HeatingCircuitIndexModel) => {
 

@@ -6,9 +6,9 @@ import {
     AuthContextModel,
     GetUserAuthDataFromStorageFunc,
     SignInAsyncFunc,
-    SignOutAsyncFunc,
-    AuthUserModel
+    SignOutAsyncFunc
 } from '../models/auth-context';
+import { AuthUserModel } from '../models/auth-user-model';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
 import { SignInModel } from '../models/signin-model';
 

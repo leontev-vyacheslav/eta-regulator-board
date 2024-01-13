@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { HttpConstants } from '../../constants/app-http-constants';
 import { useAuthHttpRequest } from './use-auth-http-request';
 import routes from '../../constants/app-api-routes';
-import { AdcValueModel, TemperatureValueModel } from '../../models/data/adc-value-model';
+import { AdcValueModel, TemperatureValueModel } from '../../models/regulator-settings/adc-value-model';
 
 export type GetAdcValueAsyncFunc = (channel: number) => Promise<AdcValueModel | null>;
 export type GetTemperatureValueAsyncFunc = (channel: number) => Promise<TemperatureValueModel | null>;

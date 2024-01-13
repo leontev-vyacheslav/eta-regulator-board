@@ -31,15 +31,12 @@ export default function SideNavigationMenu(props: SideNavigationMenuProps) {
     const items: TreeViewItemModel[] = useMemo<TreeViewItemModel[]>(
         () => {
             return sideNavigationMenuItems
-                .filter(i => !i.restricted)
                 .filter(i => i.visible === undefined || i.visible === true)
                 .map((item) => {
                     if (item.path && !(/^\//.test(item.path))) {
                         item.path = `/${item.path}`;
                     }
-                    if (item.items) {
-                        item.items = item.items.filter(i => !i.restricted)
-                    }
+                    
                     return { ...item, expanded: isLarge } as TreeViewItemModel
                 });
         },

@@ -1,6 +1,6 @@
 import './settings-page.scss';
 
-import { AdditionalMenuIcon, DownloadIcon, GraphIcon, ManageIcon, RegulatorIcon, ResetIcon, RtcClockIcon,  ScheduleIcon, ServiceIcon, SettingsIcon } from '../../constants/app-icons';
+import { AdditionalMenuIcon, DownloadIcon, GraphIcon, ManageIcon, RegulatorIcon, ResetIcon, ScheduleIcon, SettingsIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import AppConstants from '../../constants/app-constants';
 import TabPanel, { Item as TabPanelItem } from 'devextreme-react/tab-panel';
@@ -143,7 +143,6 @@ export const SettingsPageInternal = () => {
         </>
     );
 };
-
 
 export const SettingsPage = () => {
     return (

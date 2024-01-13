@@ -12,8 +12,8 @@ import { useSettingPageContext } from '../../settings-page-context';
 import { useAppSettings } from '../../../../contexts/app-settings';
 
 const SchedulesTabContentInner = () => {
-    const { refreshRegulatorSettingsAsync } = useAppSettings();
-    const { regulatorSettings, setRegulatorSettings, circuitId } = useSettingPageContext();
+    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useAppSettings();
+    const {  circuitId } = useSettingPageContext();
     const { putSchedulesAsync, schedulesDataGridRef } = useSchedulesContext();
 
     const schedulesStore = useMemo(() => {

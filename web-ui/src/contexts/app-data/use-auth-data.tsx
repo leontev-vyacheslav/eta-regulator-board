@@ -3,7 +3,7 @@ import { HttpConstants } from '../../constants/app-http-constants';
 import { Method } from 'axios';
 import { useAuthHttpRequest } from './use-auth-http-request';
 import routes from '../../constants/app-api-routes';
-import { MessageModel } from '../../models/data/message-model';
+import { MessageModel } from '../../models/message-model';
 
 export type GetAuthCheckDataAsyncFunc = () => Promise<MessageModel | null>;
 

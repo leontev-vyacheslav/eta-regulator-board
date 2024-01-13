@@ -7,18 +7,19 @@ import {
     RtcClockIcon,
     DebugIcon,
     ManualModeIcon,
-    HeatSysIcon,
-    HotWaterIcon,
-    VentilationIcon,
     AppIcon,
 } from './app-icons';
 import { IconBaseProps } from 'react-icons/lib/cjs/iconBase';
 import { TreeViewItemModel } from '../models/tree-view-item';
 import { useAppSettings } from '../contexts/app-settings';
-import { HeatingCircuitTypeModel } from '../models/regulator-settings/enums/heating-circuit-type-model';
+import { HeatingCircuitIndexModel } from '../models/regulator-settings/enums/heating-circuit-type-model';
+import { useAuth } from '../contexts/auth';
+import { UserRoleModel } from '../models/enums/user-role-model';
+import { HeatingCircuitIconSelector } from '../components/heating-circuit-icon-selector/heating-circuit-icon-selector';
 
 export const useSideNavigationMenuItems = () => {
-    const { regulatorSettings } = useAppSettings();
+    const { regulatorSettings, getHeatingCircuitName } = useAppSettings();
+    const { user } = useAuth();
 
     return useMemo<TreeViewItemModel[]>(() => {
         return [
@@ -35,55 +36,45 @@ export const useSideNavigationMenuItems = () => {
                 items: [
                     {
                         id: 'heating-circuit-1',
-                        text: regulatorSettings?.heatingCircuits.items[0].name,
-                        iconRender: (props: IconBaseProps) => {
-                            return regulatorSettings?.heatingCircuits.items[0].type === HeatingCircuitTypeModel.heating
-                                ? <HeatSysIcon size={ 22 } { ...props } />
-                                : regulatorSettings?.heatingCircuits.items[0].type === HeatingCircuitTypeModel.hotWater
-                                    ? <HotWaterIcon size={ 22 } { ...props } />
-                                    : <VentilationIcon size={ 22 } { ...props } />;
-                        },
+                        text: getHeatingCircuitName(HeatingCircuitIndexModel.first),
+                        iconRender: () => <HeatingCircuitIconSelector heatingCircuitIndex={ HeatingCircuitIndexModel.first } />,
                         path: '/settings/0',
-                        restricted: false,
                     },
                     {
                         id: 'heating-circuit-2',
-                        text: regulatorSettings?.heatingCircuits.items[1].name,
-                        iconRender: (props: IconBaseProps) => {
-                            return regulatorSettings?.heatingCircuits.items[1].type === HeatingCircuitTypeModel.heating
-                            ? <HeatSysIcon size={ 22 } { ...props } />
-                            : regulatorSettings?.heatingCircuits.items[1].type === HeatingCircuitTypeModel.hotWater
-                                ? <HotWaterIcon size={ 22 } { ...props } />
-                                : <VentilationIcon size={ 22 } { ...props } />;
-                        },
+                        text: getHeatingCircuitName(HeatingCircuitIndexModel.second),
+                        iconRender: () => <HeatingCircuitIconSelector heatingCircuitIndex={ HeatingCircuitIndexModel.second } />,
                         path: '/settings/1',
-                        restricted: false,
                     }, {
                         id: 'app-settings',
                         text: 'Приложение',
                         iconRender: (props: IconBaseProps) => <AppIcon size={ 22 } { ...props } />,
                         path: '/app-settings',
+                        visible: user && (user.role === UserRoleModel.admin)
                     }
-                ]
+                ],
+                visible: user && (user.role === UserRoleModel.admin || user.role === UserRoleModel.operator)
             },
             {
                 id: 'manual',
                 text: 'Ручной режим',
                 iconRender: (props: IconBaseProps) => <ManualModeIcon size={ 22 } { ...props } />,
                 path: '/debug/1',
+                visible: user && (user.role === UserRoleModel.admin)
             },
             {
                 id: 'debug',
                 text: 'Отладка',
                 iconRender: (props: IconBaseProps) => <DebugIcon size={ 22 } { ...props } />,
                 path: '/debug/2',
-                visible: regulatorSettings?.service.allowDebugMode
+                visible: user && (user.role === UserRoleModel.admin) && regulatorSettings?.service.allowDebugMode
             },
             {
                 id: 'rtc-clock',
                 text: 'Часы RTC',
                 iconRender: (props: IconBaseProps) => <RtcClockIcon size={ 22 } { ...props } />,
                 command: 'workDate',
+                visible: user && (user.role === UserRoleModel.admin || user.role === UserRoleModel.operator)
             },
             {
                 id: 'about',
@@ -98,5 +89,5 @@ export const useSideNavigationMenuItems = () => {
                 command: 'exit',
             },
         ] as TreeViewItemModel[];
-    }, [regulatorSettings?.heatingCircuits.items, regulatorSettings?.service.allowDebugMode]);
+    }, [getHeatingCircuitName, regulatorSettings?.service.allowDebugMode, user]);
 };

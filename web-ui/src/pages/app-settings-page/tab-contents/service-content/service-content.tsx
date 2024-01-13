@@ -1,4 +1,4 @@
-import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
+import Form, { SimpleItem } from 'devextreme-react/form';
 import { useRef } from 'react';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
@@ -34,50 +34,17 @@ export const ServiceForm = () => {
                     setRegulatorSettings(previous => {
                         previous!.service = { ...previous!.service };
 
-                        return previous;
+                        return { ...previous! };
                     });
                 }
             } }
         >
 
-            <GroupItem caption={ 'Собственник' }>
-                <SimpleItem
-                    dataField={ 'regulatorOwner.name' }
-                    label={ { location: 'top', showColon: true, text: 'Собственник' } }
-                    editorType={ 'dxTextBox' }
-                />
-                <SimpleItem
-                    dataField={ 'regulatorOwner.phoneNumber' }
-                    label={ { location: 'top', showColon: true, text: 'Телефон' } }
-                    editorType={ 'dxTextBox' }
-                    editorOptions={ {
-                        mask: '+7 (000) 000-00-00'
-                    } } />
-            </GroupItem>
-
-            <GroupItem caption='Версии ПО'>
-                <SimpleItem
-                 dataField={ 'softwareInfo.webApiVersion' }
-                    label={ { location: 'top', showColon: true, text: 'Версия веб-api' } }
-                    editorType={ 'dxTextBox' }
-                    editorOptions={ {
-                        readOnly: true
-                    } } />
-                <SimpleItem
-                    dataField={ 'softwareInfo.webUiVersion' }
-                    label={ { location: 'top', showColon: true, text: 'Версия приложения' } }
-                    editorType={ 'dxTextBox' }
-                    editorOptions={ {
-                        readOnly: true
-                    } } />
-            </GroupItem>
-            <GroupItem caption='Служебные'>
                 <SimpleItem
                     dataField={ 'allowDebugMode' }
                     label={ { location: 'top', showColon: true, text: 'Режим отладки' } }
                     editorType={ 'dxSwitch' }
                 />
-            </GroupItem>
         </Form>
     );
 }

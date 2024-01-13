@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { RtcDateTimeModel } from '../../models/data/rtc-datetime-model';
+import { RtcDateTimeModel } from '../../models/regulator-settings/rtc-datetime-model';
 import { HttpConstants } from '../../constants/app-http-constants';
 import routes from '../../constants/app-api-routes';
 import { Method } from 'axios';
