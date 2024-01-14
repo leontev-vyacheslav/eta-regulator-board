@@ -11,11 +11,10 @@ const AppSettingsContext = createContext<AppSettingsContextModel>({} as AppSetti
 const useAppSettings = () => useContext(AppSettingsContext);
 
 function AppSettingsProvider(props: AppBaseProviderProps) {
-    const [regulatorSettings, setRegulatorSettings] = useState<RegulatorSettingsModel | null>(null);
-
-    const { getRtcDateTimeAsync, getRegulatorSettingsAsync } = useAppData();
     const { user } = useAuth();
+    const { getRtcDateTimeAsync, getRegulatorSettingsAsync } = useAppData();
 
+    const [regulatorSettings, setRegulatorSettings] = useState<RegulatorSettingsModel | null>(null);
     const [appSettingsData, setAppSettingsData] = useState<AppSettingsDataContextModel>({
         isShowFooter: true,
     });
@@ -28,13 +27,18 @@ function AppSettingsProvider(props: AppBaseProviderProps) {
     }, [regulatorSettings]);
 
     const updateWorkDateAsync = useCallback(async () => {
+        if (!user) {
+
+            return;
+        }
+
         const rtcDateTime = await getRtcDateTimeAsync();
         if (rtcDateTime) {
             setAppSettingsData(previous => {
                 return { ...previous, workDate: rtcDateTime.datetime };
             });
         }
-    }, [getRtcDateTimeAsync]);
+    }, [getRtcDateTimeAsync, user]);
 
     const refreshRegulatorSettingsAsync = useCallback(async () => {
         const regulatorSettings = await getRegulatorSettingsAsync();

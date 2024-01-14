@@ -4,7 +4,6 @@ from flask_pydantic import validate
 import jwt
 
 from app import app
-from models.common.owner_info_model import OwnerInfoModel
 from models.common.auth_user_model import AuthUserModel
 from models.common.message_model import MessageModel
 from models.common.signin_model import SignInModel
@@ -51,7 +50,7 @@ def signin(body: SignInModel):
 
 @app.route('/sign-out', methods=['POST'])
 @validate()
-@authorize
+@authorize()
 def signout():
 
     return JsonResponse(
@@ -59,9 +58,10 @@ def signout():
         status=200
     )
 
+
 @app.route('/auth-check', methods=['GET'])
 @validate()
-@authorize
+@authorize()
 def auth_check():
 
     return JsonResponse(
@@ -70,4 +70,3 @@ def auth_check():
         ),
         status=200
     )
-

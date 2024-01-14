@@ -2,13 +2,16 @@ from flask_pydantic import validate
 
 from app import app
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
+from models.common.enums.user_role_model import UserRoleModel
 from models.regulator.gpio_set_model import GpioItemModel, GpioSetModel
 from omega import gpio
+from utils.auth_helper import authorize
 from utils.debug_helper import is_debug
 
 
 @app.api_route('/gpio/<pin>/<state>', methods=['PUT'])
 @validate(response_by_alias=True)
+@authorize(roles=[UserRoleModel.ADMIN])
 def put_gpio(pin: int, state: bool):
     value = gpio.set(pin, state) if not is_debug() else state
 
@@ -21,6 +24,7 @@ def put_gpio(pin: int, state: bool):
 
 @app.api_route('/gpio/<pin>', methods=['GET'])
 @validate(response_by_alias=True)
+@authorize()
 def get_gpio(pin: int):
     if not is_debug():
         value = gpio.get(pin)
@@ -42,6 +46,7 @@ def get_gpio(pin: int):
 
 @app.api_route('/gpio/all', methods=['GET'])
 @validate(response_by_alias=True)
+@authorize()
 def get_gpio_set():
     regulator_settings = app.get_regulator_settings()
 

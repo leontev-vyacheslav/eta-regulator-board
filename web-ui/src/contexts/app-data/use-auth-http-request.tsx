@@ -24,7 +24,7 @@ export const useAuthHttpRequest = () => {
 
             if (userAuthData) {
                 config.headers.Authorization = `Bearer ${userAuthData.token}`;
-                config.headers['X-ETA-Requested-User'] = userAuthData.login
+                config.headers['X-Requested-User'] = userAuthData.login
             }
 
             try {

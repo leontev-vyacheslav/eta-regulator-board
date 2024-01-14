@@ -687,6 +687,6 @@
         "hardwareInfo": {
             "onionMacAddress": "40-A3-6B-C9-8F-79"
         },
-        "allowDebugMode": false
+        "allowDebugMode": true
     }
 }

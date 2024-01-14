@@ -4,11 +4,13 @@ from flask_pydantic import validate
 from app import app
 from models.regulator.rtc_datetime_model import RtcDateTimeModel
 from omega.ds1307 import DS1307
+from utils.auth_helper import authorize
 from utils.debug_helper import is_debug
 
 
 @app.api_route('/rtc', methods=['GET'])
 @validate()
+@authorize()
 def get_rtc() -> RtcDateTimeModel:
 
     if is_debug():
@@ -22,6 +24,7 @@ def get_rtc() -> RtcDateTimeModel:
 
 @app.api_route('/rtc', methods=['PUT'])
 @validate()
+@authorize()
 def put_rtc(body: RtcDateTimeModel):
 
     if is_debug():

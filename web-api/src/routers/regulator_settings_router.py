@@ -1,6 +1,7 @@
 from typing import Optional
 from flask import send_file
 from flask_pydantic import validate
+from models.common.enums.user_role_model import UserRoleModel
 from models.regulator.heating_circuits_model import HeatingCircuitModel
 from responses.json_response import JsonResponse
 
@@ -11,7 +12,7 @@ from utils.auth_helper import authorize
 
 @app.api_route('/regulator-settings', methods=['GET'])
 @validate(response_by_alias=True)
-@authorize
+@authorize()
 def get_regulator_settings() -> RegulatorSettingsModel:
     regulator_settings = app.get_regulator_settings()
 
@@ -20,7 +21,7 @@ def get_regulator_settings() -> RegulatorSettingsModel:
 
 @app.api_route('/regulator-settings', methods=['PUT'])
 @validate(response_by_alias=True)
-@authorize
+@authorize(roles=[UserRoleModel.ADMIN])
 def put_regulator_settings(body: RegulatorSettingsChangeModel):
     regulator_settings_change = body
 
@@ -33,7 +34,7 @@ def put_regulator_settings(body: RegulatorSettingsChangeModel):
 
 
 @app.api_route('/regulator-settings/download', methods=['GET'])
-@authorize
+@authorize(roles=[UserRoleModel.ADMIN])
 def get_regulator_settings_as_file():
     return send_file(
         path_or_file=app.get_regulator_settings_repository().data_path,
@@ -44,7 +45,7 @@ def get_regulator_settings_as_file():
 
 @app.api_route('/regulator-settings/default/<heating_circuit_type>', methods=['GET'])
 @validate(response_by_alias=True)
-@authorize
+@authorize(roles=[UserRoleModel.ADMIN])
 def get_default_heating_circuits_settings(heating_circuit_type: int):
     regulator_settings_repository = app.get_regulator_settings_repository()
     default_heating_circuit_settings_list = regulator_settings_repository.get_default_heating_circuits_settings()
@@ -68,7 +69,7 @@ def get_default_heating_circuits_settings(heating_circuit_type: int):
 
 @app.api_route('/regulator-settings/reset', methods=['GET'])
 @validate(response_by_alias=True)
-@authorize
+@authorize(roles=[UserRoleModel.ADMIN])
 def get_reset_default_heating_circuits_settings():
     regulator_settings_repository = app.get_regulator_settings_repository()
     default_heating_circuit_settings_list = regulator_settings_repository.get_default_heating_circuits_settings()
