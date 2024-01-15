@@ -25,331 +25,37 @@
                 "temperatureGraph": {
                     "items": [
                         {
-                            "id": "676ef6e7-84a9-48f1-bd64-291d26ec0a9e",
+                            "id": "74ff4858-d317-4ccf-a42c-f357113a936e",
                             "outdoorTemperature": 20,
                             "supplyPipeTemperature": 20.0,
                             "returnPipeTemperature": 20.0
                         },
                         {
-                            "id": "bebeafb0-dcf4-434c-b588-551a6c7f664b",
-                            "outdoorTemperature": 19,
-                            "supplyPipeTemperature": 21.4,
-                            "returnPipeTemperature": 20.9
-                        },
-                        {
-                            "id": "3086cb8e-d2d3-482f-baa3-dede2dd12370",
-                            "outdoorTemperature": 18,
-                            "supplyPipeTemperature": 22.8,
-                            "returnPipeTemperature": 21.8
-                        },
-                        {
-                            "id": "85f62f28-3c8d-42ac-aeea-d6030f56bacb",
-                            "outdoorTemperature": 17,
-                            "supplyPipeTemperature": 24.2,
-                            "returnPipeTemperature": 22.8
-                        },
-                        {
-                            "id": "0c8840b3-dbf4-4865-8198-eda261b66db8",
-                            "outdoorTemperature": 16,
-                            "supplyPipeTemperature": 25.6,
-                            "returnPipeTemperature": 23.7
-                        },
-                        {
-                            "id": "23d35c69-4659-4700-b7dc-61127332425b",
-                            "outdoorTemperature": 15,
-                            "supplyPipeTemperature": 26.9,
-                            "returnPipeTemperature": 24.6
-                        },
-                        {
-                            "id": "b2d4de89-5b88-4d95-9de3-02d1db24303d",
-                            "outdoorTemperature": 14,
-                            "supplyPipeTemperature": 28.3,
-                            "returnPipeTemperature": 25.6
-                        },
-                        {
-                            "id": "a404e8e4-254a-4adb-9292-a38d93dc79f8",
-                            "outdoorTemperature": 13,
-                            "supplyPipeTemperature": 29.7,
-                            "returnPipeTemperature": 26.5
-                        },
-                        {
-                            "id": "57ac1e27-6017-4937-925c-486f43a49b6b",
-                            "outdoorTemperature": 12,
-                            "supplyPipeTemperature": 31.1,
-                            "returnPipeTemperature": 27.4
-                        },
-                        {
-                            "id": "37963ca7-fc1e-4e39-813b-6e2feb3538f2",
-                            "outdoorTemperature": 11,
-                            "supplyPipeTemperature": 32.5,
-                            "returnPipeTemperature": 28.3
-                        },
-                        {
-                            "id": "2b6c6c89-83b6-4359-a7df-3504fa5348a7",
-                            "outdoorTemperature": 10,
-                            "supplyPipeTemperature": 33.9,
-                            "returnPipeTemperature": 29.3
-                        },
-                        {
-                            "id": "3a2d34b4-12e1-471a-85b1-8f7e4ec256c9",
+                            "id": "7b405f67-236e-4e36-9b75-93c160281b39",
                             "outdoorTemperature": 9,
                             "supplyPipeTemperature": 35.3,
                             "returnPipeTemperature": 30.2
                         },
                         {
-                            "id": "7f318f3c-1eb0-481c-beda-98c91f7bdafd",
-                            "outdoorTemperature": 8,
-                            "supplyPipeTemperature": 36.7,
-                            "returnPipeTemperature": 31.1
-                        },
-                        {
-                            "id": "5f826a61-b7eb-4eba-9742-8eea437b3a30",
-                            "outdoorTemperature": 7,
-                            "supplyPipeTemperature": 38.1,
-                            "returnPipeTemperature": 32.0
-                        },
-                        {
-                            "id": "07beee63-f401-4eb7-aaa0-ce008ee6a9e5",
-                            "outdoorTemperature": 6,
-                            "supplyPipeTemperature": 39.4,
-                            "returnPipeTemperature": 33.0
-                        },
-                        {
-                            "id": "874cea22-9e94-4a4d-b0c7-36464f35ac34",
-                            "outdoorTemperature": 5,
-                            "supplyPipeTemperature": 40.8,
-                            "returnPipeTemperature": 33.9
-                        },
-                        {
-                            "id": "19cdd703-673a-4249-b028-3d8058c65132",
-                            "outdoorTemperature": 4,
-                            "supplyPipeTemperature": 42.2,
-                            "returnPipeTemperature": 34.8
-                        },
-                        {
-                            "id": "71125afc-e3e6-4893-b581-d010f96c9502",
-                            "outdoorTemperature": 3,
-                            "supplyPipeTemperature": 43.6,
-                            "returnPipeTemperature": 35.7
-                        },
-                        {
-                            "id": "62c2051c-08fb-42de-bc54-dfcd343310f3",
-                            "outdoorTemperature": 2,
-                            "supplyPipeTemperature": 45.0,
-                            "returnPipeTemperature": 36.7
-                        },
-                        {
-                            "id": "a3cb4435-891e-4adc-b1ba-9d7ca864232d",
-                            "outdoorTemperature": 1,
-                            "supplyPipeTemperature": 46.4,
-                            "returnPipeTemperature": 37.6
-                        },
-                        {
-                            "id": "7004167c-8521-4061-afb5-c167e8b11222",
-                            "outdoorTemperature": 0,
-                            "supplyPipeTemperature": 47.8,
-                            "returnPipeTemperature": 38.5
-                        },
-                        {
-                            "id": "48fcdf90-44b4-4197-bde5-3955f3364c67",
-                            "outdoorTemperature": -1,
-                            "supplyPipeTemperature": 49.2,
-                            "returnPipeTemperature": 39.4
-                        },
-                        {
-                            "id": "bbf9db02-4799-4040-addb-e16c00eda07c",
+                            "id": "4b656d99-01a1-45ff-bf63-bf2ed74278fb",
                             "outdoorTemperature": -2,
                             "supplyPipeTemperature": 50.6,
                             "returnPipeTemperature": 40.4
                         },
                         {
-                            "id": "99e1df3b-df66-4f29-a75b-f9af137918d6",
-                            "outdoorTemperature": -3,
-                            "supplyPipeTemperature": 51.9,
-                            "returnPipeTemperature": 41.3
-                        },
-                        {
-                            "id": "0fece8b5-7365-4b58-9c84-680682bff203",
-                            "outdoorTemperature": -4,
-                            "supplyPipeTemperature": 53.3,
-                            "returnPipeTemperature": 42.2
-                        },
-                        {
-                            "id": "e4b453e1-5f0c-4524-9452-cf24d783f150",
-                            "outdoorTemperature": -5,
-                            "supplyPipeTemperature": 54.7,
-                            "returnPipeTemperature": 43.1
-                        },
-                        {
-                            "id": "efaa7a69-e1ea-43e9-8c5f-0b779612ad6b",
-                            "outdoorTemperature": -6,
-                            "supplyPipeTemperature": 56.1,
-                            "returnPipeTemperature": 44.1
-                        },
-                        {
-                            "id": "944349ac-d52d-4347-b2c8-d01a58c8e358",
-                            "outdoorTemperature": -7,
-                            "supplyPipeTemperature": 57.5,
-                            "returnPipeTemperature": 45.0
-                        },
-                        {
-                            "id": "1e8a91b6-1bfa-4a3e-a9f0-1deaeea394d1",
-                            "outdoorTemperature": -8,
-                            "supplyPipeTemperature": 58.9,
-                            "returnPipeTemperature": 45.9
-                        },
-                        {
-                            "id": "521f0325-e7a8-4a3a-bfc3-430051731b50",
-                            "outdoorTemperature": -9,
-                            "supplyPipeTemperature": 60.3,
-                            "returnPipeTemperature": 46.8
-                        },
-                        {
-                            "id": "c7711d26-1604-4132-a114-940dcc09de6a",
-                            "outdoorTemperature": -10,
-                            "supplyPipeTemperature": 61.7,
-                            "returnPipeTemperature": 47.8
-                        },
-                        {
-                            "id": "9a1ce43f-b123-4879-839a-fd0f86b74f18",
-                            "outdoorTemperature": -11,
-                            "supplyPipeTemperature": 63.1,
-                            "returnPipeTemperature": 48.7
-                        },
-                        {
-                            "id": "70c22477-ece0-4981-a259-fa4be3894e42",
-                            "outdoorTemperature": -12,
-                            "supplyPipeTemperature": 64.4,
-                            "returnPipeTemperature": 49.6
-                        },
-                        {
-                            "id": "8a722fd9-7f3d-4709-bfbe-2c7dac2ad5db",
+                            "id": "4286284d-a525-455a-8b4c-22db72f44498",
                             "outdoorTemperature": -13,
                             "supplyPipeTemperature": 65.8,
                             "returnPipeTemperature": 50.6
                         },
                         {
-                            "id": "2e24f9ae-c2b4-41f5-9e7e-02eda7d99b13",
-                            "outdoorTemperature": -14,
-                            "supplyPipeTemperature": 67.2,
-                            "returnPipeTemperature": 51.5
-                        },
-                        {
-                            "id": "3fb4a01a-0075-4c09-90b1-ac038c2f61be",
-                            "outdoorTemperature": -15,
-                            "supplyPipeTemperature": 68.6,
-                            "returnPipeTemperature": 52.4
-                        },
-                        {
-                            "id": "5df298e7-d568-47b4-9828-2c8e5d8b26b1",
-                            "outdoorTemperature": -16,
-                            "supplyPipeTemperature": 70.0,
-                            "returnPipeTemperature": 53.3
-                        },
-                        {
-                            "id": "0ad132d8-07ac-411d-acac-7cbbf02a3dcc",
-                            "outdoorTemperature": -17,
-                            "supplyPipeTemperature": 71.4,
-                            "returnPipeTemperature": 54.3
-                        },
-                        {
-                            "id": "876b03e5-373b-4660-bf6d-f757a8926067",
-                            "outdoorTemperature": -18,
-                            "supplyPipeTemperature": 72.8,
-                            "returnPipeTemperature": 55.2
-                        },
-                        {
-                            "id": "49a83c30-ebe3-4384-b4a7-5717bfbbbd61",
-                            "outdoorTemperature": -19,
-                            "supplyPipeTemperature": 74.2,
-                            "returnPipeTemperature": 56.1
-                        },
-                        {
-                            "id": "f5e1506d-f733-4994-93bf-d40e05af28b4",
-                            "outdoorTemperature": -20,
-                            "supplyPipeTemperature": 75.6,
-                            "returnPipeTemperature": 57.0
-                        },
-                        {
-                            "id": "a522d088-eb44-416a-8ed3-e41e490e835f",
-                            "outdoorTemperature": -21,
-                            "supplyPipeTemperature": 76.9,
-                            "returnPipeTemperature": 58.0
-                        },
-                        {
-                            "id": "9809939b-d867-4e32-8991-e3660cbbdced",
-                            "outdoorTemperature": -22,
-                            "supplyPipeTemperature": 78.3,
-                            "returnPipeTemperature": 58.9
-                        },
-                        {
-                            "id": "1f1d8624-7ee3-4d17-8a63-e888da20a23c",
-                            "outdoorTemperature": -23,
-                            "supplyPipeTemperature": 79.7,
-                            "returnPipeTemperature": 59.8
-                        },
-                        {
-                            "id": "e0ce0a9d-b533-494e-819c-12bef61fe032",
+                            "id": "c48aaf3e-5c37-4b0c-9ce3-034d90b3bc2e",
                             "outdoorTemperature": -24,
                             "supplyPipeTemperature": 81.1,
                             "returnPipeTemperature": 60.7
                         },
                         {
-                            "id": "7a401db7-e29d-4c10-b520-0f5b7b261f76",
-                            "outdoorTemperature": -25,
-                            "supplyPipeTemperature": 82.5,
-                            "returnPipeTemperature": 61.7
-                        },
-                        {
-                            "id": "7a84e431-703e-4712-afbe-ec8106bd926e",
-                            "outdoorTemperature": -26,
-                            "supplyPipeTemperature": 83.9,
-                            "returnPipeTemperature": 62.6
-                        },
-                        {
-                            "id": "9a80cfab-22ac-4e9a-b263-13b28ec50bd6",
-                            "outdoorTemperature": -27,
-                            "supplyPipeTemperature": 85.3,
-                            "returnPipeTemperature": 63.5
-                        },
-                        {
-                            "id": "e5b9ea49-3584-4075-8f9a-a86b4f721ab7",
-                            "outdoorTemperature": -28,
-                            "supplyPipeTemperature": 86.7,
-                            "returnPipeTemperature": 64.4
-                        },
-                        {
-                            "id": "7f1effdc-b0a1-484e-b9fd-78d38e12df26",
-                            "outdoorTemperature": -29,
-                            "supplyPipeTemperature": 88.1,
-                            "returnPipeTemperature": 65.4
-                        },
-                        {
-                            "id": "980e2848-4c6a-42ef-8d05-8bd81643f30c",
-                            "outdoorTemperature": -30,
-                            "supplyPipeTemperature": 89.4,
-                            "returnPipeTemperature": 66.3
-                        },
-                        {
-                            "id": "58c770ab-6eb3-49a2-ac81-9c0218ecd3d8",
-                            "outdoorTemperature": -31,
-                            "supplyPipeTemperature": 90.8,
-                            "returnPipeTemperature": 67.2
-                        },
-                        {
-                            "id": "56b80bc4-8175-4115-aa61-19947881014f",
-                            "outdoorTemperature": -32,
-                            "supplyPipeTemperature": 92.2,
-                            "returnPipeTemperature": 68.1
-                        },
-                        {
-                            "id": "23f0d566-94b4-4582-83d8-044a044a1755",
-                            "outdoorTemperature": -33,
-                            "supplyPipeTemperature": 93.6,
-                            "returnPipeTemperature": 69.1
-                        },
-                        {
-                            "id": "01657798-bda7-4dc7-8b0b-3f63c18d40c3",
+                            "id": "9a9fcd6e-44c4-4726-bcd6-3b291e892a8c",
                             "outdoorTemperature": -34,
                             "supplyPipeTemperature": 95.0,
                             "returnPipeTemperature": 70.0
@@ -637,331 +343,37 @@
                 "temperatureGraph": {
                     "items": [
                         {
-                            "id": "676ef6e7-84a9-48f1-bd64-291d26ec0a9e",
+                            "id": "74ff4858-d317-4ccf-a42c-f357113a936e",
                             "outdoorTemperature": 20,
                             "supplyPipeTemperature": 20.0,
                             "returnPipeTemperature": 20.0
                         },
                         {
-                            "id": "bebeafb0-dcf4-434c-b588-551a6c7f664b",
-                            "outdoorTemperature": 19,
-                            "supplyPipeTemperature": 21.4,
-                            "returnPipeTemperature": 20.9
-                        },
-                        {
-                            "id": "3086cb8e-d2d3-482f-baa3-dede2dd12370",
-                            "outdoorTemperature": 18,
-                            "supplyPipeTemperature": 22.8,
-                            "returnPipeTemperature": 21.8
-                        },
-                        {
-                            "id": "85f62f28-3c8d-42ac-aeea-d6030f56bacb",
-                            "outdoorTemperature": 17,
-                            "supplyPipeTemperature": 24.2,
-                            "returnPipeTemperature": 22.8
-                        },
-                        {
-                            "id": "0c8840b3-dbf4-4865-8198-eda261b66db8",
-                            "outdoorTemperature": 16,
-                            "supplyPipeTemperature": 25.6,
-                            "returnPipeTemperature": 23.7
-                        },
-                        {
-                            "id": "23d35c69-4659-4700-b7dc-61127332425b",
-                            "outdoorTemperature": 15,
-                            "supplyPipeTemperature": 26.9,
-                            "returnPipeTemperature": 24.6
-                        },
-                        {
-                            "id": "b2d4de89-5b88-4d95-9de3-02d1db24303d",
-                            "outdoorTemperature": 14,
-                            "supplyPipeTemperature": 28.3,
-                            "returnPipeTemperature": 25.6
-                        },
-                        {
-                            "id": "a404e8e4-254a-4adb-9292-a38d93dc79f8",
-                            "outdoorTemperature": 13,
-                            "supplyPipeTemperature": 29.7,
-                            "returnPipeTemperature": 26.5
-                        },
-                        {
-                            "id": "57ac1e27-6017-4937-925c-486f43a49b6b",
-                            "outdoorTemperature": 12,
-                            "supplyPipeTemperature": 31.1,
-                            "returnPipeTemperature": 27.4
-                        },
-                        {
-                            "id": "37963ca7-fc1e-4e39-813b-6e2feb3538f2",
-                            "outdoorTemperature": 11,
-                            "supplyPipeTemperature": 32.5,
-                            "returnPipeTemperature": 28.3
-                        },
-                        {
-                            "id": "2b6c6c89-83b6-4359-a7df-3504fa5348a7",
-                            "outdoorTemperature": 10,
-                            "supplyPipeTemperature": 33.9,
-                            "returnPipeTemperature": 29.3
-                        },
-                        {
-                            "id": "3a2d34b4-12e1-471a-85b1-8f7e4ec256c9",
+                            "id": "7b405f67-236e-4e36-9b75-93c160281b39",
                             "outdoorTemperature": 9,
                             "supplyPipeTemperature": 35.3,
                             "returnPipeTemperature": 30.2
                         },
                         {
-                            "id": "7f318f3c-1eb0-481c-beda-98c91f7bdafd",
-                            "outdoorTemperature": 8,
-                            "supplyPipeTemperature": 36.7,
-                            "returnPipeTemperature": 31.1
-                        },
-                        {
-                            "id": "5f826a61-b7eb-4eba-9742-8eea437b3a30",
-                            "outdoorTemperature": 7,
-                            "supplyPipeTemperature": 38.1,
-                            "returnPipeTemperature": 32.0
-                        },
-                        {
-                            "id": "07beee63-f401-4eb7-aaa0-ce008ee6a9e5",
-                            "outdoorTemperature": 6,
-                            "supplyPipeTemperature": 39.4,
-                            "returnPipeTemperature": 33.0
-                        },
-                        {
-                            "id": "874cea22-9e94-4a4d-b0c7-36464f35ac34",
-                            "outdoorTemperature": 5,
-                            "supplyPipeTemperature": 40.8,
-                            "returnPipeTemperature": 33.9
-                        },
-                        {
-                            "id": "19cdd703-673a-4249-b028-3d8058c65132",
-                            "outdoorTemperature": 4,
-                            "supplyPipeTemperature": 42.2,
-                            "returnPipeTemperature": 34.8
-                        },
-                        {
-                            "id": "71125afc-e3e6-4893-b581-d010f96c9502",
-                            "outdoorTemperature": 3,
-                            "supplyPipeTemperature": 43.6,
-                            "returnPipeTemperature": 35.7
-                        },
-                        {
-                            "id": "62c2051c-08fb-42de-bc54-dfcd343310f3",
-                            "outdoorTemperature": 2,
-                            "supplyPipeTemperature": 45.0,
-                            "returnPipeTemperature": 36.7
-                        },
-                        {
-                            "id": "a3cb4435-891e-4adc-b1ba-9d7ca864232d",
-                            "outdoorTemperature": 1,
-                            "supplyPipeTemperature": 46.4,
-                            "returnPipeTemperature": 37.6
-                        },
-                        {
-                            "id": "7004167c-8521-4061-afb5-c167e8b11222",
-                            "outdoorTemperature": 0,
-                            "supplyPipeTemperature": 47.8,
-                            "returnPipeTemperature": 38.5
-                        },
-                        {
-                            "id": "48fcdf90-44b4-4197-bde5-3955f3364c67",
-                            "outdoorTemperature": -1,
-                            "supplyPipeTemperature": 49.2,
-                            "returnPipeTemperature": 39.4
-                        },
-                        {
-                            "id": "bbf9db02-4799-4040-addb-e16c00eda07c",
+                            "id": "4b656d99-01a1-45ff-bf63-bf2ed74278fb",
                             "outdoorTemperature": -2,
                             "supplyPipeTemperature": 50.6,
                             "returnPipeTemperature": 40.4
                         },
                         {
-                            "id": "99e1df3b-df66-4f29-a75b-f9af137918d6",
-                            "outdoorTemperature": -3,
-                            "supplyPipeTemperature": 51.9,
-                            "returnPipeTemperature": 41.3
-                        },
-                        {
-                            "id": "0fece8b5-7365-4b58-9c84-680682bff203",
-                            "outdoorTemperature": -4,
-                            "supplyPipeTemperature": 53.3,
-                            "returnPipeTemperature": 42.2
-                        },
-                        {
-                            "id": "e4b453e1-5f0c-4524-9452-cf24d783f150",
-                            "outdoorTemperature": -5,
-                            "supplyPipeTemperature": 54.7,
-                            "returnPipeTemperature": 43.1
-                        },
-                        {
-                            "id": "efaa7a69-e1ea-43e9-8c5f-0b779612ad6b",
-                            "outdoorTemperature": -6,
-                            "supplyPipeTemperature": 56.1,
-                            "returnPipeTemperature": 44.1
-                        },
-                        {
-                            "id": "944349ac-d52d-4347-b2c8-d01a58c8e358",
-                            "outdoorTemperature": -7,
-                            "supplyPipeTemperature": 57.5,
-                            "returnPipeTemperature": 45.0
-                        },
-                        {
-                            "id": "1e8a91b6-1bfa-4a3e-a9f0-1deaeea394d1",
-                            "outdoorTemperature": -8,
-                            "supplyPipeTemperature": 58.9,
-                            "returnPipeTemperature": 45.9
-                        },
-                        {
-                            "id": "521f0325-e7a8-4a3a-bfc3-430051731b50",
-                            "outdoorTemperature": -9,
-                            "supplyPipeTemperature": 60.3,
-                            "returnPipeTemperature": 46.8
-                        },
-                        {
-                            "id": "c7711d26-1604-4132-a114-940dcc09de6a",
-                            "outdoorTemperature": -10,
-                            "supplyPipeTemperature": 61.7,
-                            "returnPipeTemperature": 47.8
-                        },
-                        {
-                            "id": "9a1ce43f-b123-4879-839a-fd0f86b74f18",
-                            "outdoorTemperature": -11,
-                            "supplyPipeTemperature": 63.1,
-                            "returnPipeTemperature": 48.7
-                        },
-                        {
-                            "id": "70c22477-ece0-4981-a259-fa4be3894e42",
-                            "outdoorTemperature": -12,
-                            "supplyPipeTemperature": 64.4,
-                            "returnPipeTemperature": 49.6
-                        },
-                        {
-                            "id": "8a722fd9-7f3d-4709-bfbe-2c7dac2ad5db",
+                            "id": "4286284d-a525-455a-8b4c-22db72f44498",
                             "outdoorTemperature": -13,
                             "supplyPipeTemperature": 65.8,
                             "returnPipeTemperature": 50.6
                         },
                         {
-                            "id": "2e24f9ae-c2b4-41f5-9e7e-02eda7d99b13",
-                            "outdoorTemperature": -14,
-                            "supplyPipeTemperature": 67.2,
-                            "returnPipeTemperature": 51.5
-                        },
-                        {
-                            "id": "3fb4a01a-0075-4c09-90b1-ac038c2f61be",
-                            "outdoorTemperature": -15,
-                            "supplyPipeTemperature": 68.6,
-                            "returnPipeTemperature": 52.4
-                        },
-                        {
-                            "id": "5df298e7-d568-47b4-9828-2c8e5d8b26b1",
-                            "outdoorTemperature": -16,
-                            "supplyPipeTemperature": 70.0,
-                            "returnPipeTemperature": 53.3
-                        },
-                        {
-                            "id": "0ad132d8-07ac-411d-acac-7cbbf02a3dcc",
-                            "outdoorTemperature": -17,
-                            "supplyPipeTemperature": 71.4,
-                            "returnPipeTemperature": 54.3
-                        },
-                        {
-                            "id": "876b03e5-373b-4660-bf6d-f757a8926067",
-                            "outdoorTemperature": -18,
-                            "supplyPipeTemperature": 72.8,
-                            "returnPipeTemperature": 55.2
-                        },
-                        {
-                            "id": "49a83c30-ebe3-4384-b4a7-5717bfbbbd61",
-                            "outdoorTemperature": -19,
-                            "supplyPipeTemperature": 74.2,
-                            "returnPipeTemperature": 56.1
-                        },
-                        {
-                            "id": "f5e1506d-f733-4994-93bf-d40e05af28b4",
-                            "outdoorTemperature": -20,
-                            "supplyPipeTemperature": 75.6,
-                            "returnPipeTemperature": 57.0
-                        },
-                        {
-                            "id": "a522d088-eb44-416a-8ed3-e41e490e835f",
-                            "outdoorTemperature": -21,
-                            "supplyPipeTemperature": 76.9,
-                            "returnPipeTemperature": 58.0
-                        },
-                        {
-                            "id": "9809939b-d867-4e32-8991-e3660cbbdced",
-                            "outdoorTemperature": -22,
-                            "supplyPipeTemperature": 78.3,
-                            "returnPipeTemperature": 58.9
-                        },
-                        {
-                            "id": "1f1d8624-7ee3-4d17-8a63-e888da20a23c",
-                            "outdoorTemperature": -23,
-                            "supplyPipeTemperature": 79.7,
-                            "returnPipeTemperature": 59.8
-                        },
-                        {
-                            "id": "e0ce0a9d-b533-494e-819c-12bef61fe032",
+                            "id": "c48aaf3e-5c37-4b0c-9ce3-034d90b3bc2e",
                             "outdoorTemperature": -24,
                             "supplyPipeTemperature": 81.1,
                             "returnPipeTemperature": 60.7
                         },
                         {
-                            "id": "7a401db7-e29d-4c10-b520-0f5b7b261f76",
-                            "outdoorTemperature": -25,
-                            "supplyPipeTemperature": 82.5,
-                            "returnPipeTemperature": 61.7
-                        },
-                        {
-                            "id": "7a84e431-703e-4712-afbe-ec8106bd926e",
-                            "outdoorTemperature": -26,
-                            "supplyPipeTemperature": 83.9,
-                            "returnPipeTemperature": 62.6
-                        },
-                        {
-                            "id": "9a80cfab-22ac-4e9a-b263-13b28ec50bd6",
-                            "outdoorTemperature": -27,
-                            "supplyPipeTemperature": 85.3,
-                            "returnPipeTemperature": 63.5
-                        },
-                        {
-                            "id": "e5b9ea49-3584-4075-8f9a-a86b4f721ab7",
-                            "outdoorTemperature": -28,
-                            "supplyPipeTemperature": 86.7,
-                            "returnPipeTemperature": 64.4
-                        },
-                        {
-                            "id": "7f1effdc-b0a1-484e-b9fd-78d38e12df26",
-                            "outdoorTemperature": -29,
-                            "supplyPipeTemperature": 88.1,
-                            "returnPipeTemperature": 65.4
-                        },
-                        {
-                            "id": "980e2848-4c6a-42ef-8d05-8bd81643f30c",
-                            "outdoorTemperature": -30,
-                            "supplyPipeTemperature": 89.4,
-                            "returnPipeTemperature": 66.3
-                        },
-                        {
-                            "id": "58c770ab-6eb3-49a2-ac81-9c0218ecd3d8",
-                            "outdoorTemperature": -31,
-                            "supplyPipeTemperature": 90.8,
-                            "returnPipeTemperature": 67.2
-                        },
-                        {
-                            "id": "56b80bc4-8175-4115-aa61-19947881014f",
-                            "outdoorTemperature": -32,
-                            "supplyPipeTemperature": 92.2,
-                            "returnPipeTemperature": 68.1
-                        },
-                        {
-                            "id": "23f0d566-94b4-4582-83d8-044a044a1755",
-                            "outdoorTemperature": -33,
-                            "supplyPipeTemperature": 93.6,
-                            "returnPipeTemperature": 69.1
-                        },
-                        {
-                            "id": "01657798-bda7-4dc7-8b0b-3f63c18d40c3",
+                            "id": "9a9fcd6e-44c4-4726-bcd6-3b291e892a8c",
                             "outdoorTemperature": -34,
                             "supplyPipeTemperature": 95.0,
                             "returnPipeTemperature": 70.0

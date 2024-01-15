@@ -18,6 +18,7 @@ export { IoGridOutline as ListsIcon } from 'react-icons/io5';
 export { IoSettingsOutline as SettingsIcon } from 'react-icons/io5';
 export { IoHomeOutline as HomeIcon } from 'react-icons/io5';
 export { IoInformationCircleOutline as AboutIcon } from 'react-icons/io5';
+export { IoInformationCircleOutline as InfoIcon } from 'react-icons/io5';
 export { IoExitOutline as ExitIcon } from 'react-icons/io5';
 export { CgRemoveR as DeleteIcon } from 'react-icons/cg';
 export { RiDeleteBin7Line as DeleteAllIcon } from 'react-icons/ri';

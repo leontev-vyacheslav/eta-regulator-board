@@ -7,7 +7,7 @@
    viewBox="0 0 105 148"
    version="1.1"
    id="svg3689"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
    sodipodi:docname="HeatSystem.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -25,11 +25,11 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.5233586"
-     inkscape:cx="117.50352"
-     inkscape:cy="186.43017"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
+     inkscape:zoom="3.0467172"
+     inkscape:cx="279.80936"
+     inkscape:cy="171.49606"
+     inkscape:window-width="3440"
+     inkscape:window-height="1369"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -38,7 +38,11 @@
        type="xygrid"
        id="grid6152"
        originx="0"
-       originy="0" />
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="mm"
+       visible="false" />
   </sodipodi:namedview>
   <defs
      id="defs3686">
@@ -548,13 +552,13 @@
        x2="109.4328"
        y2="33.883289"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.36330733,0,0,0.21715603,20.549381,8.362139)" />
+       gradientTransform="matrix(0.36330733,0,0,0.21715603,20.549381,9.4204724)" />
     <radialGradient
        id="SVGID_47_"
        cx="105.2564"
        cy="106.554"
        r="3.5755999"
-       gradientTransform="matrix(0.26193751,0,0,0.49885999,17.571412,-37.736002)"
+       gradientTransform="matrix(0.26193751,0,0,0.49885999,17.571412,-36.677668)"
        gradientUnits="userSpaceOnUse">
       <stop
          offset="0"
@@ -639,7 +643,7 @@
        id="text34959"><tspan
          sodipodi:role="line"
          id="tspan34957"
-         style="font-size:2.91479px;stroke-width:0"
+         style="font-size:3px;stroke-width:0"
          x="28.535229"
          y="23.574759">М1</tspan></text>
     <rect
@@ -828,7 +832,7 @@
        style="display:inline;fill:url(#SVGID_65_);stroke:#2d2e83;stroke-width:0.202097;stroke-miterlimit:10" />
     <text
        xml:space="preserve"
-       style="font-size:2.91479px;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
+       style="font-size:3px;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
        x="73.092537"
        y="46.630127"
        id="text34959-1"><tspan
@@ -917,7 +921,7 @@
        id="text2711-7"
        x="25.943752"
        y="43.848099"
-       style="font-size:3.14325px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">TE2</text>
+       style="font-size:3px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">TE2</text>
     <path
        class="st59"
        d="m 22.326838,48.147384 v 0 c -0.15454,0 -0.28027,-0.12573 -0.28027,-0.280273 v -4.371736 c 0,-0.154544 0.12573,-0.280274 0.28027,-0.280274 v 0 c 0.15455,0 0.28028,0.12573 0.28028,0.280274 v 4.369117 c 0,0.157162 -0.12573,0.282892 -0.28028,0.282892 z"
@@ -1060,9 +1064,16 @@
        class="st64 st65"
        id="T2"
        x="24.369106"
-       y="47.46907"
+       y="46.76907"
        inkscape:label="#T2"
-       style="font-size:3.14325px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">0,0 °C</text>
+       style="font-size:2.3px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">0,0 °C</text>
+    <text
+       class="st64 st65"
+       id="T2calc"
+       x="23.460989"
+       y="49.5"
+       inkscape:label="#T2calc"
+       style="font-size:2.3px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">(0,0 °C)</text>
   </g>
   <g
      inkscape:groupmode="layer"
@@ -1090,7 +1101,7 @@
        id="text2711"
        x="71.638687"
        y="20.137964"
-       style="font-size:3.14325px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">TE1</text>
+       style="font-size:3px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">TE1</text>
     <path
        class="st59"
        d="m 68.021774,24.437248 v 0 c -0.15454,0 -0.28027,-0.12573 -0.28027,-0.280273 v -4.371736 c 0,-0.154544 0.12573,-0.280274 0.28027,-0.280274 v 0 c 0.15455,0 0.28028,0.12573 0.28028,0.280274 v 4.369117 c 0,0.157162 -0.12573,0.282892 -0.28028,0.282892 z"
@@ -1233,9 +1244,16 @@
        class="st64 st65"
        id="T1"
        x="70.064049"
-       y="23.758936"
+       y="22.758936"
        inkscape:label="#T1"
-       style="font-size:3.14325px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">0,0 °C</text>
+       style="font-size:2.3px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">0,0 °C</text>
+    <text
+       class="st64 st65"
+       id="T1calc"
+       x="69.077202"
+       y="25.758936"
+       inkscape:label="#T1calc"
+       style="font-size:2.3px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">(0,0 °C)</text>
   </g>
   <g
      inkscape:groupmode="layer"
@@ -1248,159 +1266,159 @@
        width="16.222986"
        height="10.004094"
        x="44.084148"
-       y="10.718053"
+       y="11.776385"
        ry="0.99756312"
        inkscape:label="#note_T_air" />
     <text
        class="st64 st65"
        id="text2758"
        x="48.75909"
-       y="13.586438"
-       style="font-size:3.14325px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">Tн.в.</text>
+       y="15.144771"
+       style="font-size:3px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937">Tн.в.</text>
     <path
        class="st66"
-       d="m 45.142955,17.885985 v 0 c -0.154543,0 -0.280273,-0.12573 -0.280273,-0.280273 v -4.371737 c 0,-0.154543 0.12573,-0.280273 0.280273,-0.280273 v 0 c 0.154544,0 0.280274,0.12573 0.280274,0.280273 v 4.369118 c 0,0.157162 -0.12573,0.282892 -0.280274,0.282892 z"
+       d="m 45.142955,18.944319 v 0 c -0.154543,0 -0.280273,-0.12573 -0.280273,-0.280273 v -4.371737 c 0,-0.154543 0.12573,-0.280273 0.280273,-0.280273 v 0 c 0.154544,0 0.280274,0.12573 0.280274,0.280273 v 4.369118 c 0,0.157162 -0.12573,0.282892 -0.280274,0.282892 z"
        id="path2722"
        style="display:inline;fill:url(#SVGID_47_);stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.922932"
-       y1="13.556158"
+       y1="14.614491"
        x2="45.163914"
-       y2="13.556158"
+       y2="14.614491"
        id="line2724"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.922932"
-       y1="14.965383"
+       y1="16.023716"
        x2="45.163914"
-       y2="14.965383"
+       y2="16.023716"
        id="line2726"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.922932"
-       y1="16.374605"
+       y1="17.43294"
        x2="45.163914"
-       y2="16.374605"
+       y2="17.43294"
        id="line2728"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.93079"
-       y1="13.825953"
+       y1="14.884285"
        x2="45.038189"
-       y2="13.825953"
+       y2="14.884285"
        id="line2730"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.93079"
-       y1="14.108847"
+       y1="15.167179"
        x2="45.038189"
-       y2="14.108847"
+       y2="15.167179"
        id="line2732"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.93079"
-       y1="14.389118"
+       y1="15.447451"
        x2="45.038189"
-       y2="14.389118"
+       y2="15.447451"
        id="line2734"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.93079"
-       y1="14.672011"
+       y1="15.730344"
        x2="45.038189"
-       y2="14.672011"
+       y2="15.730344"
        id="line2736"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.93079"
-       y1="15.235177"
+       y1="16.29351"
        x2="45.038189"
-       y2="15.235177"
+       y2="16.29351"
        id="line2738"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.93079"
-       y1="15.51545"
+       y1="16.573784"
        x2="45.038189"
-       y2="15.51545"
+       y2="16.573784"
        id="line2740"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.93079"
-       y1="15.798345"
+       y1="16.856678"
        x2="45.038189"
-       y2="15.798345"
+       y2="16.856678"
        id="line2742"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.93079"
-       y1="16.081236"
+       y1="17.13957"
        x2="45.038189"
-       y2="16.081236"
+       y2="17.13957"
        id="line2744"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.93079"
-       y1="16.644402"
+       y1="17.702736"
        x2="45.038189"
-       y2="16.644402"
+       y2="17.702736"
        id="line2746"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.93079"
-       y1="16.924675"
+       y1="17.983009"
        x2="45.038189"
-       y2="16.924675"
+       y2="17.983009"
        id="line2748"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st14"
        x1="44.93079"
-       y1="17.207565"
+       y1="18.2659"
        x2="45.038189"
-       y2="17.207565"
+       y2="18.2659"
        id="line2750"
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st61"
        x1="44.922932"
-       y1="17.624046"
+       y1="18.682381"
        x2="44.922932"
-       y2="14.554141"
+       y2="15.612473"
        id="line2752"
        style="display:inline;fill:none;stroke:#e30613;stroke-width:0.0654844;stroke-miterlimit:10" />
     <path
        class="st62"
-       d="m 45.318454,18.273653 c 0,0.09692 -0.07858,0.178117 -0.178118,0.178117 -0.09954,0 -0.178117,-0.07858 -0.178117,-0.178117 0,-0.09692 0.07858,-0.178118 0.178117,-0.178118 0.09954,0 0.178118,0.0812 0.178118,0.178118 z"
+       d="m 45.318454,19.331987 c 0,0.09692 -0.07858,0.178117 -0.178118,0.178117 -0.09954,0 -0.178117,-0.07858 -0.178117,-0.178117 0,-0.09692 0.07858,-0.178118 0.178117,-0.178118 0.09954,0 0.178118,0.0812 0.178118,0.178118 z"
        id="path2754"
        style="display:inline;fill:#9c2724;stroke:#e30613;stroke-width:0.0654844;stroke-miterlimit:10" />
     <line
        class="st63"
        x1="45.142963"
-       y1="17.885984"
+       y1="18.944319"
        x2="45.142963"
-       y2="18.098152"
+       y2="19.156487"
        id="line2756"
        style="display:inline;fill:#706f6f;stroke:#e30613;stroke-width:0.196453;stroke-miterlimit:10" />
     <text
        class="st64 st65"
        id="T_air"
        x="47.184452"
-       y="17.207409"
-       style="font-size:3.14325px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937"
+       y="18.265743"
+       style="font-size:2.3px;font-family:MyriadPro-Regular;display:inline;stroke-width:0.261937"
        inkscape:label="#T_air">0,0 °C</text>
   </g>
   <g
@@ -1427,21 +1445,10 @@
        id="valve_M1_pos_txt"
        style="font-size:8px;text-align:center;white-space:pre;shape-inside:url(#rect23643);display:inline;fill:#0000ff;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        inkscape:label="#valve_M1_pos"><tspan
-         x="304.82095"
-         y="72.263376"
-         id="tspan30081"><tspan
+         x="301.83496"
+         y="72.283018"
+         id="tspan4"><tspan
            style="fill:#000000"
-           id="tspan30079">0~100%</tspan></tspan></text>
+           id="tspan3">0~100%</tspan></tspan></text>
   </g>
-  <text
-     xml:space="preserve"
-     transform="matrix(0.26458333,0,0,0.26458333,-26.036417,-0.73687969)"
-     id="text27541"
-     style="font-size:8px;text-align:center;white-space:pre;shape-inside:url(#rect27543);fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:0;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-     inkscape:label="ContourLbl"><tspan
-       x="250.95596"
-       y="31.880564"
-       id="tspan30085"><tspan
-         style="fill:#000000"
-         id="tspan30083">Контур 1. ОТОПЛЕНИЕ</tspan></tspan></text>
 </svg>

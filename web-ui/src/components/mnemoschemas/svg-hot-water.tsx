@@ -1,5 +1,5 @@
-const SvgHotWater = (props: any) => (
-    <svg width={ props.width } viewBox="10 0 80 60" xmlnsXlink="http://www.w3.org/1999/xlink">
+const SvgHotWater = (props) => (
+    <svg width={ props.width } viewBox="10 5 80 60" xmlnsXlink="http://www.w3.org/1999/xlink" { ...props }>
         <defs>
             <linearGradient id="linearGradient28628">
                 <stop
@@ -795,7 +795,7 @@ const SvgHotWater = (props: any) => (
                 y={ 13.504069 }>
                 <tspan
                     style={ {
-                        fontSize: '2.91479px',
+                        fontSize: 3,
                         strokeWidth: 0,
                     } }
                     x={ 28.903669 }
@@ -1254,7 +1254,7 @@ const SvgHotWater = (props: any) => (
             <text
                 xmlSpace="preserve"
                 style={ {
-                    fontSize: '2.91479px',
+                    fontSize: 3,
                     textAlign: 'center',
                     textAnchor: 'middle',
                     fill: '#000000',
@@ -1270,7 +1270,7 @@ const SvgHotWater = (props: any) => (
                 y={ 36.559437 }>
                 <tspan
                     style={ {
-                        fontSize: '2.91479px',
+                        fontSize: 3,
                         strokeWidth: 0,
                     } }
                     x={ 74.961632 }
@@ -1440,7 +1440,7 @@ const SvgHotWater = (props: any) => (
                 x={ 26.312193 }
                 y={ 33.777409 }
                 style={ {
-                    fontSize: '3.14325px',
+                    fontSize: 3,
                     fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
                     display: 'inline',
                     strokeWidth: 0.261937,
@@ -1697,14 +1697,27 @@ const SvgHotWater = (props: any) => (
                 className="st64 st65"
                 id="T4"
                 x={ 24.737547 }
-                y={ 37.39838 }
+                y={ 36.340046 }
                 style={ {
-                    fontSize: '3.14325px',
+                    fontSize: '2.3px',
                     fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
                     display: 'inline',
                     strokeWidth: 0.261937,
                 } }>
                 {props.returnPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C
+            </text>
+            <text
+                className="st64 st65"
+                id="T4calc"
+                x={ 23.64324 }
+                y={ 39.275566 }
+                style={ {
+                    fontSize: '2.3px',
+                    fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
+                    display: 'inline',
+                    strokeWidth: 0.261937,
+                } }>
+                ({props.returnPipeTemperatureCalc.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C)
             </text>
         </g>
         <g>
@@ -1743,7 +1756,7 @@ const SvgHotWater = (props: any) => (
                 x={ 72.007126 }
                 y={ 10.067275 }
                 style={ {
-                    fontSize: '3.14325px',
+                    fontSize: 3,
                     fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
                     display: 'inline',
                     strokeWidth: 0.261937,
@@ -2000,14 +2013,27 @@ const SvgHotWater = (props: any) => (
                 className="st64 st65"
                 id="T3"
                 x={ 70.432487 }
-                y={ 13.688247 }
+                y={ 13.07224 }
                 style={ {
-                    fontSize: '3.14325px',
+                    fontSize: '2.3px',
                     fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
                     display: 'inline',
                     strokeWidth: 0.261937,
                 } }>
                 {props.supplyPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C
+            </text>
+            <text
+                className="st64 st65"
+                id="T3calc"
+                x={ 69.414032 }
+                y={ 15.601405 }
+                style={ {
+                    fontSize: '2.3px',
+                    fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
+                    display: 'inline',
+                    strokeWidth: 0.261937,
+                } }>
+                ({props.supplyPipeTemperatureCalc.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C)
             </text>
         </g>
         <g>
@@ -2039,7 +2065,7 @@ const SvgHotWater = (props: any) => (
                     fontSize: 8,
                     textAlign: 'center',
                     whiteSpace: 'pre',
-
+                    
                     display: 'inline',
                     fill: '#2196F3',
                     fillOpacity: 1,
@@ -2050,7 +2076,7 @@ const SvgHotWater = (props: any) => (
                     strokeDasharray: 'none',
                     strokeOpacity: 1,
                 } }>
-                <tspan x={ 310 } y={ 72.263376 }>
+                <tspan x={ 310 } y={ 72.283018 }>
                     <tspan
                         style={ {
                             fill: '#000000',

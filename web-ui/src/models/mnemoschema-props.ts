@@ -4,8 +4,10 @@ export type MnemoschemaProps = {
     pumpOn: boolean;
 
     supplyPipeTemperature: number;
+    supplyPipeTemperatureCalc: number;
 
     returnPipeTemperature: number;
+    returnPipeTemperatureCalc: number;
 
     outdoorTemperature?: number,
 

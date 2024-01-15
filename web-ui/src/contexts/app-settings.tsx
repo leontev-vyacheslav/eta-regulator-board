@@ -51,7 +51,7 @@ function AppSettingsProvider(props: AppBaseProviderProps) {
     useEffect(() => {
         (async () => {
             const regulatorSettings = await getRegulatorSettingsAsync();
-            // don't delete an artificial dependency from 'user'
+            // don't delete this artificial dependency from 'user'
             if (regulatorSettings && user) {
                 setRegulatorSettings(regulatorSettings);
             }

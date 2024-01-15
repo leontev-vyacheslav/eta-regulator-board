@@ -6,15 +6,15 @@ const svgSizeInitialize = {
             element: {
                 enter: (node, parentNode) => {
                     if (node.name === 'svg') {
-                        node.attributes.width = 'auto';
+                        node.attributes.width = 'props.width';
                         delete node.attributes['height'];
 
                         if (node.attributes['sodipodi:docname'] === 'HeatSystem.svg') {
-                            node.attributes.viewBox = '10 5 80 60'
+                            node.attributes.viewBox = '10 10 80 60'
                         }
 
                         if (node.attributes['sodipodi:docname'] === 'HotWater.svg') {
-                            node.attributes.viewBox = '10 0 80 60'
+                            node.attributes.viewBox = '10 5 80 60'
                         }
 
                         if(node.attributes['xmlnsXlink']) {
@@ -43,6 +43,14 @@ const propsInject = {
 
                     if (node.attributes.id === 'T2' || node.attributes.id === 'T4') {
                         node.children = [{ type: 'text', value: 'props.returnPipeTemperature' }];
+                    }
+
+                    if (node.attributes.id === 'T1calc' || node.attributes.id === 'T3calc') {
+                        node.children = [{ type: 'text', value: 'props.supplyPipeTemperatureCalc' }];
+                    }
+
+                    if (node.attributes.id === 'T2calc' || node.attributes.id === 'T4calc') {
+                        node.children = [{ type: 'text', value: 'props.returnPipeTemperatureCalc' }];
                     }
 
                     if (node.attributes.id === 'T_air') {
@@ -227,9 +235,13 @@ module.exports = {
                     preserve: [
                         'T_air',
                         'T1',
+                        'T1calc',
                         'T2',
+                        'T2calc',
                         'T3',
+                        'T3calc',
                         'T4',
+                        'T4calc',
                         'pump_dynamic',
                         'valve_M1_pos_txt',
                         'valve_M1_dn',

@@ -1,7 +1,7 @@
 import os
 import pathlib
 import shutil
-
+# print(840000 - 3208 * 4 + 29834)
 
 root = pathlib.Path(os.path.dirname(__file__))
 workspace_root = root.parent.parent
@@ -16,10 +16,12 @@ file_names = [
 ]
 
 props = [
-    {'name': 'supplyPipeTemperature', 'prefix': ', °C'},
-    {'name': 'returnPipeTemperature', 'prefix': ', °C'},
-    {'name': 'outdoorTemperature', 'prefix': ', °C'},
-    {'name': 'valvePosition', 'prefix': '%'}
+    {'name': 'supplyPipeTemperature', 'prefix': ', °C', 'enclose': False},
+    {'name': 'returnPipeTemperature', 'prefix': ', °C', 'enclose': False},
+    {'name': 'supplyPipeTemperatureCalc', 'prefix': ', °C', 'enclose': True},
+    {'name': 'returnPipeTemperatureCalc', 'prefix': ', °C', 'enclose': True},
+    {'name': 'outdoorTemperature', 'prefix': ', °C', 'enclose': False},
+    {'name': 'valvePosition', 'prefix': '%', 'enclose': False}
 ]
 
 for file_name, new_file_name in zip(file_names, new_file_names):
@@ -33,7 +35,7 @@ for file_name, new_file_name in zip(file_names, new_file_names):
 
     with open(f'{root}/processed/{file_name}.tsx', mode='w') as f:
         for t in props:
-            svg = svg.replace(f'{{\'props.{t["name"]}\'}}', f'{{props.{t["name"]}.toLocaleString(undefined, {{ minimumFractionDigits: 1 }})}}{t["prefix"]}')
+            svg = svg.replace(f'{{\'props.{t["name"]}\'}}', f'{"(" if t["enclose"] else ""}{{props.{t["name"]}.toLocaleString(undefined, {{ minimumFractionDigits: 1 }})}}{t["prefix"]}{")" if t["enclose"] else ""}')
 
         svg = svg.replace('"{ props.pumpOn ? \'2.0s\': \'indefinite\' }"', '{ props.pumpOn ? \'2.0s\': \'indefinite\' }')
 
@@ -44,6 +46,10 @@ for file_name, new_file_name in zip(file_names, new_file_names):
         svg = svg.replace(
             '"props.valveDirection === 2 ? \'inline\': \'none\'"',
             'props.valveDirection === 2 ? \'inline\': \'none\''
+        )
+        svg = svg.replace(
+            '"props.width"',
+            '{props.width}'
         )
 
         # unknown props

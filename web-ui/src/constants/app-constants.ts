@@ -17,7 +17,9 @@ const AppConstants = {
         companyMetroHover: '#0072C6',
         borderGreyColor: '#a3a3a3',
         themeBaseAccent: '#FF5722',
-        baseDarkgreyTextColor: '#464646'
+        baseDarkgreyTextColor: '#464646',
+        supplyPipeColor: '#f5564a',
+        returnPipeColor: '#1db2f5',
     },
     pageHeight: '65vh',
     formHeight: '55vh',

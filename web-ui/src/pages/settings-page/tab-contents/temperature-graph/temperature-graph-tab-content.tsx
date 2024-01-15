@@ -19,7 +19,7 @@ const TemperatureGraphTabContentInner = () => {
     const [isShowGraph, setIsShowGraph] = useState<boolean>(false);
 
     const temperatureGraphStore = useMemo(() => {
-        const store = new ArrayStore({
+        const store = new ArrayStore<TemperatureGraphItemModel>({
             key: 'id',
             data: regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.temperatureGraph.items,
 
@@ -118,9 +118,12 @@ const TemperatureGraphTabContentInner = () => {
             {
                 !isShowGraph
                     ?
-                    <TemperatureGraphGrid dataSource={ temperatureGraphStore } />
+                    <TemperatureGraphGrid dataSource={ temperatureGraphStore }/>
                     :
-                    <TemperatureGraphChart dataSource={ temperatureGraphStore } />
+                    <TemperatureGraphChart
+                        dataSource={ temperatureGraphStore }
+                        showPoints={ regulatorSettings!.heatingCircuits.items[circuitId].regulatorParameters.temperatureGraph.items.length < 15 }
+                    />
             }
         </div>
     );

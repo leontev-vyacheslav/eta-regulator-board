@@ -8,7 +8,9 @@ export const useMnemoschemaDefaultProps = () => {
         return {
             pumpOn: false,
             supplyPipeTemperature: 0.0,
+            supplyPipeTemperatureCalc: 0.0,
             returnPipeTemperature: 0.0,
+            returnPipeTemperatureCalc: 0.0,
             outdoorTemperature: 0.0,
             valveDirection: ValveDirectionModel.up,
             valvePosition: 100.0

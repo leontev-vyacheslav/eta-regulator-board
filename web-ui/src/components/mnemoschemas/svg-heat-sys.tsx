@@ -1,5 +1,5 @@
-const SvgHeatSystem = (props: any) => (
-    <svg width={ props.width } viewBox="10 5 80 60" xmlnsXlink="http://www.w3.org/1999/xlink">
+const SvgHeatSystem = (props) => (
+    <svg width={ props.width } viewBox="10 10 80 60" xmlnsXlink="http://www.w3.org/1999/xlink" { ...props }>
         <defs>
             <rect x={ 241.37161 } y={ 24.601337 } width={ 106.76052 } height={ 21.81628 } />
             <rect x={ 299.85782 } y={ 64.984665 } width={ 39.454975 } height={ 12.532757 } id="rect23643" />
@@ -586,14 +586,14 @@ const SvgHeatSystem = (props: any) => (
                 x2={ 109.4328 }
                 y2={ 33.883289 }
                 gradientUnits="userSpaceOnUse"
-                gradientTransform="matrix(0.36330733,0,0,0.21715603,20.549381,8.362139)"
+                gradientTransform="matrix(0.36330733,0,0,0.21715603,20.549381,9.4204724)"
             />
             <radialGradient
                 id="SVGID_47_"
                 cx={ 105.2564 }
                 cy={ 106.554 }
                 r={ 3.5755999 }
-                gradientTransform="matrix(0.26193751,0,0,0.49885999,17.571412,-37.736002)"
+                gradientTransform="matrix(0.26193751,0,0,0.49885999,17.571412,-36.677668)"
                 gradientUnits="userSpaceOnUse">
                 <stop
                     offset={ 0 }
@@ -751,7 +751,7 @@ const SvgHeatSystem = (props: any) => (
                 y={ 23.574759 }>
                 <tspan
                     style={ {
-                        fontSize: '2.91479px',
+                        fontSize: 3,
                         strokeWidth: 0,
                     } }
                     x={ 28.535229 }
@@ -1127,7 +1127,7 @@ const SvgHeatSystem = (props: any) => (
             <text
                 xmlSpace="preserve"
                 style={ {
-                    fontSize: '2.91479px',
+                    fontSize: 3,
                     textAlign: 'center',
                     textAnchor: 'middle',
                     fill: '#000000',
@@ -1313,7 +1313,7 @@ const SvgHeatSystem = (props: any) => (
                 x={ 25.943752 }
                 y={ 43.848099 }
                 style={ {
-                    fontSize: '3.14325px',
+                    fontSize: 3,
                     fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
                     display: 'inline',
                     strokeWidth: 0.261937,
@@ -1570,14 +1570,27 @@ const SvgHeatSystem = (props: any) => (
                 className="st64 st65"
                 id="T2"
                 x={ 24.369106 }
-                y={ 47.46907 }
+                y={ 46.76907 }
                 style={ {
-                    fontSize: '3.14325px',
+                    fontSize: '2.3px',
                     fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
                     display: 'inline',
                     strokeWidth: 0.261937,
                 } }>
                 {props.returnPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C
+            </text>
+            <text
+                className="st64 st65"
+                id="T2calc"
+                x={ 23.460989 }
+                y={ 49.5 }
+                style={ {
+                    fontSize: '2.3px',
+                    fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
+                    display: 'inline',
+                    strokeWidth: 0.261937,
+                } }>
+                ({props.returnPipeTemperatureCalc.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C)
             </text>
         </g>
         <g>
@@ -1616,7 +1629,7 @@ const SvgHeatSystem = (props: any) => (
                 x={ 71.638687 }
                 y={ 20.137964 }
                 style={ {
-                    fontSize: '3.14325px',
+                    fontSize: 3,
                     fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
                     display: 'inline',
                     strokeWidth: 0.261937,
@@ -1873,14 +1886,27 @@ const SvgHeatSystem = (props: any) => (
                 className="st64 st65"
                 id="T1"
                 x={ 70.064049 }
-                y={ 23.758936 }
+                y={ 22.758936 }
                 style={ {
-                    fontSize: '3.14325px',
+                    fontSize: '2.3px',
                     fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
                     display: 'inline',
                     strokeWidth: 0.261937,
                 } }>
                 {props.supplyPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C
+            </text>
+            <text
+                className="st64 st65"
+                id="T1calc"
+                x={ 69.077202 }
+                y={ 25.758936 }
+                style={ {
+                    fontSize: '2.3px',
+                    fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
+                    display: 'inline',
+                    strokeWidth: 0.261937,
+                } }>
+                ({props.supplyPipeTemperatureCalc.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C)
             </text>
         </g>
         <g
@@ -1900,15 +1926,15 @@ const SvgHeatSystem = (props: any) => (
                 width={ 16.222986 }
                 height={ 10.004094 }
                 x={ 44.084148 }
-                y={ 10.718053 }
+                y={ 11.776385 }
                 ry={ 0.99756312 }
             />
             <text
                 className="st64 st65"
                 x={ 48.75909 }
-                y={ 13.586438 }
+                y={ 15.144771 }
                 style={ {
-                    fontSize: '3.14325px',
+                    fontSize: 3,
                     fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
                     display: 'inline',
                     strokeWidth: 0.261937,
@@ -1917,7 +1943,7 @@ const SvgHeatSystem = (props: any) => (
             </text>
             <path
                 className="st66"
-                d="m 45.142955,17.885985 v 0 c -0.154543,0 -0.280273,-0.12573 -0.280273,-0.280273 v -4.371737 c 0,-0.154543 0.12573,-0.280273 0.280273,-0.280273 v 0 c 0.154544,0 0.280274,0.12573 0.280274,0.280273 v 4.369118 c 0,0.157162 -0.12573,0.282892 -0.280274,0.282892 z"
+                d="m 45.142955,18.944319 v 0 c -0.154543,0 -0.280273,-0.12573 -0.280273,-0.280273 v -4.371737 c 0,-0.154543 0.12573,-0.280273 0.280273,-0.280273 v 0 c 0.154544,0 0.280274,0.12573 0.280274,0.280273 v 4.369118 c 0,0.157162 -0.12573,0.282892 -0.280274,0.282892 z"
                 style={ {
                     display: 'inline',
                     fill: 'url(#SVGID_47_)',
@@ -1929,9 +1955,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.922932 }
-                y1={ 13.556158 }
+                y1={ 14.614491 }
                 x2={ 45.163914 }
-                y2={ 13.556158 }
+                y2={ 14.614491 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -1943,9 +1969,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.922932 }
-                y1={ 14.965383 }
+                y1={ 16.023716 }
                 x2={ 45.163914 }
-                y2={ 14.965383 }
+                y2={ 16.023716 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -1957,9 +1983,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.922932 }
-                y1={ 16.374605 }
+                y1={ 17.43294 }
                 x2={ 45.163914 }
-                y2={ 16.374605 }
+                y2={ 17.43294 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -1971,9 +1997,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.93079 }
-                y1={ 13.825953 }
+                y1={ 14.884285 }
                 x2={ 45.038189 }
-                y2={ 13.825953 }
+                y2={ 14.884285 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -1985,9 +2011,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.93079 }
-                y1={ 14.108847 }
+                y1={ 15.167179 }
                 x2={ 45.038189 }
-                y2={ 14.108847 }
+                y2={ 15.167179 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -1999,9 +2025,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.93079 }
-                y1={ 14.389118 }
+                y1={ 15.447451 }
                 x2={ 45.038189 }
-                y2={ 14.389118 }
+                y2={ 15.447451 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -2013,9 +2039,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.93079 }
-                y1={ 14.672011 }
+                y1={ 15.730344 }
                 x2={ 45.038189 }
-                y2={ 14.672011 }
+                y2={ 15.730344 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -2027,9 +2053,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.93079 }
-                y1={ 15.235177 }
+                y1={ 16.29351 }
                 x2={ 45.038189 }
-                y2={ 15.235177 }
+                y2={ 16.29351 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -2041,9 +2067,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.93079 }
-                y1={ 15.51545 }
+                y1={ 16.573784 }
                 x2={ 45.038189 }
-                y2={ 15.51545 }
+                y2={ 16.573784 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -2055,9 +2081,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.93079 }
-                y1={ 15.798345 }
+                y1={ 16.856678 }
                 x2={ 45.038189 }
-                y2={ 15.798345 }
+                y2={ 16.856678 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -2069,9 +2095,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.93079 }
-                y1={ 16.081236 }
+                y1={ 17.13957 }
                 x2={ 45.038189 }
-                y2={ 16.081236 }
+                y2={ 17.13957 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -2083,9 +2109,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.93079 }
-                y1={ 16.644402 }
+                y1={ 17.702736 }
                 x2={ 45.038189 }
-                y2={ 16.644402 }
+                y2={ 17.702736 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -2097,9 +2123,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.93079 }
-                y1={ 16.924675 }
+                y1={ 17.983009 }
                 x2={ 45.038189 }
-                y2={ 16.924675 }
+                y2={ 17.983009 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -2111,9 +2137,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st14"
                 x1={ 44.93079 }
-                y1={ 17.207565 }
+                y1={ 18.2659 }
                 x2={ 45.038189 }
-                y2={ 17.207565 }
+                y2={ 18.2659 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -2125,9 +2151,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st61"
                 x1={ 44.922932 }
-                y1={ 17.624046 }
+                y1={ 18.682381 }
                 x2={ 44.922932 }
-                y2={ 14.554141 }
+                y2={ 15.612473 }
                 style={ {
                     display: 'inline',
                     fill: 'none',
@@ -2138,7 +2164,7 @@ const SvgHeatSystem = (props: any) => (
             />
             <path
                 className="st62"
-                d="m 45.318454,18.273653 c 0,0.09692 -0.07858,0.178117 -0.178118,0.178117 -0.09954,0 -0.178117,-0.07858 -0.178117,-0.178117 0,-0.09692 0.07858,-0.178118 0.178117,-0.178118 0.09954,0 0.178118,0.0812 0.178118,0.178118 z"
+                d="m 45.318454,19.331987 c 0,0.09692 -0.07858,0.178117 -0.178118,0.178117 -0.09954,0 -0.178117,-0.07858 -0.178117,-0.178117 0,-0.09692 0.07858,-0.178118 0.178117,-0.178118 0.09954,0 0.178118,0.0812 0.178118,0.178118 z"
                 style={ {
                     display: 'inline',
                     fill: '#9c2724',
@@ -2150,9 +2176,9 @@ const SvgHeatSystem = (props: any) => (
             <line
                 className="st63"
                 x1={ 45.142963 }
-                y1={ 17.885984 }
+                y1={ 18.944319 }
                 x2={ 45.142963 }
-                y2={ 18.098152 }
+                y2={ 19.156487 }
                 style={ {
                     display: 'inline',
                     fill: '#706f6f',
@@ -2165,9 +2191,9 @@ const SvgHeatSystem = (props: any) => (
                 className="st64 st65"
                 id="T_air"
                 x={ 47.184452 }
-                y={ 17.207409 }
+                y={ 18.265743 }
                 style={ {
-                    fontSize: '3.14325px',
+                    fontSize: '2.3px',
                     fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
                     display: 'inline',
                     strokeWidth: 0.261937,
@@ -2204,7 +2230,7 @@ const SvgHeatSystem = (props: any) => (
                     fontSize: 8,
                     textAlign: 'center',
                     whiteSpace: 'pre',
-
+                    
                     display: 'inline',
                     fill: '#2196F3',
                     fillOpacity: 1,
@@ -2215,7 +2241,7 @@ const SvgHeatSystem = (props: any) => (
                     strokeDasharray: 'none',
                     strokeOpacity: 1,
                 } }>
-                <tspan x={ 310 } y={ 72.263376 }>
+                <tspan x={ 310 } y={ 72.283018 }>
                     <tspan
                         style={ {
                             fill: '#000000',
