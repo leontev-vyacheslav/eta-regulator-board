@@ -17,7 +17,7 @@ with DS1307(0x68) as rtc:
 
             print(f'{a} -> {delta1}')
 
-        # pylint: disable=broad-except
+        #pylint: disable=broad-except
         except Exception as ex:
             print('Error transaction...', ex)
         time.sleep(5)

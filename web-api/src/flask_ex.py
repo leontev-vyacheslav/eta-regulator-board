@@ -6,9 +6,11 @@ from typing import Callable, List, Optional, Any, Union
 
 from flask import Flask
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
+from models.accounts_settings_model import AccountsSettingsModel
 
-from models.app_config_model import AppConfigModel
+from models.internal_settings_model import InternalSettingsModel
 from models.app_background_process_model import AppBackgroundProcessModel
+from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
 
 class FlaskEx(Flask):
@@ -42,7 +44,7 @@ class FlaskEx(Flask):
         self.app_root_path = pathlib.Path(os.path.dirname(__file__)).parent
 
         self.worker_logger: Logger = self._init_worker_logger()
-        self.app_config = self._init_app_config()
+        self.internal_settings = self._init_internal_settings()
         self.app_background_processes: List[AppBackgroundProcessModel] = []
 
         # self.regulator_settings_repository = RegulatorSettingsRepository()
@@ -65,20 +67,25 @@ class FlaskEx(Flask):
 
         return logger
 
-    def _init_app_config(self) -> AppConfigModel:
-        config_path = self.app_root_path.joinpath('data', 'config.json')
+    def _init_internal_settings(self) -> InternalSettingsModel:
+        config_path = self.app_root_path.joinpath('data', 'internal_settings.json')
 
         with open(config_path, mode='r', encoding='utf-8') as f:
             json_config = f.read()
 
-        return AppConfigModel.parse_raw(json_config)
+        return InternalSettingsModel.parse_raw(json_config)
 
-    def get_regulator_settings_repository(self):
+    def get_regulator_settings_repository(self) -> RegulatorSettingsRepository:
         regulator_settings_repository: RegulatorSettingsRepository = self.extensions['regulator_settings_repository']
 
         return regulator_settings_repository
 
-    def get_regulator_settings(self):
+    def get_regulator_settings(self) -> RegulatorSettingsModel:
         regulator_settings_repository: RegulatorSettingsRepository = self.extensions['regulator_settings_repository']
 
         return regulator_settings_repository.settings
+
+    def get_accounts_settings(self) -> AccountsSettingsModel:
+        accounts_settings_repository: AccountsSettingsModel = self.extensions['accounts_settings_repository']
+
+        return accounts_settings_repository.settings

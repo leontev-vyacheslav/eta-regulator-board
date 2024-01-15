@@ -4,7 +4,6 @@ from flask import request
 import jwt
 
 from app import app
-from data_access.regulator_settings_repository import RegulatorSettingsRepository
 from models.common.enums.user_role_model import UserRoleModel
 from models.common.message_model import MessageModel
 from responses.json_response import JsonResponse
@@ -27,12 +26,12 @@ def authorize(roles: Optional[List[UserRoleModel]] = None):
                     response=MessageModel(message='Токен авторизации или пользователь не найден.'),
                     status=401
                 )
-
+            #pylint: disable=broad-except
             try:
-                regulator_settings_repository: RegulatorSettingsRepository = app.extensions['regulator_settings_repository']
-                regulator_settings = regulator_settings_repository.settings
+                regulator_settings = app.get_regulator_settings()
+                accounts_settings = app.get_accounts_settings()
 
-                account = next((acc for acc in regulator_settings.accounts.items if acc.login == requested_user) , None)
+                account = next((acc for acc in accounts_settings.accounts.items if acc.login == requested_user) , None)
 
                 if not account:
                     raise Exception('Учетная запись не найдена.')
@@ -56,7 +55,7 @@ def authorize(roles: Optional[List[UserRoleModel]] = None):
                     response=MessageModel(message='Срок действия токена авторизации истек.'),
                     status=401
                 )
-            # pylint: disable=broad-except
+
             except Exception as ex:
                 return JsonResponse(
                     response=MessageModel(message=ex.__str__()),

@@ -1,24 +1,5 @@
 {
     "regulatorState": 1,
-    "accounts": {
-        "items": [
-            {
-                "role": 1,
-                "login": "Admin",
-                "password": "c775e7b757ede630cd0aa1113bd102661ab38829ca52a6422ab782862f268646"
-            },
-            {
-                "role": 2,
-                "login": "Operator",
-                "password": "17756315ebd47b7110359fc7b168179bf6f2df3646fcc888bc8aa05c78b38ac1"
-            },
-            {
-                "role": 3,
-                "login": "Guest",
-                "password": "9af15b336e6a9619928537df30b2e6a2376569fcf9d7e773eccede65606529a0"
-            }
-        ]
-    },
     "heatingCircuits": {
         "items": [
             {

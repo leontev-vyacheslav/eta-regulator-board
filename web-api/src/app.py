@@ -1,4 +1,5 @@
 from flask_cors import CORS
+from data_access.accounts_settings_repository import AccountsSettingsRepository
 from flask_ex import FlaskEx
 
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
@@ -15,6 +16,7 @@ CORS(
     origins=['*']
 )
 WorkerStarter(app)
+AccountsSettingsRepository(app)
 RegulatorSettingsRepository(app)
 
 

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import Chart, { ArgumentAxis, CommonAxisSettings, Crosshair, Grid, Legend, Series, Title, Tooltip, ValueAxis } from 'devextreme-react/chart';
+import Chart, { ArgumentAxis, CommonAxisSettings, Crosshair, Font, Grid, Legend, Point, Series, Title, Tooltip, ValueAxis } from 'devextreme-react/chart';
 import { useTemperatureGraphContext } from './temperature-graph-context';
 import { getUuidV4 } from '../../../../utils/uuid';
 import AppConstants from '../../../../constants/app-constants';
@@ -59,10 +59,8 @@ export const TemperatureGraphChart = ({ dataSource, showPoints }: { dataSource: 
                 argumentField="outdoorTemperature"
                 valueField="supplyPipeTemperature"
                 showInLegend={ true }
-                color={ AppConstants.colors.supplyPipeColor }
-                type='spline'
-                point={ { visible: showPoints, size: 8 } }
-            >
+                type='spline' color={ AppConstants.colors.supplyPipeColor }>
+                    <Point visible={ showPoints } size={ 8 }  symbol='circle'/>
             </Series>
 
             <Series
@@ -71,10 +69,9 @@ export const TemperatureGraphChart = ({ dataSource, showPoints }: { dataSource: 
                 valueField="returnPipeTemperature"
                 showInLegend={ true }
                 color={ AppConstants.colors.returnPipeColor }
-                type='spline'
-                point={ { visible: showPoints, size: 8, symbol: 'square' } }
-            />
-
+                type='spline' >
+                    <Point visible={ showPoints } size={ 8 }  symbol='square'/>
+                </Series>
             <ArgumentAxis inverted={ chartArgumentAxisInverted }>
                 <Grid />
                 <Title text='Температура наружного воздуха, °C' font={ { size: 12 } } />
@@ -82,7 +79,9 @@ export const TemperatureGraphChart = ({ dataSource, showPoints }: { dataSource: 
 
             <ValueAxis>
                 <Grid />
-                <Title text='Температура носителя, °C' font={ { size: 12 } } />
+                <Title text='Температура носителя, °C'>
+                    <Font size={ 12 } />
+                </Title>
             </ValueAxis>
 
             <CommonAxisSettings>

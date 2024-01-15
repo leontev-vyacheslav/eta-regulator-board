@@ -29,7 +29,7 @@ class WorkerStarter():
             worker_module_name, _ = os.path.splitext(os.path.basename(worker_path))
             worker_module = importlib.import_module(f'.{worker_module_name}', workers.__name__)
 
-            for worker_info in app.app_config.workers:
+            for worker_info in app.internal_settings.workers:
 
                 if hasattr(worker_module, worker_info.name):
                     worker = getattr(worker_module, worker_info.name)

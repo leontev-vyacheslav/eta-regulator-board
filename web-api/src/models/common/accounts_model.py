@@ -5,3 +5,4 @@ from models.common.account_model import AccountModel
 
 class AccountsModel(AppBaseModel):
     items: List[AccountModel]
+

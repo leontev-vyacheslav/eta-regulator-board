@@ -15,8 +15,9 @@ from utils.auth_helper import authorize
 @validate()
 def signin(body: SignInModel):
     regulator_settings = app.get_regulator_settings()
+    accounts_settings = app.get_accounts_settings()
 
-    account = next((acc for acc in regulator_settings.accounts.items if acc.login == body.login), None)
+    account = next((acc for acc in accounts_settings.accounts.items if acc.login == body.login), None)
 
     if account is None:
         return JsonResponse(
