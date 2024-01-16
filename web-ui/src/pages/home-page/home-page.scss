@@ -1,57 +1,22 @@
-.logos-container {
-  text-align: center;
-  display: flex;
+.heating-circuit-info-form {
+  padding-bottom: 10px;
 
-  svg {
-    display: inline-block;
-
-    circle {
-      fill: #2c394c;
-    }
+  .dx-field {
+    margin: 0 0 0px;
   }
-;
 
-  div {
-    flex: 1;
-    align-self: center;
-    text-align: left;
-    font-size: 24px;
-    margin-left: 10px;
-    color: #666666;
-    font-weight: bold;
+  .dx-layout-manager .dx-field-item {
+    padding-bottom: 0px;
+    padding-top: 0px;
+    font-size: 12px;
   }
-;
-}
 
-.devextreme-logo {
-  width: 200px;
-  height: 34px;
-  margin-bottom: 19px;
-}
-
-.home-page-content {
-  p {
-    line-height: 30px;
-    text-align: justify;
+  .dx-layout-manager.dx-layout-manager-one-col .dx-box-item:not(:first-child) .dx-single-column-item-content>.dx-field-item {
+    padding-top: 0px;
   }
-}
 
-.screen-x-small .logos-container {
-  flex-direction: column;
-
-  div {
-    text-align: inherit;
-  }
-;
-
-  svg {
-    margin: 0 auto;
-    width: 50%;
+  .dx-field-item-label-location-top {
     display: block;
+    padding: 10px 16px 3px;
   }
-}
-
-.screen-x-small .logos-container span {
-  margin: initial;
-  font-size: 16px;
 }

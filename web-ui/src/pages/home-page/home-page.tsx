@@ -9,7 +9,7 @@ import { useAppSettings } from '../../contexts/app-settings';
 import { HeatingCircuitIndexModel } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { formatMessage } from 'devextreme/localization';
 import { HeatingCircuitIconSelector } from '../../components/heating-circuit-icon-selector/heating-circuit-icon-selector';
-import { MnemoschemaSelector } from './mnemoschema-selector';
+import { HeatingCircuitSelector } from './mnemoschema-selector';
 
 export const HomePage = () => {
     const { regulatorSettings, getHeatingCircuitName } = useAppSettings();
@@ -41,7 +41,7 @@ export const HomePage = () => {
                             >
                                 {
                                     activeTabIndex === HeatingCircuitIndexModel.first
-                                        ? <MnemoschemaSelector heatingCircuitIndex={ HeatingCircuitIndexModel.first } />
+                                        ? <HeatingCircuitSelector heatingCircuitIndex={ HeatingCircuitIndexModel.first } />
                                         : null
                                 }
                             </TabPanelItem>
@@ -54,7 +54,7 @@ export const HomePage = () => {
                             >
                                 {
                                     activeTabIndex === HeatingCircuitIndexModel.second
-                                        ? <MnemoschemaSelector heatingCircuitIndex={ HeatingCircuitIndexModel.second } />
+                                        ? <HeatingCircuitSelector heatingCircuitIndex={ HeatingCircuitIndexModel.second } />
                                         : null
                                 }
                             </TabPanelItem>

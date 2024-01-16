@@ -15,7 +15,9 @@ const dialogContentRender = ({ iconName, iconSize, iconColor, textRender }: Simp
     function innerContent() {
         return (
             <div style={ { display: 'flex', alignItems: 'center' } }>
-                {createElement((AppIcons as any)[iconName], { size: iconSize = iconSize ? iconSize : 24, style: { alignSelf: 'flex-start', color: iconColor ? iconColor : '#ff5722' } })}
+                <div>
+                    {createElement((AppIcons as any)[iconName], { size: iconSize = iconSize ? iconSize : 24, style: { alignSelf: 'flex-start', color: iconColor ? iconColor : '#ff5722' } })}
+                </div>
                 {textRender ? <span style={ { marginLeft: 10 } }>{textRender()}</span> : null}
             </div>
         );

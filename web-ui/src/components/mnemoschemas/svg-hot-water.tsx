@@ -1,5 +1,5 @@
 const SvgHotWater = (props) => (
-    <svg width={ props.width } viewBox="10 5 80 60" xmlnsXlink="http://www.w3.org/1999/xlink" { ...props }>
+    <svg width={ props.width } viewBox="10 5 80 60" xmlnsXlink="http://www.w3.org/1999/xlink">
         <defs>
             <linearGradient id="linearGradient28628">
                 <stop
@@ -2065,7 +2065,7 @@ const SvgHotWater = (props) => (
                     fontSize: 8,
                     textAlign: 'center',
                     whiteSpace: 'pre',
-                    
+
                     display: 'inline',
                     fill: '#2196F3',
                     fillOpacity: 1,

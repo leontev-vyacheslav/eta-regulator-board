@@ -25,6 +25,10 @@ export const HeatingCircuitContent = () => {
             scrollingEnabled={ true }
             formData={ regulatorSettings?.heatingCircuits.items[circuitId] }
             onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
+                if (e.dataField === 'type') {
+                    return;
+                }
+
                 const regulatorSettingsChange = {
                     regulatorSettings: regulatorSettings!,
                     changeLogItem: {
@@ -55,18 +59,24 @@ export const HeatingCircuitContent = () => {
                         valueExpr: 'type',
                         displayExpr: 'description',
                         onValueChanged: (e: ValueChangedEvent) => {
+
                             if (e.value == currentHeatingCircuitType.type) {
                                 return;
                             }
+
                             if (e.event) {
                                 const innerCallback = async (dialogResult?: boolean) => {
                                     if (dialogResult) {
                                         await applyDefaultHeatCircuitSettingsAsync(e.value);
+                                        // ?
+                                        // setRegulatorSettings((previous) => {
+                                        //     previous!.heatingCircuits.items[circuitId].type = e.value
+                                        //     return { ...previous! };
+                                        // });
+                                    } else {
+                                        const previousValue = e.previousValue;
+                                        e.component.instance().option('value', previousValue);
                                     }
-                                    setRegulatorSettings((previous) => {
-                                        previous!.heatingCircuits.items[circuitId].type = e.value
-                                        return { ...previous! };
-                                    })
                                 };
 
                                 showConfirmDialogEx({
@@ -75,15 +85,17 @@ export const HeatingCircuitContent = () => {
                                     iconSize: 32,
                                     callback: innerCallback,
                                     textRender: () => {
-                                        return <>{formatMessage('confirm-dialog-default-heating-circuit-settings')}</>;
+                                        return <>{formatMessage('confirm-dialog-change-heating-circuit-type')}</>;
                                     }
                                 });
                             }
                             else {
-                                setRegulatorSettings((previous) => {
-                                    previous!.heatingCircuits.items[circuitId].type = e.value
-                                    return { ...previous! };
-                                })
+                                console.log(e);
+
+                                // setRegulatorSettings((previous) => {
+                                //     previous!.heatingCircuits.items[circuitId].type = e.value
+                                //     return { ...previous! };
+                                // })
                             }
                         } }
                     }

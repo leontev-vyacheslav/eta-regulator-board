@@ -5,6 +5,7 @@ import { useAppData } from './app-data/app-data';
 import { RegulatorSettingsModel } from '../models/regulator-settings/regulator-settings-model';
 import { useAuth } from './auth';
 import { HeatingCircuitIndexModel } from '../models/regulator-settings/enums/heating-circuit-type-model';
+import { ControlModes } from '../models/regulator-settings/enums/control-mode-model';
 
 const AppSettingsContext = createContext<AppSettingsContextModel>({} as AppSettingsContextModel);
 
@@ -19,12 +20,19 @@ function AppSettingsProvider(props: AppBaseProviderProps) {
         isShowFooter: true,
     });
 
-    const getHeatingCircuitName = useCallback((index: HeatingCircuitIndexModel) => {
+    const getHeatingCircuitName = useCallback((heatingCircuitIndex: HeatingCircuitIndexModel) => {
 
         return regulatorSettings
-            ? regulatorSettings.heatingCircuits.items[index].name
-            : `Контур ${index + 1}`;
+            ? regulatorSettings.heatingCircuits.items[heatingCircuitIndex].name
+            : `Контур ${heatingCircuitIndex + 1}`;
     }, [regulatorSettings]);
+
+    const getControlModeName = useCallback((heatingCircuitIndex: HeatingCircuitIndexModel) => {
+
+        return regulatorSettings
+            ? ControlModes.find(m => m.id === regulatorSettings.heatingCircuits.items[heatingCircuitIndex].regulatorParameters.controlParameters.controlMode)!.description
+            : ''
+        }, [regulatorSettings]);
 
     const updateWorkDateAsync = useCallback(async () => {
         if (!user) {
@@ -81,8 +89,9 @@ function AppSettingsProvider(props: AppBaseProviderProps) {
         regulatorSettings,
         setRegulatorSettings,
         refreshRegulatorSettingsAsync,
-        getHeatingCircuitName
-    } } { ...props } />;
+        getHeatingCircuitName,
+        getControlModeName
+       } } { ...props } />;
 }
 
 export { AppSettingsProvider, useAppSettings };

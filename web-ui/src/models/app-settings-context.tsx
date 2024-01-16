@@ -3,25 +3,27 @@ import { RegulatorSettingsModel } from './regulator-settings/regulator-settings-
 import { HeatingCircuitIndexModel } from './regulator-settings/enums/heating-circuit-type-model';
 
 export type AppSettingsModel = {
-  workDate?: Date;
+    workDate?: Date;
 
-  isShowFooter: boolean;
+    isShowFooter: boolean;
 }
 
 export type AppSettingsDataContextModel = AppSettingsModel;
 
 export type AppSettingsContextModel = {
-  appSettingsData: AppSettingsDataContextModel;
+    appSettingsData: AppSettingsDataContextModel;
 
-  setAppSettingsData: Dispatch<SetStateAction<AppSettingsDataContextModel>>;
+    setAppSettingsData: Dispatch<SetStateAction<AppSettingsDataContextModel>>;
 
-  updateWorkDateAsync: () => Promise<void>;
+    updateWorkDateAsync: () => Promise<void>;
 
-  regulatorSettings: RegulatorSettingsModel | null;
+    regulatorSettings: RegulatorSettingsModel | null;
 
-  setRegulatorSettings: Dispatch<SetStateAction<RegulatorSettingsModel | null>>;
+    setRegulatorSettings: Dispatch<SetStateAction<RegulatorSettingsModel | null>>;
 
-  refreshRegulatorSettingsAsync: () => Promise<void>;
+    refreshRegulatorSettingsAsync: () => Promise<void>;
 
-  getHeatingCircuitName: (index: HeatingCircuitIndexModel) => string;
+    getHeatingCircuitName: (heatingCircuitIndex: HeatingCircuitIndexModel) => string;
+
+    getControlModeName: (heatingCircuitIndex: HeatingCircuitIndexModel) => string;
 }
