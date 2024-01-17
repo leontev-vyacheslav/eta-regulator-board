@@ -12,10 +12,10 @@ import { useScreenSize } from '../../../../utils/media-query';
 import { showConfirmDialog } from '../../../../utils/dialogs';
 import { ControlModeModel, ControlModes } from '../../../../models/regulator-settings/enums/control-mode-model';
 import { EditorPreparingEvent } from 'devextreme/ui/data_grid';
-import { useAppSettings } from '../../../../contexts/app-settings';
+import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 
 export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => {
-    const { regulatorSettings, setRegulatorSettings } = useAppSettings();
+    const { regulatorSettings, setRegulatorSettings } = useRegulatorSettings();
     const { putSchedulesAsync } = useSchedulesContext();
     const scheduleWindowsRef = useRef<DataGrid<ScheduleWindowModel, any>>(null);
     const { circuitId } = useSettingPageContext();

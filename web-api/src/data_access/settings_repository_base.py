@@ -18,7 +18,9 @@ class SettingsRepositoryBase():
     def init_app(self, app):
         app.extensions[pascal_to_snake(self.__class__.__name__)] = self
 
-        self.data_path = app.app_root_path.joinpath(f'data/{pascal_to_snake(self.__class__.__name__.replace("Repository", str()))}.json')
+        self.data_path = app.app_root_path.joinpath(
+            f'data/settings/{pascal_to_snake(self.__class__.__name__.replace("Repository", str()))}.json'
+        )
 
         with open(self.data_path, 'r', encoding='utf-8') as file:
             json = file.read()

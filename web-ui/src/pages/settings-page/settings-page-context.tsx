@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useMemo } from 'react';
 import { useAppData } from '../../contexts/app-data/app-data';
 import { HeatingCircuitTypeModel, HeatingCircuitTypes, HeatingCircuitTypesItem } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { useParams } from 'react-router-dom';
-import { useAppSettings } from '../../contexts/app-settings';
+import { useRegulatorSettings } from '../../contexts/app-regulator-settings';
 
 type SettingPageContextModel = {
     circuitId: number;
@@ -15,7 +15,7 @@ const SettingPageContext = createContext({} as SettingPageContextModel);
 function SettingPageContextProvider (props: any) {
     const { circuitIdParam } = useParams();
     const { getDefaultHeatingCircuitsSettingsAsync, putRegulatorSettingsAsync } = useAppData();
-    const { regulatorSettings, setRegulatorSettings } = useAppSettings();
+    const { regulatorSettings, setRegulatorSettings } = useRegulatorSettings();
 
     const circuitId = useMemo(() => {
         return circuitIdParam ? parseInt(circuitIdParam) : 0;

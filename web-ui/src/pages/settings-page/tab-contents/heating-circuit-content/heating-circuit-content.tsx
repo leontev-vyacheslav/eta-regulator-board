@@ -9,11 +9,11 @@ import { MnemoschemaWrapper } from './mnemoschema-wrapper';
 import AppConstants from '../../../../constants/app-constants';
 import { showConfirmDialogEx } from '../../../../utils/dialogs';
 import { formatMessage } from 'devextreme/localization';
-import { useAppSettings } from '../../../../contexts/app-settings';
+import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 
 export const HeatingCircuitContent = () => {
     const dxHeatingCircuitFormRef = useRef<Form>(null);
-    const { regulatorSettings, setRegulatorSettings } = useAppSettings();
+    const { regulatorSettings, setRegulatorSettings } = useRegulatorSettings();
     const { circuitId, applyDefaultHeatCircuitSettingsAsync, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 

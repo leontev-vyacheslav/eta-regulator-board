@@ -4,11 +4,11 @@ import { useSettingPageContext } from '../../settings-page-context';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import AppConstants from '../../../../constants/app-constants';
-import { useAppSettings } from '../../../../contexts/app-settings';
+import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 
 export const RegulationParametersForm = () => {
     const dxRegulatorParametersFormRef = useRef<Form>(null);
-    const { regulatorSettings } = useAppSettings();
+    const { regulatorSettings } = useRegulatorSettings();
     const { circuitId, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
 

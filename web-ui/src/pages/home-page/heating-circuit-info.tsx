@@ -1,10 +1,10 @@
 import Form, { Label, SimpleItem } from 'devextreme-react/form';
 import { WorkDateWidget } from '../../components/work-date-widget/work-date-widget';
 import { HeatingCircuitIndexModel } from '../../models/regulator-settings/enums/heating-circuit-type-model';
-import { useAppSettings } from '../../contexts/app-settings';
+import { useRegulatorSettings } from '../../contexts/app-regulator-settings';
 
 export const HeatingCircuitInfo = ({ heatingCircuitIndex }: {heatingCircuitIndex: HeatingCircuitIndexModel}) => {
-    const { getControlModeName } = useAppSettings();
+    const { getControlModeName } = useRegulatorSettings();
 
     return (
         <Form className='heating-circuit-info-form'>

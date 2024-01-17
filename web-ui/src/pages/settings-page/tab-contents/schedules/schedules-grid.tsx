@@ -9,13 +9,12 @@ import { ValidationCallbackData, ValidationRule } from 'devextreme/common';
 import { formatMessage } from 'devextreme/localization';
 import { ScheduleWindowsGrid } from './schedule-windows-grid';
 import { useSchedulesContext } from './schedules-context';
-
 import AppConstants from '../../../../constants/app-constants';
-import { useAppSettings } from '../../../../contexts/app-settings';
+import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 
 
 export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
-    const { regulatorSettings } = useAppSettings();
+    const { regulatorSettings } = useRegulatorSettings();
     const { circuitId } = useSettingPageContext();
     const { schedulesDataGridRef, daysOfWeek } = useSchedulesContext();
 

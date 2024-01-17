@@ -9,10 +9,10 @@ import { showConfirmDialog } from '../../../../utils/dialogs';
 import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { useSettingPageContext } from '../../settings-page-context';
-import { useAppSettings } from '../../../../contexts/app-settings';
+import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 
 const SchedulesTabContentInner = () => {
-    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useAppSettings();
+    const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useRegulatorSettings();
     const {  circuitId } = useSettingPageContext();
     const { putSchedulesAsync, schedulesDataGridRef } = useSchedulesContext();
 

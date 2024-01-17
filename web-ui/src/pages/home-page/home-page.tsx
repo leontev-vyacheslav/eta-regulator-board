@@ -5,14 +5,14 @@ import PageHeader from '../../components/page-header/page-header';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel'
 import { useRef, useState } from 'react';
 import { IconTab } from '../../components/tab-utils/icon-tab';
-import { useAppSettings } from '../../contexts/app-settings';
 import { HeatingCircuitIndexModel } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { formatMessage } from 'devextreme/localization';
 import { HeatingCircuitIconSelector } from '../../components/heating-circuit-icon-selector/heating-circuit-icon-selector';
 import { HeatingCircuitSelector } from './mnemoschema-selector';
+import { useRegulatorSettings } from '../../contexts/app-regulator-settings';
 
 export const HomePage = () => {
-    const { regulatorSettings, getHeatingCircuitName } = useAppSettings();
+    const { regulatorSettings, getHeatingCircuitName } = useRegulatorSettings();
     const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
     const tabPanelRef = useRef<TabPanel>(null);
 

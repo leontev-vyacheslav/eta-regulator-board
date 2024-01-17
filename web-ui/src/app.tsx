@@ -16,6 +16,7 @@ import ContentAuth from './content-auth';
 import ContentNonAuth from './content-non-auth';
 import { WorkdatePickerProvider } from './contexts/workdate-context';
 import Loader from './components/loader/loader';
+import { RegulatorSettingsProvider } from './contexts/app-regulator-settings';
 
 
 function App() {
@@ -51,7 +52,7 @@ function App() {
     });
     locale('ru-RU');
 
-    return user === null ? <ContentNonAuth/> :  <ContentAuth />
+    return user === null ? <ContentNonAuth /> : <ContentAuth />
 }
 
 function Main() {
@@ -63,14 +64,16 @@ function Main() {
                 <SharedAreaProvider>
                     <AppDataProvider>
                         <AppSettingsProvider>
-                            <WorkdatePickerProvider>
-                                <NavigationProvider>
-                                    <div className={ `app ${screenSizeClass}` }>
-                                        <App />
-                                        <Loader />
-                                    </div>
-                                </NavigationProvider>
-                            </WorkdatePickerProvider>
+                            <RegulatorSettingsProvider>
+                                <WorkdatePickerProvider>
+                                    <NavigationProvider>
+                                        <div className={ `app ${screenSizeClass}` }>
+                                            <App />
+                                            <Loader />
+                                        </div>
+                                    </NavigationProvider>
+                                </WorkdatePickerProvider>
+                            </RegulatorSettingsProvider>
                         </AppSettingsProvider>
                     </AppDataProvider>
                 </SharedAreaProvider>

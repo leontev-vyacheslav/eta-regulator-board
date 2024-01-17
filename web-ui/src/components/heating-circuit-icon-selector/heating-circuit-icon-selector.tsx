@@ -1,11 +1,11 @@
 import {  ReactElement } from 'react';
 import { IconBaseProps } from 'react-icons';
 import { HeatSysIcon, HotWaterIcon, VentilationIcon } from '../../constants/app-icons';
-import { useAppSettings } from '../../contexts/app-settings';
 import { HeatingCircuitIndexModel, HeatingCircuitTypeModel } from '../../models/regulator-settings/enums/heating-circuit-type-model';
+import { useRegulatorSettings } from '../../contexts/app-regulator-settings';
 
 export const HeatingCircuitIconSelector = ({ heatingCircuitIndex, iconProps }: { heatingCircuitIndex: HeatingCircuitIndexModel, iconProps?: IconBaseProps }) => {
-        const { regulatorSettings } = useAppSettings();
+        const { regulatorSettings } = useRegulatorSettings();
 
         let icon: ReactElement | null;
 

@@ -68,7 +68,7 @@ class FlaskEx(Flask):
         return logger
 
     def _init_internal_settings(self) -> InternalSettingsModel:
-        config_path = self.app_root_path.joinpath('data', 'internal_settings.json')
+        config_path = self.app_root_path.joinpath('data/settings', 'internal_settings.json')
 
         with open(config_path, mode='r', encoding='utf-8') as f:
             json_config = f.read()

@@ -2,7 +2,7 @@ import { Dispatch, createContext, useCallback, useContext, useRef, useState } fr
 import { TemperatureGraphItemModel } from '../../../../models/regulator-settings/temperature-graph-model';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import DataGrid from 'devextreme-react/data-grid';
-import { useAppSettings } from '../../../../contexts/app-settings';
+import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 
 export type TemperatureGraphContextModel = {
     putTemperatureGraphAsync: (values: TemperatureGraphItemModel) => Promise<void>;
@@ -16,7 +16,7 @@ export type TemperatureGraphContextModel = {
 const TemperatureGraphContext = createContext({} as TemperatureGraphContextModel);
 
 function TemperatureGraphProvider(props: any) {
-    const { regulatorSettings } = useAppSettings();
+    const { regulatorSettings } = useRegulatorSettings();
     const { putRegulatorSettingsAsync } = useAppData();
     const [chartArgumentAxisInverted, setChartArgumentAxisInverted] = useState<boolean>(false);
     const dataGridRef = useRef<DataGrid<TemperatureGraphItemModel>>(null);
