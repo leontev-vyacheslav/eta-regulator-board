@@ -11,8 +11,8 @@ from utils.auth_helper import authorize
 
 
 @app.api_route('/regulator-settings', methods=['GET'])
-@validate(response_by_alias=True)
 @authorize()
+@validate(response_by_alias=True)
 def get_regulator_settings() -> RegulatorSettingsModel:
     regulator_settings = app.get_regulator_settings()
 
@@ -20,8 +20,8 @@ def get_regulator_settings() -> RegulatorSettingsModel:
 
 
 @app.api_route('/regulator-settings', methods=['PUT'])
-@validate(response_by_alias=True)
 @authorize(roles=[UserRoleModel.ADMIN])
+@validate(response_by_alias=True)
 def put_regulator_settings(body: RegulatorSettingsChangeModel):
     regulator_settings_change = body
 
@@ -44,8 +44,8 @@ def get_regulator_settings_as_file():
 
 
 @app.api_route('/regulator-settings/default/<heating_circuit_type>', methods=['GET'])
-@validate(response_by_alias=True)
 @authorize(roles=[UserRoleModel.ADMIN])
+@validate(response_by_alias=True)
 def get_default_heating_circuits_settings(heating_circuit_type: int):
     regulator_settings_repository = app.get_regulator_settings_repository()
     default_heating_circuit_settings_list = regulator_settings_repository.get_default_heating_circuits_settings()
@@ -68,8 +68,8 @@ def get_default_heating_circuits_settings(heating_circuit_type: int):
 
 
 @app.api_route('/regulator-settings/reset', methods=['GET'])
-@validate(response_by_alias=True)
 @authorize(roles=[UserRoleModel.ADMIN])
+@validate(response_by_alias=True)
 def get_reset_default_heating_circuits_settings():
     regulator_settings_repository = app.get_regulator_settings_repository()
     default_heating_circuit_settings_list = regulator_settings_repository.get_default_heating_circuits_settings()

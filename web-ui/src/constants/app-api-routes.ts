@@ -6,7 +6,6 @@ export default {
     accountAuthCheck: '/auth-check',
     accountOwnerInfo: '/owner-info',
 
-    tests: '/api/tests',
     rtc: '/api/rtc',
 
     gpio: '/api/gpio',
@@ -15,6 +14,8 @@ export default {
     temperature: '/api/temperature',
 
     dac: '/api/dac',
+
+    archives: '/api/archives',
 
     regulatorSettings: '/api/regulator-settings'
 };

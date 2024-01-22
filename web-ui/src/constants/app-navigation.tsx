@@ -8,6 +8,7 @@ import {
     DebugIcon,
     ManualModeIcon,
     AppIcon,
+    ArchivesIcon,
 } from './app-icons';
 import { IconBaseProps } from 'react-icons/lib/cjs/iconBase';
 import { TreeViewItemModel } from '../models/tree-view-item';
@@ -53,6 +54,13 @@ export const useSideNavigationMenuItems = () => {
                         visible: user && (user.role === UserRoleModel.admin)
                     }
                 ],
+                visible: user && (user.role === UserRoleModel.admin || user.role === UserRoleModel.operator)
+            },
+            {
+                id: 'archives',
+                text: 'Архивы',
+                iconRender: (props: IconBaseProps) => <ArchivesIcon size={ 22 } { ...props } />,
+                path: '/archives',
                 visible: user && (user.role === UserRoleModel.admin || user.role === UserRoleModel.operator)
             },
             {

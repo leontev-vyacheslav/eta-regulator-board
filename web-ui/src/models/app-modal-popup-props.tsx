@@ -2,9 +2,9 @@ import { ReactNode } from 'react';
 import { PopupCallbackModel } from './popup-callback';
 
 export type AppModalPopupProps = {
-  title: string;
+  title?: string;
 
-  children: ReactNode;
-  
+  children?: ReactNode;
+
   callback: ({ ...any }: PopupCallbackModel) => void;
 }

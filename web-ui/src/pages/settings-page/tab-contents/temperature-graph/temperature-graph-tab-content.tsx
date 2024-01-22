@@ -110,7 +110,7 @@ const TemperatureGraphTabContentInner = () => {
                     }
                 ]
             }];
-    }, [chartArgumentAxisInverted, dataGridRef, isShowGraph, putTemperatureGraphAsync, refreshRegulatorSettingsAsync, regulatorSettings, setChartArgumentAxisInverted, setRegulatorSettings])
+    }, [chartArgumentAxisInverted, dataGridRef, isShowGraph, putTemperatureGraphAsync, refreshRegulatorSettingsAsync, regulatorSettings, setChartArgumentAxisInverted, setRegulatorSettings]);
 
     return (
         <div className='setting-form'>

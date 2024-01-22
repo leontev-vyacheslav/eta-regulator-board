@@ -1,5 +1,5 @@
 import { withNavigationWatcher } from '../contexts/navigation';
-import { HomePage, SettingsPage, AboutPage, SignOutPage, DebugPage, AppSettingsPage } from '../pages';
+import { HomePage, SettingsPage, AboutPage, SignOutPage, DebugPage, AppSettingsPage, ArchivesPage } from '../pages';
 
 const routes = [
     {
@@ -21,6 +21,10 @@ const routes = [
     {
         path: '/app-settings',
         component: AppSettingsPage,
+    },
+    {
+        path: '/archives',
+        component: ArchivesPage,
     },
     {
         path: '/about',

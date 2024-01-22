@@ -6,13 +6,15 @@ import { AppDataContextAuthCheckEndpointsModel, useAuthData } from './use-auth-d
 import { AppDataContextGpioEndpointsModel, useGpioData } from './use-gpio-data';
 import { AppDataContextAdcEndpointsModel, useAdcData } from './use-adc-data';
 import { AppDataContextDacEndpointsModel, useDacData } from './use-dac-data';
+import { AppDataContextArchivesEndpointsModel, useArchivesData } from './use-archives-data';
 
 export type AppDataContextModel =  AppDataContextRtcDataTimeEndpointsModel
     & AppDataContextRegulatorSettingsEndpointsModel
     & AppDataContextAuthCheckEndpointsModel
     & AppDataContextGpioEndpointsModel
     & AppDataContextAdcEndpointsModel
-    & AppDataContextDacEndpointsModel ;
+    & AppDataContextDacEndpointsModel
+    & AppDataContextArchivesEndpointsModel;
 
 const AppDataContext = createContext<AppDataContextModel>({} as AppDataContextModel);
 const useAppData = () => useContext(AppDataContext);
@@ -24,6 +26,7 @@ function AppDataProvider (props: AppBaseProviderProps) {
     const gpioData  = useGpioData();
     const adcData = useAdcData();
     const dacData = useDacData();
+    const archivesData = useArchivesData();
 
     return (
         <AppDataContext.Provider
@@ -33,7 +36,8 @@ function AppDataProvider (props: AppBaseProviderProps) {
                 ...authData,
                 ...gpioData,
                 ...adcData,
-                ...dacData
+                ...dacData,
+                ...archivesData,
             } }
             { ...props }
         />

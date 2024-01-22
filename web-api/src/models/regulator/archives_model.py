@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from typing import List
 
 from models.abstracts.app_base_model import AppBaseModel
@@ -9,4 +9,4 @@ class ArchivesModel(AppBaseModel):
     items: List[ArchiveModel]
 
 class ArchivesDatesModel(AppBaseModel):
-    items: List[date]
+    items: List[datetime]

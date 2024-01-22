@@ -74,6 +74,7 @@ export { AiOutlineAppstore as AppIcon } from 'react-icons/ai';
 export { IoSunnyOutline as OutdoorIcon } from 'react-icons/io5';
 export { IoMdLogIn as SupplyPipeIcon } from 'react-icons/io';
 export { IoMdLogOut as ReturnPipeIcon } from 'react-icons/io';
+export { RxArchive as ArchivesIcon } from 'react-icons/rx';
 
 
 import { MdMoreVert } from 'react-icons/md';

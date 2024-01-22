@@ -12,8 +12,8 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
 
     const defaultColumCaptions = useMemo(() => {
         return {
-            outdoorTemperatureColCaption: isXSmall ? 'Tвн, °C' : 'Внеш. темп. (°C)',
-            supplyPipeTemperatureColCaption: isXSmall ? 'Тп, °C' : 'Темп. подачи (°C)',
+            outdoorTemperature: isXSmall ? 'Tвн, °C' : 'Внеш. темп. (°C)',
+            supplyPipeTemperature: isXSmall ? 'Тп, °C' : 'Темп. подачи (°C)',
             returnPipeTemperature: isXSmall ? 'То, °C' : 'Темп. обратки (°C)',
         };
     }, [isXSmall]);
@@ -112,7 +112,7 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
             <Column
                 dataType='string'
                 dataField='outdoorTemperature'
-                caption={ columnCaptions.outdoorTemperatureColCaption }
+                caption={ columnCaptions.outdoorTemperature }
                 allowSorting={ true }
                 sortOrder='asc'
                 validationRules={ outdoorTemperatureValidationRules }
@@ -122,7 +122,7 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
             <Column
                 dataType='number'
                 dataField='supplyPipeTemperature'
-                caption={ columnCaptions.supplyPipeTemperatureColCaption }
+                caption={ columnCaptions.supplyPipeTemperature }
                 allowSorting={ false }
                 validationRules={ supplyPipeTemperatureValidationRules }
             />
