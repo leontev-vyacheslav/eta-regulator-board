@@ -1,9 +1,11 @@
+import './archives-page.scss';
+
 import { useEffect, useMemo, useState } from 'react';
 import PageHeader from '../../components/page-header/page-header';
 import AppConstants from '../../constants/app-constants';
 import { AdditionalMenuIcon, ArchivesIcon, GraphIcon, RefreshIcon, TableIcon, WorkDateIcon } from '../../constants/app-icons';
 import { ArchivesChart } from './archives-chart';
-import { ArchivesGrid } from './archive-grid';
+import { ArchivesGrid } from './archives-grid';
 import { useAppData } from '../../contexts/app-data/app-data';
 import { ArchiveModel } from '../../models/regulator-settings/archive-model';
 import { ArchivesDateSelectorDialog } from './archives-date-selector-dialog';
@@ -16,7 +18,6 @@ export const ArchivesPage = () => {
     const [archivesDate, setArchivesDate] = useState<Date>(new Date());
     const [archives, setArchives] = useState<ArchiveModel[]>([]);
     const [refreshToken, setRefreshToken] = useState<({ token: number }) | null>({ token: 0 });
-
 
     const menuItems = useMemo(() => {
 
@@ -63,7 +64,7 @@ export const ArchivesPage = () => {
                 <ArchivesIcon size={ AppConstants.headerIconSize } />
             </PageHeader>
             <div className={ 'content-block' }>
-                <div className={ 'dx-card responsive-paddings' }>
+                <div className={ `dx-card responsive-paddings ${isShowGraph ? 'archives-content-chart' : 'archives-content-grid'}` }>
                     {
                         isShowGraph
                             ? <ArchivesChart dataSource={ archives } />

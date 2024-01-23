@@ -4,8 +4,11 @@ function isIsoDateString(value: any): boolean {
   return value && typeof value === 'string' && isoDateFormat.test(value);
 }
 
-export function handleDates(obj: any) {
+function toDate(value: string) {
+  return  new Date(value.includes('+') || value.includes('Z') ? value : `${value}Z`)
+}
 
+export function handleDates(obj: any) {
 
   if (obj === null || obj === undefined || typeof obj !== 'object')
     return obj;
@@ -13,7 +16,7 @@ export function handleDates(obj: any) {
   if (Array.isArray(obj)) {
     for (let i = 0; i < obj.length; i++) {
       if(typeof obj[i] === 'string' && isIsoDateString(obj[i])) {
-        obj[i] = new Date(obj[i]+'Z')
+        obj[i] = toDate(obj[i])
       } else  {
         handleDates(obj[i]);
       }
@@ -22,7 +25,7 @@ export function handleDates(obj: any) {
     for (const key of Object.keys(obj)) {
       const value = obj[key];
       if (isIsoDateString(value)) {
-        obj[key] = new Date(value+'Z');
+        obj[key] = toDate(value);
       }
       else if (typeof value === 'object') {
         handleDates(value);

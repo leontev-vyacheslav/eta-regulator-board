@@ -4,6 +4,8 @@ import { ArchiveModel } from '../../models/regulator-settings/archive-model';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useScreenSize } from '../../utils/media-query';
 
+
+
 export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
     const { isXSmall } = useScreenSize();
     const dataGridRef = useRef<DataGrid<ArchiveModel>>(null);
@@ -29,7 +31,7 @@ export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
             className='app-grid temperature-graph-grid'
             showColumnLines
             dataSource={ dataSource }
-            height={ AppConstants.pageHeight }
+            height={ () => AppConstants.pageHeight }
         >
             <Selection mode='single' />
             <Column

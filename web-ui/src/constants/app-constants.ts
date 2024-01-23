@@ -20,6 +20,7 @@ const AppConstants = {
         baseDarkgreyTextColor: '#464646',
         supplyPipeColor: '#f5564a',
         returnPipeColor: '#1db2f5',
+        outdoorColor: '#4CAF50'
     },
     pageHeight: '65vh',
     formHeight: '55vh',

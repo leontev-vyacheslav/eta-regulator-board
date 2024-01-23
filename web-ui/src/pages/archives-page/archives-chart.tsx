@@ -1,4 +1,4 @@
-import { Chart, Tooltip, Crosshair, Series, Point, ArgumentAxis, Grid, Title, ValueAxis, Font, CommonAxisSettings, Legend, Label, MinorGrid } from 'devextreme-react/chart';
+import { Chart, Tooltip, Crosshair, Series, Point, ArgumentAxis, Grid, Title, ValueAxis, Font, CommonAxisSettings, Legend, Label, MinorGrid, Tick } from 'devextreme-react/chart';
 import { useRef } from 'react';
 import AppConstants from '../../constants/app-constants';
 import { ArchiveModel } from '../../models/regulator-settings/archive-model';
@@ -26,32 +26,24 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                 dashStyle='dot'
                 horizontalLine={ false }
             />
-            <Series
-                name='supplyPipe'
-                valueField="supplyPipeTemperature"
-                argumentField="datetime"
-                showInLegend={ true }
-                type='spline' color={ AppConstants.colors.supplyPipeColor }>
-                    <Point visible={ true } size={ 8 } symbol='circle'/>
-            </Series>
 
-            <Series
-                name='returnPipe'
-                valueField="returnPipeTemperature"
-                argumentField="datetime"
-                showInLegend={ true }
-                color={ AppConstants.colors.returnPipeColor }
-                type='spline' >
-                    <Point visible={ true } size={ 8 } symbol='square'/>
-                </Series>
             <ArgumentAxis>
                 <Grid visible />
                 <MinorGrid visible />
-                <Title text='Время измерения' font={ { size: 12 } }  />
-                <Label rotationAngle={ 270 } indentFromAxis={ 15 } displayMode='rotate'  format={ 'shortTime' }  />
+                <Title text='Время измерения' font={ { size: 12 } } />
+                <Label rotationAngle={ 270 } indentFromAxis={ 15 } displayMode='rotate' format={ 'shortTime' } />
             </ArgumentAxis>
 
-            <ValueAxis>
+            <ValueAxis name='outdoorAxis' position='right'>
+                <Tick length={ 4 } shift={ 2 }/>
+                <Title text='Наружная температура, °C'>
+                    <Font size={ 12 } />
+                </Title>
+            </ValueAxis>
+
+            <ValueAxis name='pipeAxis'>
+                <Tick length={ 4 } shift={ 2 } />
+
                 <Grid />
                 <Title text='Температура носителя, °C'>
                     <Font size={ 12 } />
@@ -69,7 +61,16 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                     seriesIndex: number;
                     seriesName: any;
                 }) => {
-                    return seriesInfo.seriesName === 'supplyPipe' ? 'Подача' : 'Обратка'
+                    switch (seriesInfo.seriesName) {
+                        case 'supplyPipe':
+                            return'Подача'
+                        case 'returnPipe':
+                            return 'Обратка'
+                        case 'outdoor':
+                            return 'Внешний'
+                        default:
+                            return ''
+                    }
                 } }
                 position='inside'
                 verticalAlignment='top'
@@ -84,12 +85,47 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                             {
                                 markerInfo.series.name === 'supplyPipe'
                                     ? <circle cx={ 5 } cy={ 5 } r={ 5 } fill={ AppConstants.colors.supplyPipeColor }></circle>
-                                    : <rect x={ 0 } y={ 0 } width={ 9 } height={ 9 } fill={ AppConstants.colors.returnPipeColor }></rect>
+                                    : markerInfo.series.name === 'returnPipe' ? <rect x={ 0 } y={ 0 } width={ 9 } height={ 9 } fill={ AppConstants.colors.returnPipeColor }></rect>
+
+                                    : <polygon points={ '5,0 0,10 10,10 ' } fill={ AppConstants.colors.outdoorColor } />
                             }
                         </>
                     )
                 } }
             />
+
+            <Series
+                name='supplyPipe'
+                axis='pipeAxis'
+                valueField="supplyPipeTemperature"
+                argumentField="datetime"
+                showInLegend={ true }
+                type='spline' color={ AppConstants.colors.supplyPipeColor }>
+                    <Point visible={ true } size={ 8 } symbol='circle'/>
+            </Series>
+
+            <Series
+                name='returnPipe'
+                axis='pipeAxis'
+                valueField='returnPipeTemperature'
+                argumentField='datetime'
+                showInLegend={ true }
+                color={ AppConstants.colors.returnPipeColor }
+                type='spline' >
+                    <Point visible={ true } size={ 8 } symbol='square'/>
+            </Series>
+
+            <Series
+                name='outdoor'
+                axis='outdoorAxis'
+                valueField='outdoorTemperature'
+                argumentField='datetime'
+                showInLegend={ true }
+                color={ AppConstants.colors.outdoorColor }
+                type='spline'
+            >
+                <Point visible={ true } size={ 8 } symbol='triangle'/>
+            </Series>
         </Chart>
     );
 }

@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import List
+import gzip
 
 from flask_pydantic import validate
 from models.regulator.archives_model import ArchivesDatesModel, ArchivesModel
@@ -14,15 +15,17 @@ from utils.auth_helper import authorize
 def get_archive(date: datetime) -> ArchivesModel:
 
     data_path = app.app_root_path.joinpath(
-        f'data/archives/{date.strftime("%Y-%m-%dT%H:%M:%S")}.json'
+        f'data/archives/{date.strftime("%Y-%m-%dT%H:%M:%SZ")}.json.gz'
     )
 
     if not data_path.exists():
         return ArchivesModel(items=[])
 
-    with open(data_path, 'r', encoding='utf-8') as file:
-        json = file.read()
-        archives = ArchivesModel.parse_raw(json)
+    with gzip.open(data_path, 'r') as file:
+        zip_content = file.read()
+        json = zip_content.decode('utf-8')
+
+    archives = ArchivesModel.parse_raw(json)
 
     return archives
 
@@ -33,9 +36,9 @@ def get_archive(date: datetime) -> ArchivesModel:
 def get_archives_list() -> List[str]:
     data_path = app.app_root_path.joinpath('data/archives')
     archive_dates = [
-        datetime.strptime(f.stem, '%Y-%m-%dT%H:%M:%S')
+        datetime.strptime(f.stem.replace('.json', ''), '%Y-%m-%dT%H:%M:%SZ')
         for f in data_path.iterdir()
-        if f.is_file() and f.suffix == '.json'
+        if f.is_file() and f.suffix == '.gz'
     ]
 
     return ArchivesDatesModel(
