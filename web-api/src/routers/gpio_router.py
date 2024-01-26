@@ -6,7 +6,7 @@ from models.common.enums.user_role_model import UserRoleModel
 from models.regulator.gpio_set_model import GpioItemModel, GpioSetModel
 from omega import gpio
 from utils.auth_helper import authorize
-from utils.debug_helper import is_debug
+from utils.debugging import is_debug
 
 
 @app.api_route('/gpio/<pin>/<state>', methods=['PUT'])

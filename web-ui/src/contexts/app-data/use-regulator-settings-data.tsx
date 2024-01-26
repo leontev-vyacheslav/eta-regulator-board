@@ -9,7 +9,7 @@ import { HeatingCircuitTypeModel } from '../../models/regulator-settings/enums/h
 
 
 export type GetRegulatorSettingsAsyncFunc = () => Promise<RegulatorSettingsModel | null>;
-export type PutRegulatorSettingsAsyncFunc = (regulatorSettingsChange: RegulatorSettingsChangeModel) => Promise<RegulatorSettingsModel | null>;
+export type PutRegulatorSettingsAsyncFunc = (regulatorSettingsChange: RegulatorSettingsChangeModel, accessToken?: string) => Promise<RegulatorSettingsModel | null>;
 export type GetRegulatorSettingsAsFileAsyncFunc = () => Promise<any>;
 export type GetDefaultHeatingCircuitsSettingsAsyncFunc = (heatingCircuitType: HeatingCircuitTypeModel) => Promise<HeatingCircuitModel>;
 
@@ -37,10 +37,11 @@ export const useRegulatorSettingsData = () => {
         return null;
     }, [authHttpRequest]);
 
-    const putRegulatorSettingsAsync = useCallback<PutRegulatorSettingsAsyncFunc>(async (regulatorSettingsChange: RegulatorSettingsChangeModel) => {
+    const putRegulatorSettingsAsync = useCallback<PutRegulatorSettingsAsyncFunc>(async (regulatorSettingsChange: RegulatorSettingsChangeModel, accessToken?:  string) => {
         const response = await authHttpRequest({
             url: `${routes.host}${routes.regulatorSettings}`,
             method: HttpConstants.Methods.Put as Method,
+            headers: accessToken ? { 'X-Access-Token': accessToken }: undefined,
             data: regulatorSettingsChange
         }, true);
 

@@ -2,7 +2,6 @@ from data_access.settings_repository_base import SettingsRepositoryBase
 from models.regulator.heating_circuits_model import HeatingCircuitsModel
 
 
-
 class RegulatorSettingsRepository(SettingsRepositoryBase):
 
     def get_default_heating_circuits_settings(self) -> HeatingCircuitsModel:

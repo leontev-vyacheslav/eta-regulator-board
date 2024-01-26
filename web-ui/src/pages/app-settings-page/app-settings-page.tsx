@@ -19,6 +19,7 @@ export const AppSettingsPage = () => {
                         width={ '100%' }
                         height={ AppConstants.pageHeight }
                         swipeEnabled={ false }
+                        animationEnabled
                         loop
                     >
                         <TabPanelItem title={ 'Информация' } tabRender={ (e) => <IconTab tab={ e } icon={ <InfoIcon size={ 18 } /> } /> }>

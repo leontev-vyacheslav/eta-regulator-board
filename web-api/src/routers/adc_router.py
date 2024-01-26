@@ -7,7 +7,7 @@ from models.regulator.adc_value_model import AdcValueModel, TemperatureValueMode
 from omega import gpio
 from omega.mcp3208 import MCP3208
 from responses.json_response import JsonResponse
-from utils.debug_helper import is_debug
+from utils.debugging import is_debug
 
 
 @app.api_route('/adc/<channel>', methods=['GET'])

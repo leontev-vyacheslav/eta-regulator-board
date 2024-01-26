@@ -5,7 +5,7 @@ from typing import List
 
 from flask_ex import FlaskEx
 from models.app_background_process_model import AppBackgroundProcessModel
-from utils.debug_helper import is_debug
+from utils.debugging import is_debug
 
 
 def background_processes_watcher(app: FlaskEx, interval: float, immediately: bool, environment_state, lock: Lock):

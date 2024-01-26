@@ -76,6 +76,8 @@ export { IoMdLogIn as SupplyPipeIcon } from 'react-icons/io';
 export { IoMdLogOut as ReturnPipeIcon } from 'react-icons/io';
 export { RxArchive as ArchivesIcon } from 'react-icons/rx';
 
+export { IoMdKey as AccessTokenIcon } from 'react-icons/io';
+
 
 import { MdMoreVert } from 'react-icons/md';
 export const GridAdditionalMenuIcon = () => <MdMoreVert style={ { cursor: 'pointer' } } size={ 18 } />

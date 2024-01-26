@@ -8,7 +8,7 @@
                 "type": 1,
                 "regulatorParameters": {
                     "controlParameters": {
-                        "controlMode": 2,
+                        "controlMode": 1,
                         "manualControlMode": 2,
                         "outdoorTemperatureSensorFailureAction": 4,
                         "supplyPipeTemperatureSensorFailureAction": 2,
@@ -273,7 +273,7 @@
                         ]
                     },
                     "regulationParameters": {
-                        "proportionalityFactor": 70.0,
+                        "proportionalityFactor": 72.0,
                         "integrationFactor": 30.0,
                         "differentiationFactor": 30.0,
                         "calculationPeriod": 25.0,
@@ -364,8 +364,8 @@
     },
     "service": {
         "regulatorOwner": {
-            "name": "ETA24",
-            "phoneNumber": "9274484333"
+            "name": "ETA24-1-2-1",
+            "phoneNumber": "9274484332"
         },
         "softwareInfo": {
             "webApiVersion": "v.0.1.20231004-064321",

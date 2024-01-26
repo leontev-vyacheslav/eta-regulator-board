@@ -1,13 +1,16 @@
 from typing import Optional
-from flask import send_file
+from http import HTTPStatus
+from flask import Response, abort, send_file, request
 from flask_pydantic import validate
-from models.common.enums.user_role_model import UserRoleModel
-from models.regulator.heating_circuits_model import HeatingCircuitModel
-from responses.json_response import JsonResponse
 
 from app import app
+from models.common.enums.user_role_model import UserRoleModel
+from models.common.message_model import MessageModel
+from models.regulator.heating_circuits_model import HeatingCircuitModel
 from models.regulator.regulator_settings_model import RegulatorSettingsChangeModel, RegulatorSettingsModel
+from responses.json_response import JsonResponse
 from utils.auth_helper import authorize
+from utils.encoding import verify_access_token
 
 
 @app.api_route('/regulator-settings', methods=['GET'])
@@ -26,10 +29,31 @@ def put_regulator_settings(body: RegulatorSettingsChangeModel):
     regulator_settings_change = body
 
     regulator_settings_repository = app.get_regulator_settings_repository()
-    regulator_settings_repository.update(current_settings=regulator_settings_change.regulator_settings)
+    change_tracker_items = regulator_settings_repository.update(current_settings=regulator_settings_change.regulator_settings)
+
+    required_access_token = next(
+        (
+            c.required_access_token
+            for c in change_tracker_items
+            if c.required_access_token is not None
+        ),
+        None
+    )
+    if required_access_token is not None:
+        access_token = request.headers.get('X-Access-Token')
+        is_verify = access_token is not None and verify_access_token(access_token=access_token)
+
+        if not is_verify:
+
+            return JsonResponse(
+                response=MessageModel(message='Токен доступа отсутствует или указан неверно.'),
+                status=HTTPStatus.FORBIDDEN
+            )
+
 
     return JsonResponse(
-        response=regulator_settings_repository.settings, status=200
+        response=regulator_settings_repository.settings,
+        status=HTTPStatus.OK
     )
 
 

@@ -1,10 +1,12 @@
 from datetime import datetime
+from io import BytesIO
 from typing import List
 import gzip
 
+from flask import send_file
 from flask_pydantic import validate
-from models.regulator.archives_model import ArchivesDatesModel, ArchivesModel
 
+from models.regulator.archives_model import ArchivesDatesModel, ArchivesModel
 from app import app
 from utils.auth_helper import authorize
 
@@ -44,3 +46,29 @@ def get_archives_list() -> List[str]:
     return ArchivesDatesModel(
         items=archive_dates
     )
+
+
+@app.api_route('/archives/download/<date>', methods=['GET'])
+@authorize()
+@validate(response_by_alias=True)
+def download_archives(date: datetime):
+
+    data_path = app.app_root_path.joinpath(
+        f'data/archives/{date.strftime("%Y-%m-%dT%H:%M:%SZ")}.json.gz'
+    )
+
+    if not data_path.exists():
+        return ArchivesModel(items=[])
+
+    with gzip.open(data_path, 'r') as file:
+        zip_content = file.read()
+        json = zip_content.decode('utf-8')
+
+    in_memory_file = BytesIO(json.encode('utf-8'))
+
+    file_response =  send_file(
+        path_or_file=in_memory_file,
+        mimetype='application/json'
+    )
+
+    return file_response

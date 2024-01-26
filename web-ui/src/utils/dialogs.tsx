@@ -84,8 +84,8 @@ const showPromptDialog = ({ title, iconName, iconSize, iconColor, textRender, ca
         contentContainerElement.insertAdjacentElement('beforeend', textBoxElement)
         textBox = new dxTextBox(textBoxElement, {
             value: text,
-            label: 'Prompt text',
-            labelMode: 'static'
+            label: 'Значение',
+            labelMode: 'floating'
         } as Properties);
 
         return contentContainerElement;
@@ -100,7 +100,7 @@ const showPromptDialog = ({ title, iconName, iconSize, iconColor, textRender, ca
             width: 100,
             onClick: async () => {
                 if (callback) {
-                    await callback({ text: textBox?.option('text') });
+                    await callback({ modalResult: 'OK', text: textBox?.option('text') });
                     popup.hide();
                 }
             },
@@ -112,8 +112,9 @@ const showPromptDialog = ({ title, iconName, iconSize, iconColor, textRender, ca
         options: {
             text: 'Отмена',
             width: 100,
-            onClick: () => {
+            onClick: async () => {
                 popup.hide();
+                await callback({ modalResult: 'CANCEL' });
             },
         },
     }];

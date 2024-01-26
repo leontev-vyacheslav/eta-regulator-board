@@ -10,7 +10,7 @@ from omega.signal_generators.sawtooth_signal_generator import SawToothSignalGene
 from omega.signal_generators.sin_wave_signal_generator import SinWaveSignalGenerator
 from omega.signal_generators.square_wave_signal_generator import SquareWaveSignalGenerator
 from responses.json_response import JsonResponse
-from utils.debug_helper import is_debug
+from utils.debugging import is_debug
 
 
 def signal_generator_factory_method(cancellation_event: Event, signal_id: int):

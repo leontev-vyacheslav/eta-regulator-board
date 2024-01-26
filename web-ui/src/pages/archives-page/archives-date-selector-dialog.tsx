@@ -1,5 +1,5 @@
 import Form, { Label, SimpleItem } from 'devextreme-react/form';
-import AppModalPopup from '../../components/popups/app-modal-popup/app-modal-popup';
+import AppModalPopup from '../../components/dialogs/app-modal-popup/app-modal-popup';
 import { useEffect, useRef, useState } from 'react';
 import { AppModalPopupProps } from '../../models/app-modal-popup-props';
 import { useAppData } from '../../contexts/app-data/app-data';
@@ -41,7 +41,7 @@ export const ArchivesDateSelectorDialog = ( { callback }: AppModalPopupProps ) =
                </SimpleItem>
                 <SimpleItem>
                     <div style={ { display: 'flex', justifyContent: 'flex-end' } }>
-                        <Button ref={ buttonRef } text='Выбрать' type='default' onClick={ () => {
+                        <Button ref={ buttonRef } text='Выбрать' type='default' disabled onClick={ () => {
                             const formData = formRef.current?.instance.option('formData');
                             callback( { modalResult: 'OK', data: formData.archivesDate })
                         } }/>
@@ -49,5 +49,5 @@ export const ArchivesDateSelectorDialog = ( { callback }: AppModalPopupProps ) =
                 </SimpleItem>
             </Form>
         </AppModalPopup>
-    )
+    );
 }

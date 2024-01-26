@@ -26,6 +26,7 @@ const DebugPageInternal = () => {
                     <TabPanel
                         ref={ tabPanelRef }
                         swipeEnabled={ false }
+                        animationEnabled
                         width={ '100%' }
                         height={ AppConstants.pageHeight }
                         loop

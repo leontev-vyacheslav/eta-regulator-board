@@ -1,9 +1,10 @@
+from pydantic.fields import Field
 from models.abstracts.app_base_model import AppBaseModel
 
 class RegulatorOwnerModel(AppBaseModel):
-    name: str
+    name: str = Field(required_access_token=True)
 
-    phone_number: str
+    phone_number: str = Field(required_access_token=True)
 
 
 class SoftwareInfoModel(AppBaseModel):

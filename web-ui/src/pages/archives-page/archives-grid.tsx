@@ -1,4 +1,4 @@
-import { DataGrid, Column, Selection } from 'devextreme-react/data-grid';
+import { DataGrid, Column, Selection, Format } from 'devextreme-react/data-grid';
 import AppConstants from '../../constants/app-constants';
 import { ArchiveModel } from '../../models/regulator-settings/archive-model';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -35,12 +35,15 @@ export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
         >
             <Selection mode='single' />
             <Column
-                dataType='string'
+                dataType='datetime'
                 dataField='datetime'
+                width={ 90 }
                 caption={ columnCaptions.datetime }
                 allowSorting={ true }
                 sortOrder='asc'
-            />
+            >
+                <Format type='shortTime' />
+            </Column>
             <Column
                 dataType='string'
                 dataField='outdoorTemperature'

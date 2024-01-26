@@ -4,10 +4,11 @@ import { useAppData } from '../../../../contexts/app-data/app-data';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import AppConstants from '../../../../constants/app-constants';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
+import { showPromptDialog } from '../../../../utils/dialogs';
 
 export const InformationForm = () => {
     const dxServiceFormRef = useRef<Form>(null);
-    const { regulatorSettings } = useRegulatorSettings();
+    const { regulatorSettings, refreshRegulatorSettingsAsync } = useRegulatorSettings();
     const { putRegulatorSettingsAsync } = useAppData();
 
     return (
@@ -19,16 +20,41 @@ export const InformationForm = () => {
             formData={ regulatorSettings?.service }
             ref={ dxServiceFormRef }
             onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
-                const regulatorSettingsChange = {
-                    regulatorSettings: regulatorSettings!,
-                    changeLogItem: {
-                        dataField: e.dataField!,
-                        datetime: new Date(),
-                        path: 'regulatorSettings.service',
-                        value: e.value
+                const applyChanges = async (accessToken?: string) => {
+                    const regulatorSettingsChange = {
+                        regulatorSettings: regulatorSettings!,
+                        changeLogItem: {
+                            dataField: e.dataField!,
+                            datetime: new Date(),
+                            path: 'regulatorSettings.service',
+                            value: e.value
+                        }
                     }
+                    await putRegulatorSettingsAsync(regulatorSettingsChange, accessToken);
                 }
-                await putRegulatorSettingsAsync(regulatorSettingsChange);
+
+                if (e.dataField === 'regulatorOwner.name' || e.dataField === 'regulatorOwner.phoneNumber') {
+                    showPromptDialog({
+                        title: 'Токен доступа',
+                        iconName: 'AccessTokenIcon',
+                        textRender: () => 'Введите токен доступа в текстовое поле',
+                        callback: async ({ text: accessToken, modalResult }: {modalResult: string, text: string } ) => {
+                            if (modalResult === 'CANCEL') {
+                                await refreshRegulatorSettingsAsync();
+
+                                return;
+                            }
+
+                            if (accessToken) {
+                                await applyChanges(accessToken);
+                            }
+                        }
+                    });
+
+                    return;
+                }
+
+                await applyChanges();
             } }
         >
 
@@ -37,19 +63,43 @@ export const InformationForm = () => {
                     dataField={ 'regulatorOwner.name' }
                     label={ { location: 'top', showColon: true, text: 'Собственник' } }
                     editorType={ 'dxTextBox' }
+                    editorOptions={ {
+                        buttons: [
+                            {
+                                name: 'restricted',
+                                options: {
+                                    disabled: true,
+                                    icon: 'key',
+                                    stylingMode: 'text',
+
+                                }
+                            }
+                        ]
+                    } }
                 />
                 <SimpleItem
                     dataField={ 'regulatorOwner.phoneNumber' }
                     label={ { location: 'top', showColon: true, text: 'Телефон' } }
                     editorType={ 'dxTextBox' }
                     editorOptions={ {
-                        mask: '+7 (000) 000-00-00'
+                        mask: '+7 (000) 000-00-00',
+                        buttons: [
+                            {
+
+                                name: 'restricted',
+                                options: {
+                                    disabled: true,
+                                    icon: 'key',
+                                    stylingMode: 'text',
+                                }
+                            }
+                        ]
                     } } />
             </GroupItem>
 
             <GroupItem caption='Версии ПО'>
                 <SimpleItem
-                 dataField={ 'softwareInfo.webApiVersion' }
+                    dataField={ 'softwareInfo.webApiVersion' }
                     label={ { location: 'top', showColon: true, text: 'Версия веб-api' } }
                     editorType={ 'dxTextBox' }
                     editorOptions={ {

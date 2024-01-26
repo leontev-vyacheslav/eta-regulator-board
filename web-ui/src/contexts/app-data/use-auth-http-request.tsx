@@ -6,6 +6,7 @@ import { SharedAreaContextModel } from '../../models/shared-area-context';
 import { useAuth } from '../auth';
 import { httpClientBase } from './http-client-base';
 import { proclaim } from '../../utils/proclaim';
+import { MessageModel } from '../../models/message-model';
 
 export type AxiosWithCredentialsFunc = (config: AxiosRequestConfig, suppressLoader?: boolean, suppressShowUnauthorized?: boolean) => Promise<AxiosResponse | undefined>;
 
@@ -45,9 +46,13 @@ export const useAuthHttpRequest = () => {
                         });
                     }
                 } else {
+                    let errorMessage = (error as AxiosError).message;
+                    if ((error as AxiosError).response && (error as AxiosError).response?.data) {
+                        errorMessage = ((error as AxiosError).response?.data as MessageModel).message
+                    }
                     proclaim({
                         type: 'error',
-                        message: 'В процессе выполнения запроса или получения данных от сервера произошла ошибка',
+                        message:  !errorMessage ? (error as AxiosError).message : errorMessage,
                     });
                 }
             } finally {

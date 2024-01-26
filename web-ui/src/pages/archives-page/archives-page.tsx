@@ -1,9 +1,9 @@
 import './archives-page.scss';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import PageHeader from '../../components/page-header/page-header';
 import AppConstants from '../../constants/app-constants';
-import { AdditionalMenuIcon, ArchivesIcon, GraphIcon, RefreshIcon, TableIcon, WorkDateIcon } from '../../constants/app-icons';
+import { AdditionalMenuIcon, ArchivesIcon, DownloadIcon, GraphIcon, RefreshIcon, TableIcon, WorkDateIcon } from '../../constants/app-icons';
 import { ArchivesChart } from './archives-chart';
 import { ArchivesGrid } from './archives-grid';
 import { useAppData } from '../../contexts/app-data/app-data';
@@ -12,12 +12,34 @@ import { ArchivesDateSelectorDialog } from './archives-date-selector-dialog';
 import { PopupCallbackModel } from '../../models/popup-callback';
 
 export const ArchivesPage = () => {
-    const { getArchivesByDateAsync } = useAppData();
+    const { getArchivesByDateAsync, getArchivesByDateAsFile } = useAppData();
     const [isShowGraph, setIsShowGraph] = useState(true);
     const [isShowArchiveDateSelector, setIsShowArchiveDateSelector] = useState(false);
     const [archivesDate, setArchivesDate] = useState<Date>(new Date());
     const [archives, setArchives] = useState<ArchiveModel[]>([]);
     const [refreshToken, setRefreshToken] = useState<({ token: number }) | null>({ token: 0 });
+
+    const downloadRegulatorSettingsAsync = useCallback(async () => {
+        const data = await getArchivesByDateAsFile(archivesDate);
+
+        if (!data) {
+            return;
+        };
+
+        const href = URL.createObjectURL(data);
+
+        const anchorElement = document.createElement('a');
+        anchorElement.href = href;
+        anchorElement.setAttribute('download', `${archivesDate.toISOString()}.json`);
+        document.body.appendChild(anchorElement);
+        anchorElement.click();
+
+        document.body.removeChild(anchorElement);
+
+        setTimeout(() => {
+            URL.revokeObjectURL(href);
+        }, 100);
+    }, [archivesDate, getArchivesByDateAsFile]);
 
     const menuItems = useMemo(() => {
 
@@ -41,9 +63,14 @@ export const ArchivesPage = () => {
                         icon: () => < WorkDateIcon size={ 20 } />,
                         onClick: () => setIsShowArchiveDateSelector(true)
                     },
+                    {
+                        text: 'Выгрузить...',
+                        icon: () => <DownloadIcon size={ 20 } />,
+                        onClick: async () => await downloadRegulatorSettingsAsync()
+                    }
                 ]
             }];
-    }, [isShowGraph, refreshToken])
+    }, [downloadRegulatorSettingsAsync, isShowGraph, refreshToken])
 
     useEffect(() => {
         (async () => {
@@ -60,7 +87,14 @@ export const ArchivesPage = () => {
 
     return (
         <>
-            <PageHeader caption={ 'Архивы' } menuItems={ menuItems } >
+            <PageHeader caption={ () => {
+                return (
+                    <div style={ { display: 'flex', gap: 10, alignItems: 'center' } }>
+                        <span>Архивы</span>
+                        <span>({archivesDate.toLocaleDateString('ru-RU')})</span>
+                    </div>
+                );
+            } } menuItems={ menuItems } >
                 <ArchivesIcon size={ AppConstants.headerIconSize } />
             </PageHeader>
             <div className={ 'content-block' }>

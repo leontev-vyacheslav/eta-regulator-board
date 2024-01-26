@@ -117,7 +117,9 @@ export const SettingsPageInternal = () => {
                         width={ '100%' }
                         height={ AppConstants.pageHeight }
                         swipeEnabled={ false }
-                        loop>
+                        animationEnabled
+                        loop
+                    >
                         <TabPanelItem title={ 'Общие' } tabRender={ (e) => <IconTab tab={ e } icon={ <SettingsIcon size={ 18 } /> } /> }>
                             <HeatingCircuitContent />
                         </TabPanelItem>

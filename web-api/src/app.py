@@ -1,12 +1,14 @@
 from flask_cors import CORS
-from data_access.accounts_settings_repository import AccountsSettingsRepository
 from flask_ex import FlaskEx
 
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
+from data_access.accounts_settings_repository import AccountsSettingsRepository
 from workers.worker_starter_extension import WorkerStarter
 
 APP_VERSION = 'v.0.1.20231205-062656'
 APP_NAME = 'Eta Regulator Board Web API'
+
+MASTER_KEY = 'CCCWEwyPkMEiky/4uCcrptJI8aiinGZ8+UJ63V/BR+0='
 
 app = FlaskEx(__name__)
 CORS(
