@@ -1,5 +1,7 @@
+import { AxiosError } from 'axios';
 import devices from 'devextreme/core/devices';
 import notify from 'devextreme/ui/notify';
+import { MessageModel } from '../models/message-model';
 
 
 export function proclaim(options: any) {
@@ -12,6 +14,22 @@ export function proclaim(options: any) {
             offset: '-20 -20'
         }
     }, {
-        direction: 'up-stack'
+        position: 'bottom center',
+        direction: 'up-push'
+    });
+}
+
+export function proclaimError(error: unknown) {
+    let errorMessage = (error as AxiosError).message;
+
+    if ((error as AxiosError).response && (error as AxiosError).response?.data) {
+        errorMessage = ((error as AxiosError).response?.data as MessageModel).message
+    }
+
+    errorMessage = !errorMessage ? (error as AxiosError).message : errorMessage;
+
+    proclaim({
+        type: 'error',
+        message: errorMessage
     });
 }

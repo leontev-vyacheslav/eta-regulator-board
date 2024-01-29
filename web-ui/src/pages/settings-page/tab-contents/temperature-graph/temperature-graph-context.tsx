@@ -21,19 +21,8 @@ function TemperatureGraphProvider(props: any) {
     const [chartArgumentAxisInverted, setChartArgumentAxisInverted] = useState<boolean>(false);
     const dataGridRef = useRef<DataGrid<TemperatureGraphItemModel>>(null);
 
-    const putTemperatureGraphAsync = useCallback(async (values: TemperatureGraphItemModel) => {
-
-        const regulatorSettingsChange = {
-            regulatorSettings: regulatorSettings!,
-            changeLogItem: {
-                dataField: Object.keys(values).join(', '),
-                datetime: new Date(),
-                path: 'regulatorSettings.regulatorParameters.temperatureGraph.items',
-                value: Object.values(values).join(', ')
-            }
-        }
-
-        await putRegulatorSettingsAsync(regulatorSettingsChange);
+    const putTemperatureGraphAsync = useCallback(async () => {
+        await putRegulatorSettingsAsync(regulatorSettings!);
     }, [putRegulatorSettingsAsync, regulatorSettings]);
 
     return (

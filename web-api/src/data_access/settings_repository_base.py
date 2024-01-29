@@ -14,51 +14,6 @@ class ChangeTrackerItem(AppBaseModel):
     required_access_token: Optional[bool] = None
 
 
-def find_changed_fields(obj1: Any, obj2: Any, path: str='', visited: Optional[Set]=None) -> List[ChangeTrackerItem]:
-    if visited is None:
-        visited = set()
-
-    changed_fields: List[ChangeTrackerItem] = []
-
-    if id(obj1) in visited or id(obj2) in visited:
-        return changed_fields
-
-    visited.add(id(obj1))
-    visited.add(id(obj2))
-
-    for field in obj1.__annotations__:
-        value1 = getattr(obj1, field)
-        value2 = getattr(obj2, field)
-
-        if isinstance(value1, (int, float, str)) and value1 != value2:
-            required_access_token = None
-
-            field_model = type(obj1).__fields__.get(field)
-            if field is not None:
-                required_access_token = field_model.field_info.extra.get('required_access_token')
-
-            changed_fields.append(
-                ChangeTrackerItem(
-                    path=path + field,
-                    values=(value1, value2),
-                    required_access_token=required_access_token
-                )
-            )
-
-        elif isinstance(value1, BaseModel):
-            nested_changes = find_changed_fields(value1, value2, f'{path}{field}.', visited)
-            changed_fields = changed_fields + nested_changes
-        elif isinstance(value1, list):
-            for i, (item1, item2) in enumerate(zip(value1, value2)):
-                nested_changes = find_changed_fields(item1, item2, f'{path}{field}[{i}].', visited)
-                changed_fields = changed_fields + nested_changes
-
-    visited.remove(id(obj1))
-    visited.remove(id(obj2))
-
-    return changed_fields
-
-
 class SettingsRepositoryBase():
 
     def __init__(self, app=None, **kwargs):
@@ -89,10 +44,57 @@ class SettingsRepositoryBase():
 
         return len(json) == dumped_bytes
 
+    def _find_changed_fields(self, obj1: Any, obj2: Any, path: str='', visited: Optional[Set]=None) -> List[ChangeTrackerItem]:
+
+        if visited is None:
+            visited = set()
+
+        changed_fields: List[ChangeTrackerItem] = []
+
+        if id(obj1) in visited or id(obj2) in visited:
+            return changed_fields
+
+        visited.add(id(obj1))
+        visited.add(id(obj2))
+
+        for field in obj1.__annotations__:
+            value1 = getattr(obj1, field)
+            value2 = getattr(obj2, field)
+
+            if isinstance(value1, (int, float, str)) and value1 != value2:
+                required_access_token = None
+
+                field_model = type(obj1).__fields__.get(field)
+                if field is not None:
+                    required_access_token = field_model.field_info.extra.get('required_access_token')
+
+                changed_fields.append(
+                    ChangeTrackerItem(
+                        path=path + field,
+                        values=(value1, value2),
+                        required_access_token=required_access_token
+                    )
+                )
+
+            elif isinstance(value1, BaseModel):
+                nested_changes = self._find_changed_fields(value1, value2, f'{path}{field}.', visited)
+                changed_fields = changed_fields + nested_changes
+            elif isinstance(value1, list):
+                for i, (item1, item2) in enumerate(zip(value1, value2)):
+                    nested_changes = self._find_changed_fields(item1, item2, f'{path}{field}[{i}].', visited)
+                    changed_fields = changed_fields + nested_changes
+
+        visited.remove(id(obj1))
+        visited.remove(id(obj2))
+
+        return changed_fields
+
+
+    def find_changed_fields(self, updated_settings: Any, path: str='', visited: Optional[Set]=None) -> List[ChangeTrackerItem]:
+        return self._find_changed_fields(self.settings, updated_settings, path, visited)
+
+
     def update(self, current_settings):
-        change_tracker_items: List[ChangeTrackerItem] = find_changed_fields(self.settings, current_settings)
 
         self.settings = current_settings
         self._dump()
-
-        return change_tracker_items

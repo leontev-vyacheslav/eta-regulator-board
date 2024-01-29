@@ -3,7 +3,7 @@ import { useState, useCallback, FormEvent, useMemo } from 'react';
 import Form, { Item, Label, ButtonItem, ButtonOptions, RequiredRule } from 'devextreme-react/form';
 import LoadIndicator from 'devextreme-react/load-indicator';
 import { useAuth } from '../../contexts/auth';
-import { proclaim } from '../../utils/proclaim';
+import { proclaim, proclaimError } from '../../utils/proclaim';
 import { SignInModel } from '../../models/signin-model';
 
 export const SigninForm = () => {
@@ -26,10 +26,7 @@ export const SigninForm = () => {
                 });
 
             } catch (error) {
-                proclaim({
-                    type: 'error',
-                    message: 'Пользователь не найден или неверный пароль.',
-                });
+                proclaimError(error);
             }
             setLoading(false);
         }

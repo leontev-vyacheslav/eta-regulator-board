@@ -143,5 +143,12 @@ const showPromptDialog = ({ title, iconName, iconSize, iconColor, textRender, ca
     popup.show();
 };
 
+const showAccessTokenPromptDialog = ({ callback }: Omit<PromptSimpleDialogModel, 'title' | 'iconName' | 'textRender'>) =>
+    showPromptDialog({
+        title: 'Токен доступа',
+        iconName: 'AccessTokenIcon',
+        textRender: () => 'Введите токен доступа в текстовое поле',
+        callback: callback
+    });
 
-export { showConfirmDialog, showAlertDialog, showPromptDialog, showConfirmDialogEx };
+export { showConfirmDialog, showAlertDialog, showPromptDialog, showConfirmDialogEx, showAccessTokenPromptDialog };

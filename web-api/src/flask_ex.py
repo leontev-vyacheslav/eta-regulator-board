@@ -5,6 +5,7 @@ import pathlib
 from typing import Callable, List, Optional, Any, Union
 
 from flask import Flask
+from data_access.accounts_settings_repository import AccountsSettingsRepository
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
 from models.accounts_settings_model import AccountsSettingsModel
 
@@ -85,7 +86,12 @@ class FlaskEx(Flask):
 
         return regulator_settings_repository.settings
 
+    def get_accounts_settings_repository(self) -> AccountsSettingsRepository:
+        regulator_settings_repository: AccountsSettingsRepository = self.extensions['accounts_settings_repository']
+
+        return regulator_settings_repository
+
     def get_accounts_settings(self) -> AccountsSettingsModel:
-        accounts_settings_repository: AccountsSettingsModel = self.extensions['accounts_settings_repository']
+        accounts_settings_repository: AccountsSettingsRepository = self.extensions['accounts_settings_repository']
 
         return accounts_settings_repository.settings

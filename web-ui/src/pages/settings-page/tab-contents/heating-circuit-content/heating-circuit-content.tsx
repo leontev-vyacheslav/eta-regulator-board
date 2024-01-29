@@ -28,17 +28,7 @@ export const HeatingCircuitContent = () => {
                 if (e.dataField === 'type') {
                     return;
                 }
-
-                const regulatorSettingsChange = {
-                    regulatorSettings: regulatorSettings!,
-                    changeLogItem: {
-                        dataField: e.dataField!,
-                        datetime: new Date(),
-                        path: 'regulatorSettings?.heatingCircuits.items',
-                        value: e.value
-                    }
-                }
-                await putRegulatorSettingsAsync(regulatorSettingsChange);
+                await putRegulatorSettingsAsync(regulatorSettings!);
 
                 if (e.dataField === 'name') {
                     setRegulatorSettings(previous => {

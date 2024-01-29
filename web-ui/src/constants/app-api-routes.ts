@@ -17,5 +17,7 @@ export default {
 
     archives: '/api/archives',
 
+    accounts: '/api/accounts',
+
     regulatorSettings: '/api/regulator-settings'
 };

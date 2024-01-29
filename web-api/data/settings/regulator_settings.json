@@ -8,7 +8,7 @@
                 "type": 1,
                 "regulatorParameters": {
                     "controlParameters": {
-                        "controlMode": 1,
+                        "controlMode": 2,
                         "manualControlMode": 2,
                         "outdoorTemperatureSensorFailureAction": 4,
                         "supplyPipeTemperatureSensorFailureAction": 2,
@@ -74,13 +74,13 @@
                                         "id": "fe856dc0-4510-489e-94e7-ea31df11f413",
                                         "startTime": "2023-12-10T21:00:00+00:00",
                                         "endTime": "2023-12-11T02:00:00+00:00",
-                                        "desiredTemperatureMode": 3
+                                        "desiredTemperatureMode": 4
                                     },
                                     {
                                         "id": "6a2a69cb-3c1f-45f2-a827-ba5fc2c9d2a6",
                                         "startTime": "2023-12-11T02:00:00+00:00",
                                         "endTime": "2023-12-11T07:00:00+00:00",
-                                        "desiredTemperatureMode": 2
+                                        "desiredTemperatureMode": 4
                                     },
                                     {
                                         "id": "281eb2b5-ee0e-4c8c-b0f5-43b1849f4990",
@@ -273,7 +273,7 @@
                         ]
                     },
                     "regulationParameters": {
-                        "proportionalityFactor": 72.0,
+                        "proportionalityFactor": 68.0,
                         "integrationFactor": 30.0,
                         "differentiationFactor": 30.0,
                         "calculationPeriod": 25.0,
@@ -364,8 +364,8 @@
     },
     "service": {
         "regulatorOwner": {
-            "name": "ETA24-1-2-1",
-            "phoneNumber": "9274484332"
+            "name": "ETA24",
+            "phoneNumber": "9274484221"
         },
         "softwareInfo": {
             "webApiVersion": "v.0.1.20231004-064321",

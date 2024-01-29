@@ -56,6 +56,12 @@ def authorize(roles: Optional[List[UserRoleModel]] = None):
                     status=401
                 )
 
+            except jwt.InvalidSignatureError:
+                return JsonResponse(
+                    response=MessageModel(message='Проверка подписи токена авторизации не удалась'),
+                    status=401
+                )
+
             except Exception as ex:
                 return JsonResponse(
                     response=MessageModel(message=ex.__str__()),

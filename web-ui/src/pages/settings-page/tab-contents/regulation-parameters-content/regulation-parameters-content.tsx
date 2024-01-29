@@ -1,7 +1,6 @@
 import Form, { SimpleItem } from 'devextreme-react/form';
 import { useRef } from 'react';
 import { useSettingPageContext } from '../../settings-page-context';
-import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import AppConstants from '../../../../constants/app-constants';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
@@ -21,17 +20,8 @@ export const RegulationParametersForm = () => {
             colCount={ 1 }
             formData={ regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.regulationParameters }
             ref={ dxRegulatorParametersFormRef }
-            onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
-                const regulatorSettingsChange = {
-                    regulatorSettings: regulatorSettings!,
-                    changeLogItem: {
-                        dataField: e.dataField!,
-                        datetime: new Date(),
-                        path: 'regulatorParameters.regulationParameters',
-                        value: e.value
-                    }
-                }
-                await putRegulatorSettingsAsync(regulatorSettingsChange);
+            onFieldDataChanged={ async () => {
+                await putRegulatorSettingsAsync(regulatorSettings!);
             } }
         >
             <SimpleItem

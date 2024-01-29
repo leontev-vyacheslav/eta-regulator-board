@@ -44,17 +44,7 @@ function SettingPageContextProvider (props: any) {
                 ];
 
             (async () => {
-                const regulatorSettingsChange = {
-                    regulatorSettings: previous,
-                    changeLogItem: {
-                        dataField: 'all',
-                        datetime: new Date(),
-                        path: 'regulatorSettings?.heatingCircuits.items',
-                        value: ''
-                    }
-                }
-
-                await putRegulatorSettingsAsync(regulatorSettingsChange);
+                await putRegulatorSettingsAsync(previous);
             })();
 
             return { ...previous };

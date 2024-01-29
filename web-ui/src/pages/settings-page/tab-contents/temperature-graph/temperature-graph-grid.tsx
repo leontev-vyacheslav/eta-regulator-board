@@ -1,4 +1,4 @@
-import DataGrid, { Column, Editing, Selection } from 'devextreme-react/data-grid'
+import  { DataGrid, Column, Editing, Selection } from 'devextreme-react/data-grid'
 import { ValidationCallbackData, ValidationRule } from 'devextreme/common';
 import { formatMessage } from 'devextreme/localization';
 import { useEffect, useMemo, useState } from 'react';

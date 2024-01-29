@@ -1,5 +1,3 @@
-from datetime import datetime as datetime_type
-from typing import Any
 from models.abstracts.app_base_model import AppBaseModel
 
 from models.regulator.enums.regulator_state_model import RegulatorStateModel
@@ -17,19 +15,3 @@ class RegulatorSettingsModel(AppBaseModel):
     gpio_set: GpioSetModel
 
     service: ServiceModel
-
-
-class RegulatorSettingsChangeLogItemModel(AppBaseModel):
-    data_field: str
-
-    value: Any  # Union[str, bool, float, int, datetime_type]
-
-    path: str
-
-    datetime: datetime_type
-
-
-class RegulatorSettingsChangeModel(AppBaseModel):
-    regulator_settings: RegulatorSettingsModel
-
-    change_log_item: RegulatorSettingsChangeLogItemModel

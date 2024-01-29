@@ -5,8 +5,7 @@ import { useSharedArea } from '../shared-area';
 import { SharedAreaContextModel } from '../../models/shared-area-context';
 import { useAuth } from '../auth';
 import { httpClientBase } from './http-client-base';
-import { proclaim } from '../../utils/proclaim';
-import { MessageModel } from '../../models/message-model';
+import { proclaim, proclaimError } from '../../utils/proclaim';
 
 export type AxiosWithCredentialsFunc = (config: AxiosRequestConfig, suppressLoader?: boolean, suppressShowUnauthorized?: boolean) => Promise<AxiosResponse | undefined>;
 
@@ -46,14 +45,7 @@ export const useAuthHttpRequest = () => {
                         });
                     }
                 } else {
-                    let errorMessage = (error as AxiosError).message;
-                    if ((error as AxiosError).response && (error as AxiosError).response?.data) {
-                        errorMessage = ((error as AxiosError).response?.data as MessageModel).message
-                    }
-                    proclaim({
-                        type: 'error',
-                        message:  !errorMessage ? (error as AxiosError).message : errorMessage,
-                    });
+                     proclaimError(error);
                 }
             } finally {
                 if (!suppressLoader) {

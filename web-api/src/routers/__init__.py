@@ -7,5 +7,6 @@ __all__= [
     'gpio_router',
     'adc_router',
     'dac_router',
-    'archives_router'
+    'archives_router',
+    'accounts_router'
 ]

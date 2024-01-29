@@ -3,7 +3,6 @@ import {  useRef } from 'react';
 import { useSettingPageContext } from '../../settings-page-context';
 import { ControlModeModel, ControlModes } from '../../../../models/regulator-settings/enums/control-mode-model';
 import { ManualControlModes } from '../../../../models/regulator-settings/enums/manual-control-mode-model';
-import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { formatMessage } from 'devextreme/localization';
 import { HeatingCircuitTypeModel } from '../../../../models/regulator-settings/enums/heating-circuit-type-model';
@@ -26,18 +25,8 @@ export const ControlParametersForm = () => {
             colCount={ 1 }
             formData={ regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.controlParameters }
             ref={ dxControlParametersFormRef }
-            onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
-                const regulatorSettingsChange = {
-                    regulatorSettings: regulatorSettings!,
-                    changeLogItem: {
-                        dataField: e.dataField!,
-                        datetime: new Date(),
-                        path: 'regulatorParameters.controlParameters',
-                        value: e.value
-                    }
-                }
-
-                await putRegulatorSettingsAsync(regulatorSettingsChange);
+            onFieldDataChanged={ async () => {
+                await putRegulatorSettingsAsync(regulatorSettings!);
             } }
         >
             <GroupItem caption={ 'Режимы' }>

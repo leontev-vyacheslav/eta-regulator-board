@@ -19,16 +19,7 @@ export const ServiceForm = () => {
             formData={ regulatorSettings?.service }
             ref={ dxServiceFormRef }
             onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
-                const regulatorSettingsChange = {
-                    regulatorSettings: regulatorSettings!,
-                    changeLogItem: {
-                        dataField: e.dataField!,
-                        datetime: new Date(),
-                        path: 'regulatorSettings.service',
-                        value: e.value
-                    }
-                }
-                await putRegulatorSettingsAsync(regulatorSettingsChange);
+                await putRegulatorSettingsAsync(regulatorSettings!);
 
                 if (e.dataField === 'allowDebugMode') {
                     setRegulatorSettings(previous => {
@@ -39,12 +30,11 @@ export const ServiceForm = () => {
                 }
             } }
         >
-
-                <SimpleItem
-                    dataField={ 'allowDebugMode' }
-                    label={ { location: 'top', showColon: true, text: 'Режим отладки' } }
-                    editorType={ 'dxSwitch' }
-                />
+            <SimpleItem
+                dataField={ 'allowDebugMode' }
+                label={ { location: 'top', showColon: true, text: 'Режим отладки' } }
+                editorType={ 'dxSwitch' }
+            />
         </Form>
     );
 }

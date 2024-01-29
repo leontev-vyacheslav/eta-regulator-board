@@ -4,7 +4,7 @@ import { useAppData } from '../../../../contexts/app-data/app-data';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import AppConstants from '../../../../constants/app-constants';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
-import { showPromptDialog } from '../../../../utils/dialogs';
+import { showAccessTokenPromptDialog } from '../../../../utils/dialogs';
 
 export const InformationForm = () => {
     const dxServiceFormRef = useRef<Form>(null);
@@ -20,41 +20,23 @@ export const InformationForm = () => {
             formData={ regulatorSettings?.service }
             ref={ dxServiceFormRef }
             onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
-                const applyChanges = async (accessToken?: string) => {
-                    const regulatorSettingsChange = {
-                        regulatorSettings: regulatorSettings!,
-                        changeLogItem: {
-                            dataField: e.dataField!,
-                            datetime: new Date(),
-                            path: 'regulatorSettings.service',
-                            value: e.value
-                        }
-                    }
-                    await putRegulatorSettingsAsync(regulatorSettingsChange, accessToken);
-                }
 
                 if (e.dataField === 'regulatorOwner.name' || e.dataField === 'regulatorOwner.phoneNumber') {
-                    showPromptDialog({
-                        title: 'Токен доступа',
-                        iconName: 'AccessTokenIcon',
-                        textRender: () => 'Введите токен доступа в текстовое поле',
-                        callback: async ({ text: accessToken, modalResult }: {modalResult: string, text: string } ) => {
-                            if (modalResult === 'CANCEL') {
+                    showAccessTokenPromptDialog({
+                        callback: async ({ text: accessToken, modalResult }: { modalResult: string, text: string } ) => {
+                            if (modalResult === 'OK' && accessToken) {
+                                const updatedRegulatorSettings = await putRegulatorSettingsAsync(regulatorSettings!, accessToken);
+                                if (!updatedRegulatorSettings) {
+                                    await refreshRegulatorSettingsAsync();
+                                }
+                            } else {
                                 await refreshRegulatorSettingsAsync();
-
-                                return;
-                            }
-
-                            if (accessToken) {
-                                await applyChanges(accessToken);
                             }
                         }
                     });
-
-                    return;
+                } else {
+                    await putRegulatorSettingsAsync(regulatorSettings!)
                 }
-
-                await applyChanges();
             } }
         >
 

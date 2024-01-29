@@ -1,13 +1,13 @@
 from typing import Optional
 from http import HTTPStatus
-from flask import Response, abort, send_file, request
+from flask import send_file, request
 from flask_pydantic import validate
 
 from app import app
 from models.common.enums.user_role_model import UserRoleModel
 from models.common.message_model import MessageModel
 from models.regulator.heating_circuits_model import HeatingCircuitModel
-from models.regulator.regulator_settings_model import RegulatorSettingsChangeModel, RegulatorSettingsModel
+from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from responses.json_response import JsonResponse
 from utils.auth_helper import authorize
 from utils.encoding import verify_access_token
@@ -25,12 +25,10 @@ def get_regulator_settings() -> RegulatorSettingsModel:
 @app.api_route('/regulator-settings', methods=['PUT'])
 @authorize(roles=[UserRoleModel.ADMIN])
 @validate(response_by_alias=True)
-def put_regulator_settings(body: RegulatorSettingsChangeModel):
-    regulator_settings_change = body
-
+def put_regulator_settings(body: RegulatorSettingsModel):
+    regulator_settings = body
     regulator_settings_repository = app.get_regulator_settings_repository()
-    change_tracker_items = regulator_settings_repository.update(current_settings=regulator_settings_change.regulator_settings)
-
+    change_tracker_items = regulator_settings_repository.find_changed_fields(regulator_settings)
     required_access_token = next(
         (
             c.required_access_token
@@ -49,7 +47,8 @@ def put_regulator_settings(body: RegulatorSettingsChangeModel):
                 response=MessageModel(message='Токен доступа отсутствует или указан неверно.'),
                 status=HTTPStatus.FORBIDDEN
             )
-
+        # log here change_tracker_items
+        regulator_settings_repository.update(regulator_settings)
 
     return JsonResponse(
         response=regulator_settings_repository.settings,

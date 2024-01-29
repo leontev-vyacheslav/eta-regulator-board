@@ -21,7 +21,7 @@ def signin(body: SignInModel):
 
     if account is None:
         return JsonResponse(
-            response=MessageModel(message='The login is failed. The user was not found.'),
+            response=MessageModel(message='Не удалось войти в систему. Пользователь не найден.'),
             status=401
         )
 
@@ -44,7 +44,7 @@ def signin(body: SignInModel):
         )
 
     return JsonResponse(
-        response=MessageModel(message='The login is failed. The password is wrong.'),
+        response=MessageModel(message='Не удалось войти в систему. Пароль неправильный.'),
         status=401
     )
 
@@ -55,7 +55,7 @@ def signin(body: SignInModel):
 def signout():
 
     return JsonResponse(
-        response=MessageModel(message='The user token has been revoked.'),
+        response=MessageModel(message='Токен авторизации для текущего пользователя отозван.'),
         status=200
     )
 

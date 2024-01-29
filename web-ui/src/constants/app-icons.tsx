@@ -13,7 +13,7 @@ export { RiCalendarEventLine as WorkDateIcon } from 'react-icons/ri';
 export { RiCalendarTodoLine as ScheduleIcon } from 'react-icons/ri';
 export { FiRefreshCcw as RefreshIcon } from 'react-icons/fi';
 export { RiAdminLine as AdminIcon } from 'react-icons/ri';
-export { RiUserLocationLine as UserIcon } from 'react-icons/ri';
+export { HiOutlineUsers as UsersIcon } from 'react-icons/hi2';
 export { IoGridOutline as ListsIcon } from 'react-icons/io5';
 export { IoSettingsOutline as SettingsIcon } from 'react-icons/io5';
 export { IoHomeOutline as HomeIcon } from 'react-icons/io5';
@@ -77,6 +77,7 @@ export { IoMdLogOut as ReturnPipeIcon } from 'react-icons/io';
 export { RxArchive as ArchivesIcon } from 'react-icons/rx';
 
 export { IoMdKey as AccessTokenIcon } from 'react-icons/io';
+export { IoIosLock as LockIcon } from 'react-icons/io';
 
 
 import { MdMoreVert } from 'react-icons/md';
