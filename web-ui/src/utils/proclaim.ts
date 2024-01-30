@@ -19,11 +19,16 @@ export function proclaim(options: any) {
     });
 }
 
-export function proclaimError(error: unknown) {
+export async function  proclaimError(error: unknown) {
     let errorMessage = (error as AxiosError).message;
 
     if ((error as AxiosError).response && (error as AxiosError).response?.data) {
         errorMessage = ((error as AxiosError).response?.data as MessageModel).message
+
+        if (!errorMessage && (error as AxiosError).response?.data instanceof Blob) {
+            const json = await ((error as AxiosError).response?.data as Blob).text();
+            errorMessage = JSON.parse(json).message;
+        }
     }
 
     errorMessage = !errorMessage ? (error as AxiosError).message : errorMessage;

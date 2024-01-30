@@ -8,6 +8,9 @@ import { RtcDateTimeForm } from '../settings-page/tab-contents';
 import { ServiceForm } from './tab-contents/service-content/service-content';
 import { AccountsGrid } from './tab-contents/accounts-content/accounts-content';
 
+import './../settings-page/settings-page.scss';
+
+
 export const AppSettingsPage = () => {
     return (
         <>

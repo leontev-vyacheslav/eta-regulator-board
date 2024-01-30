@@ -20,7 +20,7 @@ export const useRtcDataTimeData = () => {
         const response = await authHttpRequest({
             url: `${routes.host}${routes.rtc}`,
             method: HttpConstants.Methods.Get as Method,
-        }, true);
+        }, true, true);
 
         if (response && response.status === HttpConstants.StatusCodes.Ok) {
 

@@ -37,6 +37,7 @@ def put_regulator_settings(body: RegulatorSettingsModel):
         ),
         None
     )
+
     if required_access_token is not None:
         access_token = request.headers.get('X-Access-Token')
         is_verify = access_token is not None and verify_access_token(access_token=access_token)
@@ -47,8 +48,9 @@ def put_regulator_settings(body: RegulatorSettingsModel):
                 response=MessageModel(message='Токен доступа отсутствует или указан неверно.'),
                 status=HTTPStatus.FORBIDDEN
             )
-        # log here change_tracker_items
-        regulator_settings_repository.update(regulator_settings)
+
+    # log here change_tracker_items
+    regulator_settings_repository.update(regulator_settings)
 
     return JsonResponse(
         response=regulator_settings_repository.settings,

@@ -26,7 +26,7 @@ export const SigninForm = () => {
                 });
 
             } catch (error) {
-                proclaimError(error);
+                await proclaimError(error);
             }
             setLoading(false);
         }

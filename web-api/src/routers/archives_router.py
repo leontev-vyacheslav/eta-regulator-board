@@ -1,4 +1,5 @@
 from datetime import datetime
+from http import HTTPStatus
 from io import BytesIO
 from typing import List
 import gzip
@@ -7,7 +8,9 @@ from flask import send_file
 from flask_pydantic import validate
 
 from models.regulator.archives_model import ArchivesDatesModel, ArchivesModel
+from models.common.message_model import MessageModel
 from app import app
+from responses.json_response import JsonResponse
 from utils.auth_helper import authorize
 
 
@@ -58,7 +61,12 @@ def download_archives(date: datetime):
     )
 
     if not data_path.exists():
-        return ArchivesModel(items=[])
+        return JsonResponse(
+        response=MessageModel(
+            message='Архивы на указанную дату отсутствуют в памяти.'
+        ),
+        status=HTTPStatus.NOT_FOUND
+    )
 
     with gzip.open(data_path, 'r') as file:
         zip_content = file.read()

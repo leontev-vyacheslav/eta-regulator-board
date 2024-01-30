@@ -6,7 +6,7 @@ from flask_pydantic import validate
 
 from app import app
 from models.accounts_settings_model import AccountsSettingsModel
-from models.common.account_model import AccountModel, ExtendedAccountModel
+from models.common.account_model import ExtendedAccountModel
 from models.common.accounts_model import AccountsModel
 from models.common.message_model import MessageModel
 from models.common.enums.user_role_model import UserRoleModel
@@ -23,11 +23,12 @@ def get_accounts_settings():
     accounts_settings: AccountsSettingsModel = accounts_settings_repository.settings
 
     accountList = [
-        AccountModel(
+        ExtendedAccountModel(
             id=acc.id,
             role=acc.role,
             login=acc.login,
-            password=''
+            password='',
+            confirmed_password=''
         )
         for acc in accounts_settings.accounts.items
     ]

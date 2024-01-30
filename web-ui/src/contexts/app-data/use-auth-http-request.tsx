@@ -45,7 +45,7 @@ export const useAuthHttpRequest = () => {
                         });
                     }
                 } else {
-                     proclaimError(error);
+                     await proclaimError(error);
                 }
             } finally {
                 if (!suppressLoader) {
