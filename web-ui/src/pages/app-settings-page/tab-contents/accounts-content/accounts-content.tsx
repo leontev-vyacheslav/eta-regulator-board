@@ -67,6 +67,8 @@ export const AccountsGrid = () => {
                     if (modalResult === 'OK' && accessToken) {
                         await putAccountAsync(e.data, accessToken);
                         await getAuthCheckDataAsync();
+                        e.data.password = '';
+                        e.data.confirmedPassword = '';
                     }
                 }
             })
@@ -76,7 +78,6 @@ export const AccountsGrid = () => {
                 message: 'Значение пароля не совпала с его подтверждением.'
             });
         }
-
         e.data.password = '';
         e.data.confirmedPassword = '';
     }, [getAuthCheckDataAsync, putAccountAsync]);
@@ -94,7 +95,12 @@ export const AccountsGrid = () => {
         (async () => {
             const accounts = await getAccountsAsync();
             if (accounts) {
-                setAccounts(accounts.items as ExtendedAccountModel[]);
+                setAccounts(accounts.items.map(acc => {
+                    return {
+                        ...acc,
+                        confirmedPassword: '',
+                    };
+                }));
             }
         })();
     }, [getAccountsAsync]);
