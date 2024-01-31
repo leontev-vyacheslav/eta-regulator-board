@@ -42,7 +42,11 @@ def authorize(roles: Optional[List[UserRoleModel]] = None):
                 is_in_role = (roles is None or len(roles) == 0) or account.role in roles
 
                 if not is_in_role:
-                    raise Exception('Отсутствуют права доступа.')
+                     # raise Exception('Отсутствуют права доступа.')
+                    return JsonResponse(
+                        response=MessageModel(message='Отсутствуют права доступа.'),
+                        status=403
+                    )
 
                 auth_mac_address = data.get('mac_address')
 

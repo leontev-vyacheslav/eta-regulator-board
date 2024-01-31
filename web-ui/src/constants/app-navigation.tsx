@@ -10,13 +10,13 @@ import {
     AppIcon,
     ArchivesIcon,
 } from './app-icons';
-import { IconBaseProps } from 'react-icons/lib/cjs/iconBase';
 import { TreeViewItemModel } from '../models/tree-view-item';
 import { HeatingCircuitIndexModel } from '../models/regulator-settings/enums/heating-circuit-type-model';
 import { useAuth } from '../contexts/auth';
 import { UserRoleModel } from '../models/enums/user-role-model';
 import { HeatingCircuitIconSelector } from '../components/heating-circuit-icon-selector/heating-circuit-icon-selector';
 import { useRegulatorSettings } from '../contexts/app-regulator-settings';
+import { IconBaseProps } from 'react-icons';
 
 export const useSideNavigationMenuItems = () => {
     const { regulatorSettings, getHeatingCircuitName } = useRegulatorSettings();

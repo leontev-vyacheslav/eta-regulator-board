@@ -12,23 +12,23 @@ export const HeatingCircuitInfo = ({ heatingCircuitIndex }: {heatingCircuitIndex
                 return (
                     <div className="dx-field">
                         <div className="dx-field-item-label dx-field-item-label-location-top">
-                            <WorkDateWidget />
+                            <WorkDateWidget style={ { fontSize: 16, color: 'rgba(0, 0, 0, 0.87)' } } />
                         </div>
                     </div>
                 );
             } }>
-                <Label text='Время RTC:' />
+                <Label text='Время RTC' showColon/>
             </SimpleItem>
             <SimpleItem render={ () => {
                 return (
                     <div className="dx-field">
-                        <div className="dx-field-item-label dx-field-item-label-location-top">
+                        <div className="dx-field-item-label dx-field-item-label-location-top" style={ { fontSize: 16, color: 'rdba(0, 0, 0, 0.87)' } }>
                             {getControlModeName(heatingCircuitIndex)}
                         </div>
                     </div>
                 );
             } }>
-                <Label text='Режим управления:' />
+                <Label  text='Режим управления' showColon/>
             </SimpleItem>
         </Form>
     );

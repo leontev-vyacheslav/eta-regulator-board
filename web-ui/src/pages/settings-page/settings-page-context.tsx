@@ -28,27 +28,29 @@ function SettingPageContextProvider (props: any) {
     const applyDefaultHeatCircuitSettingsAsync = useCallback(async (heatingCircuitType: HeatingCircuitTypeModel) => {
         const heatingCircuitSettings = await getDefaultHeatingCircuitsSettingsAsync(heatingCircuitType);
 
-        setRegulatorSettings(previous => {
-            if (!previous) {
-                return previous;
-            }
+        if (heatingCircuitSettings) {
+            setRegulatorSettings(previous => {
+                if (!previous) {
+                    return previous;
+                }
 
-            previous!.heatingCircuits.items = circuitId === 0
-                ? [
-                    heatingCircuitSettings,
-                    ...previous!.heatingCircuits.items.filter((_, index) => index !== circuitId),
-                ]
-                : [
-                    ...previous!.heatingCircuits.items.filter((_, index) => index !== circuitId),
-                    heatingCircuitSettings,
-                ];
+                previous!.heatingCircuits.items = circuitId === 0
+                    ? [
+                        heatingCircuitSettings,
+                        ...previous!.heatingCircuits.items.filter((_, index) => index !== circuitId),
+                    ]
+                    : [
+                        ...previous!.heatingCircuits.items.filter((_, index) => index !== circuitId),
+                        heatingCircuitSettings,
+                    ];
 
-            (async () => {
-                await putRegulatorSettingsAsync(previous);
-            })();
+                (async () => {
+                    await putRegulatorSettingsAsync(previous);
+                })();
 
-            return { ...previous };
-        });
+                return { ...previous };
+            });
+        }
     }, [circuitId, getDefaultHeatingCircuitsSettingsAsync, putRegulatorSettingsAsync, setRegulatorSettings]);
 
     return (

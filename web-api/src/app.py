@@ -5,10 +5,10 @@ from data_access.regulator_settings_repository import RegulatorSettingsRepositor
 from data_access.accounts_settings_repository import AccountsSettingsRepository
 from workers.worker_starter_extension import WorkerStarter
 
-APP_VERSION = 'v.0.1.20231205-062656'
+APP_VERSION = 'v.0.1.20240131-124540'
 APP_NAME = 'Eta Regulator Board Web API'
 
-MASTER_KEY = 'CCCWEwyPkMEiky/4uCcrptJI8aiinGZ8+UJ63V/BR+0='
+MASTER_KEY = 'XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='
 
 app = FlaskEx(__name__)
 CORS(

@@ -3,7 +3,7 @@ import AppConstants from '../../constants/app-constants';
 import { ArchiveModel } from '../../models/regulator-settings/archive-model';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useScreenSize } from '../../utils/media-query';
-
+import { formatMessage } from 'devextreme/localization';
 
 
 export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
@@ -12,7 +12,7 @@ export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
 
     const defaultColumCaptions = useMemo(() => {
         return {
-            datetime: isXSmall ? 'Время' : 'Время измерения',
+            datetime: isXSmall ? 'Время' : formatMessage('app-measurement-time'),
             outdoorTemperature: isXSmall ? 'Tвн, °C' : 'Внеш. темп. (°C)',
             supplyPipeTemperature: isXSmall ? 'Тп, °C' : 'Темп. подачи (°C)',
             returnPipeTemperature: isXSmall ? 'То, °C' : 'Темп. обратки (°C)',

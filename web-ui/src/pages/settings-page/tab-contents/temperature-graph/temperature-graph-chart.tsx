@@ -6,6 +6,7 @@ import AppConstants from '../../../../constants/app-constants';
 import { OutdoorIcon, ReturnPipeIcon, SupplyPipeIcon } from '../../../../constants/app-icons';
 import ArrayStore from 'devextreme/data/array_store';
 import { TemperatureGraphItemModel } from '../../../../models/regulator-settings/temperature-graph-model';
+import { formatMessage } from 'devextreme/localization';
 
 
 const TooltipTemplate = (info: any) => {
@@ -74,7 +75,7 @@ export const TemperatureGraphChart = ({ dataSource, showPoints }: { dataSource: 
                 </Series>
             <ArgumentAxis inverted={ chartArgumentAxisInverted }>
                 <Grid />
-                <Title text='Температура наружного воздуха, °C' font={ { size: 12 } } />
+                <Title text={ formatMessage('app-outdoor-temperature') } font={ { size: 12 } } />
             </ArgumentAxis>
 
             <ValueAxis>

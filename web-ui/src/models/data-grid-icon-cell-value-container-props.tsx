@@ -1,5 +1,5 @@
 import { CSSProperties, FunctionComponent, ReactNode } from 'react';
-import { IconBaseProps } from 'react-icons/lib/cjs/iconBase';
+import { IconBaseProps } from 'react-icons';
 
 export type DataGridIconCellValueContainerProps = {
   cellDataFormatter: () => ReactNode;

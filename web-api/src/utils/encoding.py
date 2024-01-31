@@ -1,21 +1,26 @@
 from datetime import datetime
 from base64 import b64decode
-from Crypto.Util.Padding import unpad
-from Crypto.Cipher import AES
+from pyaes import AESModeOfOperationCBC
 
 from utils.network import get_mac_address
 from app import MASTER_KEY
 
+BLOCK_SIZE = 16
 
-def decrypt(encrypted_data, key):
+def decrypt(encrypted_data, key: bytes):
     encrypted_data = b64decode(encrypted_data)
-    iv = encrypted_data[:AES.block_size]
-    cipher_text = encrypted_data[AES.block_size:]
-    cipher = AES.new(key, AES.MODE_CBC, iv)
-    decrypted_text = cipher.decrypt(cipher_text)
-    decrypted_text = unpad(decrypted_text, 16)
 
-    return decrypted_text.decode('utf-8')
+    iv = encrypted_data[0:BLOCK_SIZE]
+    encrypted_data = encrypted_data[BLOCK_SIZE:]
+
+    aes = AESModeOfOperationCBC(key, iv)
+    blocks_count = len(encrypted_data) // BLOCK_SIZE
+    plain_text = b''
+    for i in range(blocks_count):
+        block = encrypted_data[i * 16:i * 16 + 16]
+        plain_text += aes.decrypt(block)
+
+    return plain_text.decode('utf-8').rstrip('\0')
 
 
 def verify_access_token(access_token: str) -> bool:

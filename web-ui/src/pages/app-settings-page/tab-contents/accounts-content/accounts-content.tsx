@@ -67,19 +67,22 @@ export const AccountsGrid = () => {
                     if (modalResult === 'OK' && accessToken) {
                         await putAccountAsync(e.data, accessToken);
                         await getAuthCheckDataAsync();
+                        // don't touch. it's important code
                         e.data.password = '';
                         e.data.confirmedPassword = '';
                     }
                 }
-            })
+            });
         } else {
             proclaim({
                 type: 'error',
                 message: 'Значение пароля не совпала с его подтверждением.'
             });
+            // don't touch. it's important code
+            e.data.password = '';
+            e.data.confirmedPassword = '';
         }
-        e.data.password = '';
-        e.data.confirmedPassword = '';
+
     }, [getAuthCheckDataAsync, putAccountAsync]);
 
     const gridPasswordCellRender = useCallback(() => {

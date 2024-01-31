@@ -3,7 +3,7 @@ import { WorkDateWidgetProps } from '../../models/work-date-widget-props';
 import { useCallback, useEffect, useState } from 'react';
 
 
-export const WorkDateWidget = ({ outerStyle }: WorkDateWidgetProps) => {
+export const WorkDateWidget = ({ style }: WorkDateWidgetProps) => {
     const { appSettingsData } = useAppSettings();
     const [isShowColon, setIsShowColon] = useState<boolean>(true);
 
@@ -39,7 +39,7 @@ export const WorkDateWidget = ({ outerStyle }: WorkDateWidgetProps) => {
                 flexDirection: 'column',
                 lineHeight: 'initial',
                 alignItems: 'flex-start'
-            }, ...outerStyle,
+            }, ...style,
         } }>
             <div> {getFormattedWorkDate()}</div>
         </div>

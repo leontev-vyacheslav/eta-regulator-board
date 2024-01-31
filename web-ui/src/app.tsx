@@ -47,7 +47,11 @@ function App() {
             'temperature-graph-title': 'Температурный график',
             'schedule-windows-title': 'Временные окна',
             'schedules-title': 'Дни недели',
-            'dxDataGrid-noDataText': 'Нет данных для отображения'
+            'dxDataGrid-noDataText': 'Нет данных для отображения',
+
+            'app-outdoor-temperature': 'Температура наружного воздуха, °C',
+            'app-media-temperature': 'Температура носителя, °C',
+            'app-measurement-time': 'Время измерения'
         }
     });
     locale('ru-RU');

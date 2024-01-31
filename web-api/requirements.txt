@@ -5,3 +5,4 @@ Flask-Pydantic
 gunicorn
 smbus2
 pyjwt
+pyaes

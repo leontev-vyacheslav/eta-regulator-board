@@ -2,13 +2,14 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import { AppSettingsContextModel, AppSettingsDataContextModel } from '../models/app-settings-context';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
 import { useAppData } from './app-data/app-data';
-// import { useAuth } from './auth';
+import { useAuth } from './auth';
 
 const AppSettingsContext = createContext<AppSettingsContextModel>({} as AppSettingsContextModel);
 
 const useAppSettings = () => useContext(AppSettingsContext);
 
 function AppSettingsProvider(props: AppBaseProviderProps) {
+    const { getUserAuthDataFromStorage } = useAuth();
     const { getRtcDateTimeAsync } = useAppData();
 
     const [appSettingsData, setAppSettingsData] = useState<AppSettingsDataContextModel>({
@@ -16,13 +17,17 @@ function AppSettingsProvider(props: AppBaseProviderProps) {
     });
 
     const updateWorkDateAsync = useCallback(async () => {
+        const user = getUserAuthDataFromStorage();
+        if (!user) {
+            return;
+        }
         const rtcDateTime = await getRtcDateTimeAsync();
         if (rtcDateTime) {
             setAppSettingsData(previous => {
                 return { ...previous, workDate: rtcDateTime.datetime };
             });
         }
-    }, [getRtcDateTimeAsync]);
+    }, [getRtcDateTimeAsync, getUserAuthDataFromStorage]);
 
     useEffect(() => {
         (async () => {

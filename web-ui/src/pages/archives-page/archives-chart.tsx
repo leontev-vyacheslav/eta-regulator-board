@@ -2,6 +2,7 @@ import { Chart, Tooltip, Crosshair, Series, Point, ArgumentAxis, Grid, Title, Va
 import { useRef } from 'react';
 import AppConstants from '../../constants/app-constants';
 import { ArchiveModel } from '../../models/regulator-settings/archive-model';
+import { formatMessage } from 'devextreme/localization';
 
 export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
     const chartRef = useRef<Chart>(null);
@@ -30,13 +31,13 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
             <ArgumentAxis>
                 <Grid visible />
                 <MinorGrid visible />
-                <Title text='Время измерения' font={ { size: 12 } } />
+                <Title text={ formatMessage('app-measurement-time') } font={ { size: 12 } } />
                 <Label rotationAngle={ 270 } indentFromAxis={ 15 } displayMode='rotate' format={ 'shortTime' } />
             </ArgumentAxis>
 
             <ValueAxis name='outdoorAxis' position='right'>
                 <Tick length={ 4 } shift={ 2 }/>
-                <Title text='Наружная температура, °C'>
+                <Title text={ formatMessage('app-outdoor-temperature') } >
                     <Font size={ 12 } />
                 </Title>
             </ValueAxis>
@@ -45,7 +46,7 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                 <Tick length={ 4 } shift={ 2 } />
 
                 <Grid />
-                <Title text='Температура носителя, °C'>
+                <Title text={ formatMessage('app-media-temperature') } >
                     <Font size={ 12 } />
                 </Title>
             </ValueAxis>

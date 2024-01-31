@@ -1,4 +1,4 @@
-import { IconBaseProps } from 'react-icons/lib/cjs/iconBase';
+import { IconBaseProps } from 'react-icons';
 
 export type TreeViewItemModel = {
   id: string;
@@ -10,7 +10,7 @@ export type TreeViewItemModel = {
   iconRender: (props: IconBaseProps) => JSX.Element;
 
   expanded?: boolean;
-  
+
   command?: string;
 
   items?: TreeViewItemModel[];
