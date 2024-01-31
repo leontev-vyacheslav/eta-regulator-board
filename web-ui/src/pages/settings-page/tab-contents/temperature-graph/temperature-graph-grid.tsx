@@ -5,10 +5,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { useScreenSize } from '../../../../utils/media-query';
 import { useTemperatureGraphContext } from './temperature-graph-context';
 import AppConstants from '../../../../constants/app-constants';
+import { useAuth } from '../../../../contexts/auth';
+import { UserRoleModel } from '../../../../models/enums/user-role-model';
 
 export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
     const { dataGridRef } = useTemperatureGraphContext()
     const { isXSmall } = useScreenSize();
+    const { getUserAuthDataFromStorage } = useAuth();
+    const user = getUserAuthDataFromStorage();
 
     const defaultColumCaptions = useMemo(() => {
         return {
@@ -106,6 +110,7 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
             showColumnLines
             dataSource={ dataSource }
             height={ AppConstants.formHeight }
+
         >
             <Selection mode='single' />
 
@@ -135,7 +140,7 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
                 validationRules={ returnPipeTemperatureValidationRules }
             />
 
-            <Editing mode='row' allowUpdating allowDeleting />
+            <Editing mode='row' allowUpdating={ user !== null && user.role == UserRoleModel.admin } allowDeleting={ user !== null && user.role === UserRoleModel.admin } />
         </DataGrid>
     )
 }

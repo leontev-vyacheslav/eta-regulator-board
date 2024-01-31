@@ -19,6 +19,7 @@ function SchedulesContextProvider(props: any) {
     const { putRegulatorSettingsAsync } = useAppData();
     const { regulatorSettings } = useRegulatorSettings();
     const schedulesDataGridRef = useRef<DataGrid<ScheduleModel, any>>(null)
+    
 
     const putSchedulesAsync = useCallback(async () => {
         await putRegulatorSettingsAsync(regulatorSettings!);

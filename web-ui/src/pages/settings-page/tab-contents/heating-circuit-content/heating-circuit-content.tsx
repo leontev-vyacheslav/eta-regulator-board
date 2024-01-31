@@ -10,12 +10,16 @@ import AppConstants from '../../../../constants/app-constants';
 import { showConfirmDialogEx } from '../../../../utils/dialogs';
 import { formatMessage } from 'devextreme/localization';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
+import { useAuth } from '../../../../contexts/auth';
+import { UserRoleModel } from '../../../../models/enums/user-role-model';
 
 export const HeatingCircuitContent = () => {
     const dxHeatingCircuitFormRef = useRef<Form>(null);
     const { regulatorSettings, setRegulatorSettings } = useRegulatorSettings();
     const { circuitId, applyDefaultHeatCircuitSettingsAsync, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
+    const { getUserAuthDataFromStorage } = useAuth();
+    const user = getUserAuthDataFromStorage();
 
     return (
         <Form
@@ -45,6 +49,7 @@ export const HeatingCircuitContent = () => {
                     label={ { location: 'top', showColon: true, text: 'Тип' } }
                     editorType='dxSelectBox'
                     editorOptions={ {
+                        readOnly: user && user?.role !== UserRoleModel.admin,
                         items: HeatingCircuitTypes,
                         valueExpr: 'type',
                         displayExpr: 'description',
@@ -94,7 +99,9 @@ export const HeatingCircuitContent = () => {
                     dataField='name'
                     label={ { location: 'top', showColon: true, text: 'Наименование' } }
                     editorType='dxTextBox'
-
+                    editorOptions={ {
+                        readOnly: user && user?.role !== UserRoleModel.admin
+                    } }
                 />
                 <SimpleItem
                     cssClass='heating-circuit-mnemoschema'

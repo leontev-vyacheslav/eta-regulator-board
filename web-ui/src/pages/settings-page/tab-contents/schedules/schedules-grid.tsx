@@ -11,12 +11,16 @@ import { ScheduleWindowsGrid } from './schedule-windows-grid';
 import { useSchedulesContext } from './schedules-context';
 import AppConstants from '../../../../constants/app-constants';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
+import { useAuth } from '../../../../contexts/auth';
+import { UserRoleModel } from '../../../../models/enums/user-role-model';
 
 
 export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
     const { regulatorSettings } = useRegulatorSettings();
     const { circuitId } = useSettingPageContext();
     const { schedulesDataGridRef, daysOfWeek } = useSchedulesContext();
+    const { getUserAuthDataFromStorage } = useAuth();
+    const user = getUserAuthDataFromStorage();
 
     const dayOfWeekValidationRules = useMemo<ValidationRule[]>(() => {
         return [
@@ -74,7 +78,7 @@ export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
 
                     />
                 </Column>
-                <Editing allowAdding allowDeleting mode='row' />
+                <Editing allowUpdating={ user !== null && user.role == UserRoleModel.admin } allowDeleting={ user !== null && user.role === UserRoleModel.admin } mode='row' />
 
                 <MasterDetail
                     enabled={ true }

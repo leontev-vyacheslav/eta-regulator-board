@@ -13,6 +13,9 @@ import { showConfirmDialog } from '../../../../utils/dialogs';
 import { ControlModeModel, ControlModes } from '../../../../models/regulator-settings/enums/control-mode-model';
 import { EditorPreparingEvent } from 'devextreme/ui/data_grid';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
+import { UserRoleModel } from '../../../../models/enums/user-role-model';
+import { useAuth } from '../../../../contexts/auth';
+import { MenuItemModel } from '../../../../models/menu-item-model';
 
 export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => {
     const { regulatorSettings, setRegulatorSettings } = useRegulatorSettings();
@@ -20,6 +23,8 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
     const scheduleWindowsRef = useRef<DataGrid<ScheduleWindowModel, any>>(null);
     const { circuitId } = useSettingPageContext();
     const { isXSmall } = useScreenSize();
+    const { getUserAuthDataFromStorage } = useAuth();
+    const user = getUserAuthDataFromStorage();
 
     const temperatureModes = useMemo(() => {
         return ControlModes.filter(m => [ControlModeModel.comfort, ControlModeModel.economy, ControlModeModel.protect].includes(m.id));
@@ -85,7 +90,7 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                     }
                 }
             ]
-        }]
+        }] as MenuItemModel[]
     }, [addScheduleWindowAsync, circuitId, putSchedulesAsync, regulatorSettings, schedule.day, setRegulatorSettings]);
 
     const timeValidationRules = useMemo<ValidationRule[]>(() => {
@@ -134,7 +139,7 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
 
     return (
             <>
-            <PageToolbar title={ formatMessage('schedule-windows-title') } style={ { marginRight: -8 } } menuItems={ scheduleWindowMenuItems }
+            <PageToolbar title={ formatMessage('schedule-windows-title') } style={ { marginRight: -8 } } menuItems={ user && user.role === UserRoleModel.admin ? scheduleWindowMenuItems : [] }
             />
             <DataGrid
                 ref={ scheduleWindowsRef }
@@ -192,7 +197,7 @@ export const ScheduleWindowsGrid = ({ schedule }: {schedule: ScheduleModel}) => 
                     />
                 </Column>
 
-                <Editing allowAdding allowUpdating allowDeleting mode='row' newRowPosition={ 'last' } />
+                <Editing allowUpdating={ user !== null && user.role == UserRoleModel.admin } allowDeleting={ user !== null && user.role === UserRoleModel.admin } mode='row' newRowPosition={ 'last' } />
             </DataGrid>
         </>
     );

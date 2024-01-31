@@ -4,12 +4,16 @@ import { useSettingPageContext } from '../../settings-page-context';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import AppConstants from '../../../../constants/app-constants';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
+import { useAuth } from '../../../../contexts/auth';
+import { UserRoleModel } from '../../../../models/enums/user-role-model';
 
 export const RegulationParametersForm = () => {
     const dxRegulatorParametersFormRef = useRef<Form>(null);
     const { regulatorSettings } = useRegulatorSettings();
     const { circuitId, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
+    const { getUserAuthDataFromStorage } = useAuth();
+    const user = getUserAuthDataFromStorage();
 
     return (
         <Form
@@ -28,37 +32,55 @@ export const RegulationParametersForm = () => {
                 dataField='proportionalityFactor'
                 label={ { location: 'top', showColon: true, text: `Коэффициент пропорциональности (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
-                editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
+                editorOptions={ {
+                    readOnly: user && user?.role !== UserRoleModel.admin,
+                    showSpinButtons: true, min: 0, max: 100
+                } } />
 
             <SimpleItem
                 dataField='integrationFactor'
 
                 label={ { location: 'top', showColon: true, text: `Коэффициент интегрирования (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
-                editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
+                editorOptions={ {
+                    readOnly: user && user?.role !== UserRoleModel.admin,
+                    showSpinButtons: true, min: 0, max: 100
+                } } />
 
             <SimpleItem
                 dataField='differentiationFactor'
                 label={ { location: 'top', showColon: true, text: `Коэффициент дифференцирования (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
-                editorOptions={ { showSpinButtons: true, min: 0, max: 100 } } />
+                editorOptions={ {
+                    readOnly: user && user?.role !== UserRoleModel.admin,
+                    showSpinButtons: true, min: 0, max: 100
+                } } />
 
             <SimpleItem
                 dataField='calculationPeriod'
                 label={ { location: 'top', showColon: true, text: `Период расчета, 100мс (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
-                editorOptions={ { showSpinButtons: true, min: 1, max: 50 } } />
+                editorOptions={ {
+                    readOnly: user && user?.role !== UserRoleModel.admin,
+                    showSpinButtons: true, min: 1, max: 50
+                } } />
 
             <SimpleItem
                 dataField='pulseDurationValve'
                 label={ { location: 'top', showColon: true, text: `Длител. импульса регулирующего клапана, с (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
-                editorOptions={ { showSpinButtons: true, min: 1, max: 20 } } />
+                editorOptions={ {
+                    readOnly: user && user?.role !== UserRoleModel.admin,
+                    showSpinButtons: true, min: 1, max: 20
+                } } />
 
             <SimpleItem
                 dataField='driveUnitAnalogControl'
                 label={ { location: 'top', showColon: true, text: `Привод с аналоговым управлением (${ currentHeatingCircuitType.shotDescription })` } }
-                editorType={ 'dxSwitch' } />
+                editorType={ 'dxSwitch' }
+                editorOptions={ {
+                    readOnly: user && user?.role !== UserRoleModel.admin
+                } } />
 
         </Form>
     );
