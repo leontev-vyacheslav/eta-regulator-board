@@ -51,9 +51,17 @@ def put_account(body: ExtendedAccountModel):
 
     updated_accounts_settings = deepcopy(accounts_settings)
     account = next((acc for acc in updated_accounts_settings.accounts.items if acc.id == extended_account.id), None)
+    original_account = next((acc for acc in accounts_settings.accounts.items if acc.id == extended_account.id), None)
+
     if account is None:
         raise Exception('Учетная запись не найдена.')
+
     account.password = sha256(extended_account.password.encode(encoding='utf-8')).hexdigest()
+    if account.password == original_account.password:
+        return JsonResponse(
+                response=MessageModel(message='Учетные данные не были изменены.'),
+                status=HTTPStatus.FORBIDDEN
+            )
 
     change_tracker_items = accounts_settings_repository.find_changed_fields(updated_accounts_settings)
 
