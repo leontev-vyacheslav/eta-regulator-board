@@ -80,7 +80,7 @@ export const TemperatureGraphChart = ({ dataSource, showPoints }: { dataSource: 
 
             <ValueAxis>
                 <Grid />
-                <Title text='Температура носителя, °C'>
+                <Title text={ formatMessage('app-media-temperature') }>
                     <Font size={ 12 } />
                 </Title>
             </ValueAxis>

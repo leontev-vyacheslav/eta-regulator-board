@@ -11,15 +11,13 @@ import { showConfirmDialogEx } from '../../../../utils/dialogs';
 import { formatMessage } from 'devextreme/localization';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 import { useAuth } from '../../../../contexts/auth';
-import { UserRoleModel } from '../../../../models/enums/user-role-model';
 
 export const HeatingCircuitContent = () => {
     const dxHeatingCircuitFormRef = useRef<Form>(null);
     const { regulatorSettings, setRegulatorSettings } = useRegulatorSettings();
     const { circuitId, applyDefaultHeatCircuitSettingsAsync, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
-    const { getUserAuthDataFromStorage } = useAuth();
-    const user = getUserAuthDataFromStorage();
+    const { isAdmin } = useAuth();
 
     return (
         <Form
@@ -49,7 +47,7 @@ export const HeatingCircuitContent = () => {
                     label={ { location: 'top', showColon: true, text: 'Тип' } }
                     editorType='dxSelectBox'
                     editorOptions={ {
-                        readOnly: user && user?.role !== UserRoleModel.admin,
+                        readOnly: !isAdmin(),
                         items: HeatingCircuitTypes,
                         valueExpr: 'type',
                         displayExpr: 'description',
@@ -100,7 +98,7 @@ export const HeatingCircuitContent = () => {
                     label={ { location: 'top', showColon: true, text: 'Наименование' } }
                     editorType='dxTextBox'
                     editorOptions={ {
-                        readOnly: user && user?.role !== UserRoleModel.admin
+                        readOnly: !isAdmin()
                     } }
                 />
                 <SimpleItem

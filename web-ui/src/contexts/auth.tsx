@@ -11,6 +11,7 @@ import {
 import { AuthUserModel } from '../models/auth-user-model';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
 import { SignInModel } from '../models/signin-model';
+import { UserRoleModel } from '../models/enums/user-role-model';
 
 const AuthContext = createContext<AuthContextModel>({ } as AuthContextModel);
 const useAuth = () => useContext(AuthContext);
@@ -35,6 +36,7 @@ function AuthProvider (props: AppBaseProviderProps) {
 
     useEffect(() => {
         const userAuthData = getUserAuthDataFromStorage();
+
         setUser(userAuthData);
     }, [getUserAuthDataFromStorage]);
 
@@ -81,9 +83,21 @@ function AuthProvider (props: AppBaseProviderProps) {
 
     }, [getUserAuthDataFromStorage]);
 
+    const isAdmin = useCallback<() => boolean>(() => {
+        return user !== null && user.role === UserRoleModel.admin;
+    }, [user]);
+
+    const isOperator = useCallback<() => boolean>(() => {
+        return user !== null && user.role === UserRoleModel.operator;
+    }, [user]);
+
+    const isGuest = useCallback<() => boolean>(() => {
+        return user !== null && user.role === UserRoleModel.operator;
+    }, [user]);
+
     return (
         <AuthContext.Provider
-            value={ { user, signIn, signOut, getUserAuthDataFromStorage } }
+            value={ { user, signIn, signOut, getUserAuthDataFromStorage, isAdmin, isOperator, isGuest } }
             { ...props }
         />
     );

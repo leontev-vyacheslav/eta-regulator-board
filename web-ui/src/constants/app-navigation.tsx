@@ -13,14 +13,13 @@ import {
 import { TreeViewItemModel } from '../models/tree-view-item';
 import { HeatingCircuitIndexModel } from '../models/regulator-settings/enums/heating-circuit-type-model';
 import { useAuth } from '../contexts/auth';
-import { UserRoleModel } from '../models/enums/user-role-model';
 import { HeatingCircuitIconSelector } from '../components/heating-circuit-icon-selector/heating-circuit-icon-selector';
 import { useRegulatorSettings } from '../contexts/app-regulator-settings';
 import { IconBaseProps } from 'react-icons';
 
 export const useSideNavigationMenuItems = () => {
     const { regulatorSettings, getHeatingCircuitName } = useRegulatorSettings();
-    const { user } = useAuth();
+    const { isAdmin, isOperator } = useAuth();
 
     return useMemo<TreeViewItemModel[]>(() => {
         return [
@@ -40,49 +39,51 @@ export const useSideNavigationMenuItems = () => {
                         text: getHeatingCircuitName(HeatingCircuitIndexModel.first),
                         iconRender: () => <HeatingCircuitIconSelector heatingCircuitIndex={ HeatingCircuitIndexModel.first } />,
                         path: '/settings/0',
+                        visible: regulatorSettings
                     },
                     {
                         id: 'heating-circuit-2',
                         text: getHeatingCircuitName(HeatingCircuitIndexModel.second),
                         iconRender: () => <HeatingCircuitIconSelector heatingCircuitIndex={ HeatingCircuitIndexModel.second } />,
                         path: '/settings/1',
+                        visible: regulatorSettings
                     }, {
                         id: 'app-settings',
                         text: 'Приложение',
                         iconRender: (props: IconBaseProps) => <AppIcon size={ 22 } { ...props } />,
                         path: '/app-settings',
-                        visible: user && (user.role === UserRoleModel.admin)
+                        visible: regulatorSettings && isAdmin()
                     }
                 ],
-                visible: user && (user.role === UserRoleModel.admin || user.role === UserRoleModel.operator)
+                visible: isAdmin() || isOperator()
             },
             {
                 id: 'archives',
                 text: 'Архивы',
                 iconRender: (props: IconBaseProps) => <ArchivesIcon size={ 22 } { ...props } />,
                 path: '/archives',
-                visible: user && (user.role === UserRoleModel.admin || user.role === UserRoleModel.operator)
+                visible: isAdmin() || isOperator()
             },
             {
                 id: 'manual',
                 text: 'Ручной режим',
                 iconRender: (props: IconBaseProps) => <ManualModeIcon size={ 22 } { ...props } />,
                 path: '/debug/1',
-                visible: user && (user.role === UserRoleModel.admin)
+                visible: isAdmin()
             },
             {
                 id: 'debug',
                 text: 'Отладка',
                 iconRender: (props: IconBaseProps) => <DebugIcon size={ 22 } { ...props } />,
                 path: '/debug/2',
-                visible: user && (user.role === UserRoleModel.admin) && regulatorSettings?.service.allowDebugMode
+                visible: isAdmin() && regulatorSettings?.service.allowDebugMode
             },
             {
                 id: 'rtc-clock',
                 text: 'Часы RTC',
                 iconRender: (props: IconBaseProps) => <RtcClockIcon size={ 22 } { ...props } />,
                 command: 'workDate',
-                visible: user && (user.role === UserRoleModel.admin || user.role === UserRoleModel.operator)
+                visible: isAdmin() || isOperator()
             },
             {
                 id: 'about',
@@ -97,5 +98,5 @@ export const useSideNavigationMenuItems = () => {
                 command: 'exit',
             },
         ] as TreeViewItemModel[];
-    }, [getHeatingCircuitName, regulatorSettings?.service.allowDebugMode, user]);
+    }, [getHeatingCircuitName, isAdmin, isOperator, regulatorSettings]);
 };

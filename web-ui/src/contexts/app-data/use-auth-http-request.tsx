@@ -21,6 +21,8 @@ export const useAuthHttpRequest = () => {
             config = config || {};
             config.headers = config.headers || {};
             config.headers = { ...config.headers, ...HttpConstants.Headers.AcceptJson };
+            // config.timeout = 10000
+            config.timeoutErrorMessage = 'Сервер не ответил в установленный период времени 10 сек.'
 
             if (userAuthData) {
                 config.headers.Authorization = `Bearer ${userAuthData.token}`;

@@ -22,6 +22,14 @@ export const ArchivesDateSelectorDialog = ( { callback }: AppModalPopupProps ) =
         })();
     }, [getArchivesListAsync]);
 
+    useEffect(() => {
+        setTimeout(() => {
+            if(buttonRef && buttonRef.current) {
+                buttonRef.current.instance.option('disabled', true);
+            }
+        }, 250);
+    }, []);
+
     return (
         <AppModalPopup title='Выбор даты' callback={ () => {
             callback( { modalResult: 'CANCEL' });
@@ -34,6 +42,7 @@ export const ArchivesDateSelectorDialog = ( { callback }: AppModalPopupProps ) =
                         onValueChanged: (e: ValueChangedEvent) => {
                             const isArchivesExisted = archivesList.some(d => d.getTime() === (e.value as Date).getTime());
                             buttonRef.current?.instance.option('disabled', !isArchivesExisted);
+                            buttonRef.current?.instance.option('type', 'default');
                         }
                     } }
                >
@@ -41,7 +50,7 @@ export const ArchivesDateSelectorDialog = ( { callback }: AppModalPopupProps ) =
                </SimpleItem>
                 <SimpleItem>
                     <div style={ { display: 'flex', justifyContent: 'flex-end' } }>
-                        <Button ref={ buttonRef } text='Выбрать' type='default' disabled onClick={ () => {
+                        <Button ref={ buttonRef } text='Выбрать' onClick={ () => {
                             const formData = formRef.current?.instance.option('formData');
                             callback( { modalResult: 'OK', data: formData.archivesDate })
                         } }/>

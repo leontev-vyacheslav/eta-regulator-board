@@ -15,10 +15,12 @@ import { useAppData } from '../../contexts/app-data/app-data';
 import { MenuItemModel } from '../../models/menu-item-model';
 import { formatMessage } from 'devextreme/localization';
 import { showConfirmDialog } from '../../utils/dialogs';
+import { useAuth } from '../../contexts/auth';
 
 export const SettingsPageInternal = () => {
     const { circuitId, applyDefaultHeatCircuitSettingsAsync, currentHeatingCircuitType } = useSettingPageContext();
     const { getRegulatorSettingsAsFile } = useAppData();
+    const { isAdmin } = useAuth();
     const tabPanelRef = useRef<TabPanel>(null);
 
     const pageHeaderTitle = useMemo(() => {
@@ -74,7 +76,8 @@ export const SettingsPageInternal = () => {
                     {
                         text: 'Сброс настроек контура...',
                         icon: () => <ResetIcon size={ 20 } />,
-                        onClick: resetRegulatorSettingsAsync
+                        onClick: resetRegulatorSettingsAsync,
+                        visible: isAdmin()
                     },
                     {
                         text: 'Выгрузить все настройки',
@@ -84,7 +87,7 @@ export const SettingsPageInternal = () => {
                 ]
             }
         ] as MenuItemModel[];
-    }, [resetRegulatorSettingsAsync, downloadRegulatorSettingsAsync]);
+    }, [resetRegulatorSettingsAsync, isAdmin, downloadRegulatorSettingsAsync]);
 
     useEffect(() => {
         const temperatureGraphTabHtmlElement: HTMLDivElement | null = document.querySelector('.dx-item.dx-tab:has(* #temperature-graph-tab-icon)');

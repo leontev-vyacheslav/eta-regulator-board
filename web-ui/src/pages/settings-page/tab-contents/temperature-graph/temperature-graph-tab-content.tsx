@@ -12,15 +12,13 @@ import { TemperatureGraphGrid } from './temperature-graph-grid';
 import { TemperatureGraphChart } from './temperature-graph-chart';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 import { useAuth } from '../../../../contexts/auth';
-import { UserRoleModel } from '../../../../models/enums/user-role-model';
 
 const TemperatureGraphTabContentInner = () => {
     const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useRegulatorSettings();
     const { circuitId } = useSettingPageContext();
     const { putTemperatureGraphAsync, setChartArgumentAxisInverted, chartArgumentAxisInverted, dataGridRef } = useTemperatureGraphContext();
     const [isShowGraph, setIsShowGraph] = useState<boolean>(false);
-    const { getUserAuthDataFromStorage } = useAuth();
-    const user = getUserAuthDataFromStorage();
+    const { isAdmin } = useAuth();
 
     const temperatureGraphStore = useMemo(() => {
         const store = new ArrayStore<TemperatureGraphItemModel>({
@@ -113,9 +111,9 @@ const TemperatureGraphTabContentInner = () => {
                         visible: !isShowGraph,
                     }
                 ],
-                visible: user != null && user.role === UserRoleModel.admin,
+                visible: isAdmin(),
             }];
-    }, [chartArgumentAxisInverted, dataGridRef, isShowGraph, putTemperatureGraphAsync, refreshRegulatorSettingsAsync, regulatorSettings, setChartArgumentAxisInverted, setRegulatorSettings, user]);
+    }, [chartArgumentAxisInverted, dataGridRef, isAdmin, isShowGraph, putTemperatureGraphAsync, refreshRegulatorSettingsAsync, regulatorSettings, setChartArgumentAxisInverted, setRegulatorSettings]);
 
     return (
         <div className='setting-form'>

@@ -13,4 +13,10 @@ export type AuthContextModel = {
   signOut: SignOutAsyncFunc;
 
   getUserAuthDataFromStorage: GetUserAuthDataFromStorageFunc;
+
+  isAdmin: () => boolean;
+
+  isOperator: () => boolean;
+
+  isGuest: () => boolean;
 };

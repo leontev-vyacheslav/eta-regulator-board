@@ -59,7 +59,7 @@ def put_regulator_settings(body: RegulatorSettingsModel):
 
 
 @app.api_route('/regulator-settings/download', methods=['GET'])
-@authorize(roles=[UserRoleModel.ADMIN])
+@authorize(roles=[UserRoleModel.ADMIN, UserRoleModel.OPERATOR])
 def get_regulator_settings_as_file():
     return send_file(
         path_or_file=app.get_regulator_settings_repository().data_path,

@@ -6,13 +6,12 @@ import { useScreenSize } from '../../../../utils/media-query';
 import { useTemperatureGraphContext } from './temperature-graph-context';
 import AppConstants from '../../../../constants/app-constants';
 import { useAuth } from '../../../../contexts/auth';
-import { UserRoleModel } from '../../../../models/enums/user-role-model';
 
 export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
     const { dataGridRef } = useTemperatureGraphContext()
     const { isXSmall } = useScreenSize();
-    const { getUserAuthDataFromStorage } = useAuth();
-    const user = getUserAuthDataFromStorage();
+    const { isAdmin } = useAuth();
+
 
     const defaultColumCaptions = useMemo(() => {
         return {
@@ -140,7 +139,7 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
                 validationRules={ returnPipeTemperatureValidationRules }
             />
 
-            <Editing mode='row' allowUpdating={ user !== null && user.role == UserRoleModel.admin } allowDeleting={ user !== null && user.role === UserRoleModel.admin } />
+            <Editing mode='row' allowUpdating={ isAdmin() } allowDeleting={ isAdmin() } />
         </DataGrid>
     )
 }

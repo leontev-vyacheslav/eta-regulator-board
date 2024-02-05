@@ -10,15 +10,14 @@ import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { useSettingPageContext } from '../../settings-page-context';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
-import { UserRoleModel } from '../../../../models/enums/user-role-model';
 import { useAuth } from '../../../../contexts/auth';
 
 const SchedulesTabContentInner = () => {
     const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useRegulatorSettings();
     const {  circuitId } = useSettingPageContext();
     const { putSchedulesAsync, schedulesDataGridRef } = useSchedulesContext();
-    const { getUserAuthDataFromStorage } = useAuth();
-    const user = getUserAuthDataFromStorage();
+    const { isAdmin } = useAuth();
+
 
     const schedulesStore = useMemo(() => {
 
@@ -89,7 +88,7 @@ const SchedulesTabContentInner = () => {
 
     return (
         <div className='setting-form'>
-            <PageToolbar title={ formatMessage('schedules-title') } menuItems={ user && user.role === UserRoleModel.admin ? menuItems: [] } />
+            <PageToolbar title={ formatMessage('schedules-title') } menuItems={ isAdmin() ? menuItems: [] } />
             <SchedulesGrid dataSource={ schedulesStore } />
         </div>
     );

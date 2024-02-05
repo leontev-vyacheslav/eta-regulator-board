@@ -1,6 +1,7 @@
 from datetime import datetime
 from http import HTTPStatus
 from io import BytesIO
+import re
 from typing import List
 import gzip
 
@@ -40,10 +41,16 @@ def get_archive(date: datetime) -> ArchivesModel:
 @validate(response_by_alias=True)
 def get_archives_list() -> List[str]:
     data_path = app.app_root_path.joinpath('data/archives')
-    archive_dates = [
-        datetime.strptime(f.stem.replace('_', ':').replace('.json', ''), '%Y-%m-%dT%H:%M:%SZ')
+    file_names = [
+        f.stem.replace('_', ':').replace('.json', '')
         for f in data_path.iterdir()
         if f.is_file() and f.suffix == '.gz'
+    ]
+
+    archive_dates = [
+        datetime.strptime(f, '%Y-%m-%dT%H:%M:%SZ')
+        for f in file_names
+        if re.match(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$', f) is not None
     ]
 
     return ArchivesDatesModel(
@@ -54,7 +61,7 @@ def get_archives_list() -> List[str]:
 @app.api_route('/archives/download/<date>', methods=['GET'])
 @authorize()
 @validate(response_by_alias=True)
-def download_archives(date: datetime):
+def get_archives_as_file(date: datetime):
 
     data_path = app.app_root_path.joinpath(
         f'data/archives/{date.strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'

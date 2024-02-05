@@ -5,19 +5,16 @@ import { useAppData } from '../../../../contexts/app-data/app-data';
 import AppConstants from '../../../../constants/app-constants';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 import { useAuth } from '../../../../contexts/auth';
-import { UserRoleModel } from '../../../../models/enums/user-role-model';
 
 export const RegulationParametersForm = () => {
     const dxRegulatorParametersFormRef = useRef<Form>(null);
     const { regulatorSettings } = useRegulatorSettings();
     const { circuitId, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
-    const { getUserAuthDataFromStorage } = useAuth();
-    const user = getUserAuthDataFromStorage();
+    const { isAdmin } = useAuth();
 
     return (
         <Form
-
             className='app-form setting-form'
             height={ AppConstants.formHeight }
             scrollingEnabled={ true }
@@ -33,7 +30,7 @@ export const RegulationParametersForm = () => {
                 label={ { location: 'top', showColon: true, text: `Коэффициент пропорциональности (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {
-                    readOnly: user && user?.role !== UserRoleModel.admin,
+                    readOnly: !isAdmin(),
                     showSpinButtons: true, min: 0, max: 100
                 } } />
 
@@ -43,7 +40,7 @@ export const RegulationParametersForm = () => {
                 label={ { location: 'top', showColon: true, text: `Коэффициент интегрирования (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {
-                    readOnly: user && user?.role !== UserRoleModel.admin,
+                    readOnly: !isAdmin(),
                     showSpinButtons: true, min: 0, max: 100
                 } } />
 
@@ -52,7 +49,7 @@ export const RegulationParametersForm = () => {
                 label={ { location: 'top', showColon: true, text: `Коэффициент дифференцирования (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {
-                    readOnly: user && user?.role !== UserRoleModel.admin,
+                    readOnly: !isAdmin(),
                     showSpinButtons: true, min: 0, max: 100
                 } } />
 
@@ -61,7 +58,7 @@ export const RegulationParametersForm = () => {
                 label={ { location: 'top', showColon: true, text: `Период расчета, 100мс (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {
-                    readOnly: user && user?.role !== UserRoleModel.admin,
+                    readOnly: !isAdmin(),
                     showSpinButtons: true, min: 1, max: 50
                 } } />
 
@@ -70,7 +67,7 @@ export const RegulationParametersForm = () => {
                 label={ { location: 'top', showColon: true, text: `Длител. импульса регулирующего клапана, с (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {
-                    readOnly: user && user?.role !== UserRoleModel.admin,
+                    readOnly: !isAdmin(),
                     showSpinButtons: true, min: 1, max: 20
                 } } />
 
@@ -79,7 +76,7 @@ export const RegulationParametersForm = () => {
                 label={ { location: 'top', showColon: true, text: `Привод с аналоговым управлением (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxSwitch' }
                 editorOptions={ {
-                    readOnly: user && user?.role !== UserRoleModel.admin
+                    readOnly: !isAdmin(),
                 } } />
 
         </Form>

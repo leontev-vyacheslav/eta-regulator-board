@@ -12,15 +12,13 @@ import { useSchedulesContext } from './schedules-context';
 import AppConstants from '../../../../constants/app-constants';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 import { useAuth } from '../../../../contexts/auth';
-import { UserRoleModel } from '../../../../models/enums/user-role-model';
 
 
 export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
     const { regulatorSettings } = useRegulatorSettings();
     const { circuitId } = useSettingPageContext();
     const { schedulesDataGridRef, daysOfWeek } = useSchedulesContext();
-    const { getUserAuthDataFromStorage } = useAuth();
-    const user = getUserAuthDataFromStorage();
+    const { isAdmin } = useAuth();
 
     const dayOfWeekValidationRules = useMemo<ValidationRule[]>(() => {
         return [
@@ -69,16 +67,15 @@ export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
                         );
                         } }
                     validationRules={ dayOfWeekValidationRules }
-                    >
+                >
                     <Lookup
                         dataSource={ daysOfWeek }
                         valueExpr={ 'id' }
                         displayExpr={ 'name' }
                         key={ 'id' }
-
                     />
                 </Column>
-                <Editing allowUpdating={ user !== null && user.role == UserRoleModel.admin } allowDeleting={ user !== null && user.role === UserRoleModel.admin } mode='row' />
+                <Editing allowUpdating={ isAdmin() } allowDeleting={ isAdmin() } mode='row' />
 
                 <MasterDetail
                     enabled={ true }
