@@ -6,3 +6,4 @@ gunicorn
 smbus2
 pyjwt
 pyaes
+spidev==3.5
