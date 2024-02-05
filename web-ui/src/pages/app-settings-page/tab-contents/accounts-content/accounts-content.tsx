@@ -10,12 +10,14 @@ import { FocusInEvent } from 'devextreme/ui/text_box';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { proclaim } from '../../../../utils/proclaim';
 import { RowUpdatedEvent } from 'devextreme/ui/data_grid';
+import { useScreenSize } from '../../../../utils/media-query';
 
 
 export const AccountsGrid = () => {
     const dataGridRef = useRef<DataGrid<ExtendedAccountModel>>(null);
     const [accounts, setAccounts] = useState<ExtendedAccountModel[]>([]);
     const { getAccountsAsync, putAccountAsync, getAuthCheckDataAsync } = useAppData();
+    const { isSmall, isXSmall } = useScreenSize();
 
     const onShowPasswordClickHandler = useCallback((editorId: string) => {
         const inputElement = document.querySelector(`#${editorId} input`);
@@ -114,7 +116,7 @@ export const AccountsGrid = () => {
             <DataGrid
                 ref={ dataGridRef }
                 keyExpr={ 'id' }
-                className='app-grid'
+                className='app-grid accounts-grid'
                 showColumnLines
                 dataSource={ accounts }
                 height={ AppConstants.formHeight }
@@ -122,7 +124,7 @@ export const AccountsGrid = () => {
             >
                 <Selection mode='single' />
                 <Editing mode='popup' allowUpdating>
-                    <Form elementAttr={ { class: 'app-form' } } >
+                    <Form elementAttr={ { class: 'app-form' } } colCount={ 1 } >
                         <SimpleItem
                             dataField='login'
                             editorOptions={ {
@@ -176,10 +178,12 @@ export const AccountsGrid = () => {
                         elementAttr={ { class: 'app-popup' } }
                         title='Изменить пароль'
                         height={ 'auto' }
+                        width={ isSmall || isXSmall ? '100%': 640 }
                         showTitle
                         fullScreen={ false }
                         showCloseButton
-                        onShowing={ onPopupShowingHandler } />
+                        onShowing={ onPopupShowingHandler }
+                        />
                 </Editing>
                 <Column
                     dataField='role'

@@ -10,6 +10,8 @@ import { useAppData } from '../../contexts/app-data/app-data';
 import { ArchiveModel } from '../../models/regulator-settings/archive-model';
 import { ArchivesDateSelectorDialog } from './archives-date-selector-dialog';
 import { PopupCallbackModel } from '../../models/popup-callback';
+import { PageToolbar } from '../../components/page-toolbar/page-toolbar';
+import { formatMessage } from 'devextreme/localization';
 
 export const ArchivesPage = () => {
     const { getArchivesByDateAsync, getArchivesByDateAsFile } = useAppData();
@@ -94,11 +96,12 @@ export const ArchivesPage = () => {
                         <span>({archivesDate.toLocaleDateString('ru-RU')})</span>
                     </div>
                 );
-            } } menuItems={ menuItems } >
+            } } menuItems={ [] } >
                 <ArchivesIcon size={ AppConstants.headerIconSize } />
             </PageHeader>
             <div className={ 'content-block' }>
                 <div className={ `dx-card responsive-paddings ${isShowGraph ? 'archives-content-chart' : 'archives-content-grid'}` }>
+                    <PageToolbar title={ formatMessage('archives-graphs') } menuItems={ menuItems } />
                     {
                         isShowGraph
                             ? <ArchivesChart dataSource={ archives } />

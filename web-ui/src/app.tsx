@@ -45,6 +45,7 @@ function App() {
             'menu-item-add-point': 'Добавить точку...',
             'confirm-title': 'Подтвердить',
             'temperature-graph-title': 'Температурный график',
+            'archives-graphs': 'Температурные графики', 
             'schedule-windows-title': 'Временные окна',
             'schedules-title': 'Дни недели',
             'dxDataGrid-noDataText': 'Нет данных для отображения',
