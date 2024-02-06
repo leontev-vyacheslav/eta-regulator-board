@@ -178,7 +178,7 @@ export const AccountsGrid = () => {
                         elementAttr={ { class: 'app-popup' } }
                         title='Изменить пароль'
                         height={ 'auto' }
-                        width={ isSmall || isXSmall ? '100%': 640 }
+                        width={ isSmall || isXSmall ? '90%': 640 }
                         showTitle
                         fullScreen={ false }
                         showCloseButton
