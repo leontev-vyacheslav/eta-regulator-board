@@ -5,7 +5,6 @@ import { useAppData } from '../../../../contexts/app-data/app-data';
 import { ExtendedAccountModel } from '../../../../models/regulator-settings/accounts-model';
 import { UserRoles } from '../../../../models/enums/user-role-model';
 import { RequiredRule, SimpleItem, StringLengthRule } from 'devextreme-react/form';
-import { showAccessTokenPromptDialog } from '../../../../utils/dialogs';
 import { FocusInEvent } from 'devextreme/ui/text_box';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { proclaim } from '../../../../utils/proclaim';
@@ -62,19 +61,13 @@ export const AccountsGrid = () => {
             });
     }, []);
 
-    const onGridRowUpdated = useCallback((e: RowUpdatedEvent<ExtendedAccountModel, any>) => {
+    const onGridRowUpdated = useCallback(async (e: RowUpdatedEvent<ExtendedAccountModel, any>) => {
         if (e.data.password === e.data.confirmedPassword) {
-            showAccessTokenPromptDialog({
-                callback: async ({ text: accessToken, modalResult }: { modalResult: string, text: string }) => {
-                    if (modalResult === 'OK' && accessToken) {
-                        await putAccountAsync(e.data, accessToken);
-                        await getAuthCheckDataAsync();
-                        // don't touch. it's important code
-                        e.data.password = '';
-                        e.data.confirmedPassword = '';
-                    }
-                }
-            });
+            await putAccountAsync(e.data);
+            await getAuthCheckDataAsync();
+            // don't touch. it's important code
+            e.data.password = '';
+            e.data.confirmedPassword = '';
         } else {
             proclaim({
                 type: 'error',
@@ -90,7 +83,6 @@ export const AccountsGrid = () => {
     const gridPasswordCellRender = useCallback(() => {
         return (
             <div style={ { display: 'flex', alignItems: 'center', gap: 5 } }>
-                <div className='dx-icon dx-icon-key' style={ { color: 'rgba(0, 0, 0, 0.3)', fontSize: 18 } }></div>
                 <span style={ { fontSize: 10, color: 'rgba(0, 0, 0, 0.6)' } }>●●●●●</span>
             </div>
         );
@@ -210,7 +202,6 @@ export const AccountsGrid = () => {
                     dataField='confirmedPassword'
                     visible={ false }
                     caption='Подтверждение пароля'
-
                 />
             </DataGrid>
         </div>

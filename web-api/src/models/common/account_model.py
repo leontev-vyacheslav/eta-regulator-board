@@ -10,7 +10,7 @@ class AccountModel(AppBaseModel):
 
     login: str
 
-    password: str = Field(required_access_token=True)
+    password: str
 
 
 class ExtendedAccountModel(AccountModel):

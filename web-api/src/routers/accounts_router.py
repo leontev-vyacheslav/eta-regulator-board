@@ -85,7 +85,7 @@ def put_account(body: ExtendedAccountModel):
             )
 
         # log here change_tracker_items
-        accounts_settings_repository.update(updated_accounts_settings)
+    accounts_settings_repository.update(updated_accounts_settings)
 
 
     return JsonResponse(

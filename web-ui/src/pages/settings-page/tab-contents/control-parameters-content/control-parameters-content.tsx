@@ -38,7 +38,6 @@ export const ControlParametersForm = () => {
                     label={ { location: 'top', showColon: true, text: `Режим управления (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxSelectBox' }
                     editorOptions={ {
-                        readOnly: !isAdmin(),
                         items: ControlModes.filter(c => currentHeatingCircuitType.type === HeatingCircuitTypeModel.heating || c.id !== ControlModeModel.protect), valueExpr: 'id', displayExpr: 'description'
                     } } />
 
@@ -48,7 +47,6 @@ export const ControlParametersForm = () => {
                         label={ { location: 'top', showColon: true, text: `Режим ручного управления (${ currentHeatingCircuitType.shotDescription })` } }
                         editorType={ 'dxSelectBox' }
                         editorOptions={ {
-                            readOnly: !isAdmin(),
                             items: ManualControlModes, valueExpr: 'id', displayExpr: 'description'
                         } } />
                     : null
@@ -59,7 +57,6 @@ export const ControlParametersForm = () => {
                             label={ { location: 'top', showColon: true, text: `Действие при отказе датчика температуры нар.воздуха (${ currentHeatingCircuitType.shotDescription })` } }
                             editorType={ 'dxSelectBox' }
                             editorOptions={ {
-                                readOnly: !isAdmin(),
                                 items: OutdoorTemperatureSensorFailureActionTypes, valueExpr: 'id', displayExpr: 'description'
                             } } />
                     : null
@@ -69,7 +66,6 @@ export const ControlParametersForm = () => {
                         label={ { location: 'top', showColon: true, text: `Действие при отказе датчика температуры подачи (${ currentHeatingCircuitType.shotDescription })` } }
                         editorType={ 'dxSelectBox' }
                         editorOptions={ {
-                            readOnly: !isAdmin(),
                             items: SupplyPipeTemperatureSensorFailureActionTypes, valueExpr: 'id', displayExpr: 'description'
                         } } />
 
@@ -81,7 +77,6 @@ export const ControlParametersForm = () => {
                     label={ { location: 'top', showColon: true, text: `Уставка поддерживаемой темп. ручного режима, °C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
-                        readOnly: !isAdmin(),
                         showSpinButtons: true,
                         min: currentHeatingCircuitType.settings.manualControlModeTemperatureSetpointMin,
                         max: currentHeatingCircuitType.settings.manualControlModeTemperatureSetpointMax,
@@ -94,7 +89,6 @@ export const ControlParametersForm = () => {
                     label={ { location: 'top', showColon: true, text: `Положение аналог.клапана в режиме аварии, % (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
-                        readOnly: !isAdmin(),
                         showSpinButtons: true,
                         min: currentHeatingCircuitType.settings.analogValveErrorSetpointMin,
                         max: currentHeatingCircuitType.settings.analogValveErrorSetpointMax,
@@ -108,7 +102,6 @@ export const ControlParametersForm = () => {
                         label={ { location: 'top', showColon: true, text: `Температура перехода в летний режим, °C (${ currentHeatingCircuitType.shotDescription })` } }
                         editorType={ 'dxNumberBox' }
                         editorOptions={ {
-                            readOnly: !isAdmin(),
                             showSpinButtons: true, min: 5, max: 15
                         } } />
                     : null
@@ -119,7 +112,6 @@ export const ControlParametersForm = () => {
                     label={ { location: 'top', showColon: true, text: `Температура комфортная, °C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
-                        readOnly: !isAdmin(),
                         showSpinButtons: true,
                         min: currentHeatingCircuitType.settings.comfortTemperatureMin,
                         max: currentHeatingCircuitType.settings.comfortTemperatureMax,
@@ -130,7 +122,6 @@ export const ControlParametersForm = () => {
                     label={ { location: 'top', showColon: true, text: `Температура экономная, °C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
-                        readOnly: !isAdmin(),
                         showSpinButtons: true,
                         min: currentHeatingCircuitType.settings.economicalTemperatureMin,
                         max: currentHeatingCircuitType.settings.economicalTemperatureMax,
@@ -142,7 +133,6 @@ export const ControlParametersForm = () => {
                         label={ { location: 'top', showColon: true, text: `Температура защиты от замерзания, °C (${ currentHeatingCircuitType.shotDescription })` } }
                         editorType={ 'dxNumberBox' }
                         editorOptions={ {
-                            readOnly: !isAdmin(),
                             showSpinButtons: true,
                             min: 4,
                             max: 10,
@@ -156,7 +146,6 @@ export const ControlParametersForm = () => {
                         label={ { location: 'top', showColon: true, text:  `Влияние темп. помещения, 0.1°C (${ currentHeatingCircuitType.shotDescription })` } }
                         editorType={ 'dxNumberBox' }
                         editorOptions={ {
-                            readOnly: !isAdmin(),
                             showSpinButtons: true, min: 0, max: 50
                         } }
                     />
@@ -168,7 +157,6 @@ export const ControlParametersForm = () => {
                     label={ { location: 'top', showColon: true, text: `Влияние темп. обратки, 0.1°C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
-                        readOnly: !isAdmin(),
                         showSpinButtons: true, min: 0, max: 50
                     } } />
 
@@ -177,7 +165,6 @@ export const ControlParametersForm = () => {
                     label={ { location: 'top', showColon: true, text:  `Минимальная температура подачи, °C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
-                        readOnly: !isAdmin(),
                         showSpinButtons: true, min: 30, max: 150
                     } } />
 
@@ -186,7 +173,6 @@ export const ControlParametersForm = () => {
                     label={ { location: 'top', showColon: true, text: `Максимальная температура подачи, °C (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
-                        readOnly: !isAdmin(),
                         showSpinButtons: true, min: 30, max: 150
                     } } />
             </GroupItem>
@@ -197,7 +183,6 @@ export const ControlParametersForm = () => {
                     label={ { location: 'top', showColon: true, text: `Управление циркуляционным насосом (${ currentHeatingCircuitType.shotDescription })` } }
                     editorType={ 'dxSwitch' }
                     editorOptions={ {
-                        readOnly: !isAdmin(),
                         items: [1, 2]
                     } } />
             </GroupItem>
