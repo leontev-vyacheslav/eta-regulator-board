@@ -10,7 +10,6 @@ import AppConstants from '../../../../constants/app-constants';
 import { OutdoorTemperatureSensorFailureActionTypes } from '../../../../models/regulator-settings/enums/outdoor-temperature-sensor-failure-action-type-model';
 import { SupplyPipeTemperatureSensorFailureActionTypes } from '../../../../models/regulator-settings/enums/supply-pipe-temperature-sensor-failure-action-type-model';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
-import { useAuth } from '../../../../contexts/auth';
 
 
 export const ControlParametersForm = () => {
@@ -18,7 +17,6 @@ export const ControlParametersForm = () => {
     const { regulatorSettings } = useRegulatorSettings();
     const { circuitId, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
-    const { isAdmin } = useAuth();
 
     return regulatorSettings ?
         <Form

@@ -65,7 +65,7 @@ Write-Host "Removing orignal files '$WEB_UI_APP_NAME'..." -ForegroundColor Green
 $remoteOutput = ssh ${ACCOUNT}@${IPADDR} "rm -rf ${WORKSPACE_ROOT}${APP_ROOT}/" *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
-    exit
+    Exit 1
 }
 Start-Sleep -Seconds 2
 Write-Host
@@ -92,10 +92,14 @@ if ($hasError) {
 }
 Start-Sleep -Seconds 2
 
-Write-Host "Starting UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-$remoteOutput = ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd start' *>&1
-$hasError = Find-ExternalError -remoteOutput $remoteOutput
-if ($hasError) {
-    exit
-}
-Start-Sleep -Seconds 2
+param(
+    [string]$ipaddr,
+    [string]$distro,
+    [string]$root
+)
+
+Import-Module $PSScriptRoot\deployment_support.ps1 -Force
+
+
+$WEB_UI_APP_NAME = "eta-regulator-board-web-ui"
+$APP_ROOT = "/web-ui"
