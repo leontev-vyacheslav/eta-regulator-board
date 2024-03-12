@@ -40,5 +40,6 @@
             "editor.foldingHighlight": true,
         },
         "svg.preview.background": "white",
+        "powershell.cwd": ".workspace",
     }
 }

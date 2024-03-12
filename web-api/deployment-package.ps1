@@ -29,19 +29,24 @@ If (-not(Test-Path -Path './build')) {
 
 Get-ChildItem -Path "./build" -Recurse | Remove-Item -force -recurse
 
-Copy-Item -Path "./src" -Destination "./build" -Recurse -Force
-Copy-Item -Path "./data" -Destination "./build" -Recurse -Force
-Copy-Item -Path "./log" -Destination "./build" -Recurse -Force
-Copy-Item -Path "./startup.sh" -Destination "./build" -Recurse -Force
-Copy-Item -Path "./requirements.txt" -Destination "./build" -Recurse -Force
+Copy-Item -Path "src" -Destination "./build" -Recurse -Force
+Copy-Item -Path "data" -Destination "./build" -Recurse -Force
+Copy-Item -Path "log" -Destination "./build" -Recurse -Force
+Copy-Item -Path "startup.sh" -Destination "./build" -Recurse -Force
+Copy-Item -Path "requirements.txt" -Destination "./build" -Recurse -Force
 
 $deployment_package_path = "./distributable/eta_regulator_board_web_api_${buildDateTimeMark}.zip"
 
-Compress-Archive -Path "./build" -DestinationPath $deployment_package_path
+if($IsLinux) {
+    Invoke-Expression "zip -r $deployment_package_path build"
+} else {
+    Compress-Archive -Path "./build" -DestinationPath $deployment_package_path
+}
+
 
 $form = @{
     file = Get-Item -Path $deployment_package_path
 }
-$response = Invoke-WebRequest -Uri $uri -Method Post -Form $form
+Invoke-WebRequest -Uri $uri -Method Post -Form $form
 
 Get-ChildItem -Path "./build" -Recurse | Remove-Item -Force -Recurse

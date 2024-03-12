@@ -39,10 +39,15 @@ If (-not(Test-Path -Path './distributable')) {
 }
 
 $deployment_package_path = "./distributable/eta_regulator_board_web_ui_${buildDateTimeMark}.zip"
-Compress-Archive  -Path "./build" -DestinationPath $deployment_package_path
+
+if($IsLinux) {
+    Invoke-Expression "zip -r $deployment_package_path build"
+} else {
+    Compress-Archive -Path "./build" -DestinationPath $deployment_package_path
+}
 
 $form = @{
     file = Get-Item -Path $deployment_package_path
 }
 
-$response = Invoke-WebRequest -Uri $uri -Method Post -Form $form
+Invoke-WebRequest -Uri $uri -Method Post -Form $form
