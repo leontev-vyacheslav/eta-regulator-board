@@ -50,4 +50,8 @@ $form = @{
     file = Get-Item -Path $deployment_package_path
 }
 
-Invoke-WebRequest -Uri $uri -Method Post -Form $form
+Invoke-WebRequest -Uri $uri `
+    -Method Post `
+    -Form $form `
+    -ConnectionTimeoutSeconds 5 `
+    -OperationTimeoutSeconds 30
