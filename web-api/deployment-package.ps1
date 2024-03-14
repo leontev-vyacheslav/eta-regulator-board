@@ -20,8 +20,8 @@ if ($BumpVersion -eq "yes" -or $BumpVersion -eq "y") {
         -Substitution "APP_VERSION = 'v.0.1.${buildDateTimeMark}'"
 }
 
-If (-not(Test-Path -Path './distributable')) {
-    New-Item -Path "./" -Name "distributable" -ItemType Directory
+If (-not(Test-Path -Path './distro')) {
+    New-Item -Path "./" -Name "distro" -ItemType Directory
 }
 If (-not(Test-Path -Path './build')) {
     New-Item -Path "./" -Name "build" -ItemType Directory
@@ -35,10 +35,10 @@ Copy-Item -Path "log" -Destination "./build" -Recurse -Force
 Copy-Item -Path "startup.sh" -Destination "./build" -Recurse -Force
 Copy-Item -Path "requirements.txt" -Destination "./build" -Recurse -Force
 
-$deployment_package_path = "./distributable/eta_regulator_board_web_api_${buildDateTimeMark}.zip"
+$deployment_package_path = "./distro/web_api_${buildDateTimeMark}.zip"
 
 if($IsLinux) {
-    Invoke-Expression "zip -r $deployment_package_path build"
+    Invoke-Expression "zip -r $deployment_package_path ./build"
 } else {
     Compress-Archive -Path "./build" -DestinationPath $deployment_package_path
 }
@@ -51,7 +51,7 @@ $form = @{
 Invoke-WebRequest -Uri $uri `
     -Method Post `
     -Form $form `
-    -ConnectionTimeoutSeconds 5 `
+    -ConnectionTimeoutSeconds 30 `
     -OperationTimeoutSeconds 30
 
 Get-ChildItem -Path "./build" -Recurse | Remove-Item -Force -Recurse

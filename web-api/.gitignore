@@ -136,4 +136,4 @@ cython_debug/
 
 celerybeat-schedule*.*
 
-distributable
+distro
