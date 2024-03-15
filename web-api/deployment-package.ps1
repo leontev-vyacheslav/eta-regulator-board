@@ -6,10 +6,12 @@ param(
 Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
 
 
-$uri = "http://eta24.ru:15020/deployments/"
+$uri = "http://eta24.ru:15020"
 if ($DebugMode -eq "yes" -or $DebugMode -eq "y") {
-    $uri = "http://192.168.0.107:5020/deployments/"
+    $uri = "http://192.168.0.107:5020"
 }
+
+$uri += "/deployments/"
 
 $buildDateTimeMark = Get-Date -Format "yyyyMMddTHHmmss"
 

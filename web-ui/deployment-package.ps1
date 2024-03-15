@@ -8,10 +8,12 @@ Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
 
 $buildDateTimeMark = Get-Date -Format "yyyyMMddTHHmmss"
 
-$uri = "http://eta24.ru:15020/deployments/"
+$uri = "http://eta24.ru:15020"
 if ($DebugMode -eq "yes" -or $DebugMode -eq "y") {
-    $uri = "http://192.168.0.107:5020/deployments/"
+    $uri = "http://192.168.0.107:5020"
 }
+
+$uri += "/deployments/"
 
 if ($BumpVersion -eq "yes" -or $BumpVersion -eq "y") {
     Set-AppVersion `
