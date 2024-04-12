@@ -12,15 +12,15 @@ class HeatingCircuitModel(AppBaseModel):
 
     type: HeatingCircuitTypeModel
 
-    regulatorParameters: RegulatorParametersModel
+    regulator_parameters: RegulatorParametersModel
 
     def modify_identifiers(self):
         self.id = str(uuid.uuid4())
 
-        for temperature_graph_item in self.regulatorParameters.temperature_graph.items:
+        for temperature_graph_item in self.regulator_parameters.temperature_graph.items:
             temperature_graph_item.id = str(uuid.uuid4())
 
-        for schedule in self.regulatorParameters.schedules.items:
+        for schedule in self.regulator_parameters.schedules.items:
             schedule.id = str(uuid.uuid4())
 
             for window in schedule.windows:
