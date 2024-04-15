@@ -1,5 +1,9 @@
+import sys
+import signal
+
 from flask_cors import CORS
 from flask_ex import FlaskEx
+from flask import request
 
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
 from data_access.accounts_settings_repository import AccountsSettingsRepository
@@ -24,3 +28,9 @@ RegulatorSettingsRepository(app)
 
 #pylint: disable=wrong-import-position, disable=wildcard-import
 from routers import *
+
+
+def shutdown_server(signum: signal.Signals, frame):
+    sys.exit(0)
+
+signal.signal(signal.SIGTERM, shutdown_server)
