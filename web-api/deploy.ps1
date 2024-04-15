@@ -2,6 +2,8 @@ Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
 
 $APP_ROOT = "/web-api"
 
+# TODO: */5 * * * * cd /mnt/mmcblk0p1/eta-regulator-board/web-api && ./restart.sh
+
 # Check connection
 $testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1
 If($testConnectionStatus.Status -ne "Success")
