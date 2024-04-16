@@ -7,6 +7,7 @@ from time import sleep, time
 from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.heating_circuits_model import HeatingCircuitModel, HeatingCircuitsModel
+from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
 
 def get_heating_circuit_settings(heating_circuit_index: HeatingCircuitIndexModel) -> HeatingCircuitModel:
@@ -16,9 +17,9 @@ def get_heating_circuit_settings(heating_circuit_index: HeatingCircuitIndexModel
     with open(regulator_settings_path, 'r', encoding='utf-8') as file:
         json = file.read()
 
-    heating_circuits_settings = HeatingCircuitsModel.parse_raw(json)
+    regulator_settings = RegulatorSettingsModel.parse_raw(json)
 
-    return heating_circuits_settings.items[heating_circuit_index]
+    return regulator_settings.heating_circuits.items[heating_circuit_index]
 
 
 def start_sensors_polling(heating_circuit_index: HeatingCircuitIndexModel) -> None:
@@ -39,11 +40,11 @@ def start_sensors_polling(heating_circuit_index: HeatingCircuitIndexModel) -> No
         end_time = time()
 
         delta = end_time - start_time
+        # TODO: measutement unit (factor) of calculation_period
+        if delta < regulation_parameters.calculation_period / 10:
+            sleep(regulation_parameters.calculation_period / 10 - delta)
 
-        if delta < regulation_parameters.calculation_period:
-            sleep(regulation_parameters.calculation_period - delta)
-
-        print(f'sensors_polling step {datetime.now()}')
+        print(f'[{datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")}] sensors_polling step {heating_circuit_index}')
 
 
 def start_regulation_polling(heating_circuit_index: HeatingCircuitIndexModel) -> None:
@@ -68,7 +69,7 @@ def start_regulation_polling(heating_circuit_index: HeatingCircuitIndexModel) ->
         if delta < regulation_parameters.pulse_duration_valve:
             sleep(regulation_parameters.pulse_duration_valve-delta)
 
-        print(f'sensors_polling step {datetime.now()}')
+        print(f'[{datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")}] regulation_polling step {heating_circuit_index}')
 
 
 def run_regulation(heating_circuit_index: HeatingCircuitIndexModel) -> None:

@@ -1,12 +1,12 @@
 import sys
 from multiprocessing import Event, Process
+from flask_ex import FlaskEx
 
-from app import app
 from models.app_background_process_model import AppBackgroundProcessModel
 from regulation.regulation_engine import run_regulation
 
 
-def launch_regulation_engine():
+def launch_regulation_engine(app: FlaskEx):
     regulator_settings = app.get_regulator_settings()
 
     for index, _ in enumerate(regulator_settings.heating_circuits.items):

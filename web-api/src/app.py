@@ -9,7 +9,7 @@ from data_access.accounts_settings_repository import AccountsSettingsRepository
 from regulation.regulation_engine_launcher import launch_regulation_engine
 from workers.worker_starter_extension import WorkerStarter
 
-APP_VERSION = 'v.0.1.20240404T062124'
+APP_VERSION = 'v.0.1.20240416-141143'
 APP_NAME = 'Eta Regulator Board Web API'
 
 MASTER_KEY = 'XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='
@@ -35,4 +35,4 @@ def shutdown_server(signum: signal.Signals, frame):
 
 signal.signal(signal.SIGTERM, shutdown_server)
 
-launch_regulation_engine()
+launch_regulation_engine(app)

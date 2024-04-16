@@ -32,3 +32,5 @@ python -m pip install -r requirements.txt
 
 # support ru_RU.UTF-8 locale in servicing Python scripts
 sudo apt install locales-all
+
+echo "192.168.0.100    omega-8f79" | sudo tee -a "/etc/hosts" > /dev/null

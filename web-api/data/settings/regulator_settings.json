@@ -311,7 +311,7 @@
                         "items": []
                     },
                     "regulationParameters": {
-                        "proportionalityFactor": 74.0,
+                        "proportionalityFactor": 75.0,
                         "integrationFactor": 30.0,
                         "differentiationFactor": 30.0,
                         "calculationPeriod": 25.0,
