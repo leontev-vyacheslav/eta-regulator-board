@@ -40,7 +40,7 @@ Initialize-AppFolders `
 # Shutting down 'eta-regulator-board-web-api' and removing orignal files...
 Write-Host "Shutting down '$WEB_API_APP_NAME' and removing orignal files..."  -ForegroundColor Green
 # ssh ${ACCOUNT}@${IPADDR} "wget --post-data='security_pass=onioneer' --tries=2 ${WEB_API_SHUTDOWN_ENDPOINT}"
-$remoteOutput = ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}${APP_ROOT}/src;kill `$(cat PID_FILE)" *>&1
+$remoteOutput = ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}${APP_ROOT}/src;kill -TERM `$(cat PID_FILE)" *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
     # exit
