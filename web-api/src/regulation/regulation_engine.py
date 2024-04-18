@@ -1,5 +1,7 @@
 import os
+import sys
 import pathlib
+import logging
 from datetime import datetime
 from time import sleep, time
 from multiprocessing import Event as ProcessEvent
@@ -11,7 +13,33 @@ from models.regulator.heating_circuits_model import HeatingCircuitModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
 
+class RegulationEngineLoggingFormatter(logging.Formatter):
+    def format(self, record):
+        record.pid = os.getpid()
+        record.created_utc = datetime.utcfromtimestamp(record.created)
+        record.utctime = record.created_utc.strftime("%Y-%m-%d %H:%M:%S.%f%z")[:-4] + " +0000"
+
+        return super().format(record)
+
+
 class RegulationEngine:
+
+    sensors_polling_stopped = 'The sensors polling thread %d was gracefully stopped.'
+    sensors_polling_done = 'The sensors polling thread %d has done a step.'
+    regulation_polling_stopped ='The regulation polling process %d was gracefully stopped.'
+    regulation_polling_done ='The regulation polling process %d has done a step.'
+
+    def __init__(self) -> None:
+        self.logger = logging.getLogger()
+        self.logger.setLevel(logging.DEBUG)
+
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setLevel(logging.DEBUG)
+        handler.setFormatter(
+            RegulationEngineLoggingFormatter('[%(utctime)s] [%(pid)d] [%(levelname)s] %(message)s')
+        )
+
+        self.logger.addHandler(handler)
 
     def _get_heating_circuit_settings(self, heating_circuit_index: HeatingCircuitIndexModel) -> HeatingCircuitModel:
         app_root_path = pathlib.Path(os.path.dirname(__file__)).parent.parent
@@ -33,8 +61,7 @@ class RegulationEngine:
         # start polling
         while True:
             if threading_cancellation_event.is_set():
-                print(
-                    f'[{datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")}] The sensors polling thread {heating_circuit_index} was gracefully stopped.')
+                self.logger.info(RegulationEngine.sensors_polling_stopped, heating_circuit_index)
                 break
 
             current_receiving_settings_time = time()
@@ -51,7 +78,7 @@ class RegulationEngine:
             if delta < regulation_parameters.calculation_period / 10:
                 sleep(regulation_parameters.calculation_period / 10 - delta)
 
-            print(f'[{datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")}] The sensors polling thread {heating_circuit_index} has done a step.')
+            self.logger.info(RegulationEngine.sensors_polling_done, heating_circuit_index)
 
     def run(self, process_cancellation_event: ProcessEvent, heating_circuit_index: HeatingCircuitIndexModel) -> None:
         # start polling temperature sensors and calculation
@@ -66,7 +93,7 @@ class RegulationEngine:
                 while polling_thread.is_alive():
                     pass
 
-                print(f'[{datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")}] The regulation polling process {heating_circuit_index} was gracefully stopped.')
+                self.logger.info(RegulationEngine.regulation_polling_stopped, heating_circuit_index)
 
                 break
 
@@ -90,4 +117,4 @@ class RegulationEngine:
             if delta < regulation_parameters.pulse_duration_valve:
                 sleep(regulation_parameters.pulse_duration_valve-delta)
 
-            print(f'[{datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")}] The regulation polling process {heating_circuit_index} has done a step.')
+            self.logger.info(RegulationEngine.regulation_polling_done, heating_circuit_index)
