@@ -11,7 +11,8 @@ def launch_regulation_engine(app: FlaskEx):
 
     for heating_circuit_index, _ in enumerate(regulator_settings.heating_circuits.items):
         process_cancellation_event = ProcessEvent()
-        engine = RegulationEngine()
+        engine = RegulationEngine(heating_circuit_index=heating_circuit_index)
+
         regulation_heating_circuit_process = Process(
             target=engine.run,
             args=(process_cancellation_event, heating_circuit_index),

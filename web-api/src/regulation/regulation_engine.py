@@ -1,8 +1,5 @@
 import os
-import sys
 import pathlib
-import logging
-from datetime import datetime
 from time import sleep, time
 from multiprocessing import Event as ProcessEvent
 from threading import Thread, Event as ThreadingEvent
@@ -12,34 +9,21 @@ from models.regulator.enums.heating_circuit_index_model import HeatingCircuitInd
 from models.regulator.heating_circuits_model import HeatingCircuitModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
-
-class RegulationEngineLoggingFormatter(logging.Formatter):
-    def format(self, record):
-        record.pid = os.getpid()
-        record.created_utc = datetime.utcfromtimestamp(record.created)
-        record.utctime = record.created_utc.strftime("%Y-%m-%d %H:%M:%S.%f%z")[:-4] + " +0000"
-
-        return super().format(record)
+from loggers.default_logger_builder import build as build_default_logger
 
 
 class RegulationEngine:
 
-    sensors_polling_stopped = 'The sensors polling thread %d was gracefully stopped.'
-    sensors_polling_done = 'The sensors polling thread %d has done a step.'
-    regulation_polling_stopped ='The regulation polling process %d was gracefully stopped.'
-    regulation_polling_done ='The regulation polling process %d has done a step.'
+    sensors_polling_started = 'The sensors polling thread %d was STARTED.'
+    sensors_polling_done = 'The sensors polling thread %d has DONE A STEP.'
+    sensors_polling_stopped = 'The sensors polling thread %d was gracefully STOPPED.'
 
-    def __init__(self) -> None:
-        self.logger = logging.getLogger()
-        self.logger.setLevel(logging.DEBUG)
+    regulation_polling_started = 'The regulation polling process %d was STARTED.'
+    regulation_polling_done = 'The regulation polling process %d has DONE A STEP.'
+    regulation_polling_stopped = 'The regulation polling process %d was gracefully STOPPED.'
 
-        handler = logging.StreamHandler(sys.stdout)
-        handler.setLevel(logging.DEBUG)
-        handler.setFormatter(
-            RegulationEngineLoggingFormatter('[%(utctime)s] [%(pid)d] [%(levelname)s] %(message)s')
-        )
-
-        self.logger.addHandler(handler)
+    def __init__(self, heating_circuit_index: HeatingCircuitIndexModel) -> None:
+        self.logger = build_default_logger(f'regulation_engine_logger_{heating_circuit_index}')
 
     def _get_heating_circuit_settings(self, heating_circuit_index: HeatingCircuitIndexModel) -> HeatingCircuitModel:
         app_root_path = pathlib.Path(os.path.dirname(__file__)).parent.parent
@@ -59,6 +43,8 @@ class RegulationEngine:
         last_receiving_settings_time = time()
 
         # start polling
+        self.logger.info(RegulationEngine.sensors_polling_started, heating_circuit_index)
+
         while True:
             if threading_cancellation_event.is_set():
                 self.logger.info(RegulationEngine.sensors_polling_stopped, heating_circuit_index)
@@ -81,6 +67,8 @@ class RegulationEngine:
             self.logger.info(RegulationEngine.sensors_polling_done, heating_circuit_index)
 
     def run(self, process_cancellation_event: ProcessEvent, heating_circuit_index: HeatingCircuitIndexModel) -> None:
+        self.logger.info(RegulationEngine.regulation_polling_started, heating_circuit_index)
+
         # start polling temperature sensors and calculation
         threading_cancellation_event = ThreadingEvent()
         polling_thread = Thread(target=self._run_sensors_polling, args=(
