@@ -1,9 +1,9 @@
-flask
-flask-cors
-dataclasses
-Flask-Pydantic
-gunicorn
-smbus2
-pyjwt
-pyaes
+flask==2.0.3
+flask-cors==4.0.0
+dataclasses==0.8
+Flask-Pydantic==0.11.0
+gunicorn==21.2.0
+smbus2==0.4.3
+pyjwt==2.4.0
+pyaes==1.6.1
 spidev==3.5

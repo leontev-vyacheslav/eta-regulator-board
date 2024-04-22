@@ -1,7 +1,7 @@
 import os
 import pathlib
 from time import sleep, time
-from multiprocessing import Event as ProcessEvent
+from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 from threading import Thread, Event as ThreadingEvent
 
 from models.regulator.enums.control_mode_model import ControlModeModel
@@ -11,6 +11,7 @@ from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
 from loggers.default_logger_builder import build as build_default_logger
 
+process_lock_sensor_reading = ProcessLock()
 
 class RegulationEngine:
 
@@ -55,9 +56,13 @@ class RegulationEngine:
                 heating_circuit_settings = self._get_heating_circuit_settings(heating_circuit_index)
                 last_receiving_settings_time = time()
 
-            start_time = time()
-            # read temperature sensors and calculate regulator valve impact
-            end_time = time()
+            process_lock_sensor_reading.acquire()
+            try:
+                start_time = time()
+                # read temperature sensors and calculate regulator valve impact
+                end_time = time()
+            finally:
+                process_lock_sensor_reading.release()
 
             delta = end_time - start_time
             # TODO: measutement unit (factor) of calculation_period

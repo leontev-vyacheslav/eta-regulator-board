@@ -1,22 +1,36 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-       {
-          "type": "npm",
-          "script": "start",
-          "path": "web-ui",
-          "isBackground": true,   // This prevents the launch.json to wait for the completion of the task
-          "problemMatcher": {
-             "owner": "custom",   // This is not needed but, required by the problemMatcher Object
-             "pattern": {
-               "regexp": "^$"     // This is not needed but, required by the problemMatcher Object
-             },
-             "background": {
+   "version": "2.0.0",
+   "tasks": [
+      {
+         "type": "npm",
+         "script": "start",
+         "path": "web-ui",
+         "isBackground": true,
+         "problemMatcher": {
+            "owner": "custom",
+            "pattern": {
+               "regexp": "^$"
+            },
+            "background": {
                "activeOnStart": true,
-               "beginsPattern": "Compiling...",  // Signals the begin of the Task
-               "endsPattern": "Compiled .*"      // Signals that now the initialization of the task is complete
-             }
-          }
-       }
-    ]
+               "beginsPattern": "Compiling...",
+               "endsPattern": "Compiled .*"
+            }
+         }
+      },
+      {
+         "type": "shell",
+         "label": "omega-8f79-to-hosts",
+         "command": [
+            "echo '192.168.0.100    omega-8f79' | sudo tee -a '/etc/hosts' > /dev/null"
+         ],
+         "isBackground": true,
+         "presentation": {
+            "reveal": "silent",
+            "revealProblems": "onProblem",
+            "close": true
+         },
+         "problemMatcher": []
+      }
+   ]
 }

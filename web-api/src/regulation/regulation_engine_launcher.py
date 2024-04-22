@@ -21,7 +21,7 @@ def launch_regulation_engine(app: FlaskEx):
         regulation_heating_circuit_process.start()
 
         app_process = AppBackgroundProcessModel(
-            name=f'regulation_heating_circuit_process{heating_circuit_index}',
+            name=f'regulation_process{heating_circuit_index}',
             process=regulation_heating_circuit_process,
             cancellation_event=process_cancellation_event,
             lifetime=sys.maxsize,
