@@ -1,10 +1,11 @@
-from ast import List
+
+from typing import List
 from models.regulator.adc_channel_model import AdcChannelModel
 from models.regulator.enums.temperature_sensor_channel_pins import TemperatureSersorChannelPins
+from utils.debugging import is_debug
 
 from omega import gpio
 from omega.mcp3208 import MCP3208
-
 
 
 temperature_sersor_channels: List[AdcChannelModel] = [
@@ -41,12 +42,15 @@ temperature_sersor_channels: List[AdcChannelModel] = [
 ]
 
 
-def get_temperature(channel: TemperatureSersorChannelPins) -> float:
+def get_temperature(channel: TemperatureSersorChannelPins, measurements: int = 5) -> float:
+    if is_debug():
+        return 0
+
     gpio.adc_chip_select()
     try:
         gpio.set(gpio.GPIO_Vp, False)
         with MCP3208() as mcp_3208:
-            value = mcp_3208.read_avg(channel=channel, measurements=5)
+            value = mcp_3208.read_avg(channel=int(channel), measurements=measurements)
     finally:
         gpio.set(gpio.GPIO_Vp, True)
 
@@ -54,4 +58,3 @@ def get_temperature(channel: TemperatureSersorChannelPins) -> float:
     temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
 
     return temperature
-
