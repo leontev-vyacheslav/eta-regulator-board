@@ -2,6 +2,7 @@
 from typing import List
 from models.regulator.adc_channel_model import AdcChannelModel
 from models.regulator.enums.temperature_sensor_channel_pins import TemperatureSersorChannelPins
+from omega.ds1307 import DS1307
 from utils.debugging import is_debug
 
 from omega import gpio
@@ -58,3 +59,10 @@ def get_temperature(channel: TemperatureSersorChannelPins, measurements: int = 5
     temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
 
     return temperature
+
+
+def get_rtc_datetime():
+    with DS1307() as rtc:
+        rtc_now = rtc.read_datetime()
+
+    return rtc_now
