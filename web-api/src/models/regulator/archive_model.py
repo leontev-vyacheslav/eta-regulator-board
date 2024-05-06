@@ -8,7 +8,8 @@ class ArchiveModel(AppBaseModel):
 
     outdoor_temperature: float
 
+    room_temperature: float
+
     supply_pipe_temperature: float
 
     return_pipe_temperature: float
-

@@ -3,10 +3,11 @@ import logging
 
 from loggers.default_logger_formatter import DefaultLoggingFormatter
 
-def build(name: str):
+
+def build(name: str, default_level: int = logging.DEBUG):
 
     logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(default_level)
 
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.DEBUG)
