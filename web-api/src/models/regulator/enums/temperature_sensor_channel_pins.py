@@ -1,6 +1,6 @@
 from enum import IntEnum
 
-class TemperatureSersorChannelPins(IntEnum):
+class TemperatureSensorChannels(IntEnum):
     OUTDOOR_TEMPERATURE = 0
     ROOM_TEMPERATURE = 1
     SUPPLY_PIPE_TEMPERATURE_1 = 2

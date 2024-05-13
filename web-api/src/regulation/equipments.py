@@ -1,49 +1,22 @@
+from time import sleep
 
-from typing import List
-from models.regulator.adc_channel_model import AdcChannelModel
-from models.regulator.enums.temperature_sensor_channel_pins import TemperatureSersorChannelPins
+from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
+from models.regulator.enums.temperature_sensor_channel_pins import TemperatureSensorChannels
 from omega.ds1307 import DS1307
 from utils.debugging import is_debug
 
 from omega import gpio
 from omega.mcp3208 import MCP3208
+from omega.gpio import set as gpio_set, V1_PLUS, V1_MINUS, V2_PLUS, V2_MINUS
+
+VALVE1_OPEN = V1_PLUS
+VALVE1_CLOSE = V1_MINUS
+
+VALVE2_OPEN = V2_PLUS
+VALVE2_CLOSE = V2_MINUS
 
 
-temperature_sersor_channels: List[AdcChannelModel] = [
-    AdcChannelModel(
-        pin=TemperatureSersorChannelPins.OUTDOOR_TEMPERATURE,
-        name='outdoor_temperature',
-        description='Температура наружного воздуха'
-    ),
-    AdcChannelModel(
-        pin=TemperatureSersorChannelPins.ROOM_TEMPERATURE,
-        name='room_temperature',
-        description='Температура в помещении'
-    ),
-    AdcChannelModel(
-        pin=TemperatureSersorChannelPins.SUPPLY_PIPE_TEMPERATURE_1,
-        name='supply_pipe_temperature_1',
-        description='Температура подачи контура №1'
-    ),
-    AdcChannelModel(
-        pin=TemperatureSersorChannelPins.RETURN_PIPE_TEMPERATURE_1,
-        name='return_pipe_temperature_1',
-        description='Температура обратки контура №1'
-    ),
-    AdcChannelModel(
-        pin=TemperatureSersorChannelPins.SUPPLY_PIPE_TEMPERATURE_2,
-        name='supply_pipe_temperature_2',
-        description='Температура подачи контура №2'
-    ),
-    AdcChannelModel(
-        pin=TemperatureSersorChannelPins.RETURN_PIPE_TEMPERATURE_2,
-        name='return_pipe_temperature_2',
-        description='Температура обратки контура №2'
-    )
-]
-
-
-def get_temperature(channel: TemperatureSersorChannelPins, measurements: int = 5) -> float:
+def get_temperature(channel: TemperatureSensorChannels, measurements: int = 5) -> float:
     if is_debug():
         return 0
 
@@ -66,3 +39,20 @@ def get_rtc_datetime():
         rtc_now = rtc.read_datetime()
 
     return rtc_now
+
+
+def set_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, impact_sign: bool, delay: float):
+    valve_open_pin = VALVE1_OPEN if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_OPEN
+    valve_close_pin = VALVE1_CLOSE if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_CLOSE
+
+    gpio_set(valve_open_pin, False)
+    gpio_set(valve_close_pin, False)
+
+    if impact_sign:
+        gpio_set(valve_open_pin, True)
+        sleep(delay)
+        gpio_set(valve_open_pin, False)
+    else:
+        gpio_set(valve_close_pin, True)
+        sleep(delay)
+        gpio_set(valve_close_pin, False)

@@ -5,6 +5,11 @@ GPIO_Vp = 19
 CSGPIO = 18
 CS1 = 6
 
+V1_PLUS = 11
+V1_MINUS = 17
+V2_PLUS = 16
+V2_MINUS = 15
+
 def set(pin: int, state: bool) -> bool:
 
     completed_process = subprocess.run(

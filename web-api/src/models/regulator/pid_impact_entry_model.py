@@ -1,6 +1,5 @@
 from models.abstracts.app_base_model import AppBaseModel
 from models.regulator.archive_model import ArchiveModel
-from models.regulator.calculated_temperatures_model import CalculatedTemperaturesModel
 
 
 class PidImpactEntryModel(AppBaseModel):
@@ -11,7 +10,7 @@ class PidImpactEntryModel(AppBaseModel):
     total_derivation: float
 
 
-class PipImpactResultModel(AppBaseModel):
+class PidImpactResultModel(AppBaseModel):
     impact: float
 
-    derivarion: float
+    derivation: float

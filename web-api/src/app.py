@@ -2,7 +2,6 @@ import os
 import sys
 import signal
 import time
-import pathlib
 import os.path
 
 from flask_cors import CORS
@@ -10,7 +9,7 @@ from flask_ex import FlaskEx
 
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
 from data_access.accounts_settings_repository import AccountsSettingsRepository
-from regulation.regulation_engine_launcher import launch_regulation_engine
+from regulation.launcher import launch_regulation_engines
 from workers.worker_starter_extension import WorkerStarter
 
 APP_VERSION = 'v.0.1.20240422-135841'
@@ -50,7 +49,7 @@ def shutdown_handler(signum: signal.Signals, frame):
 
 signal.signal(signal.SIGTERM, shutdown_handler)
 
-app.app_logger.info('The master procees PID is %d.',os.getpid())
+app.app_logger.info('The master process PID is %d.',os.getpid())
 
 counter = 1
 while True:
@@ -62,6 +61,6 @@ while True:
     counter += 1
 
 
-launch_regulation_engine(app)
+launch_regulation_engines(app)
 
 
