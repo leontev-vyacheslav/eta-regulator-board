@@ -59,6 +59,12 @@ class FlaskEx(Flask):
         logger = logging.getLogger('worker_logger')
         logger.setLevel(logging.INFO)
         log_path = self.app_root_path.joinpath('log', 'worker.log')
+
+        if not log_path.exists():
+            if not log_path.parent.exists():
+                log_path.parent.mkdir(parents=True)
+            log_path.write_text(data=str(), encoding='utf-8')
+
         file_handler = logging.FileHandler(f'{log_path}', mode='w')
         formatter = logging.Formatter(
             fmt='%(asctime)s [%(levelname)s] %(message)s',

@@ -1,5 +1,5 @@
 import sys
-from multiprocessing import Event as ProcessEvent, Process, Lock as ProcessLock
+from multiprocessing import Process, Event as ProcessEvent, Lock as ProcessLock
 
 from flask_ex import FlaskEx
 from models.app_background_process_model import AppBackgroundProcessModel

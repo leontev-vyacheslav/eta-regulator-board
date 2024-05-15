@@ -2,12 +2,12 @@ import os
 import pathlib
 import math
 import gzip
-import json
 from datetime import datetime
 from time import sleep, time
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 from threading import Thread, Event as ThreadingEvent, Lock as ThreadingLock
 from typing import List, Optional
+from models.regulator.archives_model import ArchivesModel
 
 import regulation.equipments as equipments
 from loggers.default_logger_builder import build as build_default_logger
@@ -41,7 +41,7 @@ class RegulationEngine:
     def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock) -> None:
         self._heating_circuit_index = heating_circuit_index
         self._process_cancellation_event = process_cancellation_event
-        self._hardware_process_lock: ProcessLock = hardwares_process_lock
+        self._hardware_process_lock = hardwares_process_lock
 
         self._pid_impact_threading_lock = ThreadingLock()
         self._shared_pid_impact: Optional[PidImpactResultModel] = None
@@ -187,20 +187,26 @@ class RegulationEngine:
             try:
                 start_current_day = self._rtc_datetime.replace(hour=0, minute=0, second=0, microsecond=0)
                 data_path = pathlib.Path(__file__).parent.parent.joinpath(
-                    f'data/archives/{self._heating_circuit_settings.type}_{self._heating_circuit_index + 1}_{start_current_day.strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
+                    f'data/archives/{self._heating_circuit_settings.type.name}_{self._heating_circuit_index + 1}_{start_current_day.strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
                 )
-                json_text = json.dumps(self._archives)
+                if not data_path.exists():
+                    data_path.write_text(data=str(), encoding='utc-8')
+
+                json_text = ArchivesModel(items=self._archives).json()
+
                 with gzip.open(data_path, mode='w') as file:
                     file.write(
                         json_text.encode()
                     )
-            except:
-                self._logger.error('Error during writing archives!')
+            except Exception as ex:
+                self._logger.error(f'Error during writing archives: {str(ex)}')
 
     def _refresh_rtc_datetime(self):
         if time() - self._last_rtc_getting_time >= RegulationEngine.updating_rtc_period:
             self._rtc_datetime = equipments.get_rtc_datetime()
             self._last_rtc_getting_time = time()
+
+            self._logger.debug(f'A current rtc datetime (%d, %s): {self._rtc_datetime}.', self._heating_circuit_index, self._heating_circuit_type.name)
 
     def _get_pid_impact(self, entry: PidImpactEntryModel) -> PidImpactResultModel:
         calc_temperatures = self._get_calculated_temperatures(entry.archive)
@@ -320,7 +326,7 @@ class RegulationEngine:
         threading_cancellation_event = ThreadingEvent()
         polling_thread = Thread(
             target=self._start_sensors_polling,
-            args=(threading_cancellation_event)
+            args=(threading_cancellation_event, )
         )
         polling_thread.start()
 
@@ -363,7 +369,7 @@ class RegulationEngine:
                     equipments.set_valve_impact(
                         heating_circuit_index=self._heating_circuit_index,
                         impact_sign=pid_impact.impact > 0.0,
-                        delay=pid_impact.impact * regulation_parameters.pulse_duration_valve
+                        impact_duration=abs(pid_impact.impact * regulation_parameters.pulse_duration_valve)
                     )
                 finally:
                     self._hardware_process_lock.release()

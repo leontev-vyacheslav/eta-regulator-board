@@ -1,4 +1,6 @@
 from time import sleep
+from datetime import datetime
+
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.temperature_sensor_channel_pins import TemperatureSensorChannels
@@ -34,25 +36,34 @@ def get_temperature(channel: TemperatureSensorChannels, measurements: int = 5) -
     return temperature
 
 
-def get_rtc_datetime():
+def get_rtc_datetime() -> datetime:
+    if is_debug():
+        return datetime.utcnow()
+
     with DS1307() as rtc:
         rtc_now = rtc.read_datetime()
 
     return rtc_now
 
 
-def set_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, impact_sign: bool, delay: float):
+def set_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, impact_sign: bool, impact_duration: float):
     valve_open_pin = VALVE1_OPEN if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_OPEN
     valve_close_pin = VALVE1_CLOSE if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_CLOSE
+
+    if is_debug():
+        #sleep(impact_duration)
+        sleep(0.5)
+
+        return
 
     gpio_set(valve_open_pin, False)
     gpio_set(valve_close_pin, False)
 
     if impact_sign:
         gpio_set(valve_open_pin, True)
-        sleep(delay)
+        sleep(impact_duration)
         gpio_set(valve_open_pin, False)
     else:
         gpio_set(valve_close_pin, True)
-        sleep(delay)
+        sleep(impact_duration)
         gpio_set(valve_close_pin, False)
