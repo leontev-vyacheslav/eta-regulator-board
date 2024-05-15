@@ -13,7 +13,7 @@ from models.internal_settings_model import InternalSettingsModel
 from models.app_background_process_model import AppBackgroundProcessModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
-from loggers.default_logger_builder import build as build_default_logger
+from loggers.default_logger_builder import build as build_logger
 
 class FlaskEx(Flask):
 
@@ -48,7 +48,7 @@ class FlaskEx(Flask):
         self.worker_logger: Logger = self._init_worker_logger()
         self.internal_settings = self._init_internal_settings()
         self.app_background_processes: List[AppBackgroundProcessModel] = []
-        self.app_logger = build_default_logger('default_app_logger')
+        self.app_logger = build_logger('default_app_logger')
 
         # self.regulator_settings_repository = RegulatorSettingsRepository()
 

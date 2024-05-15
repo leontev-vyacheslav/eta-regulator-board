@@ -52,11 +52,12 @@ signal.signal(signal.SIGTERM, shutdown_handler)
 app.app_logger.info('The master process PID is %d.',os.getpid())
 
 counter = 1
+delay_steps = 5
 while True:
     time.sleep(1)
-    app.app_logger.info('Waiting before running of the regulation processes (%d out of 10)...', counter)
+    app.app_logger.info(f'Waiting before running of the regulation processes ({counter} out of {delay_steps})...')
     current_time = time.time()
-    if counter == 10:
+    if counter == delay_steps:
         break
     counter += 1
 
