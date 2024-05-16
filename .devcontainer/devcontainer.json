@@ -36,7 +36,7 @@
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"ms-python.python@2022.8.0",
-				"ms-python.vscode-pylance"
+				"ms-python.vscode-pylance@2023.10.40"
 			]
 		}
 	},
