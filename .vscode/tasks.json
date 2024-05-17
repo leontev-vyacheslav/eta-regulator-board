@@ -20,9 +20,23 @@
       },
       {
          "type": "shell",
-         "label": "omega-8f79-to-hosts",
+         "label": "omega-8f79-to-hosts.wifi",
          "command": [
             "echo '192.168.0.100    omega-8f79' | sudo tee -a '/etc/hosts' > /dev/null"
+         ],
+         "isBackground": true,
+         "presentation": {
+            "reveal": "silent",
+            "revealProblems": "onProblem",
+            "close": true
+         },
+         "problemMatcher": []
+      },
+      {
+         "type": "shell",
+         "label": "omega-8f79-to-hosts.mobile-hotspot",
+         "command": [
+            "echo '192.168.3.1    omega-8f79' | sudo tee -a '/etc/hosts' > /dev/null"
          ],
          "isBackground": true,
          "presentation": {
