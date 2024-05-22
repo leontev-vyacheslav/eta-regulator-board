@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
-from models.regulator.enums.temperature_sensor_channel_pins import TemperatureSensorChannels
+from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
 from omega.ds1307 import DS1307
 from utils.debugging import is_debug
 
@@ -18,7 +18,7 @@ VALVE2_OPEN = V2_PLUS
 VALVE2_CLOSE = V2_MINUS
 
 
-def get_temperature(channel: TemperatureSensorChannels, measurements: int = 5) -> float:
+def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 5) -> float:
     if is_debug():
         return 0
 

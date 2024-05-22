@@ -2,15 +2,15 @@ from models.abstracts.app_base_model import AppBaseModel
 from models.regulator.archive_model import ArchiveModel
 
 
-class PidImpactEntryModel(AppBaseModel):
+class PidDeviationBase(AppBaseModel):
+    deviation: float
+
+    total_deviation: float
+
+
+class PidImpactEntryModel(PidDeviationBase):
     archive: ArchiveModel
 
-    previous_derivation:  float
 
-    total_derivation: float
-
-
-class PidImpactResultModel(AppBaseModel):
+class PidImpactResultModel(PidDeviationBase):
     impact: float
-
-    derivation: float

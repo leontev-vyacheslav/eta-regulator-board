@@ -1,7 +1,7 @@
 from enum import IntEnum
 
 
-class AdcChannelPins(IntEnum):
+class AdcChannelPinModel(IntEnum):
     CHANNEL_0 = 0
     CHANNEL_1 = 1
     CHANNEL_2 = 2
