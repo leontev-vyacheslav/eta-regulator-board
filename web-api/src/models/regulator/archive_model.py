@@ -13,22 +13,3 @@ class ArchiveModel(AppBaseModel):
     supply_pipe_temperature: float
 
     return_pipe_temperature: float
-
-
-class ArchiveRangeModel(AppBaseModel):
-
-    outdoor_temperature_min: float
-
-    outdoor_temperature_max: float
-
-    room_temperature_min: float
-
-    room_temperature_max: float
-
-    supply_pipe_temperature_min: float
-
-    supply_pipe_temperature_max: float
-
-    return_pipe_temperature_min: float
-
-    return_pipe_temperature_max: float
