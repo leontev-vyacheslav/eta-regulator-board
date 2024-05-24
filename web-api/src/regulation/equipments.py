@@ -1,7 +1,6 @@
 from time import sleep
 from datetime import datetime
 
-
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
 from omega.ds1307 import DS1307
@@ -18,6 +17,7 @@ VALVE2_OPEN = V2_PLUS
 VALVE2_CLOSE = V2_MINUS
 
 
+# TODO: overplaying situations: missing sersors and short circuit (-inf | +inf)
 def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 5) -> float:
     if is_debug():
         return 0
@@ -25,6 +25,7 @@ def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 
     gpio.adc_chip_select()
     try:
         gpio.set(gpio.GPIO_Vp, False)
+        # TODO: time profiling
         with MCP3208() as mcp_3208:
             value = mcp_3208.read_avg(channel=int(channel), measurements=measurements)
     finally:
@@ -51,7 +52,7 @@ def set_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, impact_sig
     valve_close_pin = VALVE1_CLOSE if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_CLOSE
 
     if is_debug():
-        #sleep(impact_duration)
+        # sleep(impact_duration)
         sleep(0.5)
 
         return

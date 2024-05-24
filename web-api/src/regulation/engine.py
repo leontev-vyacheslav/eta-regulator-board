@@ -306,6 +306,7 @@ class RegulationEngine:
             .control_parameters \
             .return_pipe_temperature_influence
 
+        # TODO: missing sensors
         deviation = (calc_temperatures.supply_pipe_temperature - entry.archive.supply_pipe_temperature) + \
             (calc_temperatures.return_pipe_temperature - entry.archive.return_pipe_temperature) * return_pipe_temperature_influence + \
             (entry.archive.room_temperature - RegulationEngine.default_room_temperature) * room_temperature_influence
@@ -465,6 +466,8 @@ class RegulationEngine:
                     )
 
             if pid_impact is not None:
+                # missing sensors
+                # reset total, deviation
                 with self._hardware_process_lock:
                     equipments.set_valve_impact(
                         heating_circuit_index=self._heating_circuit_index,
@@ -490,6 +493,6 @@ def regulation_engine_starter(heating_circuit_index: HeatingCircuitIndexModel, p
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
         logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE,
-        is_search_impact=True
+        is_search_impact=False
     )
     engine.start()
