@@ -17,11 +17,10 @@ from models.regulator.archive_model import ArchiveModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
 from models.regulator.heating_circuits_model import HeatingCircuitModel
-from models.regulator.pid_impact_entry_model import PidImpactEntryModel, PidImpactResultModel
+from models.regulator.pid_impact_entry_model import PidImpactEntryModel, PidImpactResultComponentsModel, PidImpactResultModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
 from models.regulator.calculated_temperatures_model import CalculatedTemperaturesModel
-from utils.iterators_helper import frange
 
 
 class RegulationEngine:
@@ -51,8 +50,7 @@ class RegulationEngine:
     pid_impact_calculated_debug_msg = 'PID impact was calculated with a value: IMPACT=%.2f, DEVIATION=%.2f, TOTAL_DEVIATION=%.2f'
     writing_archives_error_msg = 'Error has happened during writing archives: %s'
 
-    def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: RegulationEngineLoggingLevelModel, is_search_impact: bool) -> None:
-        self._is_search_impact = is_search_impact
+    def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: RegulationEngineLoggingLevelModel) -> None:
         self._logging_level = logging_level
 
         self._heating_circuit_index = heating_circuit_index
@@ -80,42 +78,6 @@ class RegulationEngine:
         # class members depending on settings
         self._heating_circuit_type = self._heating_circuit_settings.type
         self._calculation_period = self._heating_circuit_settings.regulator_parameters.regulation_parameters.calculation_period / 10
-
-        #
-        if self._is_search_impact:
-            self._init_search_impact_mode()
-
-    def _init_search_impact_mode(self):
-        self._calculation_period = 0
-        self._logger.setLevel(logging.CRITICAL)
-
-        outdoor_temperature_min = -34.0
-        outdoor_temperature_max = 20.0
-
-        room_temperature_min = 20.0
-        room_temperature_max = 25.0
-
-        supply_pipe_temperature_min = self._heating_circuit_settings.regulator_parameters.control_parameters.supply_pipe_min_temperature
-        supply_pipe_temperature_max = self._heating_circuit_settings.regulator_parameters.control_parameters.supply_pipe_max_temperature
-
-        archives: List[ArchiveModel] = []
-
-        for outdoor_temperature in frange(outdoor_temperature_min, outdoor_temperature_max, 1):
-            for room_temperature in frange(room_temperature_min, room_temperature_max, 1):
-                for supply_pipe_temperature in frange(supply_pipe_temperature_min, supply_pipe_temperature_max, 5):
-                    archives.append(
-                        ArchiveModel(
-                            datetime=datetime.utcnow(),
-                            outdoor_temperature=outdoor_temperature,
-                            room_temperature=room_temperature,
-                            supply_pipe_temperature=supply_pipe_temperature,
-                            return_pipe_temperature=0.5 * supply_pipe_temperature
-                        )
-                    )
-
-            self._search_impact_archive_sequence = (a for a in archives)
-            self._min_pid_impact = float('inf')
-            self._max_pid_impact = float('-inf')
 
     def _get_settings(self) -> HeatingCircuitModel:
         app_root_path = pathlib.Path(os.path.dirname(__file__)).parent.parent
@@ -187,42 +149,18 @@ class RegulationEngine:
         )
 
     def _get_archive(self) -> ArchiveModel:
-        if self._is_search_impact:
-            try:
-                generated_archive = next(self._search_impact_archive_sequence)
-
-                outdoor_temperature_measured = generated_archive.outdoor_temperature
-                room_temperature_measured = generated_archive.room_temperature
-                supply_pipe_temperature_measured = generated_archive.supply_pipe_temperature
-                return_pipe_temperature_measured = generated_archive.return_pipe_temperature
-
-            except StopIteration:
-                if not self._process_cancellation_event.is_set():
-                    self._logger.critical('MIN_IMPACT=%.2f, MAX_IMPACT=%.2f', self._min_pid_impact, self._max_pid_impact)
-
-                self._process_cancellation_event.set()
-
-                return ArchiveModel(
-                    datetime=self._rtc_datetime,
-                    outdoor_temperature=float(),
-                    room_temperature=float(),
-                    supply_pipe_temperature=float(),
-                    return_pipe_temperature=float(),
-                )
-        else:
-
-            outdoor_temperature_measured = equipments.get_temperature(
-                TemperatureSensorChannelModel.OUTDOOR_TEMPERATURE
-            )
-            room_temperature_measured = equipments.get_temperature(
-                TemperatureSensorChannelModel.ROOM_TEMPERATURE
-            )
-            supply_pipe_temperature_measured = equipments.get_temperature(
-                TemperatureSensorChannelModel[f'SUPPLY_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}']
-            )
-            return_pipe_temperature_measured = equipments.get_temperature(
-                TemperatureSensorChannelModel[f'RETURN_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}']
-            )
+        outdoor_temperature_measured = equipments.get_temperature(
+            TemperatureSensorChannelModel.OUTDOOR_TEMPERATURE
+        )
+        room_temperature_measured = equipments.get_temperature(
+            TemperatureSensorChannelModel.ROOM_TEMPERATURE
+        )
+        supply_pipe_temperature_measured = equipments.get_temperature(
+            TemperatureSensorChannelModel[f'SUPPLY_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}']
+        )
+        return_pipe_temperature_measured = equipments.get_temperature(
+            TemperatureSensorChannelModel[f'RETURN_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}']
+        )
 
         self._logger.debug(
             RegulationEngine.measured_temperatures_debug_msg,
@@ -290,7 +228,7 @@ class RegulationEngine:
 
             self._logger.debug(RegulationEngine.getting_current_rtc_debug_msg, f'{self._rtc_datetime}')
 
-    def _get_pid_impact(self, entry: PidImpactEntryModel) -> PidImpactResultModel:
+    def _get_pid_imact_components(self, entry: PidImpactEntryModel) -> PidImpactResultComponentsModel:
         calc_temperatures = self._get_calculated_temperatures(entry.archive)
 
         room_temperature_influence = self._heating_circuit_settings \
@@ -336,17 +274,27 @@ class RegulationEngine:
         integration_part_impact = total_deviation * integration_factor
         differentiation_part_impact = (entry.deviation - deviation) * differentiation_factor
 
-        # TODO: need to normalize to 100%
-        pid_impart = proportional_part_impact + integration_part_impact + differentiation_part_impact
+        self._logger.debug(
+            RegulationEngine.pid_impact_calculated_debug_msg,
+            proportional_part_impact + integration_part_impact + differentiation_part_impact,
+            deviation,
+            total_deviation
+        )
 
-        if self._is_search_impact:
-            if pid_impart < self._min_pid_impact:
-                self._min_pid_impact = pid_impart
+        return PidImpactResultComponentsModel(
+            deviation=deviation,
+            total_deviation=total_deviation,
+            proportional_impact=proportional_part_impact,
+            integration_impact=integration_part_impact,
+            differentiation_impact=differentiation_part_impact
+        )
 
-            if pid_impart > self._max_pid_impact:
-                self._max_pid_impact = pid_impart
+    def _get_pid_impact_result(self, entry: PidImpactEntryModel) -> PidImpactResultModel:
+        pid_impact_components = self._get_pid_imact_components(entry)
 
-        self._logger.debug(RegulationEngine.pid_impact_calculated_debug_msg, pid_impart, deviation, total_deviation)
+        pid_impart = pid_impact_components.proportional_impact + \
+            pid_impact_components.integration_impact + \
+            pid_impact_components.differentiation_impact
 
         percented_pid_impart = 0.0
 
@@ -360,8 +308,8 @@ class RegulationEngine:
 
         return PidImpactResultModel(
             impact=percented_pid_impart,
-            deviation=deviation,
-            total_deviation=total_deviation
+            deviation=pid_impact_components.deviation,
+            total_deviation=pid_impact_components.total_deviation
         )
 
     def _start_sensors_polling(self, threading_cancellation_event: ThreadingEvent) -> None:
@@ -396,7 +344,7 @@ class RegulationEngine:
                 self._save_archives(archive)
 
                 # calc pid impact
-                pid_impact_result = self._get_pid_impact(
+                pid_impact_result = self._get_pid_impact_result(
                     entry=PidImpactEntryModel(
                         archive=archive,
                         deviation=deviation,
@@ -411,9 +359,8 @@ class RegulationEngine:
                         total_deviation=pid_impact_result.total_deviation
                     )
 
-                if not self._is_search_impact:
-                    deviation = pid_impact_result.deviation
-                    total_deviation += pid_impact_result.total_deviation
+                deviation = pid_impact_result.deviation
+                total_deviation += pid_impact_result.total_deviation
 
             # HOT_WATER
             else:
@@ -466,8 +413,8 @@ class RegulationEngine:
                     )
 
             if pid_impact is not None:
-                # missing sensors
-                # reset total, deviation
+                # TODO: cmissing sensors
+                # TODO: reset total, deviation
                 with self._hardware_process_lock:
                     equipments.set_valve_impact(
                         heating_circuit_index=self._heating_circuit_index,
@@ -492,7 +439,6 @@ def regulation_engine_starter(heating_circuit_index: HeatingCircuitIndexModel, p
         heating_circuit_index=heating_circuit_index,
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE,
-        is_search_impact=False
+        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
     )
     engine.start()
