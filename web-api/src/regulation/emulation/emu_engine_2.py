@@ -1,8 +1,8 @@
-import logging
 from datetime import datetime
 from enum import IntEnum
-from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
+import logging
 from time import time
+from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 from typing import Optional
 
 from loggers.engine_logger_builder import build as build_logger
@@ -17,10 +17,11 @@ from regulation.metadata.decorators import regulator_starter_metadata
 
 class EmuRegulationEngine(RegulationEngine):
     """
-        supply pipe temperature step variation  (50.6)(55.6)(50.6)
+        outdoor temperature step variation  (-10)(-13)(-10)
     """
-    known_outdoor_temperature = -2
-    temperature_step = 5
+
+    known_outdoor_temperature = -10
+    temperature_step = -3
     emul_step_duration = 60
 
     pid_impact_parts_critical_msg = 'PROPORTIONAL=%.2f, INTEGRAL=%.2f, DIFFERENTIAL=%.2f, DEVIATION=%.2f, TOTAL_DEVIATION=%.2f'
@@ -40,9 +41,6 @@ class EmuRegulationEngine(RegulationEngine):
             if tg_item.outdoor_temperature == EmuRegulationEngine.known_outdoor_temperature
         ), None)
 
-        if self.__temperature_graph_item is None:
-            raise ValueError()
-
         self._emul_logger_level = logging.CRITICAL + 10
         logging.addLevelName(self._emul_logger_level, "EMUL")
 
@@ -61,7 +59,6 @@ class EmuRegulationEngine(RegulationEngine):
             self._logger._log(self._emul_logger_level, msg, args, **kwargs)
 
     def _get_archive(self) -> ArchiveModel:
-
         if self.__change_state_time is None:
             self.__change_state_time = time()
 
@@ -69,11 +66,12 @@ class EmuRegulationEngine(RegulationEngine):
             self.__state = EmuRegulationEngine.State.High if self.__state == EmuRegulationEngine.State.Low else EmuRegulationEngine.State.Low
             self.__change_state_time = time()
 
-        outdoor_temperature_measured = EmuRegulationEngine.known_outdoor_temperature
         room_temperature_measured = RegulationEngine.default_room_temperature
+        outdoor_temperature_measured = self.__temperature_graph_item.outdoor_temperature \
+            if self.__state == EmuRegulationEngine.State.High \
+            else self.__temperature_graph_item.outdoor_temperature + EmuRegulationEngine.temperature_step
 
-        supply_pipe_temperature_measured = self.__temperature_graph_item.supply_pipe_temperature + \
-            EmuRegulationEngine.temperature_step if self.__state == EmuRegulationEngine.State.High else self.__temperature_graph_item.supply_pipe_temperature
+        supply_pipe_temperature_measured = self.__temperature_graph_item.supply_pipe_temperature
         return_pipe_temperature_measured = self.__temperature_graph_item.return_pipe_temperature
 
         self._logger.emul(
@@ -105,7 +103,6 @@ class EmuRegulationEngine(RegulationEngine):
         )
 
         return pid_imact_components
-
 
 @regulator_starter_metadata(
     heating_circuit_types=[
