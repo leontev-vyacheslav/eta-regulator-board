@@ -9,9 +9,11 @@ from typing import Optional
 from loggers.engine_logger_builder import build as build_logger
 from models.regulator.archive_model import ArchiveModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
+from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
 from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
 from models.regulator.pid_impact_entry_model import PidImpactEntryModel, PidImpactResultComponentsModel
 from regulation.engine import RegulationEngine
+from regulation.metadata.decorators import regulator_starter_metadata
 
 
 class EmuRegulationEngineLoggerHandler(logging.StreamHandler):
@@ -24,6 +26,9 @@ class EmuRegulationEngineLoggerHandler(logging.StreamHandler):
 
 
 class EmuRegulationEngine(RegulationEngine):
+    """
+        supply pipe temperature step variation  __+++__
+    """
     known_outdoor_temperature = -2
     supply_pipe_temperature_step = 5
     supply_pipe_temperature_step_duration = 60
@@ -48,23 +53,22 @@ class EmuRegulationEngine(RegulationEngine):
         if self.__temperature_graph_item is None:
             raise ValueError()
 
-        emul_logger_level = logging.CRITICAL + 5
-        logging.addLevelName(emul_logger_level, "EMUL")
+        self._emul_logger_level = logging.CRITICAL + 10
+        logging.addLevelName(self._emul_logger_level, "EMUL")
 
         self._logger = build_logger(
             name=f'emu_regulation_engine_logger',
             heating_circuit_index=heating_circuit_index,
             heating_circuit_type=self._heating_circuit_settings.type,
-            default_level=emul_logger_level,
+            default_level=self._emul_logger_level,
             # default_handler=EmuRegulationEngineLoggerHandler(sys.stdout)
         )
 
         self._logger.emul = self.__emul_log
 
-
     def __emul_log(self, msg, *args, **kwargs):
-        if self._logger.isEnabledFor(60):
-            self._logger._log(60, msg, args, **kwargs)
+        if self._logger.isEnabledFor(self._emul_logger_level):
+            self._logger._log(self._emul_logger_level, msg, args, **kwargs)
 
     def _get_archive(self) -> ArchiveModel:
 
@@ -112,6 +116,11 @@ class EmuRegulationEngine(RegulationEngine):
         return pid_imact_components
 
 
+@regulator_starter_metadata(
+    heating_circuit_types=[
+        HeatingCircuitTypeModel.HEATING
+    ]
+)
 def regulation_engine_starter(heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardware_process_lock: ProcessLock):
     engine = EmuRegulationEngine(
         heating_circuit_index=heating_circuit_index,

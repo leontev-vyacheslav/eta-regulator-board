@@ -3,6 +3,7 @@ import os
 import pathlib
 import math
 import gzip
+import bisect
 from datetime import datetime
 from time import sleep, time
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
@@ -21,6 +22,7 @@ from models.regulator.pid_impact_entry_model import PidImpactEntryModel, PidImpa
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
 from models.regulator.calculated_temperatures_model import CalculatedTemperaturesModel
+from regulation.metadata.decorators import regulator_starter_metadata
 
 
 class RegulationEngine:
@@ -103,38 +105,48 @@ class RegulationEngine:
             self._logger.debug(RegulationEngine.settings_refresh_debug_msg)
 
     def _get_calculated_temperatures(self, archive: ArchiveModel) -> CalculatedTemperaturesModel:
+        accurate_match_tg_item = next(
+            (
+                item
+                for item in self._heating_circuit_settings.regulator_parameters.temperature_graph.items
+                if item.outdoor_temperature == archive.outdoor_temperature
+            ),
+            None
+        )
+
+        if accurate_match_tg_item is not None:
+            return CalculatedTemperaturesModel(
+                supply_pipe_temperature=accurate_match_tg_item.supply_pipe_temperature,
+                return_pipe_temperature=accurate_match_tg_item.return_pipe_temperature
+            )
+
         temperature_graph = sorted(
             self._heating_circuit_settings.regulator_parameters.temperature_graph.items,
             key=lambda i: i.outdoor_temperature
         )
         outdoor_temperature_measured = archive.outdoor_temperature
+        outdoor_temperatures = [item.outdoor_temperature for item in temperature_graph]
 
-        max_outdoor_temperature = temperature_graph[-1].outdoor_temperature
-        min_outdoor_temperature = temperature_graph[0].outdoor_temperature
+        pos = bisect.bisect_left(outdoor_temperatures, outdoor_temperature_measured)
 
-        if outdoor_temperature_measured >= max_outdoor_temperature:
-
+        if pos == 0:
             supply_pipe_temperature_calculated = temperature_graph[0].supply_pipe_temperature
             return_pipe_temperature_calculated = temperature_graph[0].return_pipe_temperature
-
-        elif outdoor_temperature_measured <= min_outdoor_temperature:
+        elif pos == len(outdoor_temperatures):
             supply_pipe_temperature_calculated = temperature_graph[-1].supply_pipe_temperature
             return_pipe_temperature_calculated = temperature_graph[-1].return_pipe_temperature
-
         else:
-            for index, item in enumerate(temperature_graph):
-                if outdoor_temperature_measured >= item.outdoor_temperature:
-                    tg_0 = temperature_graph[index]
-                    tg_1 = temperature_graph[index + 1]
-                    break
-
-            # approximate
-            k = (tg_1.supply_pipe_temperature - tg_0.supply_pipe_temperature) / (tg_1.outdoor_temperature - tg_0.outdoor_temperature)
-            b = tg_0.supply_pipe_temperature - tg_0.outdoor_temperature * k
+            tg_left = temperature_graph[pos - 1]
+            tg_right = temperature_graph[pos]
+           # interpolate
+            k = (tg_right.supply_pipe_temperature - tg_left.supply_pipe_temperature) / \
+                (tg_right.outdoor_temperature - tg_left.outdoor_temperature)
+            b = tg_left.supply_pipe_temperature - tg_left.outdoor_temperature * k
             supply_pipe_temperature_calculated = k * outdoor_temperature_measured + b
 
-            k = (tg_1.return_pipe_temperature - tg_0.return_pipe_temperature) / (tg_1.outdoor_temperature - tg_0.outdoor_temperature)
-            b = tg_0.return_pipe_temperature - tg_0.outdoor_temperature * k
+            k = (tg_right.return_pipe_temperature - tg_left.return_pipe_temperature) / \
+                (tg_right.outdoor_temperature - tg_left.outdoor_temperature)
+            b = tg_left.return_pipe_temperature - tg_left.outdoor_temperature * k
             return_pipe_temperature_calculated = k * outdoor_temperature_measured + b
 
         self._logger.debug(
@@ -360,7 +372,7 @@ class RegulationEngine:
                     )
 
                 deviation = pid_impact_result.deviation
-                total_deviation += pid_impact_result.total_deviation
+                total_deviation = pid_impact_result.total_deviation
 
             # HOT_WATER
             else:
@@ -434,6 +446,13 @@ class RegulationEngine:
             self._logger.debug(RegulationEngine.regulation_polling_step_done_debug_msg)
 
 
+@regulator_starter_metadata(
+    heating_circuit_types=[
+        HeatingCircuitTypeModel.HEATING,
+        HeatingCircuitTypeModel.VENTILATION,
+        HeatingCircuitTypeModel.HOT_WATER
+    ]
+)
 def regulation_engine_starter(heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardware_process_lock: ProcessLock):
     engine = RegulationEngine(
         heating_circuit_index=heating_circuit_index,

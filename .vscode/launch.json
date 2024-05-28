@@ -9,7 +9,7 @@
             "env": {
                 "FLASK_APP": "web-api/src/app.py",
                 "FLASK_DEBUG": "1",
-                "EMUL": "1"
+                "REGULATOR_ENGINE_STARTER": "emu_regulation_engine_starter"
             },
             "args": [
                 "run",

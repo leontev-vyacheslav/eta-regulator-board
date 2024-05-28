@@ -1,13 +1,14 @@
 import sys, os
 from multiprocessing import Process, Event as ProcessEvent, Lock as ProcessLock
+from typing import Callable, Optional
 
 from flask_ex import FlaskEx
 from models.app_background_process_model import AppBackgroundProcessModel
 from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
-from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
+
 from regulation.engine import regulation_engine_starter
-from regulation.emu_engine import regulation_engine_starter as emu_regulation_engine_starter
+from regulation.emulation.emu_engine_1 import regulation_engine_starter as emu_regulation_engine_starter
 
 hardware_process_lock = ProcessLock()
 
@@ -15,11 +16,20 @@ hardware_process_lock = ProcessLock()
 def launch_regulation_engines(app: FlaskEx):
     regulator_settings = app.get_regulator_settings()
     heating_circuits = regulator_settings.heating_circuits.items
+    regulation_engine_starter: Optional[Callable] = None
 
-    starter = regulation_engine_starter
-    if os.environ.get("EMUL") == "1":
-        starter = emu_regulation_engine_starter
-        heating_circuits = [heating_circuit for heating_circuit in heating_circuits if heating_circuit.type == HeatingCircuitTypeModel.HEATING]
+    regulation_engine_starter_name = os.environ.get("REGULATOR_ENGINE_STARTER")
+    if regulation_engine_starter_name is None:
+        regulation_engine_starter = globals().get("regulation_engine_starter")
+    else:
+        regulation_engine_starter = globals().get(regulation_engine_starter_name)
+        if regulation_engine_starter is None:
+            NameError("Regulator engine starter is not found.")
+
+    heating_circuits = [heating_circuit
+        for heating_circuit in heating_circuits
+        if heating_circuit.type in regulation_engine_starter.heating_circuit_types
+    ]
 
     for index, item in enumerate(heating_circuits):
 
@@ -29,7 +39,7 @@ def launch_regulation_engines(app: FlaskEx):
         process_cancellation_event = ProcessEvent()
 
         regulation_heating_circuit_process = Process(
-            target=starter,
+            target=regulation_engine_starter,
             args=(HeatingCircuitIndexModel(index), process_cancellation_event, hardware_process_lock),
             daemon=False
         )
