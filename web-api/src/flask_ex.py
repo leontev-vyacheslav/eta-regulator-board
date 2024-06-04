@@ -15,6 +15,7 @@ from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
 from loggers.default_logger_builder import build as build_logger
 
+
 class FlaskEx(Flask):
 
     def __init__(

@@ -17,7 +17,7 @@ VALVE2_OPEN = V2_PLUS
 VALVE2_CLOSE = V2_MINUS
 
 
-# TODO: overplaying situations: missing sersors and short circuit (-inf | +inf)
+# TODO: overplaying situations: missing sensors and short circuit (-inf | +inf)
 def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 5) -> float:
     if is_debug():
         return 0

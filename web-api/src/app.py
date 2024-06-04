@@ -49,7 +49,7 @@ def shutdown_handler(signum: signal.Signals, frame):
 
 signal.signal(signal.SIGTERM, shutdown_handler)
 
-app.app_logger.info('The master process PID is %d.',os.getpid())
+app.app_logger.info('The master process PID is %d.', os.getpid())
 
 counter = 1
 delay_steps = 5

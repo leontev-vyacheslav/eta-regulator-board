@@ -9,7 +9,9 @@ from time import sleep, time
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 from threading import Thread, Event as ThreadingEvent, Lock as ThreadingLock
 from typing import List, Optional
+import uuid
 from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
+from models.regulator.temperature_graph_model import TemperatureGraphItemModel
 
 import regulation.equipments as equipments
 from loggers.engine_logger_builder import build as build_logger
@@ -21,7 +23,6 @@ from models.regulator.heating_circuits_model import HeatingCircuitModel
 from models.regulator.pid_impact_entry_model import PidImpactEntryModel, PidImpactResultComponentsModel, PidImpactResultModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
-from models.regulator.calculated_temperatures_model import CalculatedTemperaturesModel
 from regulation.metadata.decorators import regulator_starter_metadata
 
 
@@ -104,27 +105,24 @@ class RegulationEngine:
 
             self._logger.debug(RegulationEngine.settings_refresh_debug_msg)
 
-    def _get_calculated_temperatures(self, archive: ArchiveModel) -> CalculatedTemperaturesModel:
+    def _get_calculated_temperatures(self, outdoor_temperature: float) -> TemperatureGraphItemModel:
         accurate_match_tg_item = next(
             (
                 item
                 for item in self._heating_circuit_settings.regulator_parameters.temperature_graph.items
-                if item.outdoor_temperature == archive.outdoor_temperature
+                if item.outdoor_temperature == outdoor_temperature
             ),
             None
         )
 
         if accurate_match_tg_item is not None:
-            return CalculatedTemperaturesModel(
-                supply_pipe_temperature=accurate_match_tg_item.supply_pipe_temperature,
-                return_pipe_temperature=accurate_match_tg_item.return_pipe_temperature
-            )
+            return accurate_match_tg_item
 
         temperature_graph = sorted(
             self._heating_circuit_settings.regulator_parameters.temperature_graph.items,
             key=lambda i: i.outdoor_temperature
         )
-        outdoor_temperature_measured = archive.outdoor_temperature
+        outdoor_temperature_measured = outdoor_temperature
         outdoor_temperatures = [item.outdoor_temperature for item in temperature_graph]
 
         pos = bisect.bisect_left(outdoor_temperatures, outdoor_temperature_measured)
@@ -138,7 +136,7 @@ class RegulationEngine:
         else:
             tg_left = temperature_graph[pos - 1]
             tg_right = temperature_graph[pos]
-           # interpolate
+            # interpolate
             k = (tg_right.supply_pipe_temperature - tg_left.supply_pipe_temperature) / \
                 (tg_right.outdoor_temperature - tg_left.outdoor_temperature)
             b = tg_left.supply_pipe_temperature - tg_left.outdoor_temperature * k
@@ -155,7 +153,9 @@ class RegulationEngine:
             return_pipe_temperature_calculated
         )
 
-        return CalculatedTemperaturesModel(
+        return TemperatureGraphItemModel(
+            id=uuid.UUID(int=0).hex,
+            outdoor_temperature=outdoor_temperature_measured,
             supply_pipe_temperature=supply_pipe_temperature_calculated,
             return_pipe_temperature=return_pipe_temperature_calculated
         )
@@ -240,8 +240,8 @@ class RegulationEngine:
 
             self._logger.debug(RegulationEngine.getting_current_rtc_debug_msg, f'{self._rtc_datetime}')
 
-    def _get_pid_imact_components(self, entry: PidImpactEntryModel) -> PidImpactResultComponentsModel:
-        calc_temperatures = self._get_calculated_temperatures(entry.archive)
+    def _get_pid_impact_components(self, entry: PidImpactEntryModel) -> PidImpactResultComponentsModel:
+        calc_temperatures = self._get_calculated_temperatures(entry.archive.outdoor_temperature)
 
         room_temperature_influence = self._heating_circuit_settings \
             .regulator_parameters \
@@ -302,7 +302,7 @@ class RegulationEngine:
         )
 
     def _get_pid_impact_result(self, entry: PidImpactEntryModel) -> PidImpactResultModel:
-        pid_impact_components = self._get_pid_imact_components(entry)
+        pid_impact_components = self._get_pid_impact_components(entry)
 
         pid_impart = pid_impact_components.proportional_impact + \
             pid_impact_components.integration_impact + \
@@ -425,7 +425,7 @@ class RegulationEngine:
                     )
 
             if pid_impact is not None:
-                # TODO: cmissing sensors
+                # TODO: missing sensors
                 # TODO: reset total, deviation
                 with self._hardware_process_lock:
                     equipments.set_valve_impact(

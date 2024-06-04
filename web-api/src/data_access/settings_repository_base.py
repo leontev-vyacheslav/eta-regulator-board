@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from models.abstracts.app_base_model import AppBaseModel
 from utils.strings import pascal_to_snake
 
-#pylint: disable=unused-import
+# pylint: disable=unused-import
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.accounts_settings_model import AccountsSettingsModel
 
@@ -44,7 +44,7 @@ class SettingsRepositoryBase():
 
         return len(json) == dumped_bytes
 
-    def _find_changed_fields(self, obj1: Any, obj2: Any, path: str='', visited: Optional[Set]=None) -> List[ChangeTrackerItem]:
+    def _find_changed_fields(self, obj1: Any, obj2: Any, path: str = '', visited: Optional[Set] = None) -> List[ChangeTrackerItem]:
 
         if visited is None:
             visited = set()
@@ -89,10 +89,8 @@ class SettingsRepositoryBase():
 
         return changed_fields
 
-
-    def find_changed_fields(self, updated_settings: Any, path: str='', visited: Optional[Set]=None) -> List[ChangeTrackerItem]:
+    def find_changed_fields(self, updated_settings: Any, path: str = '', visited: Optional[Set] = None) -> List[ChangeTrackerItem]:
         return self._find_changed_fields(self.settings, updated_settings, path, visited)
-
 
     def update(self, current_settings):
 

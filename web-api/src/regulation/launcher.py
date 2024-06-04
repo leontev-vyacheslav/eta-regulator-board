@@ -8,7 +8,8 @@ from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 
 from regulation.engine import regulation_engine_starter
-from regulation.emulation.emu_engine_1 import regulation_engine_starter as emu_regulation_engine_starter
+from regulation.emulation.emu_engine_1 import regulation_engine_starter as emu_regulation_engine_starter_1
+from regulation.emulation.emu_engine_2 import regulation_engine_starter as emu_regulation_engine_starter_2
 
 hardware_process_lock = ProcessLock()
 
@@ -26,7 +27,8 @@ def launch_regulation_engines(app: FlaskEx):
         if regulation_engine_starter is None:
             NameError("Regulator engine starter is not found.")
 
-    heating_circuits = [heating_circuit
+    heating_circuits = [
+        heating_circuit
         for heating_circuit in heating_circuits
         if heating_circuit.type in regulation_engine_starter.heating_circuit_types
     ]

@@ -22,6 +22,7 @@ def put_gpio(pin: int, state: bool):
         state=value
     )
 
+
 @app.api_route('/gpio/<pin>', methods=['GET'])
 @validate(response_by_alias=True)
 @authorize()

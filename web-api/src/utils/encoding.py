@@ -7,6 +7,7 @@ from app import MASTER_KEY
 
 BLOCK_SIZE = 16
 
+
 def decrypt(encrypted_data, key: bytes):
     encrypted_data = b64decode(encrypted_data)
 

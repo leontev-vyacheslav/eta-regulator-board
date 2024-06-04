@@ -22,8 +22,8 @@ def get_accounts_settings():
     accounts_settings_repository = app.get_accounts_settings_repository()
     accounts_settings: AccountsSettingsModel = accounts_settings_repository.settings
 
-    accountList = [
-       AccountModel(
+    account_list = [
+        AccountModel(
             id=acc.id,
             role=acc.role,
             login=acc.login,
@@ -32,8 +32,8 @@ def get_accounts_settings():
         for acc in accounts_settings.accounts.items
     ]
 
-    return AccountsModel (
-        items=accountList
+    return AccountsModel(
+        items=account_list
     )
 
 
@@ -86,7 +86,6 @@ def put_account(body: ExtendedAccountModel):
 
         # log here change_tracker_items
     accounts_settings_repository.update(updated_accounts_settings)
-
 
     return JsonResponse(
         response=accounts_settings,

@@ -5,7 +5,7 @@ from loggers.default_logger_formatter import DefaultLoggingFormatter
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
 
-def build(name: str, heating_circuit_index: HeatingCircuitIndexModel, heating_circuit_type: HeatingCircuitTypeModel, default_level: int = logging.DEBUG, default_handler: logging.Handler=None):
+def build(name: str, heating_circuit_index: HeatingCircuitIndexModel, heating_circuit_type: HeatingCircuitTypeModel, default_level: int = logging.DEBUG, default_handler: logging.Handler = None):
 
     logger = logging.getLogger(f'{name}_{heating_circuit_index}')
     logger.setLevel(default_level)

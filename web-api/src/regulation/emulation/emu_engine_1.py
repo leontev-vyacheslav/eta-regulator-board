@@ -11,6 +11,7 @@ from models.regulator.enums.heating_circuit_index_model import HeatingCircuitInd
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
 from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
 from models.regulator.pid_impact_entry_model import PidImpactEntryModel, PidImpactResultComponentsModel
+from models.regulator.temperature_graph_model import TemperatureGraphItemModel
 from regulation.engine import RegulationEngine
 from regulation.metadata.decorators import regulator_starter_metadata
 
@@ -35,13 +36,9 @@ class EmuRegulationEngine(RegulationEngine):
         self.__state: EmuRegulationEngine.State = EmuRegulationEngine.State.High
         self.__change_state_time: Optional[float] = None
 
-        self.__temperature_graph_item = next((
-            tg_item for tg_item in self._heating_circuit_settings.regulator_parameters.temperature_graph.items
-            if tg_item.outdoor_temperature == EmuRegulationEngine.known_outdoor_temperature
-        ), None)
-
-        if self.__temperature_graph_item is None:
-            raise ValueError()
+        self.__temperature_graph_item: TemperatureGraphItemModel = self._get_calculated_temperatures(
+            outdoor_temperature=EmuRegulationEngine.known_outdoor_temperature
+        )
 
         self._emul_logger_level = logging.CRITICAL + 10
         logging.addLevelName(self._emul_logger_level, "EMUL")
@@ -61,7 +58,6 @@ class EmuRegulationEngine(RegulationEngine):
             self._logger._log(self._emul_logger_level, msg, args, **kwargs)
 
     def _get_archive(self) -> ArchiveModel:
-
         if self.__change_state_time is None:
             self.__change_state_time = time()
 
@@ -92,19 +88,19 @@ class EmuRegulationEngine(RegulationEngine):
             return_pipe_temperature=return_pipe_temperature_measured
         )
 
-    def _get_pid_imact_components(self, entry: PidImpactEntryModel) -> PidImpactResultComponentsModel:
-        pid_imact_components = super()._get_pid_imact_components(entry)
+    def _get_pid_impact_components(self, entry: PidImpactEntryModel) -> PidImpactResultComponentsModel:
+        pid_impact_components = super()._get_pid_impact_components(entry)
 
         self._logger.emul(
             EmuRegulationEngine.pid_impact_parts_critical_msg,
-            pid_imact_components.proportional_impact,
-            pid_imact_components.integration_impact,
-            pid_imact_components.differentiation_impact,
-            pid_imact_components.deviation,
-            pid_imact_components.total_deviation
+            pid_impact_components.proportional_impact,
+            pid_impact_components.integration_impact,
+            pid_impact_components.differentiation_impact,
+            pid_impact_components.deviation,
+            pid_impact_components.total_deviation
         )
 
-        return pid_imact_components
+        return pid_impact_components
 
 
 @regulator_starter_metadata(
