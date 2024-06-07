@@ -18,13 +18,13 @@ from regulation.metadata.decorators import regulator_starter_metadata
 
 class EmuRegulationEngine(RegulationEngine):
     """
-        supply pipe temperature step variation  (50.6)(55.6)(50.6)
+        supply pipe temperature step variation (55.6)(50.6)(55.6)
     """
     known_outdoor_temperature = -2
     temperature_step = 5
     emul_step_duration = 60
 
-    pid_impact_parts_critical_msg = 'PROPORTIONAL=%.2f, INTEGRAL=%.2f, DIFFERENTIAL=%.2f, DEVIATION=%.2f, TOTAL_DEVIATION=%.2f'
+    pid_impact_parts_critical_msg = 'P=%.2f, I=%.2f, D=%.2f, DEV=%.2f, TOTAL=%.2f (OUT=%.2f, ROOM=%.2f, SUPL=%.2f, RET=%.2f)'
 
     class State(IntEnum):
         Low = 1
@@ -72,14 +72,6 @@ class EmuRegulationEngine(RegulationEngine):
             EmuRegulationEngine.temperature_step if self.__state == EmuRegulationEngine.State.High else self.__temperature_graph_item.supply_pipe_temperature
         return_pipe_temperature_measured = self.__temperature_graph_item.return_pipe_temperature
 
-        self._logger.emul(
-            RegulationEngine.measured_temperatures_debug_msg,
-            outdoor_temperature_measured,
-            room_temperature_measured,
-            supply_pipe_temperature_measured,
-            return_pipe_temperature_measured
-        )
-
         return ArchiveModel(
             datetime=datetime.now(),
             outdoor_temperature=outdoor_temperature_measured,
@@ -97,7 +89,12 @@ class EmuRegulationEngine(RegulationEngine):
             pid_impact_components.integration_impact,
             pid_impact_components.differentiation_impact,
             pid_impact_components.deviation,
-            pid_impact_components.total_deviation
+            pid_impact_components.total_deviation,
+
+            entry.archive.outdoor_temperature,
+            entry.archive.room_temperature,
+            entry.archive.supply_pipe_temperature,
+            entry.archive.return_pipe_temperature,
         )
 
         return pid_impact_components
