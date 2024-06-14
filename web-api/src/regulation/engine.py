@@ -15,7 +15,7 @@ from models.regulator.temperature_graph_model import TemperatureGraphItemModel
 
 import regulation.equipments as equipments
 from loggers.engine_logger_builder import build as build_logger
-from models.regulator.archives_model import ArchivesModel
+from models.regulator.archives_model import DailySavedArchivesModel
 from models.regulator.archive_model import ArchiveModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
@@ -24,6 +24,7 @@ from models.regulator.pid_impact_entry_model import PidImpactEntryModel, PidImpa
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
 from regulation.metadata.decorators import regulator_starter_metadata
+from utils.datetime_helper import is_last_day_of_month
 
 
 class RegulationEngine:
@@ -34,6 +35,10 @@ class RegulationEngine:
     default_room_temperature = 20
     default_room_temperature_influence = 0.0
     updating_settings_factor = 5
+
+    start_current_hour_template = {'minute': 1, 'second': 0, 'microsecond': 0}
+    end_current_hour_template = {'minute': 59, 'second': 59, 'microsecond': 0}
+    start_current_day_template = {'hour': 0, 'minute': 0, 'second': 0, 'microsecond': 0}
 
     sensors_polling_started_info_msg = 'The sensors polling thread was STARTED.'
     sensors_polling_step_done_debug_msg = 'The sensors polling thread has DONE A STEP.'
@@ -74,9 +79,12 @@ class RegulationEngine:
 
         self._last_receiving_settings_time = time()
         self._rtc_datetime: datetime = datetime.utcnow()
-        self._last_rtc_getting_time = time()
+        self._last_rtc_getting_time: Optional[float] = None
 
-        self._archives: List[ArchiveModel] = []
+        self._archives: DailySavedArchivesModel = DailySavedArchivesModel(
+            items=[],
+            is_last_day_of_month_saved=False
+        )
 
         # class members depending on settings
         self._heating_circuit_type = self._heating_circuit_settings.type
@@ -191,19 +199,31 @@ class RegulationEngine:
         )
 
     def _save_archives(self, archive: ArchiveModel):
+
         # clear the current archives if the new day has come
-        if self._archives:
-            self._archives.sort(key=lambda archive: archive.datetime)
-            latest_archive_day = self._archives[-1].datetime.day
-            if latest_archive_day < self._rtc_datetime.day:
-                self._archives.clear()
+        if self._archives.items:
+            self._archives.items.sort(key=lambda archive: archive.datetime)
+            latest_archive_day = self._archives.items[-1].datetime.day
+            latest_archive_month = self._archives.items[-1].datetime.month
+
+            if latest_archive_day < self._rtc_datetime.day and latest_archive_month == self._rtc_datetime.month:
+                self._archives.items.clear()
+
+            if len(self._archives.items) == 24 and is_last_day_of_month(self._rtc_datetime):
+                self._archives.items.clear()
+                self._archives.is_last_day_of_month_saved = True
+
+                return
+
+        if not is_last_day_of_month(self._rtc_datetime) and self._archives.is_last_day_of_month_saved:
+            self._archives.is_last_day_of_month_saved = False
 
         # calculate the hour boundaries
-        start_current_hour = self._rtc_datetime.replace(minute=1, second=0, microsecond=0)
-        end_current_hour = self._rtc_datetime.replace(minute=59, second=59, microsecond=0)
+        start_current_hour = self._rtc_datetime.replace(**RegulationEngine.start_current_hour_template)
+        end_current_hour = self._rtc_datetime.replace(**RegulationEngine.end_current_hour_template)
 
         is_already_saved = next((
-            archive for archive in self._archives
+            archive for archive in self._archives.items
             if archive.datetime >= start_current_hour and archive.datetime <= end_current_hour
         ),  None) is not None
 
@@ -211,17 +231,17 @@ class RegulationEngine:
             return
 
         # save to an archive and rewrite a file of archives
-        if self._rtc_datetime >= start_current_hour:
-            self._archives.append(archive)
+        if self._rtc_datetime >= start_current_hour and not self._archives.is_last_day_of_month_saved:
+            self._archives.items.append(archive)
 
             try:
-                start_current_day = self._rtc_datetime.replace(hour=0, minute=0, second=0, microsecond=0)
+                start_current_day = self._rtc_datetime.replace(**RegulationEngine.start_current_day_template)
                 archive_file_name = f'{self._heating_circuit_settings.type.name}_{self._heating_circuit_index}_{start_current_day.strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
                 data_path = pathlib.Path(__file__).parent.parent.parent.joinpath(
                     f'data/archives/{archive_file_name}'
                 )
 
-                json_text = ArchivesModel(items=self._archives).json()
+                json_text = self._archives.json(by_alias=True)
 
                 with gzip.open(data_path, mode='w') as file:
                     file.write(
@@ -234,7 +254,7 @@ class RegulationEngine:
                 self._logger.error(RegulationEngine.writing_archives_error_msg, str(ex))
 
     def _refresh_rtc_datetime(self):
-        if time() - self._last_rtc_getting_time >= RegulationEngine.updating_rtc_period:
+        if self._last_rtc_getting_time is None or time() - self._last_rtc_getting_time >= RegulationEngine.updating_rtc_period:
             self._rtc_datetime = equipments.get_rtc_datetime()
             self._last_rtc_getting_time = time()
 
@@ -330,8 +350,7 @@ class RegulationEngine:
         total_deviation: float = 0.0
         deviation: float = float('inf')
 
-        self._rtc_datetime = equipments.get_rtc_datetime()
-        self._last_rtc_getting_time = time()
+        self._refresh_rtc_datetime()
 
         # start polling
 
@@ -426,7 +445,7 @@ class RegulationEngine:
 
             if pid_impact is not None:
                 # TODO: missing sensors
-                # TODO: reset total, deviation
+                # TODO: reset total deviation, deviation when twhen limits exceeded
                 with self._hardware_process_lock:
                     equipments.set_valve_impact(
                         heating_circuit_index=self._heating_circuit_index,
