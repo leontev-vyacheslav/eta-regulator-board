@@ -96,6 +96,7 @@ def get_pid_impact_components_check():
 
     asserted_calc_temperatures = engine._get_calculated_temperatures(asserted_archive.outdoor_temperature)
     asserted_heating_circuit_settings: HeatingCircuitModel = engine._get_settings()
+    
     asserted_previous_deviation = -5.0
     asserted_previoustotal_deviation = 10
 

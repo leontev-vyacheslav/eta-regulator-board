@@ -8,8 +8,6 @@ from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 
 from regulation.engine import regulation_engine_starter
-from regulation.emulation.emu_engine_1 import regulation_engine_starter as emu_regulation_engine_starter_1
-from regulation.emulation.emu_engine_2 import regulation_engine_starter as emu_regulation_engine_starter_2
 
 hardware_process_lock = ProcessLock()
 

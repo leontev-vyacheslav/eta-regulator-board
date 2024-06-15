@@ -1,8 +1,8 @@
+import logging
 from datetime import datetime
 from enum import IntEnum
-import logging
-from time import time
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
+from time import time
 from typing import Optional
 
 from loggers.engine_logger_builder import build as build_logger
@@ -16,28 +16,28 @@ from regulation.engine import RegulationEngine
 from regulation.metadata.decorators import regulator_starter_metadata
 
 
-class EmuOutdoorTempStepVariationRegulationEngine(RegulationEngine):
+class EmuSupplyPipeTempStepVariationRegulationEngine(RegulationEngine):
     """
-        outdoor temperature step variation  (-10)(-13)(-10)
+        supply pipe temperature step variation (55.6)(50.6)(55.6)
     """
-    known_outdoor_temperature = -10
-    temperature_step = -3
-    emul_step_duration = 60
+    known_outdoor_temperature = -2
+    temperature_step = 5
 
-    pid_impact_parts_critical_msg = 'PROPORTIONAL=%.2f, INTEGRAL=%.2f, DIFFERENTIAL=%.2f, DEVIATION=%.2f, TOTAL_DEVIATION=%.2f'
+    pid_impact_parts_critical_msg = 'P=%.2f, I=%.2f, D=%.2f, DEV=%.2f, TOTAL=%.2f (OUT=%.2f, ROOM=%.2f, SUPL=%.2f, RET=%.2f)'
 
     class State(IntEnum):
         Low = 1
         High = 2
 
-    def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: RegulationEngineLoggingLevelModel) -> None:
+    def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: RegulationEngineLoggingLevelModel, step_duration: float) -> None:
         super().__init__(heating_circuit_index, process_cancellation_event, hardwares_process_lock, logging_level)
 
-        self.__state: EmuOutdoorTempStepVariationRegulationEngine.State = EmuOutdoorTempStepVariationRegulationEngine.State.High
+        self.step_duration = step_duration
+        self.__state: EmuSupplyPipeTempStepVariationRegulationEngine.State = EmuSupplyPipeTempStepVariationRegulationEngine.State.High
         self.__change_state_time: Optional[float] = None
 
         self.__temperature_graph_item: TemperatureGraphItemModel = self._get_calculated_temperatures(
-            outdoor_temperature=EmuOutdoorTempStepVariationRegulationEngine.known_outdoor_temperature
+            outdoor_temperature=EmuSupplyPipeTempStepVariationRegulationEngine.known_outdoor_temperature
         )
 
         self._emul_logger_level = logging.CRITICAL + 10
@@ -61,25 +61,16 @@ class EmuOutdoorTempStepVariationRegulationEngine(RegulationEngine):
         if self.__change_state_time is None:
             self.__change_state_time = time()
 
-        if time() - self.__change_state_time > EmuOutdoorTempStepVariationRegulationEngine.emul_step_duration:
-            self.__state = EmuOutdoorTempStepVariationRegulationEngine.State.High if self.__state == EmuOutdoorTempStepVariationRegulationEngine.State.Low else EmuOutdoorTempStepVariationRegulationEngine.State.Low
+        if time() - self.__change_state_time > self.step_duration:
+            self.__state = EmuSupplyPipeTempStepVariationRegulationEngine.State.High if self.__state == EmuSupplyPipeTempStepVariationRegulationEngine.State.Low else EmuSupplyPipeTempStepVariationRegulationEngine.State.Low
             self.__change_state_time = time()
 
+        outdoor_temperature_measured = EmuSupplyPipeTempStepVariationRegulationEngine.known_outdoor_temperature
         room_temperature_measured = RegulationEngine.default_room_temperature
-        outdoor_temperature_measured = self.__temperature_graph_item.outdoor_temperature \
-            if self.__state == EmuOutdoorTempStepVariationRegulationEngine.State.High \
-            else self.__temperature_graph_item.outdoor_temperature + EmuOutdoorTempStepVariationRegulationEngine.temperature_step
 
-        supply_pipe_temperature_measured = self.__temperature_graph_item.supply_pipe_temperature
+        supply_pipe_temperature_measured = self.__temperature_graph_item.supply_pipe_temperature + \
+            EmuSupplyPipeTempStepVariationRegulationEngine.temperature_step if self.__state == EmuSupplyPipeTempStepVariationRegulationEngine.State.High else self.__temperature_graph_item.supply_pipe_temperature
         return_pipe_temperature_measured = self.__temperature_graph_item.return_pipe_temperature
-
-        self._logger.emul(
-            RegulationEngine.measured_temperatures_debug_msg,
-            outdoor_temperature_measured,
-            room_temperature_measured,
-            supply_pipe_temperature_measured,
-            return_pipe_temperature_measured
-        )
 
         return ArchiveModel(
             datetime=datetime.now(),
@@ -93,28 +84,17 @@ class EmuOutdoorTempStepVariationRegulationEngine(RegulationEngine):
         pid_impact_components = super()._get_pid_impact_components(entry)
 
         self._logger.emul(
-            EmuOutdoorTempStepVariationRegulationEngine.pid_impact_parts_critical_msg,
+            EmuSupplyPipeTempStepVariationRegulationEngine.pid_impact_parts_critical_msg,
             pid_impact_components.proportional_impact,
             pid_impact_components.integration_impact,
             pid_impact_components.differentiation_impact,
             pid_impact_components.deviation,
-            pid_impact_components.total_deviation
+            pid_impact_components.total_deviation,
+
+            entry.archive.outdoor_temperature,
+            entry.archive.room_temperature,
+            entry.archive.supply_pipe_temperature,
+            entry.archive.return_pipe_temperature,
         )
 
         return pid_impact_components
-
-
-@regulator_starter_metadata(
-    heating_circuit_types=[
-        HeatingCircuitTypeModel.HEATING
-    ]
-)
-def regulation_engine_starter(heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardware_process_lock: ProcessLock):
-    engine = EmuOutdoorTempStepVariationRegulationEngine(
-        heating_circuit_index=heating_circuit_index,
-        process_cancellation_event=process_cancellation_event,
-        hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
-    )
-
-    engine.start()

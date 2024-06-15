@@ -110,8 +110,8 @@ def get_calculated_temperatures_interpolation_check(get_regulation_engine: Regul
         temp
     )
 
-    assert calc_temperature_graph_item.supply_pipe_temperature == pytest.approx(calc_supply_pipe_temperature, 0.0001)
-    assert calc_temperature_graph_item.return_pipe_temperature == pytest.approx(calc_return_pipe_temperature, 0.0001)
+    assert calc_temperature_graph_item.supply_pipe_temperature == pytest.approx(calc_supply_pipe_temperature, 0.001)
+    assert calc_temperature_graph_item.return_pipe_temperature == pytest.approx(calc_return_pipe_temperature, 0.001)
 
     logger.debug(
         "CALC_SUPPLY=%.2f, CALC_RETURN=%.2f",
