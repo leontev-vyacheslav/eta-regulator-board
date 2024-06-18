@@ -7,7 +7,7 @@ from models.app_background_process_model import AppBackgroundProcessModel
 from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 
-from regulation.engine import regulation_engine_starter
+from regulation.engine import regulation_engine_starter as default_regulation_engine_starter
 
 hardware_process_lock = ProcessLock()
 
@@ -17,13 +17,13 @@ def launch_regulation_engines(app: FlaskEx):
     heating_circuits = regulator_settings.heating_circuits.items
     regulation_engine_starter: Optional[Callable] = None
 
-    regulation_engine_starter_name = os.environ.get("REGULATOR_ENGINE_STARTER")
+    regulation_engine_starter_name = os.environ.get('REGULATOR_ENGINE_STARTER')
     if regulation_engine_starter_name is None:
-        regulation_engine_starter = globals().get("regulation_engine_starter")
+        regulation_engine_starter = globals().get('regulation_engine_starter')
     else:
         regulation_engine_starter = globals().get(regulation_engine_starter_name)
         if regulation_engine_starter is None:
-            NameError("Regulator engine starter is not found.")
+            regulation_engine_starter = default_regulation_engine_starter
 
     heating_circuits = [
         heating_circuit
