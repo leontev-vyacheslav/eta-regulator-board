@@ -6,15 +6,14 @@ from models.regulator.enums.regulation_engine_mode_model import RegulationEngine
 from regulation.engine import RegulationEngine
 from tests.testable_engines.auto_control_mode_testable_regulation_engine import AutoControlModeTestableRegulationEngine
 from tests.testable_engines.schedules_testable_regulation_engine import SchedulesTestableRegulationEngine
-from tests.testable_engines.base_settings_testable_regulation_engine import BaseSettingsTestableRegulationEngine
+from tests.testable_engines.base_settings_testable_regulation_engine import BaseSettingsTestableRegulationEngine, base_testable_settings
 
 
-
-def get_default_room_temperature_no_comfort_or_econom_check():
+def get_default_room_temperature_no_comfort_or_econom_modes_check():
     hardware_process_lock = ProcessLock()
     process_cancellation_event = ProcessEvent()
 
-    assertable_default_room_temperature = 100
+    assertable_default_room_temperature = float('inf')
 
     RegulationEngine.default_room_temperature = assertable_default_room_temperature
 
@@ -41,7 +40,7 @@ def get_default_room_temperature_comfort_no_schedules_check():
         logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
     )
 
-    assertable_default_room_temperature = 100
+    assertable_default_room_temperature = float('inf')
 
     RegulationEngine.default_room_temperature = assertable_default_room_temperature
 
@@ -50,7 +49,7 @@ def get_default_room_temperature_comfort_no_schedules_check():
     assert default_room_temperature == assertable_default_room_temperature
 
 
-def get_default_room_temperature_comfort_no_schedule_check():
+def get_default_room_temperature_comfort_no_schedule_for_weekday_check():
     hardware_process_lock = ProcessLock()
     process_cancellation_event = ProcessEvent()
 
@@ -61,19 +60,46 @@ def get_default_room_temperature_comfort_no_schedule_check():
         logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
     )
 
-    assertable_default_room_temperature = 100
+    assertable_default_room_temperature = float('inf')
 
     RegulationEngine.default_room_temperature = assertable_default_room_temperature
 
     engine._rtc_datetime = datetime(
         year=2024,
         month=6,
-        day=17, # week_day = 0 (1)
+        day=17,  # week_day = 0 (1)
         hour=17,
         second=30,
         tzinfo=timezone.utc
     )
 
+    default_room_temperature = engine._get_default_room_temperature()
+
+    assert default_room_temperature == assertable_default_room_temperature
+
+
+def get_default_room_temperature_comfort_has_schedule_no_window_check():
+    hardware_process_lock = ProcessLock()
+    process_cancellation_event = ProcessEvent()
+
+    engine = SchedulesTestableRegulationEngine(
+        heating_circuit_index=HeatingCircuitIndexModel.FIRST,
+        process_cancellation_event=process_cancellation_event,
+        hardwares_process_lock=hardware_process_lock,
+        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
+    )
+
+    assertable_default_room_temperature = float('inf')
+    RegulationEngine.default_room_temperature = assertable_default_room_temperature
+
+    engine._rtc_datetime = datetime(
+        year=2024,
+        month=6,
+        day=18,  # week_day = 1 (2)
+        hour=14,
+        minute=30,
+        tzinfo=timezone.utc
+    )
 
     default_room_temperature = engine._get_default_room_temperature()
 
@@ -91,20 +117,17 @@ def get_default_room_temperature_comfort_has_schedule_check():
         logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
     )
 
-    assertable_default_room_temperature = 100
-
-    RegulationEngine.default_room_temperature = assertable_default_room_temperature
+    assertable_default_room_temperature = base_testable_settings.regulator_parameters.control_parameters.comfort_temperature
 
     engine._rtc_datetime = datetime(
         year=2024,
         month=6,
-        day=18, # week_day = 1 (2)
+        day=18,  # week_day = 1 (2)
         hour=10,
         minute=30,
         tzinfo=timezone.utc
     )
 
-
     default_room_temperature = engine._get_default_room_temperature()
 
-    assert default_room_temperature == 20
+    assert default_room_temperature == assertable_default_room_temperature

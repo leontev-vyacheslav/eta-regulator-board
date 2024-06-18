@@ -47,21 +47,23 @@ def shutdown_handler(signum: signal.Signals, frame):
     sys.exit(0)
 
 
-signal.signal(signal.SIGTERM, shutdown_handler)
+if __name__ == '__main__':
 
-app.app_logger.info('The master process PID is %d.', os.getpid())
+    signal.signal(signal.SIGTERM, shutdown_handler)
 
-counter = 1
-delay_steps = 5
-while True:
-    time.sleep(1)
-    app.app_logger.info(f'Waiting before running of the regulation processes ({counter} out of {delay_steps})...')
-    current_time = time.time()
-    if counter == delay_steps:
-        break
-    counter += 1
+    app.app_logger.info('The master process PID is %d.', os.getpid())
+
+    counter = 1
+    delay_steps = 5
+    while True:
+        time.sleep(1)
+        app.app_logger.info(f'Waiting before running of the regulation processes ({counter} out of {delay_steps})...')
+        current_time = time.time()
+        if counter == delay_steps:
+            break
+        counter += 1
 
 
-launch_regulation_engines(app)
+    launch_regulation_engines(app)
 
 

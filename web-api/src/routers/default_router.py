@@ -21,7 +21,6 @@ def favicon():
 @app.api_route('/', methods=['GET'])
 @validate()
 def home():
-
     return MessageModel(
         message=f'{APP_NAME} {APP_VERSION}'
     )
