@@ -7,8 +7,9 @@ from threading import Event as ThreadingEvent, Thread
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
 from regulation.engine import RegulationEngine
-from tests.emulation.emu_engine_1 import EmuSupplyPipeTempStepVariationRegulationEngine
-from tests.emulation.emu_engine_2 import EmuOutdoorTempStepVariationRegulationEngine
+from tests.emulation_engines.emu_supply_pipe_temp_step_variation_regulation_engine import EmuSupplyPipeTempStepVariationRegulationEngine
+from tests.emulation_engines.emu_outdoor_temp_step_variation_regulation_engine import EmuOutdoorTempStepVariationRegulationEngine
+
 
 logger = logging.getLogger(__name__)
 

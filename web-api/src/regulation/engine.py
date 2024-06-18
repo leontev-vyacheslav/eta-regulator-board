@@ -10,11 +10,12 @@ from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 from threading import Thread, Event as ThreadingEvent, Lock as ThreadingLock
 from typing import List, Optional
 import uuid
-from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
-from models.regulator.temperature_graph_model import TemperatureGraphItemModel
 
 import regulation.equipments as equipments
 from loggers.engine_logger_builder import build as build_logger
+from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
+from models.regulator.enums.control_mode_model import ControlModeModel
+from models.regulator.temperature_graph_model import TemperatureGraphItemModel
 from models.regulator.archives_model import DailySavedArchivesModel
 from models.regulator.archive_model import ArchiveModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
@@ -260,6 +261,45 @@ class RegulationEngine:
 
             self._logger.debug(RegulationEngine.getting_current_rtc_debug_msg, f'{self._rtc_datetime}')
 
+    def _get_default_room_temperature(self) -> float:
+        control_mode = self._heating_circuit_settings \
+            .regulator_parameters \
+            .control_parameters \
+            .control_mode
+
+        if control_mode not in [ControlModeModel.COMFORT, ControlModeModel.ECONOMY]:
+            return RegulationEngine.default_room_temperature
+
+        schedules = self._heating_circuit_settings \
+            .regulator_parameters \
+            .schedules
+
+        if schedules is None or len(schedules.items) == 0:
+            return RegulationEngine.default_room_temperature
+
+        day_of_week = self._rtc_datetime.weekday() + 1
+        schedule = next((item for item in schedules.items if item.day == day_of_week), None)
+
+        if schedule is None:
+            return RegulationEngine.default_room_temperature
+
+        current_rtc_datetime = self._rtc_datetime.replace(microsecond=0)
+        window = next((item for item in schedule.windows if item.start_time.time() <= current_rtc_datetime.time() <= item.end_time.time()), None)
+
+        if window is None:
+            return RegulationEngine.default_room_temperature
+
+        comfort_temperature = self._heating_circuit_settings \
+            .regulator_parameters \
+            .control_parameters \
+            .comfort_temperature
+        economical_temperature = self._heating_circuit_settings \
+            .regulator_parameters \
+            .control_parameters \
+            .economical_temperature
+
+        return comfort_temperature if control_mode == ControlModeModel.COMFORT else economical_temperature
+
     def _get_pid_impact_components(self, entry: PidImpactEntryModel) -> PidImpactResultComponentsModel:
         calc_temperatures = self._get_calculated_temperatures(entry.archive.outdoor_temperature)
 
@@ -276,10 +316,12 @@ class RegulationEngine:
             .control_parameters \
             .return_pipe_temperature_influence
 
+        default_room_temperature = self._get_default_room_temperature()
+
         # TODO: missing sensors
         deviation = (calc_temperatures.supply_pipe_temperature - entry.archive.supply_pipe_temperature) + \
             (calc_temperatures.return_pipe_temperature - entry.archive.return_pipe_temperature) * return_pipe_temperature_influence + \
-            (entry.archive.room_temperature - RegulationEngine.default_room_temperature) * room_temperature_influence
+            (entry.archive.room_temperature - default_room_temperature) * room_temperature_influence
 
         total_deviation = entry.total_deviation + deviation
 
@@ -287,12 +329,10 @@ class RegulationEngine:
             .regulator_parameters \
             .regulation_parameters \
             .proportionality_factor
-
         integration_factor = self._heating_circuit_settings \
             .regulator_parameters \
             .regulation_parameters \
             .integration_factor
-
         differentiation_factor = self._heating_circuit_settings \
             .regulator_parameters \
             .regulation_parameters \
