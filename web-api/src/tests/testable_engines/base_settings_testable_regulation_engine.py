@@ -33,7 +33,12 @@ base_testable_settings = HeatingCircuitModel(
         differentiation_factor=30.0,
         calculation_period=25.0,
         pulse_duration_valve=5.0,
-        drive_unit_analog_control=False
+        drive_unit_analog_control=False,
+
+        full_pid_impact_range=1000,
+        insensivity_threshold=1,
+        proportionality_factor_denominator=5,
+        integration_factor_denominator=50
     ),
     temperature_graph=TemperatureGraphModel(
         items=[
@@ -48,7 +53,6 @@ base_testable_settings = HeatingCircuitModel(
     schedules=SchedulesModel(
         items=[]
     )
-
 )
 
 

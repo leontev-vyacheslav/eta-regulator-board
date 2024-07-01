@@ -38,23 +38,21 @@ class RegulationEngine:
     end_current_hour_template = {'minute': 59, 'second': 59, 'microsecond': 0}
     start_current_day_template = {'hour': 0, 'minute': 0, 'second': 0, 'microsecond': 0}
 
-    sensors_polling_started_info_msg = 'The sensors polling thread was STARTED.'
-    sensors_polling_step_done_debug_msg = 'The sensors polling thread has DONE A STEP.'
-    sensors_polling_stopped_info_msg = 'The sensors polling thread was gracefully STOPPED.'
-    sensors_polling_slept_debug_msg = 'The sensors polling thread has executed %.6f sec and has slept during %.6f sec.'
+    sensors_polling_started_info_msg = 'The polling thread was STARTED.'
+    sensors_polling_stopped_info_msg = 'The polling thread was STOPPED.'
+    sensors_polling_slept_debug_msg = 'The polling thread executed/slept during %.6f / %.6f sec.'
 
-    regulation_polling_started_info_msg = 'The regulation main thread  was STARTED.'
-    regulation_polling_step_done_debug_msg = 'The regulation main thread has DONE A STEP.'
-    regulation_polling_stopped_info_msg = 'The regulation main thread was gracefully STOPPED.'
-    regulation_polling_slept_debug_msg = 'The regulation main thread has executed %.6f sec and has slept during %.6f sec.'
+    regulation_started_info_msg = 'The regulation thread  was STARTED.'
+    regulation_stopped_info_msg = 'The regulation thread was STOPPED.'
+    regulation_slept_debug_msg = 'The regulation thread executed/slept during %.6f / %.6f sec.'
 
-    measured_temperatures_debug_msg = 'The measured temperatures were obtained: OUTDOOR=%.2f, ROOM=%.2f SUPPLY=%.2f; RETURN=%.2f'
-    calculated_temperatures_debug_msg = 'The calculated temperatures were approximated: SUPPLY=%.2f; RETURN=%.2f'
-    settings_refresh_debug_msg = 'Settings refresh completed'
-    writing_archives_debug_msg = 'Writing archives to file has been completed: %s'
-    getting_current_rtc_debug_msg = 'The current RTC datetime: %s'
-    # PID impact was calculated with a values:
-    pid_impact_components_debug_msg = 'PID values: P=%.2f, I=%.2f, D=%.2f, SUM = %.2f DEV=%.2f, TOTAL=%.2f'
+    measured_temperatures_debug_msg = 'The measured temperatures: OUTDOOR=%.2f, ROOM=%.2f SUPPLY=%.2f; RETURN=%.2f'
+    calculated_temperatures_debug_msg = 'The calculated temperatures: SUPPLY=%.2f; RETURN=%.2f'
+    settings_refresh_debug_msg = 'Settings was refreshed'
+    writing_archives_debug_msg = 'Writing archives has been completed: %s'
+    getting_current_rtc_debug_msg = 'The current RTC: %s'
+    pid_impact_components_debug_msg = 'PID impact components: P=%.2f, I=%.2f, D=%.2f, SUM = %.2f DEV=%.2f, TOTAL=%.2f'
+    pid_impact_result_debug_msg = 'PID impact result: %.2f%%'
     writing_archives_error_msg = 'Error has happened during writing archives: %s'
 
     def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: RegulationEngineLoggingLevelModel) -> None:
@@ -385,11 +383,9 @@ class RegulationEngine:
             .regulation_parameters \
             .full_pid_impact_range
 
-        percented_pid_impart = 0.0
-
         percented_pid_impart = 100 * pid_impart / full_pid_impact_range
 
-        self._logger.debug("Total PID %%: %.2f", percented_pid_impart)
+        self._logger.debug(RegulationEngine.pid_impact_result_debug_msg, percented_pid_impart)
 
         return PidImpactResultModel(
             impact=percented_pid_impart,
@@ -456,11 +452,9 @@ class RegulationEngine:
                 sleep(self._calculation_period - delta)
                 self._logger.debug(RegulationEngine.sensors_polling_slept_debug_msg, delta, self._calculation_period - delta)
 
-            self._logger.debug(RegulationEngine.sensors_polling_step_done_debug_msg)
-
     def start(self) -> None:
         # start regulation thread
-        self._logger.info(RegulationEngine.regulation_polling_started_info_msg)
+        self._logger.info(RegulationEngine.regulation_started_info_msg)
 
         # start polling temperature sensors and calculation
         threading_cancellation_event = ThreadingEvent()
@@ -476,7 +470,7 @@ class RegulationEngine:
                 while polling_thread.is_alive():
                     pass
                 # stop regulation thread
-                self._logger.info(RegulationEngine.regulation_polling_stopped_info_msg)
+                self._logger.info(RegulationEngine.regulation_stopped_info_msg)
 
                 break
 
@@ -520,12 +514,10 @@ class RegulationEngine:
             if delta < regulation_parameters.pulse_duration_valve:
                 sleep(regulation_parameters.pulse_duration_valve - delta)
                 self._logger.debug(
-                    RegulationEngine.regulation_polling_slept_debug_msg,
+                    RegulationEngine.regulation_slept_debug_msg,
                     delta,
                     regulation_parameters.pulse_duration_valve - delta
                 )
-
-            self._logger.debug(RegulationEngine.regulation_polling_step_done_debug_msg)
 
 
 @regulator_starter_metadata(
