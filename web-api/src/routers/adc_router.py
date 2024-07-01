@@ -27,6 +27,7 @@ def get_adc_value(channel: int):
         status=200
     )
 
+
 @app.api_route('/temperature/<channel>', methods=['GET'])
 @validate(response_by_alias=True)
 def get_temperature_value(channel: int):
@@ -40,7 +41,7 @@ def get_temperature_value(channel: int):
             gpio.set(gpio.GPIO_Vp, True)
     else:
         value = random() * MCP3208.REFERENCE_VOLTAGE
-    #TODO: divide by zero
+    # TODO: divide by zero
     temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
 
     return JsonResponse(

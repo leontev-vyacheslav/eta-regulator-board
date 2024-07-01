@@ -1,5 +1,6 @@
 from typing import Optional
 
+
 def get_mac_address(interface: str) -> Optional[str]:
     try:
 

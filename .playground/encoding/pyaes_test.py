@@ -79,10 +79,10 @@ decrypted_text = decrypt(encrypted_text, b64decode(master_key))
 print(decrypted_text == plain_text)
 
 
-mac_adderss = get_mac_adderss('eth0')
-mac_adderss = '40:a3:6b:c9:8f:7a'
+mac_address = get_mac_adderss('eth0')
+mac_address = '40:a3:6b:c9:8f:7a'
 
-c = create_access_token(mac_adderss, 8, master_key)
+c = create_access_token(mac_address, 8, master_key)
 print(c)
 print(verify_access_token(c))
 

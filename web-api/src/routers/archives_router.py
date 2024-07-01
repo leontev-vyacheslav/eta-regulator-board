@@ -69,11 +69,11 @@ def get_archives_as_file(date: datetime):
 
     if not data_path.exists():
         return JsonResponse(
-        response=MessageModel(
-            message='Архивы на указанную дату отсутствуют в памяти.'
-        ),
-        status=HTTPStatus.NOT_FOUND
-    )
+            response=MessageModel(
+                message='Архивы на указанную дату отсутствуют в памяти.'
+            ),
+            status=HTTPStatus.NOT_FOUND
+        )
 
     with gzip.open(data_path, 'r') as file:
         zip_content = file.read()

@@ -18,7 +18,7 @@
                         "comfortTemperature": 20.0,
                         "economicalTemperature": 18.0,
                         "frostProtectionTemperature": 5.0,
-                        "roomTemperatureInfluence": 10.0,
+                        "roomTemperatureInfluence": 0.0,
                         "returnPipeTemperatureInfluence": 0.0,
                         "supplyPipeMinTemperature": 30.0,
                         "supplyPipeMaxTemperature": 90.0,
@@ -275,10 +275,14 @@
                     "regulationParameters": {
                         "proportionalityFactor": 70.0,
                         "integrationFactor": 30.0,
-                        "differentiationFactor": 30.0,
+                        "differentiationFactor": 0.0,
                         "calculationPeriod": 25.0,
                         "pulseDurationValve": 5.0,
-                        "driveUnitAnalogControl": false
+                        "driveUnitAnalogControl": false,
+                        "insensivityThreshold": 1,
+                        "fullPidImpactRange": 1000,
+                        "proportionalityFactorDenominator": 5,
+                        "integrationFactorDenominator": 50
                     }
                 }
             },
@@ -313,10 +317,14 @@
                     "regulationParameters": {
                         "proportionalityFactor": 75.0,
                         "integrationFactor": 30.0,
-                        "differentiationFactor": 30.0,
+                        "differentiationFactor": 0.0,
                         "calculationPeriod": 25.0,
                         "pulseDurationValve": 5.0,
-                        "driveUnitAnalogControl": false
+                        "driveUnitAnalogControl": false,
+                        "insensivityThreshold": 1,
+                        "fullPidImpactRange": 1000,
+                        "proportionalityFactorDenominator": 5,
+                        "integrationFactorDenominator": 50
                     }
                 }
             }

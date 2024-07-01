@@ -1,7 +1,6 @@
 from time import sleep
 from datetime import datetime
 
-
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
 from omega.ds1307 import DS1307
@@ -9,7 +8,7 @@ from utils.debugging import is_debug
 
 from omega import gpio
 from omega.mcp3208 import MCP3208
-from omega.gpio import set as gpio_set, V1_PLUS, V1_MINUS, V2_PLUS, V2_MINUS
+from omega.gpio import V1_PLUS, V1_MINUS, V2_PLUS, V2_MINUS
 
 VALVE1_OPEN = V1_PLUS
 VALVE1_CLOSE = V1_MINUS
@@ -18,6 +17,7 @@ VALVE2_OPEN = V2_PLUS
 VALVE2_CLOSE = V2_MINUS
 
 
+# TODO: consider situations: missing sensors and short circuit (-inf | +inf)
 def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 5) -> float:
     if is_debug():
         return 0
@@ -25,13 +25,22 @@ def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 
     gpio.adc_chip_select()
     try:
         gpio.set(gpio.GPIO_Vp, False)
+        # TODO: time profiling
         with MCP3208() as mcp_3208:
-            value = mcp_3208.read_avg(channel=int(channel), measurements=measurements)
+            value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
+    except Exception as ex:
+        print(ex)
+        temperature = 100.0
     finally:
         gpio.set(gpio.GPIO_Vp, True)
 
-    # TODO: divide by zero
-    temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
+    try:
+        temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
+    except ZeroDivisionError:
+        temperature = 100
+
+    if temperature > 100:
+            temperature = 100.0
 
     return temperature
 
@@ -51,19 +60,17 @@ def set_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, impact_sig
     valve_close_pin = VALVE1_CLOSE if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_CLOSE
 
     if is_debug():
-        #sleep(impact_duration)
         sleep(0.5)
-
         return
 
-    gpio_set(valve_open_pin, False)
-    gpio_set(valve_close_pin, False)
+    gpio.set(valve_open_pin, False)
+    gpio.set(valve_close_pin, False)
 
     if impact_sign:
-        gpio_set(valve_open_pin, True)
+        gpio.set(valve_open_pin, True)
         sleep(impact_duration)
-        gpio_set(valve_open_pin, False)
+        gpio.set(valve_open_pin, False)
     else:
-        gpio_set(valve_close_pin, True)
+        gpio.set(valve_close_pin, True)
         sleep(impact_duration)
-        gpio_set(valve_close_pin, False)
+        gpio.set(valve_close_pin, False)

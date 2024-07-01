@@ -42,7 +42,6 @@ def authorize(roles: Optional[List[UserRoleModel]] = None):
                 is_in_role = (roles is None or len(roles) == 0) or account.role in roles
 
                 if not is_in_role:
-                     # raise Exception('Отсутствуют права доступа.')
                     return JsonResponse(
                         response=MessageModel(message='Отсутствуют права доступа.'),
                         status=403
@@ -52,7 +51,6 @@ def authorize(roles: Optional[List[UserRoleModel]] = None):
 
                 if auth_mac_address is None or auth_mac_address != mac_address:
                     raise Exception('Требуемое поле "mac_address" в токене авторизации отсутствует или не указано неверно.')
-
 
             except jwt.ExpiredSignatureError:
                 return JsonResponse(

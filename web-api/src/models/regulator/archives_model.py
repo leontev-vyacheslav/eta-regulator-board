@@ -9,5 +9,15 @@ class ArchivesModel(AppBaseModel):
     items: List[ArchiveModel]
 
 
+class DailySavedArchivesModel(ArchivesModel):
+    is_last_day_of_month_saved: bool
+
+
+    def json(self, *args, **kwargs):
+        exclude = {'is_last_day_of_month_saved'}
+
+        return super().json(*args, **kwargs, exclude=exclude)
+
+
 class ArchivesDatesModel(AppBaseModel):
     items: List[datetime]

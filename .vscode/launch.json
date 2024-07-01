@@ -8,7 +8,8 @@
             "module": "flask",
             "env": {
                 "FLASK_APP": "web-api/src/app.py",
-                "FLASK_DEBUG": "1"
+                "FLASK_DEBUG": "1",
+                "REGULATOR_ENGINE_STARTER": "emu_regulation_engine_starter_1"
             },
             "args": [
                 "run",

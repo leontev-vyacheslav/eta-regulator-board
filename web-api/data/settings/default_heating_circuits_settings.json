@@ -276,7 +276,11 @@
                     "differentiationFactor": 30.0,
                     "calculationPeriod": 25.0,
                     "pulseDurationValve": 5.0,
-                    "driveUnitAnalogControl": false
+                    "driveUnitAnalogControl": false,
+                    "insensivityThreshold": 1,
+                    "fullPidImpactRange": 1000,
+                    "proportionalityFactorDenominator": 5,
+                    "integrationFactorDenominator": 50
                 }
             }
         },
@@ -314,7 +318,11 @@
                     "differentiationFactor": 30.0,
                     "calculationPeriod": 25.0,
                     "pulseDurationValve": 5.0,
-                    "driveUnitAnalogControl": false
+                    "driveUnitAnalogControl": false,
+                    "insensivityThreshold": 1,
+                    "fullPidImpactRange": 1000,
+                    "proportionalityFactorDenominator": 5,
+                    "integrationFactorDenominator": 50
                 }
             }
         },
@@ -594,7 +602,11 @@
                     "differentiationFactor": 30.0,
                     "calculationPeriod": 25.0,
                     "pulseDurationValve": 5.0,
-                    "driveUnitAnalogControl": false
+                    "driveUnitAnalogControl": false,
+                    "insensivityThreshold": 1,
+                    "fullPidImpactRange": 1000,
+                    "proportionalityFactorDenominator": 5,
+                    "integrationFactorDenominator": 50
                 }
             }
         }

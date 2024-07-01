@@ -12,5 +12,13 @@ class PidImpactEntryModel(PidDeviationBase):
     archive: ArchiveModel
 
 
+class PidImpactResultComponentsModel(PidDeviationBase):
+    proportional_impact: float
+
+    integration_impact: float
+
+    differentiation_impact: float
+
+
 class PidImpactResultModel(PidDeviationBase):
     impact: float
