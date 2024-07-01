@@ -93,7 +93,7 @@ class RegulationEngine:
 
         # class members depending on settings
         self._heating_circuit_type = self._heating_circuit_settings.type
-        self._calculation_period = self._heating_circuit_settings.regulator_parameters.regulation_parameters.calculation_period / 10
+        self._calculation_period = self._heating_circuit_settings.regulation_parameters.calculation_period / 10
 
     def _get_settings(self) -> HeatingCircuitModel:
         app_root_path = pathlib.Path(os.path.dirname(__file__)).parent.parent
@@ -112,7 +112,7 @@ class RegulationEngine:
             self._last_refreshing_settings_time = time()
             # class members depending on settings
             self._heating_circuit_type = self._heating_circuit_settings.type
-            self._calculation_period = self._heating_circuit_settings.regulator_parameters.regulation_parameters.calculation_period / 10
+            self._calculation_period = self._heating_circuit_settings.regulation_parameters.calculation_period / 10
 
             self._logger.debug(RegulationEngine.settings_refresh_debug_msg)
 
@@ -120,7 +120,7 @@ class RegulationEngine:
         accurate_match_tg_item = next(
             (
                 item
-                for item in self._heating_circuit_settings.regulator_parameters.temperature_graph.items
+                for item in self._heating_circuit_settings.temperature_graph.items
                 if item.outdoor_temperature == outdoor_temperature
             ),
             None
@@ -130,7 +130,7 @@ class RegulationEngine:
             return accurate_match_tg_item
 
         temperature_graph = sorted(
-            self._heating_circuit_settings.regulator_parameters.temperature_graph.items,
+            self._heating_circuit_settings.temperature_graph.items,
             key=lambda i: i.outdoor_temperature
         )
         outdoor_temperature_measured = outdoor_temperature
@@ -264,17 +264,12 @@ class RegulationEngine:
             self._logger.debug(RegulationEngine.getting_current_rtc_debug_msg, f'{self._rtc_datetime}')
 
     def _get_default_room_temperature(self) -> float:
-        control_mode = self._heating_circuit_settings \
-            .regulator_parameters \
-            .control_parameters \
-            .control_mode
+        control_mode = self._heating_circuit_settings.control_parameters.control_mode
 
         if control_mode not in [ControlModeModel.COMFORT, ControlModeModel.ECONOMY]:
             return RegulationEngine.default_room_temperature
 
-        schedules = self._heating_circuit_settings \
-            .regulator_parameters \
-            .schedules
+        schedules = self._heating_circuit_settings.schedules
 
         if schedules is None or len(schedules.items) == 0:
             return RegulationEngine.default_room_temperature
@@ -292,38 +287,21 @@ class RegulationEngine:
         if window is None:
             return RegulationEngine.default_room_temperature
 
-        comfort_temperature = self._heating_circuit_settings \
-            .regulator_parameters \
-            .control_parameters \
-            .comfort_temperature
-        economical_temperature = self._heating_circuit_settings \
-            .regulator_parameters \
-            .control_parameters \
-            .economical_temperature
+        comfort_temperature = self._heating_circuit_settings.control_parameters .comfort_temperature
+        economical_temperature = self._heating_circuit_settings.control_parameters .economical_temperature
 
         return comfort_temperature if control_mode == ControlModeModel.COMFORT else economical_temperature
 
     def _get_pid_impact_components(self, entry: PidImpactEntryModel) -> PidImpactResultComponentsModel:
         calc_temperatures = self._get_calculated_temperatures(entry.archive.outdoor_temperature)
 
-        insensivity_threshold = self._heating_circuit_settings \
-            .regulator_parameters \
-            .regulation_parameters \
-            .insensivity_threshold
-
-        room_temperature_influence = self._heating_circuit_settings \
-            .regulator_parameters \
-            .control_parameters \
-            .room_temperature_influence
+        insensivity_threshold = self._heating_circuit_settings.regulation_parameters.insensivity_threshold
+        room_temperature_influence = self._heating_circuit_settings.control_parameters.room_temperature_influence
 
         if room_temperature_influence is None:
             room_temperature_influence = RegulationEngine.default_room_temperature_influence
 
-        return_pipe_temperature_influence = self._heating_circuit_settings \
-            .regulator_parameters \
-            .control_parameters \
-            .return_pipe_temperature_influence
-
+        return_pipe_temperature_influence = self._heating_circuit_settings.control_parameters.return_pipe_temperature_influence
         default_room_temperature = self._get_default_room_temperature()
 
         # TODO: missing sensors
@@ -342,36 +320,16 @@ class RegulationEngine:
                 differentiation_impact=0.0
             )
 
-        proportionality_factor = self._heating_circuit_settings \
-            .regulator_parameters \
-            .regulation_parameters \
-            .proportionality_factor
-        integration_factor = self._heating_circuit_settings \
-            .regulator_parameters \
-            .regulation_parameters \
-            .integration_factor
-        differentiation_factor = self._heating_circuit_settings \
-            .regulator_parameters \
-            .regulation_parameters \
-            .differentiation_factor
+        proportionality_factor = self._heating_circuit_settings.regulation_parameters.proportionality_factor
+        integration_factor = self._heating_circuit_settings.regulation_parameters.integration_factor
+        differentiation_factor = self._heating_circuit_settings.regulation_parameters.differentiation_factor
 
         if math.isinf(entry.deviation):
             entry.deviation = deviation
 
-        full_pid_impact_range = self._heating_circuit_settings \
-            .regulator_parameters \
-            .regulation_parameters \
-            .full_pid_impact_range
-
-        proportionality_factor_denominator = self._heating_circuit_settings \
-            .regulator_parameters \
-            .regulation_parameters \
-            .proportionality_factor_denominator
-
-        integration_factor_denominator = self._heating_circuit_settings \
-            .regulator_parameters \
-            .regulation_parameters \
-            .integration_factor_denominator
+        full_pid_impact_range = self._heating_circuit_settings.regulation_parameters.full_pid_impact_range
+        proportionality_factor_denominator = self._heating_circuit_settings.regulation_parameters.proportionality_factor_denominator
+        integration_factor_denominator = self._heating_circuit_settings.regulation_parameters.integration_factor_denominator
 
         k = sum([1 if i > 0 else 0 for i in [proportionality_factor, integration_factor, differentiation_factor]])
 
@@ -424,7 +382,6 @@ class RegulationEngine:
             pid_impact_components.differentiation_impact
 
         full_pid_impact_range = self._heating_circuit_settings \
-            .regulator_parameters \
             .regulation_parameters \
             .full_pid_impact_range
 
@@ -432,7 +389,7 @@ class RegulationEngine:
 
         percented_pid_impart = 100 * pid_impart / full_pid_impact_range
 
-        self._logger.debug("Total PID \%: %.2f", percented_pid_impart)
+        self._logger.debug("Total PID %%: %.2f", percented_pid_impart)
 
         return PidImpactResultModel(
             impact=percented_pid_impart,
@@ -527,7 +484,7 @@ class RegulationEngine:
             start_time = time()
 
             # get valuable settings values
-            regulation_parameters = self._heating_circuit_settings.regulator_parameters.regulation_parameters
+            regulation_parameters = self._heating_circuit_settings.regulation_parameters
 
             pid_impact: Optional[PidImpactResultModel] = None
 

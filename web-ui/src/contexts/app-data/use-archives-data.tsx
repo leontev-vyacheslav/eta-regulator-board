@@ -8,7 +8,7 @@ import { ArchivesDatesModel } from '../../models/regulator-settings/archives-dat
 
 
 export type AppDataContextArchivesEndpointsModel = {
-    getArchivesByDateAsync: (date: Date) => Promise<ArchivesModel | null>;
+    getArchivesByDateAsync: (circuitId: number, date: Date) => Promise<ArchivesModel | null>;
     getArchivesListAsync: () => Promise<ArchivesDatesModel | null>;
     getArchivesByDateAsFile: (date: Date) => Promise<any>;
 }
@@ -16,11 +16,11 @@ export type AppDataContextArchivesEndpointsModel = {
 export const useArchivesData = () => {
     const authHttpRequest = useAuthHttpRequest();
 
-    const getArchivesByDateAsync = useCallback( async (date: Date) => {
+    const getArchivesByDateAsync = useCallback( async (circuitId: number, date: Date) => {
         date.setHours(0, 0, 0, 0);
 
         const response = await authHttpRequest({
-            url: `${routes.host}${routes.archives}/${date.toISOString()}`,
+            url: `${routes.host}${routes.archives}/${circuitId}/${date.toISOString()}`,
             method: HttpConstants.Methods.Get as Method,
         });
 

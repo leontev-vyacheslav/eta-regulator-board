@@ -15,13 +15,14 @@ from responses.json_response import JsonResponse
 from utils.auth_helper import authorize
 
 
-@app.api_route('/archives/<date>', methods=['GET'])
+@app.api_route('/archives/<heating_circuit_index>/<date>', methods=['GET'])
 @authorize()
 @validate(response_by_alias=True)
-def get_archive(date: datetime) -> ArchivesModel:
-
+def get_archive(heating_circuit_index: int, date: datetime) -> ArchivesModel:
+    regulator_settings = app.get_regulator_settings()
+    heating_circuit_type = regulator_settings.heating_circuits.items[heating_circuit_index].type
     data_path = app.app_root_path.joinpath(
-        f'data/archives/{date.strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
+        f'data/archives/{heating_circuit_type.name}_{heating_circuit_index}_{date.strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
     )
 
     if not data_path.exists():

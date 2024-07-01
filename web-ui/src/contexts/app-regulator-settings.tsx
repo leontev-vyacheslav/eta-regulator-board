@@ -36,7 +36,7 @@ function RegulatorSettingsProvider({ children }: any) {
 
         return regulatorSettings
             ? ControlModes.find(
-                m => m.id === regulatorSettings.heatingCircuits.items[heatingCircuitIndex].regulatorParameters.controlParameters.controlMode
+                m => m.id === regulatorSettings.heatingCircuits.items[heatingCircuitIndex].controlParameters.controlMode
             )!.description
             : ''
     }, [regulatorSettings]);

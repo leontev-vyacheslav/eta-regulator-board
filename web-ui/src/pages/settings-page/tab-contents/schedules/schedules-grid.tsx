@@ -30,7 +30,7 @@ export const SchedulesGrid = ({ dataSource }: {dataSource: any}) => {
                 type: 'custom',
                 validationCallback: (options: ValidationCallbackData) =>
                 {
-                    const existedDays = regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.schedules.items.map(i => i.day);
+                    const existedDays = regulatorSettings?.heatingCircuits.items[circuitId].schedules.items.map(i => i.day);
 
                     return !existedDays?.find(d => d === options.data.day);
                 },

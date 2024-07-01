@@ -23,7 +23,7 @@ const TemperatureGraphTabContentInner = () => {
     const temperatureGraphStore = useMemo(() => {
         const store = new ArrayStore<TemperatureGraphItemModel>({
             key: 'id',
-            data: regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.temperatureGraph.items,
+            data: regulatorSettings?.heatingCircuits.items[circuitId].temperatureGraph.items,
 
             onInserted: async (values: TemperatureGraphItemModel) => {
                 await putTemperatureGraphAsync(values);
@@ -34,7 +34,7 @@ const TemperatureGraphTabContentInner = () => {
             },
 
             onRemoving: async (key: any) => {
-                const removingItem = regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.temperatureGraph.items.find(i => i.id === key);
+                const removingItem = regulatorSettings?.heatingCircuits.items[circuitId].temperatureGraph.items.find(i => i.id === key);
 
                 if (removingItem) {
                     (store as any).lastRemovingItem = removingItem;
@@ -97,7 +97,7 @@ const TemperatureGraphTabContentInner = () => {
                                     iconName: 'DeleteAllIcon',
                                     iconSize: 32,
                                     callback: async () => {
-                                        regulatorSettings.heatingCircuits.items[0].regulatorParameters.temperatureGraph.items = [];
+                                        regulatorSettings.heatingCircuits.items[0].temperatureGraph.items = [];
                                         await putTemperatureGraphAsync({} as TemperatureGraphItemModel)
 
                                         setRegulatorSettings({ ...regulatorSettings });
@@ -125,7 +125,7 @@ const TemperatureGraphTabContentInner = () => {
                     :
                     <TemperatureGraphChart
                         dataSource={ temperatureGraphStore }
-                        showPoints={ regulatorSettings!.heatingCircuits.items[circuitId].regulatorParameters.temperatureGraph.items.length < 15 }
+                        showPoints={ regulatorSettings!.heatingCircuits.items[circuitId].temperatureGraph.items.length < 15 }
                     />
             }
         </div>

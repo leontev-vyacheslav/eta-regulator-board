@@ -33,7 +33,7 @@ def launch_regulation_engines(app: FlaskEx):
 
     for index, item in enumerate(heating_circuits):
 
-        if item.regulator_parameters.control_parameters.control_mode == ControlModeModel.OFF:
+        if item.control_parameters.control_mode == ControlModeModel.OFF:
             continue
 
         process_cancellation_event = ProcessEvent()

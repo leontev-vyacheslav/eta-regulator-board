@@ -35,7 +35,7 @@ def get_calculated_temperatures_precise_match_check(get_regulation_engine: Regul
 
     assert heating_circuit.type == HeatingCircuitTypeModel.HEATING
 
-    for temperature_graph_item in heating_circuit.regulator_parameters.temperature_graph.items:
+    for temperature_graph_item in heating_circuit.temperature_graph.items:
         calc_temperature_graph_item: TemperatureGraphItemModel = engine._get_calculated_temperatures(
             outdoor_temperature=temperature_graph_item.outdoor_temperature
         )
@@ -67,7 +67,7 @@ def get_calculated_temperatures_interpolation_check(get_regulation_engine: Regul
     assert heating_circuit_settings.type == HeatingCircuitTypeModel.HEATING
 
     temperature_graph = sorted(
-        heating_circuit_settings.regulator_parameters.temperature_graph.items,
+        heating_circuit_settings.temperature_graph.items,
         key=lambda i: i.outdoor_temperature
     )
 

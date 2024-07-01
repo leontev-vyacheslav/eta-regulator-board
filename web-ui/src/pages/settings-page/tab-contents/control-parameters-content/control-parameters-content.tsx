@@ -24,7 +24,7 @@ export const ControlParametersForm = () => {
             height={ AppConstants.formHeight }
             scrollingEnabled={ true }
             colCount={ 1 }
-            formData={ regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.controlParameters }
+            formData={ regulatorSettings?.heatingCircuits.items[circuitId].controlParameters }
             ref={ dxControlParametersFormRef }
             onFieldDataChanged={ async () => {
                 await putRegulatorSettingsAsync(regulatorSettings!);

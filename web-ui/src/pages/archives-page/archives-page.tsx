@@ -12,14 +12,39 @@ import { ArchivesDateSelectorDialog } from './archives-date-selector-dialog';
 import { PopupCallbackModel } from '../../models/popup-callback';
 import { PageToolbar } from '../../components/page-toolbar/page-toolbar';
 import { formatMessage } from 'devextreme/localization';
+import { useParams } from 'react-router';
+import { useRegulatorSettings } from '../../contexts/app-regulator-settings';
+import { HeatingCircuitTypes } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 
 export const ArchivesPage = () => {
+    const { circuitIdParam } = useParams();
+    const { regulatorSettings } = useRegulatorSettings();
     const { getArchivesByDateAsync, getArchivesByDateAsFile } = useAppData();
     const [isShowGraph, setIsShowGraph] = useState(true);
     const [isShowArchiveDateSelector, setIsShowArchiveDateSelector] = useState(false);
     const [archivesDate, setArchivesDate] = useState<Date>(new Date());
     const [archives, setArchives] = useState<ArchiveModel[]>([]);
     const [refreshToken, setRefreshToken] = useState<({ token: number }) | null>({ token: 0 });
+
+    const circuitId = useMemo(() => {
+        return circuitIdParam ? parseInt(circuitIdParam) : 0;
+    }, [circuitIdParam]);
+
+    const currentHeatingCircuitType = useMemo(() => {
+        return HeatingCircuitTypes.find(t => t.type === regulatorSettings!.heatingCircuits.items[circuitId].type)!;
+    }, [circuitId, regulatorSettings]);
+
+    const pageHeaderTitle = useMemo(() => {
+        return (
+            <div style={ { display: 'flex', gap: 10, alignItems: 'center' } }>
+                <span>{`Архивы контура ${circuitId + 1} (${currentHeatingCircuitType.shotDescription})`}</span>
+                <span>({archivesDate.toLocaleDateString('ru-RU')})</span>
+            </div>
+        );
+
+    }, [archivesDate, circuitId, currentHeatingCircuitType]);
+
+
 
     const downloadRegulatorSettingsAsync = useCallback(async () => {
         const data = await getArchivesByDateAsFile(archivesDate);
@@ -80,23 +105,16 @@ export const ArchivesPage = () => {
                 return;
             }
 
-            const archives = await getArchivesByDateAsync(archivesDate);
+            const archives = await getArchivesByDateAsync(circuitId, archivesDate);
             if (archives) {
                 setArchives(archives.items);
             }
         })();
-    }, [archivesDate, getArchivesByDateAsync, refreshToken]);
+    }, [archivesDate, circuitId, getArchivesByDateAsync, refreshToken]);
 
     return (
         <>
-            <PageHeader caption={ () => {
-                return (
-                    <div style={ { display: 'flex', gap: 10, alignItems: 'center' } }>
-                        <span>Архивы</span>
-                        <span>({archivesDate.toLocaleDateString('ru-RU')})</span>
-                    </div>
-                );
-            } } menuItems={ [] } >
+            <PageHeader caption={ () => pageHeaderTitle } menuItems={ [] } >
                 <ArchivesIcon size={ AppConstants.headerIconSize } />
             </PageHeader>
             <div className={ 'content-block' }>
@@ -111,12 +129,12 @@ export const ArchivesPage = () => {
             </div>
             {isShowArchiveDateSelector
                 ? <ArchivesDateSelectorDialog callback={ ({ modalResult, data }: PopupCallbackModel) => {
-                    if(modalResult === 'OK') {
+                    if (modalResult === 'OK') {
                         setArchivesDate(data);
                     }
                     setIsShowArchiveDateSelector(false);
                 } } />
-               : null
+                : null
             }
         </>
     );

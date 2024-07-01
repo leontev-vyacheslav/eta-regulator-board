@@ -117,7 +117,7 @@ def get_default_room_temperature_comfort_has_schedule_check():
         logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
     )
 
-    assertable_default_room_temperature = base_testable_settings.regulator_parameters.control_parameters.comfort_temperature
+    assertable_default_room_temperature = base_testable_settings.control_parameters.comfort_temperature
 
     engine._rtc_datetime = datetime(
         year=2024,

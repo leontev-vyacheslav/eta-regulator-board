@@ -61,7 +61,22 @@ export const useSideNavigationMenuItems = () => {
                 id: 'archives',
                 text: 'Архивы',
                 iconRender: (props: IconBaseProps) => <ArchivesIcon size={ 22 } { ...props } />,
-                path: '/archives',
+                items: [
+                    {
+                        id: 'archives-1',
+                        text: getHeatingCircuitName(HeatingCircuitIndexModel.first),
+                        iconRender: () => <HeatingCircuitIconSelector heatingCircuitIndex={ HeatingCircuitIndexModel.first } />,
+                        path: '/archives/0',
+                        visible: regulatorSettings
+                    },
+                    {
+                        id: 'archives-2',
+                        text: getHeatingCircuitName(HeatingCircuitIndexModel.second),
+                        iconRender: () => <HeatingCircuitIconSelector heatingCircuitIndex={ HeatingCircuitIndexModel.second } />,
+                        path: '/archives/1',
+                        visible: regulatorSettings
+                    }
+                ],
                 visible: isAdmin() || isOperator()
             },
             {
