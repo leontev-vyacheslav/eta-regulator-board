@@ -12,7 +12,7 @@ from data_access.accounts_settings_repository import AccountsSettingsRepository
 from regulation.launcher import launch_regulation_engines
 from workers.worker_starter_extension import WorkerStarter
 
-APP_VERSION = 'v.0.1.20240422-135841'
+APP_VERSION = 'v.0.1.20240629-094720'
 APP_NAME = 'Eta Regulator Board Web API'
 
 MASTER_KEY = 'XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='
@@ -54,7 +54,7 @@ app.app_logger.info('The master process PID is %d.', os.getpid())
 counter = 1
 delay_steps = 5
 while True:
-    time.sleep(1)
+    time.sleep(0.5)
     app.app_logger.info(f'Waiting before running of the regulation processes ({counter} out of {delay_steps})...')
     current_time = time.time()
     if counter == delay_steps:

@@ -8,7 +8,7 @@ from datetime import datetime
 from time import sleep, time
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 from threading import Thread, Event as ThreadingEvent, Lock as ThreadingLock
-from typing import List, Optional
+from typing import Optional
 import uuid
 
 import regulation.equipments as equipments
@@ -29,9 +29,6 @@ from utils.datetime_helper import is_last_day_of_month
 
 
 class RegulationEngine:
-    MIN_IMPACT = -6500.00
-    MAX_IMPACT = 10361.00
-
     updating_rtc_period = 60
     default_room_temperature = 20
     default_room_temperature_influence = 0.0
@@ -46,17 +43,18 @@ class RegulationEngine:
     sensors_polling_stopped_info_msg = 'The sensors polling thread was gracefully STOPPED.'
     sensors_polling_slept_debug_msg = 'The sensors polling thread has executed %.6f sec and has slept during %.6f sec.'
 
-    regulation_polling_started_info_msg = 'The regulation polling main thread  was STARTED.'
-    regulation_polling_step_done_debug_msg = 'The regulation polling main thread has DONE A STEP.'
-    regulation_polling_stopped_info_msg = 'The regulation polling main thread was gracefully STOPPED.'
-    regulation_polling_slept_debug_msg = 'The regulation polling main thread has executed %.6f sec and has slept during %.6f sec.'
+    regulation_polling_started_info_msg = 'The regulation main thread  was STARTED.'
+    regulation_polling_step_done_debug_msg = 'The regulation main thread has DONE A STEP.'
+    regulation_polling_stopped_info_msg = 'The regulation main thread was gracefully STOPPED.'
+    regulation_polling_slept_debug_msg = 'The regulation main thread has executed %.6f sec and has slept during %.6f sec.'
 
     measured_temperatures_debug_msg = 'The measured temperatures were obtained: OUTDOOR=%.2f, ROOM=%.2f SUPPLY=%.2f; RETURN=%.2f'
     calculated_temperatures_debug_msg = 'The calculated temperatures were approximated: SUPPLY=%.2f; RETURN=%.2f'
     settings_refresh_debug_msg = 'Settings refresh completed'
     writing_archives_debug_msg = 'Writing archives to file has been completed: %s'
     getting_current_rtc_debug_msg = 'The current RTC datetime: %s'
-    pid_impact_calculated_debug_msg = 'PID impact was calculated with a value: IMPACT=%.2f, DEVIATION=%.2f, TOTAL_DEVIATION=%.2f'
+    # PID impact was calculated with a values:
+    pid_impact_components_debug_msg = 'PID values: P=%.2f, I=%.2f, D=%.2f, SUM = %.2f DEV=%.2f, TOTAL=%.2f'
     writing_archives_error_msg = 'Error has happened during writing archives: %s'
 
     def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: RegulationEngineLoggingLevelModel) -> None:
@@ -71,16 +69,22 @@ class RegulationEngine:
 
         self._heating_circuit_settings: HeatingCircuitModel = self._get_settings()
 
+        # log_name = f'{self._heating_circuit_settings.type.name}_{self._heating_circuit_index}_{datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.log'
+        # log_path = pathlib.Path(__file__).parent.parent.parent.joinpath(
+        #     f'log/{log_name}'
+        # )
+
         self._logger = build_logger(
             name=f'regulation_engine_logger',
             heating_circuit_index=heating_circuit_index,
             heating_circuit_type=self._heating_circuit_settings.type,
-            default_level=logging.INFO if logging_level == RegulationEngineLoggingLevelModel.NORMAL else logging.DEBUG
+            default_level=logging.INFO if logging_level == RegulationEngineLoggingLevelModel.NORMAL else logging.DEBUG,
+            # default_handler=logging.FileHandler(log_path)
         )
 
-        self._last_receiving_settings_time = time()
+        self._last_refreshing_settings_time = time()
         self._rtc_datetime: datetime = datetime.utcnow()
-        self._last_rtc_getting_time: Optional[float] = None
+        self._last_refreshing_rtc_time: Optional[float] = None
 
         self._archives: DailySavedArchivesModel = DailySavedArchivesModel(
             items=[],
@@ -103,11 +107,9 @@ class RegulationEngine:
         return regulator_settings.heating_circuits.items[self._heating_circuit_index]
 
     def _refresh_settings(self):
-        current_receiving_settings_time = time()
-
-        if current_receiving_settings_time - self._last_receiving_settings_time > self._calculation_period * RegulationEngine.updating_settings_factor:
+        if time() - self._last_refreshing_settings_time > self._calculation_period * RegulationEngine.updating_settings_factor:
             self._heating_circuit_settings = self._get_settings()
-            self._last_receiving_settings_time = time()
+            self._last_refreshing_settings_time = time()
             # class members depending on settings
             self._heating_circuit_type = self._heating_circuit_settings.type
             self._calculation_period = self._heating_circuit_settings.regulator_parameters.regulation_parameters.calculation_period / 10
@@ -255,9 +257,9 @@ class RegulationEngine:
                 self._logger.error(RegulationEngine.writing_archives_error_msg, str(ex))
 
     def _refresh_rtc_datetime(self):
-        if self._last_rtc_getting_time is None or time() - self._last_rtc_getting_time >= RegulationEngine.updating_rtc_period:
+        if self._last_refreshing_rtc_time is None or time() - self._last_refreshing_rtc_time >= RegulationEngine.updating_rtc_period:
             self._rtc_datetime = equipments.get_rtc_datetime()
-            self._last_rtc_getting_time = time()
+            self._last_refreshing_rtc_time = time()
 
             self._logger.debug(RegulationEngine.getting_current_rtc_debug_msg, f'{self._rtc_datetime}')
 
@@ -284,7 +286,8 @@ class RegulationEngine:
             return RegulationEngine.default_room_temperature
 
         current_rtc_datetime = self._rtc_datetime.replace(microsecond=0)
-        window = next((item for item in schedule.windows if item.start_time.time() <= current_rtc_datetime.time() <= item.end_time.time()), None)
+        window = next((item for item in schedule.windows if item.start_time.time()
+                      <= current_rtc_datetime.time() <= item.end_time.time()), None)
 
         if window is None:
             return RegulationEngine.default_room_temperature
@@ -302,6 +305,11 @@ class RegulationEngine:
 
     def _get_pid_impact_components(self, entry: PidImpactEntryModel) -> PidImpactResultComponentsModel:
         calc_temperatures = self._get_calculated_temperatures(entry.archive.outdoor_temperature)
+
+        insensivity_threshold = self._heating_circuit_settings \
+            .regulator_parameters \
+            .regulation_parameters \
+            .insensivity_threshold
 
         room_temperature_influence = self._heating_circuit_settings \
             .regulator_parameters \
@@ -325,6 +333,15 @@ class RegulationEngine:
 
         total_deviation = entry.total_deviation + deviation
 
+        if abs(calc_temperatures.supply_pipe_temperature - entry.archive.supply_pipe_temperature) <= insensivity_threshold:
+            return PidImpactResultComponentsModel(
+                deviation=deviation,
+                total_deviation=0.0,
+                proportional_impact=0.0,
+                integration_impact=0.0,
+                differentiation_impact=0.0
+            )
+
         proportionality_factor = self._heating_circuit_settings \
             .regulator_parameters \
             .regulation_parameters \
@@ -338,16 +355,54 @@ class RegulationEngine:
             .regulation_parameters \
             .differentiation_factor
 
-        # 2.3 calculation of proportional, differentiation and integration parts of the impact
         if math.isinf(entry.deviation):
             entry.deviation = deviation
 
-        proportional_part_impact = deviation * proportionality_factor
-        integration_part_impact = total_deviation * integration_factor
+        full_pid_impact_range = self._heating_circuit_settings \
+            .regulator_parameters \
+            .regulation_parameters \
+            .full_pid_impact_range
+
+        proportionality_factor_denominator = self._heating_circuit_settings \
+            .regulator_parameters \
+            .regulation_parameters \
+            .proportionality_factor_denominator
+
+        integration_factor_denominator = self._heating_circuit_settings \
+            .regulator_parameters \
+            .regulation_parameters \
+            .integration_factor_denominator
+
+        k = sum([1 if i > 0 else 0 for i in [proportionality_factor, integration_factor, differentiation_factor]])
+
+        full_proportional_part_impact = full_pid_impact_range / k if proportionality_factor > 0 else 0
+        full_integration_part_impact = full_pid_impact_range / k if integration_factor > 0 else 0
+        full_differentiation_part_impact = full_pid_impact_range / k if differentiation_factor > 0 else 0
+
+        proportional_part_impact = deviation * proportionality_factor / proportionality_factor_denominator
+        integration_part_impact = total_deviation * integration_factor / integration_factor_denominator
         differentiation_part_impact = (entry.deviation - deviation) * differentiation_factor
 
+        if proportional_part_impact > full_proportional_part_impact:
+            proportional_part_impact = full_proportional_part_impact
+        if proportional_part_impact < -full_proportional_part_impact:
+            proportional_part_impact = -full_proportional_part_impact
+
+        if integration_part_impact > full_integration_part_impact:
+            integration_part_impact = full_integration_part_impact
+        if integration_part_impact < -full_integration_part_impact:
+            integration_part_impact = -full_integration_part_impact
+
+        if differentiation_part_impact > full_differentiation_part_impact:
+            differentiation_part_impact = full_differentiation_part_impact
+        if differentiation_part_impact < -full_differentiation_part_impact:
+            differentiation_part_impact = -full_differentiation_part_impact
+
         self._logger.debug(
-            RegulationEngine.pid_impact_calculated_debug_msg,
+            RegulationEngine.pid_impact_components_debug_msg,
+            proportional_part_impact,
+            integration_part_impact,
+            differentiation_part_impact,
             proportional_part_impact + integration_part_impact + differentiation_part_impact,
             deviation,
             total_deviation
@@ -368,15 +423,16 @@ class RegulationEngine:
             pid_impact_components.integration_impact + \
             pid_impact_components.differentiation_impact
 
+        full_pid_impact_range = self._heating_circuit_settings \
+            .regulator_parameters \
+            .regulation_parameters \
+            .full_pid_impact_range
+
         percented_pid_impart = 0.0
 
-        pid_impact_range_middle = (RegulationEngine.MAX_IMPACT - RegulationEngine.MIN_IMPACT) / 2
-        if pid_impart > pid_impact_range_middle:
-            percented_pid_impart = 100 * pid_impart / (RegulationEngine.MAX_IMPACT - pid_impact_range_middle)
-        elif pid_impart < pid_impact_range_middle:
-            percented_pid_impart = -100 * pid_impart / (pid_impact_range_middle - RegulationEngine.MIN_IMPACT)
-        else:
-            percented_pid_impart = 0.0
+        percented_pid_impart = 100 * pid_impart / full_pid_impact_range
+
+        self._logger.debug("Total PID \%: %.2f", percented_pid_impart)
 
         return PidImpactResultModel(
             impact=percented_pid_impart,
@@ -485,13 +541,20 @@ class RegulationEngine:
 
             if pid_impact is not None:
                 # TODO: missing sensors
-                # TODO: reset total deviation, deviation when twhen limits exceeded
+                # TODO: reset total deviation, deviation when then limits exceeded
                 with self._hardware_process_lock:
+                    impact_duration = abs(pid_impact.impact * regulation_parameters.pulse_duration_valve) / 100
+
+                    if impact_duration > regulation_parameters.pulse_duration_valve:
+                        impact_duration = regulation_parameters.pulse_duration_valve
+
                     equipments.set_valve_impact(
                         heating_circuit_index=self._heating_circuit_index,
                         impact_sign=pid_impact.impact > 0.0,
-                        impact_duration=abs(pid_impact.impact * regulation_parameters.pulse_duration_valve)
+                        impact_duration=impact_duration
                     )
+
+            self._refresh_settings()
 
             end_time = time()
             delta = end_time - start_time
@@ -499,8 +562,11 @@ class RegulationEngine:
             # wait for the end of period of the act on the regulator valve
             if delta < regulation_parameters.pulse_duration_valve:
                 sleep(regulation_parameters.pulse_duration_valve - delta)
-                self._logger.debug(RegulationEngine.regulation_polling_slept_debug_msg,
-                                   delta, regulation_parameters.pulse_duration_valve - delta)
+                self._logger.debug(
+                    RegulationEngine.regulation_polling_slept_debug_msg,
+                    delta,
+                    regulation_parameters.pulse_duration_valve - delta
+                )
 
             self._logger.debug(RegulationEngine.regulation_polling_step_done_debug_msg)
 
@@ -509,7 +575,7 @@ class RegulationEngine:
     heating_circuit_types=[
         HeatingCircuitTypeModel.HEATING,
         HeatingCircuitTypeModel.VENTILATION,
-        HeatingCircuitTypeModel.HOT_WATER
+        # HeatingCircuitTypeModel.HOT_WATER
     ]
 )
 def regulation_engine_starter(heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardware_process_lock: ProcessLock):

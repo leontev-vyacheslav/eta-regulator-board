@@ -19,7 +19,7 @@ def launch_regulation_engines(app: FlaskEx):
 
     regulation_engine_starter_name = os.environ.get('REGULATOR_ENGINE_STARTER')
     if regulation_engine_starter_name is None:
-        regulation_engine_starter = globals().get('regulation_engine_starter')
+        regulation_engine_starter = globals().get('default_regulation_engine_starter')
     else:
         regulation_engine_starter = globals().get(regulation_engine_starter_name)
         if regulation_engine_starter is None:

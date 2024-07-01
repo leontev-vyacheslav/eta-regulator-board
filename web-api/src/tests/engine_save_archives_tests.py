@@ -39,12 +39,12 @@ def refresh_rtc_datetime_init_check(get_regulation_engine: RegulationEngine):
     engine = get_regulation_engine
 
     assert engine is not None
-    assert engine._last_rtc_getting_time is None
+    assert engine._last_refreshing_rtc_time is None
 
     engine._refresh_rtc_datetime()
 
-    assert engine._last_rtc_getting_time is not None
-    delta = time() - engine._last_rtc_getting_time
+    assert engine._last_refreshing_rtc_time is not None
+    delta = time() - engine._last_refreshing_rtc_time
     assert delta < 0.01
 
     logger.debug(delta)
