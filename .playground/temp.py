@@ -12,3 +12,6 @@ def is_last_day_of_month(any_day: datetime, day: int):
     return (next_month - timedelta(days=next_month.day)).day == day
 
 print(is_last_day_of_month(datetime.now(), 30))
+a = "HEATING__0__2024-07-02T00_00_00Z.json.gz".rfind("__") + 2
+
+print("HEATING__0__2024-07-02T00_00_00Z.json.gz"[a:])

@@ -8,3 +8,6 @@ export type ArchiveModel = {
     returnPipeTemperature: number;
 }
 
+export type ArchiveExistsModel = {
+    exists: boolean
+}

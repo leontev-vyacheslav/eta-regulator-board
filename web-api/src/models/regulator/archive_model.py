@@ -13,3 +13,7 @@ class ArchiveModel(AppBaseModel):
     supply_pipe_temperature: float
 
     return_pipe_temperature: float
+
+
+class ArchiveExistsModel(AppBaseModel):
+    exists: bool

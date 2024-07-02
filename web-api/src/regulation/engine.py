@@ -40,7 +40,7 @@ class RegulationEngine:
 
     sensors_polling_started_info_msg = 'The polling thread was STARTED.'
     sensors_polling_stopped_info_msg = 'The polling thread was STOPPED.'
-    sensors_polling_slept_debug_msg = 'The polling thread executed/slept during %.6f / %.6f sec.'
+    sensors_polling_slept_debug_msg = 'The polling thread executed/slept during %.6f / %.6f sec.\r\n'
 
     regulation_started_info_msg = 'The regulation thread  was STARTED.'
     regulation_stopped_info_msg = 'The regulation thread was STOPPED.'
@@ -237,7 +237,7 @@ class RegulationEngine:
 
             try:
                 start_current_day = self._rtc_datetime.replace(**RegulationEngine.start_current_day_template)
-                archive_file_name = f'{self._heating_circuit_settings.type.name}_{self._heating_circuit_index}_{start_current_day.strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
+                archive_file_name = f'{self._heating_circuit_settings.type.name}__{self._heating_circuit_index}__{start_current_day.strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
                 data_path = pathlib.Path(__file__).parent.parent.parent.joinpath(
                     f'data/archives/{archive_file_name}'
                 )

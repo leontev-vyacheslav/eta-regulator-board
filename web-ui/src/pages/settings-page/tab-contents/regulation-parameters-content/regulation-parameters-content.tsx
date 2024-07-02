@@ -1,4 +1,4 @@
-import Form, { SimpleItem } from 'devextreme-react/form';
+import Form, { SimpleItem, GroupItem } from 'devextreme-react/form';
 import { useRef } from 'react';
 import { useSettingPageContext } from '../../settings-page-context';
 import { useAppData } from '../../../../contexts/app-data/app-data';
@@ -78,6 +78,43 @@ export const RegulationParametersForm = () => {
                 editorOptions={ {
                     readOnly: !isAdmin(),
                 } } />
+
+            <SimpleItem
+                dataField='insensivityThreshold'
+                label={ { location: 'top', showColon: true, text: `Порог нечувствительности (${ currentHeatingCircuitType.shotDescription })` } }
+                editorType={ 'dxNumberBox' }
+                editorOptions={ {
+                    readOnly: !isAdmin(),
+                    showSpinButtons: true, min: 1, max: 5
+                } } />
+             <GroupItem caption={ 'Служебные' }>
+                <SimpleItem
+                    dataField='fullPidImpactRange'
+                    label={ { location: 'top', showColon: true, text: `Диапазон значений ПИД (${ currentHeatingCircuitType.shotDescription })` } }
+                    editorType={ 'dxNumberBox' }
+                    editorOptions={ {
+                        readOnly: !isAdmin(),
+                        showSpinButtons: true, min: 1000, max: 5000
+                    } } />
+
+                <SimpleItem
+                    dataField='proportionalityFactorDenominator'
+                    label={ { location: 'top', showColon: true, text: `Делитель коэфф. пропорциональности (${ currentHeatingCircuitType.shotDescription })` } }
+                    editorType={ 'dxNumberBox' }
+                    editorOptions={ {
+                        readOnly: !isAdmin(),
+                        showSpinButtons: true, min: 1, max: 50
+                    } } />
+
+                <SimpleItem
+                    dataField='integrationFactorDenominator'
+                    label={ { location: 'top', showColon: true, text: `Делитель коэфф. интегрирования (${ currentHeatingCircuitType.shotDescription })` } }
+                    editorType={ 'dxNumberBox' }
+                    editorOptions={ {
+                        readOnly: !isAdmin(),
+                        showSpinButtons: true, min: 1, max: 50
+                    } } />
+                </GroupItem>
 
         </Form>
     );

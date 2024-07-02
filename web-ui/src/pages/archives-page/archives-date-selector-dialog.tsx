@@ -1,6 +1,6 @@
 import Form, { Label, SimpleItem } from 'devextreme-react/form';
 import AppModalPopup from '../../components/dialogs/app-modal-popup/app-modal-popup';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { AppModalPopupProps } from '../../models/app-modal-popup-props';
 import { useAppData } from '../../contexts/app-data/app-data';
 import { ValueChangedEvent } from 'devextreme/ui/calendar';
@@ -9,18 +9,9 @@ import { Button } from 'devextreme-react';
 export const ArchivesDateSelectorDialog = ( { callback }: AppModalPopupProps ) => {
     const formData = useRef({ archivesDate: new Date() });
     const formRef = useRef<Form>(null);
-    const { getArchivesListAsync } = useAppData();
-    const [archivesList, setArchivesList] = useState<Date[]>([]);
+    const { getExistsArchivesByDateAsync } = useAppData();
     const buttonRef = useRef<Button>(null);
 
-    useEffect(() => {
-        (async () => {
-            const archivesList = await getArchivesListAsync();
-            if(archivesList) {
-                setArchivesList(archivesList.items);
-            }
-        })();
-    }, [getArchivesListAsync]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -33,16 +24,19 @@ export const ArchivesDateSelectorDialog = ( { callback }: AppModalPopupProps ) =
     return (
         <AppModalPopup title='Выбор даты' callback={ () => {
             callback( { modalResult: 'CANCEL' });
-        } } height={ undefined } width={ undefined } >
+        } } height={ 450 } width={ undefined } >
             <Form ref={ formRef } formData={ formData }>
                 <SimpleItem
                     editorType='dxCalendar'
                     dataField='archivesDate'
                     editorOptions={ {
-                        onValueChanged: (e: ValueChangedEvent) => {
-                            const isArchivesExisted = archivesList.some(d => d.getTime() === (e.value as Date).getTime());
-                            buttonRef.current?.instance.option('disabled', !isArchivesExisted);
-                            buttonRef.current?.instance.option('type', 'default');
+                        onValueChanged: async (e: ValueChangedEvent) => {
+                            const archiveExists = await getExistsArchivesByDateAsync(0, e.value as Date);
+                            if (archiveExists) {
+                                const isArchivesExisted = archiveExists.exists
+                                buttonRef.current?.instance.option('disabled', !isArchivesExisted);
+                                buttonRef.current?.instance.option('type', 'default');
+                            }
                         }
                     } }
                >

@@ -45,9 +45,8 @@ export const ArchivesPage = () => {
     }, [archivesDate, circuitId, currentHeatingCircuitType]);
 
 
-
     const downloadRegulatorSettingsAsync = useCallback(async () => {
-        const data = await getArchivesByDateAsFile(archivesDate);
+        const data = await getArchivesByDateAsFile(circuitId, archivesDate);
 
         if (!data) {
             return;
@@ -66,7 +65,7 @@ export const ArchivesPage = () => {
         setTimeout(() => {
             URL.revokeObjectURL(href);
         }, 100);
-    }, [archivesDate, getArchivesByDateAsFile]);
+    }, [archivesDate, circuitId, getArchivesByDateAsFile]);
 
     const menuItems = useMemo(() => {
 
