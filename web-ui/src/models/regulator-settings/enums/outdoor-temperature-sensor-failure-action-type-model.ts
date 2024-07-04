@@ -4,7 +4,7 @@ export enum OutdoorTemperatureSensorFailureActionTypeModel {
     noAction = 1,
     closeValve = 2,
     openValve = 3,
-    temperatureSustenance = 4
+    temperatureSustenance = 5
 }
 
 export const OutdoorTemperatureSensorFailureActionTypes = [

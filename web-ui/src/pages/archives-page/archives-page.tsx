@@ -127,7 +127,7 @@ export const ArchivesPage = () => {
                 </div>
             </div>
             {isShowArchiveDateSelector
-                ? <ArchivesDateSelectorDialog callback={ ({ modalResult, data }: PopupCallbackModel) => {
+                ? <ArchivesDateSelectorDialog circuitId={ circuitId } callback={ ({ modalResult, data }: PopupCallbackModel) => {
                     if (modalResult === 'OK') {
                         setArchivesDate(data);
                     }

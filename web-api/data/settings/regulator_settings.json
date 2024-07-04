@@ -9,7 +9,7 @@
                 "controlParameters": {
                     "controlMode": 2,
                     "manualControlMode": 2,
-                    "outdoorTemperatureSensorFailureAction": 4,
+                    "outdoorTemperatureSensorFailureAction": 5,
                     "supplyPipeTemperatureSensorFailureAction": 2,
                     "manualControlModeTemperatureSetpoint": 60.0,
                     "analogValveErrorSetpoint": 50.0,

@@ -14,20 +14,28 @@ from responses.json_response import JsonResponse
 from utils.auth_helper import authorize
 
 
+def get_archive_path(heating_circuit_index: int, date: datetime):
+    regulator_settings = app.get_regulator_settings()
+    heating_circuit_type = regulator_settings.heating_circuits.items[heating_circuit_index].type
+    archive_file_name = f'{heating_circuit_type.name}__{heating_circuit_index}__{date.replace(hour=0, minute=0, second=0).strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
+    data_path = app.app_root_path.joinpath(
+        f'data/archives/{date.year}/{archive_file_name}'
+    )
+
+    return data_path
+
+
 @app.api_route('/archives/<heating_circuit_index>/<date>', methods=['GET'])
 @authorize()
 @validate(response_by_alias=True)
 def get_archive(heating_circuit_index: int, date: datetime) -> ArchivesModel:
-    regulator_settings = app.get_regulator_settings()
-    heating_circuit_type = regulator_settings.heating_circuits.items[heating_circuit_index].type
-    data_path = app.app_root_path.joinpath(
-        f'data/archives/{heating_circuit_type.name}__{heating_circuit_index}__{date.replace(hour=0, minute=0, second=0).strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
-    )
 
-    if not data_path.exists():
+    archive_path = get_archive_path(heating_circuit_index, date)
+
+    if not archive_path.exists():
         return ArchivesModel(items=[])
 
-    with gzip.open(data_path, 'r') as file:
+    with gzip.open(archive_path, 'r') as file:
         zip_content = file.read()
         json = zip_content.decode('utf-8')
 
@@ -40,13 +48,9 @@ def get_archive(heating_circuit_index: int, date: datetime) -> ArchivesModel:
 @authorize()
 @validate(response_by_alias=True)
 def get_exists_archive(heating_circuit_index: int, date: datetime) -> ArchiveExistsModel:
-    regulator_settings = app.get_regulator_settings()
-    heating_circuit_type = regulator_settings.heating_circuits.items[heating_circuit_index].type
-    data_path = app.app_root_path.joinpath(
-        f'data/archives/{heating_circuit_type.name}__{heating_circuit_index}__{date.replace(hour=0, minute=0, second=0).strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
-    )
+    archive_path = get_archive_path(heating_circuit_index, date)
 
-    if not data_path.exists():
+    if not archive_path.exists():
         return ArchiveExistsModel(exists=False)
 
     return ArchiveExistsModel(exists=True)
@@ -56,14 +60,9 @@ def get_exists_archive(heating_circuit_index: int, date: datetime) -> ArchiveExi
 @authorize()
 @validate(response_by_alias=True)
 def get_archives_as_file(heating_circuit_index: int, date: datetime):
-    regulator_settings = app.get_regulator_settings()
-    heating_circuit_type = regulator_settings.heating_circuits.items[heating_circuit_index].type
+    archive_path = get_archive_path(heating_circuit_index, date)
 
-    data_path = app.app_root_path.joinpath(
-        f'data/archives/{heating_circuit_type.name}__{heating_circuit_index}__{date.replace(hour=0, minute=0, second=0).strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
-    )
-
-    if not data_path.exists():
+    if not archive_path.exists():
         return JsonResponse(
             response=MessageModel(
                 message='Архивы на указанную дату отсутствуют в памяти.'
@@ -71,7 +70,7 @@ def get_archives_as_file(heating_circuit_index: int, date: datetime):
             status=HTTPStatus.NOT_FOUND
         )
 
-    with gzip.open(data_path, 'r') as file:
+    with gzip.open(archive_path, 'r') as file:
         zip_content = file.read()
         json = zip_content.decode('utf-8')
 

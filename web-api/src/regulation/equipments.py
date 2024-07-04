@@ -17,7 +17,6 @@ VALVE2_OPEN = V2_PLUS
 VALVE2_CLOSE = V2_MINUS
 
 
-# TODO: consider situations: missing sensors and short circuit (-inf | +inf)
 def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 5) -> float:
     if is_debug():
         return 0
@@ -25,22 +24,17 @@ def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 
     gpio.adc_chip_select()
     try:
         gpio.set(gpio.GPIO_Vp, False)
-        # TODO: time profiling
         with MCP3208() as mcp_3208:
             value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
-    except Exception as ex:
-        print(ex)
-        temperature = 100.0
+    except:
+        temperature = float("inf")
     finally:
         gpio.set(gpio.GPIO_Vp, True)
 
-    try:
-        temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
-    except ZeroDivisionError:
-        temperature = 100
+    if value < 1:
+        return float("inf")
 
-    if temperature > 100:
-            temperature = 100.0
+    temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
 
     return temperature
 
@@ -74,3 +68,31 @@ def set_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, impact_sig
         gpio.set(valve_close_pin, True)
         sleep(impact_duration)
         gpio.set(valve_close_pin, False)
+
+
+def close_valve(heating_circuit_index: HeatingCircuitIndexModel):
+    valve_open_pin = VALVE1_OPEN if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_OPEN
+    valve_close_pin = VALVE1_CLOSE if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_CLOSE
+
+    if is_debug():
+        sleep(0.1)
+        return
+
+    gpio.set(valve_open_pin, False)
+    gpio.set(valve_close_pin, False)
+    sleep(0.1)
+    gpio.set(valve_close_pin, True)
+
+
+def open_valve(heating_circuit_index: HeatingCircuitIndexModel):
+    valve_open_pin = VALVE1_OPEN if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_OPEN
+    valve_close_pin = VALVE1_CLOSE if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_CLOSE
+
+    if is_debug():
+        sleep(0.1)
+        return
+
+    gpio.set(valve_open_pin, False)
+    gpio.set(valve_close_pin, False)
+    sleep(0.1)
+    gpio.set(valve_open_pin, True)

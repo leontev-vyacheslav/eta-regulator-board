@@ -6,7 +6,11 @@ import { useAppData } from '../../contexts/app-data/app-data';
 import { ValueChangedEvent } from 'devextreme/ui/calendar';
 import { Button } from 'devextreme-react';
 
-export const ArchivesDateSelectorDialog = ( { callback }: AppModalPopupProps ) => {
+export type ArchivesDateSelectorDialogProps = AppModalPopupProps & {
+    circuitId: number
+};
+
+export const ArchivesDateSelectorDialog = ( { circuitId, callback }: ArchivesDateSelectorDialogProps ) => {
     const formData = useRef({ archivesDate: new Date() });
     const formRef = useRef<Form>(null);
     const { getExistsArchivesByDateAsync } = useAppData();
@@ -31,7 +35,7 @@ export const ArchivesDateSelectorDialog = ( { callback }: AppModalPopupProps ) =
                     dataField='archivesDate'
                     editorOptions={ {
                         onValueChanged: async (e: ValueChangedEvent) => {
-                            const archiveExists = await getExistsArchivesByDateAsync(0, e.value as Date);
+                            const archiveExists = await getExistsArchivesByDateAsync(circuitId, e.value as Date);
                             if (archiveExists) {
                                 const isArchivesExisted = archiveExists.exists
                                 buttonRef.current?.instance.option('disabled', !isArchivesExisted);
