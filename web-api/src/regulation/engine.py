@@ -540,12 +540,15 @@ class RegulationEngine:
                 failure_action_state = self._shared_failure_action_state
 
             # TODO: what about time accounting is failure_action_state is not equal NO_FAILURE
+            # if you need to count down the time until a full cycle we should to define a flag variable "isSkipNormalImpact" (or something like that)
             if failure_action_state == FailureActionTypeModel.NO_ACTION:
                 continue
+
             if failure_action_state == FailureActionTypeModel.OPEN_VALVE:
                 with self._hardware_process_lock:
                     equipments.open_valve(heating_circuit_index=self._heating_circuit_index)
                 continue
+
             if failure_action_state == FailureActionTypeModel.CLOSE_VALVE:
                 with self._hardware_process_lock:
                     equipments.close_valve(heating_circuit_index=self._heating_circuit_index)
@@ -554,8 +557,6 @@ class RegulationEngine:
             # measure time of the beginning of the act on the regulator valve
             start_time = time()
 
-            # get valuable settings values
-            regulation_parameters = self._heating_circuit_settings.regulation_parameters
 
             pid_impact_result: Optional[PidImpactResultModel] = None
 
@@ -567,6 +568,10 @@ class RegulationEngine:
                         total_deviation=self._shared_pid_impact_result.total_deviation
                     )
 
+            # get valuable settings values
+            regulation_parameters = self._heating_circuit_settings.regulation_parameters
+
+            # forming an impact to the requlation valve
             if pid_impact_result is not None:
                 with self._hardware_process_lock:
                     impact_duration = abs(pid_impact_result.impact * regulation_parameters.pulse_duration_valve) / 100

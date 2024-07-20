@@ -16,7 +16,7 @@ a = "HEATING__0__2024-07-02T00_00_00Z.json.gz".rfind("__") + 2
 
 print("HEATING__0__2024-07-02T00_00_00Z.json.gz"[a:])
 
-value = 1
+value = 0.1
 t = (973 * 3.3 / value - 973 - 1000) / 3.9
 print(t)
 

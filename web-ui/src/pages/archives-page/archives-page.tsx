@@ -103,7 +103,7 @@ export const ArchivesPage = () => {
             if (!refreshToken) {
                 return;
             }
-
+            debugger
             const archives = await getArchivesByDateAsync(circuitId, archivesDate);
             if (archives) {
                 setArchives(archives.items);

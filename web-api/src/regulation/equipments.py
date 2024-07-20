@@ -31,10 +31,13 @@ def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 
     finally:
         gpio.set(gpio.GPIO_Vp, True)
 
-    if value < 1:
+    try:
+        temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
+    except ZeroDivisionError:
         return float("inf")
 
-    temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
+    if abs(temperature) > 125:
+        return float("inf")
 
     return temperature
 
