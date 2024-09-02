@@ -1,4 +1,4 @@
-const APP_VERSION = 'v.0.1.20240712-072551';
+const APP_VERSION = 'v.0.1.20240902-145246';
 
 const AppConstants = {
     appInfo: {

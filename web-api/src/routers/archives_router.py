@@ -1,15 +1,17 @@
 from datetime import datetime
+import fcntl
 from http import HTTPStatus
 from io import BytesIO
 import gzip
 
-from flask import send_file
+from flask import send_file, Response
 from flask_pydantic import validate
 
+from app import app
 from models.regulator.archive_model import ArchiveExistsModel
 from models.regulator.archives_model import ArchivesModel
 from models.common.message_model import MessageModel
-from app import app
+from models.regulator.pid_impact_entry_model import SharedRegulatorStateModel
 from responses.json_response import JsonResponse
 from utils.auth_helper import authorize
 
@@ -67,7 +69,7 @@ def get_archives_as_file(heating_circuit_index: int, date: datetime):
             response=MessageModel(
                 message='Архивы на указанную дату отсутствуют в памяти.'
             ),
-            status=HTTPStatus.NOT_FOUND
+            status=HTTPStatus.NO_CONTENT
         )
 
     with gzip.open(archive_path, 'r') as file:
@@ -82,3 +84,27 @@ def get_archives_as_file(heating_circuit_index: int, date: datetime):
     )
 
     return file_response
+
+
+@app.api_route('/archives/shared-regulator-state/<heating_circuit_index>', methods=['GET'])
+@authorize()
+@validate(response_by_alias=True)
+def get_share_regulator_state(heating_circuit_index: int):
+    regulator_settings = app.get_regulator_settings()
+    heating_circuit_settings = regulator_settings.heating_circuits.items[heating_circuit_index]
+    shared_regulator_state_file_name = f'{heating_circuit_settings.type.name}__{heating_circuit_index}'
+    shared_regulator_state_file_path = app.app_root_path.joinpath(
+        f'data/archives/{shared_regulator_state_file_name}'
+    )
+    if not shared_regulator_state_file_path.exists():
+        return Response(status=HTTPStatus.NO_CONTENT)
+
+    with open(shared_regulator_state_file_path, 'r') as shared_regulator_state_file:
+        try:
+            fcntl.flock(shared_regulator_state_file, fcntl.LOCK_SH)
+            json_str = shared_regulator_state_file.read()
+        finally:
+            fcntl.flock(shared_regulator_state_file, fcntl.LOCK_UN)
+    shared_regulator_state = SharedRegulatorStateModel.parse_raw(json_str)
+
+    return shared_regulator_state
