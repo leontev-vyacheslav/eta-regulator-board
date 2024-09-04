@@ -17,7 +17,7 @@ VALVE2_OPEN = V2_PLUS
 VALVE2_CLOSE = V2_MINUS
 
 
-def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 5) -> float:
+def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 10) -> float:
     if is_debug():
         return 0
 

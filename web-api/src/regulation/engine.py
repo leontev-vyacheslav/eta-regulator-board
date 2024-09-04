@@ -350,22 +350,17 @@ class RegulationEngine:
         calc_temperatures = self._get_calculated_temperatures(entry.archive.outdoor_temperature)
 
         insensivity_threshold = self._heating_circuit_settings.regulation_parameters.insensivity_threshold
-
-        # taking into account missing a room temperature  sensor
+        
         room_temperature_influence = self._heating_circuit_settings.control_parameters.room_temperature_influence
-        if room_temperature_influence is None or math.isinf(entry.archive.room_temperature):
+        if room_temperature_influence is None:
             room_temperature_influence = RegulationEngine.default_room_temperature_influence
-
-        # taking into account missing a return pipe temperature  sensor
         return_pipe_temperature_influence = self._heating_circuit_settings.control_parameters.return_pipe_temperature_influence
-        if math.isinf(entry.archive.return_pipe_temperature):
-            return_pipe_temperature_influence = RegulationEngine.default_return_temperature_influence
 
         default_room_temperature = self._get_default_room_temperature()
 
         deviation = (calc_temperatures.supply_pipe_temperature - entry.archive.supply_pipe_temperature) + \
-            (calc_temperatures.return_pipe_temperature - entry.archive.return_pipe_temperature) * return_pipe_temperature_influence + \
-            (entry.archive.room_temperature - default_room_temperature) * room_temperature_influence
+            (0.0 if math.isinf(entry.archive.return_pipe_temperature) else (calc_temperatures.return_pipe_temperature - entry.archive.return_pipe_temperature) * return_pipe_temperature_influence) + \
+            (0.0 if math.isinf(entry.archive.room_temperature) else (entry.archive.room_temperature - default_room_temperature) * room_temperature_influence)
 
         total_deviation = entry.total_deviation + deviation
 
