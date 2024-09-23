@@ -11,7 +11,7 @@ from app import app
 from models.regulator.archive_model import ArchiveExistsModel
 from models.regulator.archives_model import ArchivesModel
 from models.common.message_model import MessageModel
-from models.regulator.pid_impact_entry_model import SharedRegulatorStateModel
+from models.regulator.shared_regulator_state_model import SharedRegulatorStateModel
 from responses.json_response import JsonResponse
 from utils.auth_helper import authorize
 

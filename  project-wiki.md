@@ -63,7 +63,7 @@ test.txt  100%    29     0.0KB/s   00:00    c
 It is important to mention that we have the option to copy a folder with all of its contents. For example like that:
 
 ```bash
-scp -r src ./startup.sh root@omega-xxx:/home/eta-regulator-board/web-api
+scp -r src ./startup.sh root@omega-xxx:/mnt/mmcblk0p1/eta-regulator-board/web-api
 ```
 
 In the absence of a ssh public key from your computer you  will always need to enter the root user password for every command.
@@ -73,7 +73,7 @@ How to do this see the next question.
 
 The most important thing for this to figure out that public keys OpenWrt save in the folder /etc/dropbear/ but not /root/.ssh
 
-So make an authorized_keys file and apply permissions for it like that
+Therefore, we create the file "authorized_keys" and apply permissions for it:
 
 ```bash
 cd /etc/dropbear/
@@ -99,7 +99,7 @@ opkg install python3-pip
 
 ## 7. How to deploy and host a ReactJs application on the OpenWRT OS?
 
-In the beginning you need verify a list of the installed packages OpenWRT OS
+You need to verify the list of OpenWRT OS installed packages at the beginning
 
 ```bash
 opkg list-installed
@@ -113,7 +113,7 @@ ubusd - 2018-07-26-40e0931e-1
 
 It is a web server written to be an efficient and stable server, suitable for lightweight tasks commonly used with embedded devices and proper integration with OpenWrt's configuration framework (UCI). In addition, it provides all the functionality expected of present day web servers.
 
-Then you need edit uhttpd config file adding several lines, like that
+Then you need to edit uhttpd config file adding several lines, like that
 
 ```yaml
 config uhttpd 'other'
@@ -121,7 +121,7 @@ config uhttpd 'other'
     option http_index 'index.html'
     option index_page 'index.html'
     option error_page '/index.html'
-    option 'home' '/home/eta-regulator-board-web-ui'
+    option 'home' '/mnt/mmcblk0p1/eta-regulator-board/web-ui'
 ```
 
 Then, restart the uHTTPd service to apply the changes:
@@ -132,7 +132,14 @@ Then, restart the uHTTPd service to apply the changes:
 
 Finally, copy the static js-bundle to the appropriate directory on your OpenWrt OS of the Omega2 device.
 
-## 8. How can I start a shell script after reboot OS linux?
+## 8. How can I start a shell script after reboot OS linux (to start web-api in our case)?
+
+You need to add the command in the file "/etc/rc.local", like that:
+
+```bash
+cd /mnt/mmcblk0p1/eta-regulator-board/web-api/&&sh "startup.sh"
+exit 0
+```
 
 ## 9. How to create a python virtual environment based on certain version a python  interpreter (Windows)?
 

@@ -1,11 +1,6 @@
 {
     "workers":[
         {
-            "name": "background_worker1",
-            "interval": 30,
-            "immediately": false
-        },
-        {
             "name": "background_processes_watcher",
             "interval": 60,
             "immediately": false

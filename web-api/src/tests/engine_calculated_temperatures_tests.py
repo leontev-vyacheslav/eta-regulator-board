@@ -108,3 +108,15 @@ def get_calculated_temperatures_interpolation_check(get_regulation_engine: Regul
         calc_temperature_graph_item.supply_pipe_temperature,
         calc_temperature_graph_item.return_pipe_temperature
     )
+
+
+
+@pytest.mark.parametrize("temp", [float("inf")])
+def get_calculated_temperatures_infinyty_check(get_regulation_engine: RegulationEngine, temp: float):
+    engine = get_regulation_engine
+
+    calculated_temperatures: TemperatureGraphItemModel = engine._get_calculated_temperatures(
+        outdoor_temperature=temp
+    )
+
+    assert calculated_temperatures is not None

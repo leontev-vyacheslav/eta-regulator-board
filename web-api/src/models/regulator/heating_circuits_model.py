@@ -16,19 +16,18 @@ class HeatingCircuitModel(AppBaseModel):
 
     type: HeatingCircuitTypeModel
 
-    # Управление
     control_parameters: ControlParametersModel
 
-    # Темп. график
     temperature_graph: TemperatureGraphModel
 
-    # Расписание
     schedules: SchedulesModel
 
-    # Регулятор
     regulation_parameters: RegulationParametersModel
 
     def modify_identifiers(self):
+        """
+        The main purpose of this method is to update the own identifier and the identifiers of internal objects with new values
+        """
         self.id = str(uuid.uuid4())
 
         for temperature_graph_item in self.temperature_graph.items:

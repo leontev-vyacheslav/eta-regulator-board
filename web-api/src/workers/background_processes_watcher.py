@@ -8,7 +8,7 @@ from models.app_background_process_model import AppBackgroundProcessModel
 from utils.debugging import is_debug
 
 
-def background_processes_watcher(app: FlaskEx, interval: float, immediately: bool, environment_state, lock: Lock):
+def background_processes_watcher(app: FlaskEx, interval: float, immediately: bool, lock: Lock):
 
     while True:
         if not immediately:

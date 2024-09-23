@@ -5,18 +5,7 @@ import { HttpConstants } from '../../constants/app-http-constants';
 import routes from '../../constants/app-api-routes';
 import { ArchivesModel } from '../../models/regulator-settings/archives-model';
 import { ArchiveExistsModel,  SharedRegulatorStateModel } from '../../models/regulator-settings/archive-model';
-
-function parseCustomJson(jsonString: string): any {
-    return JSON.parse(jsonString, (key, value) => {
-        if (value === 'Infinity') {
-            return Infinity;
-        } else if (value === '-Infinity') {
-            return -Infinity;
-        } else {
-            return value;
-        }
-    });
-}
+import { parseCustomJson } from './../../utils/custom-json-parser';
 
 export type AppDataContextArchivesEndpointsModel = {
     getArchivesByDateAsync: (circuitId: number, date: Date) => Promise<ArchivesModel | null>;

@@ -38,7 +38,7 @@ def engine_polling_runner(engine: RegulationEngine, threading_cancellation_event
     duration_thread = Thread(target=duration_observer, args=(threading_cancellation_event, time(), duration,))
     duration_thread.start()
 
-    engine._start_sensors_polling(threading_cancellation_event)
+    engine._run_polling(threading_cancellation_event)
 
 @pytest.mark.parametrize("duration", [180.0])
 def supply_pipe_temp_step_variation_check(get_regulation_engine_equipment, duration: float):

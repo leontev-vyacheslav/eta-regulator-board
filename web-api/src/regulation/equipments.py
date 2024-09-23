@@ -4,6 +4,7 @@ from datetime import datetime
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
 from omega.ds1307 import DS1307
+from omega.mcp4922 import MCP4922
 from utils.debugging import is_debug
 
 from omega import gpio
@@ -99,3 +100,22 @@ def open_valve(heating_circuit_index: HeatingCircuitIndexModel):
     gpio.set(valve_close_pin, False)
     sleep(0.1)
     gpio.set(valve_open_pin, True)
+
+
+def set_analog_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, impact: float):
+    gpio.dac_chip_select()
+
+    channel = heating_circuit_index
+
+    gain = (30 / 15) + 1 # 3
+    i_max = 20 / 1000 # 20mA
+    i_min = 4 / 1000 # 4mA
+
+    r = MCP4922.REFERENCE_VOLTAGE * gain / i_max # 9.9V / 20mA = 495Om
+    u_max = i_max * r # 495Om * 20mA = 9.9V
+    u_min = i_min * r # 495Om * 4mA = 1.98V
+
+    value = ((u_max - u_min) / 100) * impact  + u_min
+
+    with MCP4922() as dac:
+         dac.write(channel, int(value))

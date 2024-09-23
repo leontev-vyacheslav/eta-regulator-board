@@ -1,3 +1,4 @@
+import uuid
 from regulation.engine import RegulationEngine
 from models.regulator.control_parameters_model import ControlParametersModel
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
@@ -7,13 +8,13 @@ from models.regulator.schedules_model import SchedulesModel
 from models.regulator.temperature_graph_model import TemperatureGraphItemModel, TemperatureGraphModel
 
 base_testable_settings = HeatingCircuitModel(
-    id='00000000-0000-0000-0000-000000000000',
+    id=uuid.UUID(int=0).__str__(),
     name=str(),
     type=HeatingCircuitTypeModel.HEATING,
     control_parameters=ControlParametersModel(
         control_mode=2,
         manual_control_mode=2,
-        outdoor_temperature_sensor_failure_action=4,
+        outdoor_temperature_sensor_failure_action=5,
         supply_pipe_temperature_sensor_failure_action=2,
         manual_control_mode_temperature_setpoint=60.0,
         analog_valve_error_setpoint=50.0,
@@ -43,7 +44,7 @@ base_testable_settings = HeatingCircuitModel(
     temperature_graph=TemperatureGraphModel(
         items=[
             TemperatureGraphItemModel(
-                id='00000000-0000-0000-0000-000000000000',
+                id=uuid.UUID(int=0).__str__(),
                 outdoor_temperature=-2,
                 supply_pipe_temperature=50.6,
                 return_pipe_temperature=40.4
