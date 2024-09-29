@@ -12,7 +12,7 @@ from data_access.accounts_settings_repository import AccountsSettingsRepository
 from regulation.launcher import launch_regulation_engines
 from workers.worker_starter_extension import WorkerStarter
 
-APP_VERSION = 'v.0.1.20240903-153314'
+APP_VERSION = 'v.0.1.20240925-080137'
 APP_NAME = 'Eta Regulator Board Web API'
 
 MASTER_KEY = 'XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='
@@ -40,7 +40,7 @@ def shutdown_handler(signum: signal.Signals, frame):
         while app_background_process.process.is_alive():
             pass
 
-        app.app_logger.info('The child process \'%s\' was down.', app_background_process.name)
+        app.app_logger.info(f'The child process \'{app_background_process.name}\' was down.')
 
     app.app_logger.info('The main app process is ready to over.')
 
@@ -63,5 +63,3 @@ while True:
 
 
 launch_regulation_engines(app)
-
-

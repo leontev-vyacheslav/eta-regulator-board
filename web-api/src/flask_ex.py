@@ -7,10 +7,10 @@ from typing import Callable, List, Optional, Any, Union
 from flask import Flask
 from data_access.accounts_settings_repository import AccountsSettingsRepository
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
-from models.accounts_settings_model import AccountsSettingsModel
+from models.common.accounts_settings_model import AccountsSettingsModel
 
-from models.internal_settings_model import InternalSettingsModel
-from models.app_background_process_model import AppBackgroundProcessModel
+from models.common.internal_settings_model import InternalSettingsModel
+from models.common.app_background_process_model import AppBackgroundProcessModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
 from loggers.default_logger_builder import build as build_logger

@@ -118,4 +118,4 @@ def set_analog_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, imp
     value = ((u_max - u_min) / 100) * impact  + u_min
 
     with MCP4922() as dac:
-         dac.write(channel, int(value))
+        dac.write(channel, int(value))

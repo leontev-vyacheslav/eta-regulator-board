@@ -1,17 +1,13 @@
+import fcntl
+import os
 from typing import Any, List, Optional, Set
 from pydantic import BaseModel
-from models.abstracts.app_base_model import AppBaseModel
+from models.common.change_tracker_item_model import ChangeTrackerItemModel
 from utils.strings import pascal_to_snake
 
 # pylint: disable=unused-import
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
-from models.accounts_settings_model import AccountsSettingsModel
-
-
-class ChangeTrackerItem(AppBaseModel):
-    path: str
-    values: Set[Any]
-    required_access_token: Optional[bool] = None
+from models.common.accounts_settings_model import AccountsSettingsModel
 
 
 class SettingsRepositoryBase():
@@ -32,7 +28,12 @@ class SettingsRepositoryBase():
         )
 
         with open(self.data_path, 'r', encoding='utf-8') as file:
-            json = file.read()
+            try:
+                fcntl.flock(file, fcntl.LOCK_SH)
+                json = file.read()
+            finally:
+                fcntl.flock(file, fcntl.LOCK_UN)
+
             settings_model = globals().get(self.__class__.__name__.replace("Repository", 'Model'))
 
             self.settings = getattr(settings_model, 'parse_raw')(json)
@@ -40,16 +41,22 @@ class SettingsRepositoryBase():
     def _dump(self) -> bool:
         with open(self.data_path, 'w', encoding='utf-8') as file:
             json = self.settings.json(by_alias=True, indent=4, ensure_ascii=False)
-            dumped_bytes = file.write(json)
+            try:
+                fcntl.flock(file, fcntl.LOCK_EX)
+                dumped_bytes = file.write(json)
+                file.flush()
+                os.fsync(file.fileno())
+            finally:
+                fcntl.flock(file, fcntl.LOCK_UN)
 
         return len(json) == dumped_bytes
 
-    def _find_changed_fields(self, obj1: Any, obj2: Any, path: str = '', visited: Optional[Set] = None) -> List[ChangeTrackerItem]:
+    def _find_changed_fields(self, obj1: Any, obj2: Any, path: str = '', visited: Optional[Set] = None) -> List[ChangeTrackerItemModel]:
 
         if visited is None:
             visited = set()
 
-        changed_fields: List[ChangeTrackerItem] = []
+        changed_fields: List[ChangeTrackerItemModel] = []
 
         if id(obj1) in visited or id(obj2) in visited:
             return changed_fields
@@ -69,10 +76,12 @@ class SettingsRepositoryBase():
                     required_access_token = field_model.field_info.extra.get('required_access_token')
 
                 changed_fields.append(
-                    ChangeTrackerItem(
+                    ChangeTrackerItemModel(
                         path=path + field,
                         values=(value1, value2),
-                        required_access_token=required_access_token
+                        required_access_token=required_access_token,
+                        original_value=value1,
+                        current_value=value2
                     )
                 )
 
@@ -89,7 +98,7 @@ class SettingsRepositoryBase():
 
         return changed_fields
 
-    def find_changed_fields(self, updated_settings: Any, path: str = '', visited: Optional[Set] = None) -> List[ChangeTrackerItem]:
+    def find_changed_fields(self, updated_settings: Any, path: str = '', visited: Optional[Set] = None) -> List[ChangeTrackerItemModel]:
         return self._find_changed_fields(self.settings, updated_settings, path, visited)
 
     def update(self, current_settings):

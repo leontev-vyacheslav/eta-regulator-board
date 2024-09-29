@@ -62,5 +62,3 @@ def get_pid_impact_components_check():
     assert asserted_proportional_impact == tested_pid_impact_components.proportional_impact
     assert asserted_integration_impact == tested_pid_impact_components.integration_impact
     assert asserted_differentiation_impact == tested_pid_impact_components.differentiation_impact
-
-

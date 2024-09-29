@@ -1,16 +1,55 @@
-from typing import Optional
+from typing import List, Optional
+import re
 from http import HTTPStatus
 from flask import send_file, request
 from flask_pydantic import validate
 
 from app import app
+from models.common.change_tracker_item_model import ChangeTrackerItemModel
 from models.common.enums.user_role_model import UserRoleModel
 from models.common.message_model import MessageModel
+from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.heating_circuits_model import HeatingCircuitModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
+from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from responses.json_response import JsonResponse
+from regulation.launcher import launch_regulation_engines
 from utils.auth_helper import authorize
 from utils.encoding import verify_access_token
+
+
+def set_control_mode_settings_property(change_tracker_items: List[ChangeTrackerItemModel]) -> None:
+    """
+    It method define a specific response to a change "control_mode" property in the regulator settings model.
+    We need to stop a certain regulation process when "control_mode" equals "OFF" value or star the new regulation process otherwise
+    """
+    control_mode_change_tracker_item = next(
+        (
+            c
+            for c in change_tracker_items
+            if "control_mode" in c.path
+        ),
+        None
+    )
+
+    if control_mode_change_tracker_item is not None:
+        control_mode_current_value = control_mode_change_tracker_item.current_value
+        regultor_engine_process_index = int(re.search(r'\[(\d+)\]', control_mode_change_tracker_item.path).group(1))
+        heating_circuit_index = HeatingCircuitIndexModel(regultor_engine_process_index)
+
+        if control_mode_current_value == ControlModeModel.OFF:
+            regultor_engine_process = next(
+                (
+                    p for p in app.app_background_processes
+                    if p.name.startswith(f"regulation_process_{regultor_engine_process_index}")
+                ),
+                None
+            )
+            if regultor_engine_process is not None:
+                regultor_engine_process.cancellation_event.set()
+            app.app_background_processes.remove(regultor_engine_process)
+        else:
+            launch_regulation_engines(app=app, target_heating_circuit_index=heating_circuit_index)
 
 
 @app.api_route('/regulator-settings', methods=['GET'])
@@ -51,6 +90,8 @@ def put_regulator_settings(body: RegulatorSettingsModel):
 
     # log here change_tracker_items
     regulator_settings_repository.update(regulator_settings)
+
+    set_control_mode_settings_property(change_tracker_items)
 
     return JsonResponse(
         response=regulator_settings_repository.settings,

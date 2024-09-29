@@ -1,8 +1,8 @@
-import pytest
 import logging
 import bisect
-
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
+import pytest
+
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel

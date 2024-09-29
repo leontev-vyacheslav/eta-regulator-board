@@ -4,7 +4,7 @@ from multiprocessing import Process, Event
 from flask_pydantic import validate
 
 from app import app
-from models.app_background_process_model import AppBackgroundProcessModel
+from models.common.app_background_process_model import AppBackgroundProcessModel
 from models.regulator.active_signal_gen_model import ActiveSignalGenModel
 from omega.signal_generators.sawtooth_signal_generator import SawToothSignalGenerator
 from omega.signal_generators.sin_wave_signal_generator import SinWaveSignalGenerator

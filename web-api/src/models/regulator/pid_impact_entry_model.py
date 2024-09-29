@@ -25,6 +25,3 @@ class PidImpactResultComponentsModel(PidDeviationBase):
 
 class PidImpactResultModel(PidDeviationBase):
     impact: float
-
-
-

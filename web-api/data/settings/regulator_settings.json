@@ -7,7 +7,7 @@
                 "name": "Контур ЦО",
                 "type": 1,
                 "controlParameters": {
-                    "controlMode": 2,
+                    "controlMode": 6,
                     "manualControlMode": 2,
                     "outdoorTemperatureSensorFailureAction": 5,
                     "supplyPipeTemperatureSensorFailureAction": 2,

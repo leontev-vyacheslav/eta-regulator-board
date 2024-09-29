@@ -99,7 +99,7 @@ def get_share_regulator_state(heating_circuit_index: int):
     if not shared_regulator_state_file_path.exists():
         return Response(status=HTTPStatus.NO_CONTENT)
 
-    with open(shared_regulator_state_file_path, 'r') as shared_regulator_state_file:
+    with open(shared_regulator_state_file_path, "r", encoding="utf-8") as shared_regulator_state_file:
         try:
             fcntl.flock(shared_regulator_state_file, fcntl.LOCK_SH)
             json_str = shared_regulator_state_file.read()

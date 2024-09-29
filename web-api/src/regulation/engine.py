@@ -84,7 +84,7 @@ class RegulationEngine:
         # )
 
         self._logger = build_logger(
-            name=f'regulation_engine_logger',
+            name='regulation_engine_logger',
             heating_circuit_index=heating_circuit_index,
             heating_circuit_type=self._heating_circuit_settings.type,
             default_level=logging.INFO if logging_level == RegulationEngineLoggingLevelModel.NORMAL else logging.DEBUG,
@@ -112,7 +112,12 @@ class RegulationEngine:
         regulator_settings_path = app_root_path.joinpath('data/settings/regulator_settings.json')
 
         with open(regulator_settings_path, mode='r', encoding='utf-8') as file:
-            json = file.read()
+            try:
+                fcntl.flock(file, fcntl.LOCK_SH)
+                json = file.read()
+            finally:
+                fcntl.flock(file, fcntl.LOCK_UN)
+
 
         regulator_settings = RegulatorSettingsModel.parse_raw(json)
 
@@ -243,7 +248,7 @@ class RegulationEngine:
         shared_archive_file_name = f'{self._heating_circuit_settings.type.name}__{self._heating_circuit_index}'
         shared_archive_path = root_folder.joinpath(f'data/archives/{shared_archive_file_name}')
 
-        with open(shared_archive_path, "w") as shared_file:
+        with open(shared_archive_path, "w", encoding="utf-8") as shared_file:
             try:
                 fcntl.flock(shared_file, fcntl.LOCK_EX)
                 json_text = shared_regulator_state.json(by_alias=True)
@@ -385,7 +390,7 @@ class RegulationEngine:
         # the difference between measured and calculated values of the supply pipe temperatures less than the insensivity threshold
         if abs(calc_temperatures.supply_pipe_temperature - entry.archive.supply_pipe_temperature) <= insensivity_threshold:
             return PidImpactResultComponentsModel(
-                deviation=deviation,
+                deviation=0.0,
                 total_deviation=0.0,
                 proportional_impact=0.0,
                 integration_impact=0.0,
@@ -676,7 +681,7 @@ class RegulationEngine:
             with self._shared_failure_action_state_lock:
                 failure_action_state = self._shared_failure_action_state
 
-            self._logger.debug(f"The failure action state is: {failure_action_state.name}")
+            self._logger.debug(f"The failure action state is: {failure_action_state.name}", )
 
             # getting time of the beginning of the act on the regulator valve
             start_time = time()

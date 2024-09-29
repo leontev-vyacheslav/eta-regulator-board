@@ -19,4 +19,3 @@ class SignalGenerator(ABC):
 
     def generate(self, channel: int, freq: int, amplitude: float) -> None:
         pass
-

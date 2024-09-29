@@ -258,3 +258,20 @@ There are other better sysfs gpio libraries available for Python3:
 https://pypi.org/project/gpio/
 https://python-periphery.readthedocs.io/en/latest/gpio.html
 https://github.com/vitiral/gpio
+
+
+## 13. How can I stop web API and regulator background processes and then run their again?
+
+```bash
+
+cd /mnt/mmcblk0p1/eta-regulator-board/web-api
+
+top | grep python   # it will give three identificators of processes
+
+kill xxx yyy zzz    # kill all three processes
+
+sh startup.sh       # start web API again
+```
+
+It's convinient to run FS-SSH extention and jump to a terminal on the remote device (on "carabulca")
+in the target folder and then execute this script

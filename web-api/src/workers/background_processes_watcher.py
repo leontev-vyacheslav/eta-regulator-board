@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List
 
 from flask_ex import FlaskEx
-from models.app_background_process_model import AppBackgroundProcessModel
+from models.common.app_background_process_model import AppBackgroundProcessModel
 from utils.debugging import is_debug
 
 

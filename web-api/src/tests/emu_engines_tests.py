@@ -1,8 +1,8 @@
 import logging
 from time import time
-import pytest
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 from threading import Event as ThreadingEvent, Thread
+import pytest
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
@@ -71,4 +71,3 @@ def outdoor_temp_step_variation_check(get_regulation_engine_equipment, duration:
     assert engine is not None
 
     engine_polling_runner(engine, threading_cancellation_event, duration)
-

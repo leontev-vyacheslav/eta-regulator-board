@@ -1,9 +1,10 @@
-import sys, os
+import sys
+import os
 from multiprocessing import Process, Event as ProcessEvent, Lock as ProcessLock
 from typing import Callable, Optional
 
 from flask_ex import FlaskEx
-from models.app_background_process_model import AppBackgroundProcessModel
+from models.common.app_background_process_model import AppBackgroundProcessModel
 from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 
@@ -12,7 +13,7 @@ from regulation.engine import regulation_engine_starter as default_regulation_en
 hardware_process_lock = ProcessLock()
 
 
-def launch_regulation_engines(app: FlaskEx):
+def launch_regulation_engines(app: FlaskEx, target_heating_circuit_index: Optional[HeatingCircuitIndexModel] = None):
     regulator_settings = app.get_regulator_settings()
     heating_circuits = regulator_settings.heating_circuits.items
     regulation_engine_starter: Optional[Callable] = None
@@ -25,11 +26,18 @@ def launch_regulation_engines(app: FlaskEx):
         if regulation_engine_starter is None:
             regulation_engine_starter = default_regulation_engine_starter
 
-    heating_circuits = [
-        heating_circuit
-        for heating_circuit in heating_circuits
-        if heating_circuit.type in regulation_engine_starter.heating_circuit_types
-    ]
+    if target_heating_circuit_index is None:
+        heating_circuits = [
+            heating_circuit
+            for heating_circuit in heating_circuits
+            if heating_circuit.type in regulation_engine_starter.heating_circuit_types
+        ]
+    else:
+        heating_circuits = [
+            heating_circuit
+            for index, heating_circuit in enumerate(heating_circuits)
+            if index == target_heating_circuit_index
+        ]
 
     for index, item in enumerate(heating_circuits):
 

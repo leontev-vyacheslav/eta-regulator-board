@@ -5,7 +5,7 @@ from flask import request
 from flask_pydantic import validate
 
 from app import app
-from models.accounts_settings_model import AccountsSettingsModel
+from models.common.accounts_settings_model import AccountsSettingsModel
 from models.common.account_model import AccountModel, ExtendedAccountModel
 from models.common.accounts_model import AccountsModel
 from models.common.message_model import MessageModel
