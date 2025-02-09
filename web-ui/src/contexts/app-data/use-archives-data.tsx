@@ -26,6 +26,12 @@ export const useArchivesData = () => {
         });
 
         if (response && response.status === HttpConstants.StatusCodes.Ok) {
+            if(typeof response.data === 'string' || response.data instanceof String) {
+                const rawObj = parseCustomJson((response.data as string).replaceAll('Infinity', '"Infinity"'));
+
+                return rawObj;
+            }
+
             return response.data as ArchivesModel;
         }
 

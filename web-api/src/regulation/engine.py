@@ -37,6 +37,7 @@ from utils.datetime_helper import is_last_day_of_month
 class RegulationEngine:
     updating_rtc_period = 60
     default_room_temperature = 20
+    default_hot_water_temperature = 60
     default_room_temperature_influence = 0.0
     default_return_temperature_influence = 0.0
     updating_settings_factor = 5
@@ -118,7 +119,6 @@ class RegulationEngine:
             finally:
                 fcntl.flock(file, fcntl.LOCK_UN)
 
-
         regulator_settings = RegulatorSettingsModel.parse_raw(json)
 
         return regulator_settings.heating_circuits.items[self._heating_circuit_index]
@@ -140,16 +140,35 @@ class RegulationEngine:
     def _get_calculated_temperatures(self, outdoor_temperature: float) -> TemperatureGraphItemModel:
         """
         It is a function that allows to receive points (with supply and return pipes temperatures) on the temperature graphs based on
-        the outdoor temperature that was obtained during the current sensors polling
+        the outdoor temperature that was obtained during the current sensors polling for the heating and ventilation heating circuits
+        or as a target temperature for the hot water heating circuit
         """
 
+        # The calculated temperatures for HOT_WATER match with a target temperatures according to the control mode
+        if self._heating_circuit_type == HeatingCircuitTypeModel.HOT_WATER:
+            target_temperature = self._get_target_temperature()
+
+            self._logger.debug(
+                RegulationEngine.calculated_temperatures_debug_msg,
+                target_temperature,
+                target_temperature
+            )
+
+            return TemperatureGraphItemModel(
+                id=uuid.UUID(int=0).__str__(),
+                outdoor_temperature=outdoor_temperature,
+                supply_pipe_temperature=target_temperature,
+                return_pipe_temperature=target_temperature,
+            )
+
+        # Otherwise, we should get the calculated temperatures according to the temperature graph
         if math.isinf(outdoor_temperature):
             return TemperatureGraphItemModel(
-            id=uuid.UUID(int=0).__str__(),
-            outdoor_temperature=float("inf"),
-            supply_pipe_temperature=float("inf"),
-            return_pipe_temperature=float("inf")
-        )
+                id=uuid.UUID(int=0).__str__(),
+                outdoor_temperature=float("inf"),
+                supply_pipe_temperature=float("inf"),
+                return_pipe_temperature=float("inf")
+            )
 
         # trying to get the exact match on the temperature graph
         exact_match_tg_item = next(
@@ -329,38 +348,49 @@ class RegulationEngine:
 
             self._logger.debug(RegulationEngine.getting_current_rtc_debug_msg, f'{self._rtc_datetime}')
 
-    def _get_default_room_temperature(self) -> float:
+    def _get_target_temperature(self) -> float:
         """
-        The function allows to get the default room temperature based on
-        the control mode of the regulator and/or its schedules
+        The function allows to get a room/hot water temperature based on
+        the control mode of the regulator and/or its schedules.
+        It's impotrant to notice that the target temperature for the HOT_WATER heating curcuit is the hot water temperature, not the room temperature
         """
         control_mode = self._heating_circuit_settings.control_parameters.control_mode
-
-        if control_mode not in [ControlModeModel.COMFORT, ControlModeModel.ECONOMY]:
-            return RegulationEngine.default_room_temperature
-
-        schedules = self._heating_circuit_settings.schedules
-
-        if schedules is None or len(schedules.items) == 0:
-            return RegulationEngine.default_room_temperature
-
-        day_of_week = self._rtc_datetime.weekday() + 1
-        schedule = next((item for item in schedules.items if item.day == day_of_week), None)
-
-        if schedule is None:
-            return RegulationEngine.default_room_temperature
-
-        current_rtc_datetime = self._rtc_datetime.replace(microsecond=0)
-        window = next((item for item in schedule.windows if item.start_time.time()
-                      <= current_rtc_datetime.time() <= item.end_time.time()), None)
-
-        if window is None:
-            return RegulationEngine.default_room_temperature
-
         comfort_temperature = self._heating_circuit_settings.control_parameters.comfort_temperature
         economical_temperature = self._heating_circuit_settings.control_parameters.economical_temperature
 
-        return comfort_temperature if control_mode == ControlModeModel.COMFORT else economical_temperature
+        if self._heating_circuit_type == HeatingCircuitTypeModel.HOT_WATER:
+            default_temperature = RegulationEngine.default_hot_water_temperature
+        else:
+            default_temperature = RegulationEngine.default_room_temperature
+
+        if control_mode == ControlModeModel.COMFORT:
+            return comfort_temperature
+
+        if control_mode == ControlModeModel.ECONOMY:
+            return economical_temperature
+
+        if control_mode == ControlModeModel.AUTO:
+            schedules = self._heating_circuit_settings.schedules
+
+            if schedules is None or len(schedules.items) == 0:
+                return default_temperature
+
+            day_of_week = self._rtc_datetime.weekday() + 1
+            schedule = next((item for item in schedules.items if item.day == day_of_week), None)
+
+            if schedule is None:
+                return default_temperature
+
+            current_rtc_datetime = self._rtc_datetime.replace(microsecond=0)
+            window = next((item for item in schedule.windows if item.start_time.time()
+                           <= current_rtc_datetime.time() <= item.end_time.time()), None)
+
+            if window is None:
+                return default_temperature
+
+            return comfort_temperature if window.desired_temperature_mode == ControlModeModel.COMFORT else economical_temperature
+        else:
+            return default_temperature
 
     def _get_pid_impact_components(self, entry: PidImpactEntryModel) -> PidImpactResultComponentsModel:
         """
@@ -375,20 +405,20 @@ class RegulationEngine:
             room_temperature_influence = RegulationEngine.default_room_temperature_influence
         return_pipe_temperature_influence = self._heating_circuit_settings.control_parameters.return_pipe_temperature_influence
 
-        default_room_temperature = self._get_default_room_temperature()
+        target_temperature = self._get_target_temperature()
 
-        calc_temperatures = TemperatureGraphItemModel(
-            id=uuid.UUID(int=0).__str__(),
-            outdoor_temperature=float("inf"),
-            supply_pipe_temperature=manual_control_mode_temperature_setpoint,
-            return_pipe_temperature=float("inf"),
-        )
-
-        if not entry.failure_action_state == FailureActionTypeModel.TEMPERATURE_SUSTENANCE:
-            calc_temperatures = self._get_calculated_temperatures(entry.archive.outdoor_temperature)
+        if entry.failure_action_state != FailureActionTypeModel.TEMPERATURE_SUSTENANCE:
+            calculated_temperatures: TemperatureGraphItemModel = self._get_calculated_temperatures(entry.archive.outdoor_temperature)
+        else:
+            calculated_temperatures = TemperatureGraphItemModel(
+                id=uuid.UUID(int=0).__str__(),
+                outdoor_temperature=float("inf"),
+                supply_pipe_temperature=manual_control_mode_temperature_setpoint,
+                return_pipe_temperature=float("inf"),
+            )
 
         # the difference between measured and calculated values of the supply pipe temperatures less than the insensivity threshold
-        if abs(calc_temperatures.supply_pipe_temperature - entry.archive.supply_pipe_temperature) <= insensivity_threshold:
+        if abs(calculated_temperatures.supply_pipe_temperature - entry.archive.supply_pipe_temperature) <= insensivity_threshold:
             return PidImpactResultComponentsModel(
                 deviation=0.0,
                 total_deviation=0.0,
@@ -399,22 +429,22 @@ class RegulationEngine:
 
         deviation_supply_pipe_part = 0.0
         if not math.isinf(entry.archive.supply_pipe_temperature):
-            deviation_supply_pipe_part = calc_temperatures.supply_pipe_temperature - entry.archive.supply_pipe_temperature
+            deviation_supply_pipe_part = calculated_temperatures.supply_pipe_temperature - entry.archive.supply_pipe_temperature
 
         deviation_return_pipe_part = 0.0
-        if not math.isinf(entry.archive.return_pipe_temperature) and not math.isinf(calc_temperatures.return_pipe_temperature):
-            deviation_return_pipe_part = (calc_temperatures.return_pipe_temperature - entry.archive.return_pipe_temperature) * return_pipe_temperature_influence
+        if not math.isinf(entry.archive.return_pipe_temperature) and not math.isinf(calculated_temperatures.return_pipe_temperature):
+            deviation_return_pipe_part = (calculated_temperatures.return_pipe_temperature -
+                                          entry.archive.return_pipe_temperature) * return_pipe_temperature_influence
 
         deviation_room_part = 0.0
         if not math.isinf(entry.archive.room_temperature):
-            deviation_room_part = (entry.archive.room_temperature - default_room_temperature) * room_temperature_influence
+            deviation_room_part = (entry.archive.room_temperature - target_temperature) * room_temperature_influence
 
         deviation = deviation_supply_pipe_part + \
             deviation_return_pipe_part + \
             deviation_room_part
 
         total_deviation = entry.total_deviation + deviation
-
 
         proportionality_factor = self._heating_circuit_settings.regulation_parameters.proportionality_factor
         integration_factor = self._heating_circuit_settings.regulation_parameters.integration_factor
@@ -517,19 +547,20 @@ class RegulationEngine:
             if supply_pipe_failure_action == SupplyPipeTemperatureSensorFailureActionTypeModel.ANALOG_VALVE_ERROR:
                 return FailureActionTypeModel.ANALOG_VALVE_ERROR
 
-        # the outdoor temperature sensor is missing
-        if math.isinf(archive.outdoor_temperature):
-            if outdoor_failure_action == OutdoorTemperatureSensorFailureActionTypeModel.NO_ACTION:
-                return FailureActionTypeModel.NO_ACTION
+        # the outdoor temperature sensor is missing for the heating circuits are not "hot water"
+        if outdoor_failure_action is not None and self._heating_circuit_type != HeatingCircuitTypeModel.HOT_WATER:
+            if math.isinf(archive.outdoor_temperature):
+                if outdoor_failure_action == OutdoorTemperatureSensorFailureActionTypeModel.NO_ACTION:
+                    return FailureActionTypeModel.NO_ACTION
 
-            if outdoor_failure_action == OutdoorTemperatureSensorFailureActionTypeModel.CLOSE_VALVE:
-                return FailureActionTypeModel.CLOSE_VALVE
+                if outdoor_failure_action == OutdoorTemperatureSensorFailureActionTypeModel.CLOSE_VALVE:
+                    return FailureActionTypeModel.CLOSE_VALVE
 
-            if outdoor_failure_action == OutdoorTemperatureSensorFailureActionTypeModel.OPEN_VALVE:
-                return FailureActionTypeModel.OPEN_VALVE
+                if outdoor_failure_action == OutdoorTemperatureSensorFailureActionTypeModel.OPEN_VALVE:
+                    return FailureActionTypeModel.OPEN_VALVE
 
-            if outdoor_failure_action == OutdoorTemperatureSensorFailureActionTypeModel.TEMPERATURE_SUSTENANCE:
-                return FailureActionTypeModel.TEMPERATURE_SUSTENANCE
+                if outdoor_failure_action == OutdoorTemperatureSensorFailureActionTypeModel.TEMPERATURE_SUSTENANCE:
+                    return FailureActionTypeModel.TEMPERATURE_SUSTENANCE
 
         return FailureActionTypeModel.NO_FAILURE
 
@@ -556,91 +587,91 @@ class RegulationEngine:
             start_time = time()
 
             # here it will be served a HEATING or VENTILATION type of the `regulation channel
-            if self._heating_circuit_type in [HeatingCircuitTypeModel.HEATING, HeatingCircuitTypeModel.VENTILATION]:
+            # if self._heating_circuit_type in
 
-                # putting on a process lock while receiving archives and current datetime
-                with self._hardware_process_lock:
-                    self._refresh_rtc_datetime()
-                    archive = self._get_archive()
+            # putting on a process lock while receiving archives and current datetime
+            with self._hardware_process_lock:
+                self._refresh_rtc_datetime()
+                archive = self._get_archive()
 
-                self._save_archives(archive)
+            self._save_archives(archive)
 
-                # getting and sharing the failure action state among threads
-                failure_action_state = self._get_failure_action_state(archive)
-                with self._shared_failure_action_state_lock:
-                    self._shared_failure_action_state = failure_action_state
+            # getting and sharing the failure action state among threads
+            failure_action_state = self._get_failure_action_state(archive)
+            with self._shared_failure_action_state_lock:
+                self._shared_failure_action_state = failure_action_state
 
-                calculated_temperatures: TemperatureGraphItemModel = self._get_calculated_temperatures(archive.outdoor_temperature)
+            calculated_temperatures: TemperatureGraphItemModel = self._get_calculated_temperatures(archive.outdoor_temperature)
 
-                if failure_action_state in [FailureActionTypeModel.NO_FAILURE, FailureActionTypeModel.TEMPERATURE_SUSTENANCE]:
-                    # calculating the PID impact result (a percentage value)
-                    pid_impact_result = self._get_pid_impact_result(
-                        entry=PidImpactEntryModel(
-                            failure_action_state=failure_action_state,
-                            archive=archive,
-                            deviation=deviation,
-                            total_deviation=total_deviation
-                        )
+            if failure_action_state in [FailureActionTypeModel.NO_FAILURE, FailureActionTypeModel.TEMPERATURE_SUSTENANCE]:
+                # calculating the PID impact result (a percentage value)
+                pid_impact_result = self._get_pid_impact_result(
+                    entry=PidImpactEntryModel(
+                        failure_action_state=failure_action_state,
+                        archive=archive,
+                        deviation=deviation,
+                        total_deviation=total_deviation
                     )
+                )
 
-                    drive_unit_analog_control = self._heating_circuit_settings.regulation_parameters.drive_unit_analog_control
+                drive_unit_analog_control = self._heating_circuit_settings.regulation_parameters.drive_unit_analog_control
 
-                    if drive_unit_analog_control == True:
-                        pulse_duration_valve = self._heating_circuit_settings.regulation_parameters.pulse_duration_valve
-                        analog_valve_impact = analog_valve_impact + pid_impact_result.impact / (pulse_duration_valve / self._calculation_period)
+                if drive_unit_analog_control == True:
+                    pulse_duration_valve = self._heating_circuit_settings.regulation_parameters.pulse_duration_valve
+                    analog_valve_impact = analog_valve_impact + pid_impact_result.impact / (pulse_duration_valve / self._calculation_period)
 
-                        if analog_valve_impact > 100.0:
-                            analog_valve_impact = 100.0
-                        if analog_valve_impact < 0.0:
-                            analog_valve_impact = 0.0
+                    if analog_valve_impact > 100.0:
+                        analog_valve_impact = 100.0
+                    if analog_valve_impact < 0.0:
+                        analog_valve_impact = 0.0
 
-                    # sharing a value of the PID impact and the alnalog valver impact among the main and polling threads
-                    with self._shared_pid_impact_result_lock:
-                        self._shared_pid_impact_result = PidImpactResultModel(
-                            impact=pid_impact_result.impact,
-                            deviation=pid_impact_result.deviation,
-                            total_deviation=pid_impact_result.total_deviation
-                        )
-                        self._shared_analog_valve_impact = analog_valve_impact
+                # sharing a value of the PID impact and the alnalog valver impact among the main and polling threads
+                with self._shared_pid_impact_result_lock:
+                    self._shared_pid_impact_result = PidImpactResultModel(
+                        impact=pid_impact_result.impact,
+                        deviation=pid_impact_result.deviation,
+                        total_deviation=pid_impact_result.total_deviation
+                    )
+                    self._shared_analog_valve_impact = analog_valve_impact
 
-                    deviation = pid_impact_result.deviation
-                    total_deviation = pid_impact_result.total_deviation
+                deviation = pid_impact_result.deviation
+                total_deviation = pid_impact_result.total_deviation
 
-                    self._save_shared_archive(SharedRegulatorStateModel(
-                        failure_action_state=failure_action_state,
+                self._save_shared_archive(SharedRegulatorStateModel(
+                    failure_action_state=failure_action_state,
 
-                        datetime=archive.datetime,
-                        outdoor_temperature=archive.outdoor_temperature,
-                        room_temperature=archive.room_temperature,
-                        supply_pipe_temperature=archive.supply_pipe_temperature,
-                        return_pipe_temperature=archive.return_pipe_temperature,
+                    datetime=archive.datetime,
+                    outdoor_temperature=archive.outdoor_temperature,
+                    room_temperature=archive.room_temperature,
+                    supply_pipe_temperature=archive.supply_pipe_temperature,
+                    return_pipe_temperature=archive.return_pipe_temperature,
 
-                        supply_pipe_temperature_calculated=calculated_temperatures.supply_pipe_temperature,
-                        return_pipe_temperature_calculated=calculated_temperatures.return_pipe_temperature,
+                    supply_pipe_temperature_calculated=calculated_temperatures.supply_pipe_temperature,
+                    return_pipe_temperature_calculated=calculated_temperatures.return_pipe_temperature,
 
-                        valve_direction=ValveDirectionModel.UP if pid_impact_result.impact > 0 else ValveDirectionModel.DOWN,
-                        valve_position=pid_impact_result.impact,
+                    valve_direction=ValveDirectionModel.UP if pid_impact_result.impact > 0 else ValveDirectionModel.DOWN,
+                    valve_position=pid_impact_result.impact,
 
-                    ))
-                else:
-                    self._save_shared_archive(SharedRegulatorStateModel(
-                        failure_action_state=failure_action_state,
-
-                        valve_direction=ValveDirectionModel.UP,
-                        valve_position=float("inf"),
-
-                        supply_pipe_temperature_calculated=float("inf"),
-                        return_pipe_temperature_calculated=float("inf"),
-
-                        datetime=archive.datetime,
-                        outdoor_temperature=float("inf"),
-                        room_temperature=float("inf"),
-                        supply_pipe_temperature=float("inf"),
-                        return_pipe_temperature=float("inf")
-                    ))
-            # HOT_WATER
+                ))
             else:
-                pass
+                self._save_shared_archive(SharedRegulatorStateModel(
+                    failure_action_state=failure_action_state,
+
+                    valve_direction=ValveDirectionModel.UP,
+                    valve_position=float("inf"),
+
+                    supply_pipe_temperature_calculated=float("inf"),
+                    return_pipe_temperature_calculated=float("inf"),
+
+                    datetime=archive.datetime,
+                    outdoor_temperature=float("inf"),
+                    room_temperature=float("inf"),
+                    supply_pipe_temperature=float("inf"),
+                    return_pipe_temperature=float("inf")
+                ))
+            # HOT_WATER
+            # else:
+            #     pass
 
             end_time = time()
             delta = end_time - start_time
@@ -681,6 +712,7 @@ class RegulationEngine:
             with self._shared_failure_action_state_lock:
                 failure_action_state = self._shared_failure_action_state
 
+            self._logger.debug(f"The control mode is: {self._heating_circuit_settings.control_parameters.control_mode.name}",)
             self._logger.debug(f"The failure action state is: {failure_action_state.name}", )
 
             # getting time of the beginning of the act on the regulator valve
@@ -720,7 +752,6 @@ class RegulationEngine:
                         )
                     analog_valve_impact = self._shared_analog_valve_impact
 
-
                 # producing an impact to the requlation valve
                 if pid_impact_result is not None:
                     with self._hardware_process_lock:
@@ -758,12 +789,12 @@ class RegulationEngine:
     heating_circuit_types=[
         HeatingCircuitTypeModel.HEATING,
         HeatingCircuitTypeModel.VENTILATION,
-        # HeatingCircuitTypeModel.HOT_WATER
+        HeatingCircuitTypeModel.HOT_WATER
     ]
 )
 def regulation_engine_starter(heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardware_process_lock: ProcessLock):
     """
-    It's a dediated function that serves to start an execution of the regulation engine
+    It's a dediated function that serves to initiate the execution of the regulation engine
     """
     engine = RegulationEngine(
         heating_circuit_index=heating_circuit_index,

@@ -5,9 +5,9 @@
             "name": "Контур ЦО",
             "type": 1,
             "controlParameters": {
-                "controlMode": 2,
+                "controlMode": 6,
                 "manualControlMode": 2,
-                "outdoorTemperatureSensorFailureAction": 4,
+                "outdoorTemperatureSensorFailureAction": 5,
                 "supplyPipeTemperatureSensorFailureAction": 2,
                 "manualControlModeTemperatureSetpoint": 60.0,
                 "analogValveErrorSetpoint": 50.0,
@@ -287,7 +287,7 @@
             "name": "Контур ГВС",
             "type": 2,
             "controlParameters": {
-                "controlMode": 2,
+                "controlMode": 6,
                 "manualControlMode": null,
                 "outdoorTemperatureSensorFailureAction": null,
                 "supplyPipeTemperatureSensorFailureAction": 2,
@@ -327,9 +327,9 @@
             "name": "Контур ВЕНТ",
             "type": 3,
             "controlParameters": {
-                "controlMode": 2,
+                "controlMode": 6,
                 "manualControlMode": 2,
-                "outdoorTemperatureSensorFailureAction": 4,
+                "outdoorTemperatureSensorFailureAction": 5,
                 "supplyPipeTemperatureSensorFailureAction": 2,
                 "manualControlModeTemperatureSetpoint": 80.0,
                 "analogValveErrorSetpoint": 100.0,

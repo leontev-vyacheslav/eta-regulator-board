@@ -25,6 +25,7 @@ def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 
     gpio.adc_chip_select()
     try:
         gpio.set(gpio.GPIO_Vp, False)
+        sleep(0.5)
         with MCP3208() as mcp_3208:
             value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
     except:
@@ -106,16 +107,7 @@ def set_analog_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, imp
     gpio.dac_chip_select()
 
     channel = heating_circuit_index
-
-    gain = (30 / 15) + 1 # 3
-    i_max = 20 / 1000 # 20mA
-    i_min = 4 / 1000 # 4mA
-
-    r = MCP4922.REFERENCE_VOLTAGE * gain / i_max # 9.9V / 20mA = 495Om
-    u_max = i_max * r # 495Om * 20mA = 9.9V
-    u_min = i_min * r # 495Om * 4mA = 1.98V
-
-    value = ((u_max - u_min) / 100) * impact  + u_min
+    value = impact * MCP4922.FULL_RANGE
 
     with MCP4922() as dac:
         dac.write(channel, int(value))

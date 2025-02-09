@@ -94,6 +94,7 @@ Now we can use a command console (cmd, PowerShell, bash ect.) of the developer m
 First of all you need install a standard package manager like as 'pip' using for this OS package manager 'opkg'.
 
 ```bash
+opkg update
 opkg install python3-pip
 ```
 
@@ -108,7 +109,7 @@ opkg list-installed
 You have to see 'uhttpd' package in the list of installed packages, like that
 
 ```bash
-ubusd - 2018-07-26-40e0931e-1
+uhttpd - 2018-06-26-796d42bc-1
 ```
 
 It is a web server written to be an efficient and stable server, suitable for lightweight tasks commonly used with embedded devices and proper integration with OpenWrt's configuration framework (UCI). In addition, it provides all the functionality expected of present day web servers.
@@ -218,6 +219,14 @@ opkg install python3-pip
 
 (free 11M)
 
+### 13. On the stage preparing the device (aka "карабулька") we need to add ${WORKSPACE_ROOT} to the profile file
+
+```shell
+    touch ~/.profile
+    echo 'export PATH=$PATH:/mnt/mmcblk0p2/eta-regulator-board/bin' >> ~/.profile
+    . ~/.profile
+```
+
 ### 13. Install the FLASK library
 
 ```shell
@@ -232,7 +241,10 @@ flask, flask-cors, pydantic, flask-pydantic
 
 (free 9M)
 
+
 ### 14. Deploy applications using deploy.ps1 in the appropriate project folders
+
+
 
 ## 11. How to format microsd card on Omega2+?
 
@@ -275,3 +287,26 @@ sh startup.sh       # start web API again
 
 It's convinient to run FS-SSH extention and jump to a terminal on the remote device (on "carabulca")
 in the target folder and then execute this script
+
+## 14. What the device dependant files are there in web-api project?
+
+startup.sh
+
+    /mnt/mmcblk0pXX
+
+rc.local
+
+    /mnt/mmcblk0pXX
+
+task.json
+
+    "echo '192.168.0.104    omega-7995'
+
+uhttpd
+    /mnt/mmcblk0pXX
+
+deployment-support.ps1 -
+
+    $IPADDR = "omega-XXXX"
+    $ACCOUNT = 'root'
+    $WORKSPACE_ROOT = "/mnt/mmcblk0pXX/eta-regulator-board" # /home/eta-regulator-board

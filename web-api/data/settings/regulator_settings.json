@@ -285,11 +285,11 @@
                 }
             },
             {
-                "id": "d9f095be-a7dd-4622-90cd-b08337233176",
+                "id": "30658f3f-23f4-4bd5-9326-6719b8500c35",
                 "name": "Контур ГВС",
                 "type": 2,
                 "controlParameters": {
-                    "controlMode": 2,
+                    "controlMode": 6,
                     "manualControlMode": null,
                     "outdoorTemperatureSensorFailureAction": null,
                     "supplyPipeTemperatureSensorFailureAction": 2,
@@ -309,12 +309,25 @@
                     "items": []
                 },
                 "schedules": {
-                    "items": []
+                    "items": [
+                        {
+                            "id": "777e8b8c-c620-64d5-450e-8a2a145ddc87",
+                            "day": 1,
+                            "windows": [
+                                {
+                                    "id": "a5d84e3c-91e6-b93a-c382-b9765f9319b9",
+                                    "startTime": "2024-10-08T21:00:52.451000+00:00",
+                                    "endTime": "2024-10-08T22:00:44.302000+00:00",
+                                    "desiredTemperatureMode": 2
+                                }
+                            ]
+                        }
+                    ]
                 },
                 "regulationParameters": {
-                    "proportionalityFactor": 75.0,
+                    "proportionalityFactor": 70.0,
                     "integrationFactor": 30.0,
-                    "differentiationFactor": 0.0,
+                    "differentiationFactor": 30.0,
                     "calculationPeriod": 25.0,
                     "pulseDurationValve": 5.0,
                     "driveUnitAnalogControl": false,

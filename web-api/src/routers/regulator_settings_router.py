@@ -9,6 +9,7 @@ from models.common.change_tracker_item_model import ChangeTrackerItemModel
 from models.common.enums.user_role_model import UserRoleModel
 from models.common.message_model import MessageModel
 from models.regulator.enums.control_mode_model import ControlModeModel
+from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
 from models.regulator.heating_circuits_model import HeatingCircuitModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
@@ -18,38 +19,87 @@ from utils.auth_helper import authorize
 from utils.encoding import verify_access_token
 
 
-def set_control_mode_settings_property(change_tracker_items: List[ChangeTrackerItemModel]) -> None:
+def on_chanded_control_mode_settings_property(change_tracker_items: List[ChangeTrackerItemModel]) -> None:
     """
-    It method define a specific response to a change "control_mode" property in the regulator settings model.
-    We need to stop a certain regulation process when "control_mode" equals "OFF" value or star the new regulation process otherwise
+    It method define a specific response to a change of the "control_mode" property in the regulator settings model.
+    We need to stop a certain regulation process when the "control_mode" property equals "OFF" value or start the new regulation process otherwise
     """
     control_mode_change_tracker_item = next(
         (
             c
             for c in change_tracker_items
-            if "control_mode" in c.path
+            if ".control_mode" in c.path
         ),
         None
     )
 
     if control_mode_change_tracker_item is not None:
         control_mode_current_value = control_mode_change_tracker_item.current_value
-        regultor_engine_process_index = int(re.search(r'\[(\d+)\]', control_mode_change_tracker_item.path).group(1))
-        heating_circuit_index = HeatingCircuitIndexModel(regultor_engine_process_index)
+        control_mode_original_value = control_mode_change_tracker_item.original_value
+        search_match = re.search(r'\[(\d+)\]', control_mode_change_tracker_item.path)
+        if search_match is None:
+            return
+
+        regulator_engine_process_index = int(search_match.group(1))
+        heating_circuit_index = HeatingCircuitIndexModel(regulator_engine_process_index)
 
         if control_mode_current_value == ControlModeModel.OFF:
-            regultor_engine_process = next(
+            regulator_engine_process = next(
                 (
                     p for p in app.app_background_processes
-                    if p.name.startswith(f"regulation_process_{regultor_engine_process_index}")
+                    if p.name.startswith(f"regulation_process_{regulator_engine_process_index}")
                 ),
                 None
             )
-            if regultor_engine_process is not None:
-                regultor_engine_process.cancellation_event.set()
-            app.app_background_processes.remove(regultor_engine_process)
-        else:
+            if regulator_engine_process is not None:
+                regulator_engine_process.cancellation_event.set()
+                while regulator_engine_process.process.is_alive():
+                    pass
+                app.app_background_processes.remove(regulator_engine_process)
+
+        if control_mode_original_value == ControlModeModel.OFF and control_mode_current_value != ControlModeModel.OFF:
             launch_regulation_engines(app=app, target_heating_circuit_index=heating_circuit_index)
+
+
+def on_changed_type_settings_property(change_tracker_items: List[ChangeTrackerItemModel]) -> None:
+    """
+    It method define a specific response to a change of the "type" property (the heating system type) in the regulator settings model.
+    The current regulation engine process must be stopped and restarted for a new type of heating system
+    """
+    type_change_tracker_item = next(
+        (
+            c
+            for c in change_tracker_items
+            if ".type" in c.path
+        ),
+        None
+    )
+
+    if type_change_tracker_item is not None:
+        search_match = re.search(r'\[(\d+)\]', type_change_tracker_item.path)
+        if search_match is None:
+            return
+
+        regultor_engine_process_index = int(search_match.group(1))
+        heating_circuit_index = HeatingCircuitIndexModel(regultor_engine_process_index)
+
+        regulator_engine_process = next(
+            (
+                p for p in app.app_background_processes
+                if p.name.startswith(f"regulation_process_{regultor_engine_process_index}")
+            ),
+            None
+        )
+
+        if regulator_engine_process is not None and regulator_engine_process.process.is_alive():
+            regulator_engine_process.cancellation_event.set()
+            while regulator_engine_process.process.is_alive():
+                pass
+            app.app_background_processes.remove(regulator_engine_process)
+
+            regulator_settings = app.get_regulator_settings()
+            if regulator_settings.heating_circuits.items[regultor_engine_process_index].control_parameters.control_mode != ControlModeModel.OFF:
+                launch_regulation_engines(app=app, target_heating_circuit_index=heating_circuit_index)
 
 
 @app.api_route('/regulator-settings', methods=['GET'])
@@ -91,7 +141,8 @@ def put_regulator_settings(body: RegulatorSettingsModel):
     # log here change_tracker_items
     regulator_settings_repository.update(regulator_settings)
 
-    set_control_mode_settings_property(change_tracker_items)
+    on_changed_type_settings_property(change_tracker_items)
+    on_chanded_control_mode_settings_property(change_tracker_items)
 
     return JsonResponse(
         response=regulator_settings_repository.settings,
