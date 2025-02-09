@@ -45,6 +45,34 @@
             "close": true
          },
          "problemMatcher": []
-      }
+      },
+      {
+         "type": "shell",
+         "label": "omega-7995-wifi",
+         "command": [
+            "echo '192.168.0.104    omega-7995' | sudo tee -a '/etc/hosts' > /dev/null"
+         ],
+         "isBackground": true,
+         "presentation": {
+            "reveal": "silent",
+            "revealProblems": "onProblem",
+            "close": true
+         },
+         "problemMatcher": []
+      },
+      {
+         "type": "shell",
+         "label": "omega-7995-hotspot",
+         "command": [
+            "echo '192.168.3.2    omega-7995' | sudo tee -a '/etc/hosts' > /dev/null"
+         ],
+         "isBackground": true,
+         "presentation": {
+            "reveal": "silent",
+            "revealProblems": "onProblem",
+            "close": true
+         },
+         "problemMatcher": []
+      },
    ]
 }

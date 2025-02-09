@@ -24,7 +24,7 @@ def get_default_room_temperature_no_comfort_or_econom_modes_check():
         logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
     )
 
-    default_room_temperature = engine._get_default_room_temperature()
+    default_room_temperature = engine._get_target_temperature()
 
     assert default_room_temperature == assertable_default_room_temperature
 
@@ -44,7 +44,7 @@ def get_default_room_temperature_comfort_no_schedules_check():
 
     RegulationEngine.default_room_temperature = assertable_default_room_temperature
 
-    default_room_temperature = engine._get_default_room_temperature()
+    default_room_temperature = engine._get_target_temperature()
 
     assert default_room_temperature == assertable_default_room_temperature
 
@@ -73,7 +73,7 @@ def get_default_room_temperature_comfort_no_schedule_for_weekday_check():
         tzinfo=timezone.utc
     )
 
-    default_room_temperature = engine._get_default_room_temperature()
+    default_room_temperature = engine._get_target_temperature()
 
     assert default_room_temperature == assertable_default_room_temperature
 
@@ -101,7 +101,7 @@ def get_default_room_temperature_comfort_has_schedule_no_window_check():
         tzinfo=timezone.utc
     )
 
-    default_room_temperature = engine._get_default_room_temperature()
+    default_room_temperature = engine._get_target_temperature()
 
     assert default_room_temperature == assertable_default_room_temperature
 
@@ -117,7 +117,7 @@ def get_default_room_temperature_comfort_has_schedule_check():
         logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
     )
 
-    assertable_default_room_temperature = base_testable_settings.regulator_parameters.control_parameters.comfort_temperature
+    assertable_default_room_temperature = base_testable_settings.control_parameters.comfort_temperature
 
     engine._rtc_datetime = datetime(
         year=2024,
@@ -128,6 +128,6 @@ def get_default_room_temperature_comfort_has_schedule_check():
         tzinfo=timezone.utc
     )
 
-    default_room_temperature = engine._get_default_room_temperature()
+    default_room_temperature = engine._get_target_temperature()
 
     assert default_room_temperature == assertable_default_room_temperature

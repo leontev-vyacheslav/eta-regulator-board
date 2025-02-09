@@ -1,5 +1,6 @@
 from models.abstracts.app_base_model import AppBaseModel
 from models.regulator.archive_model import ArchiveModel
+from models.regulator.enums.failure_action_type_model import FailureActionTypeModel
 
 
 class PidDeviationBase(AppBaseModel):
@@ -9,6 +10,8 @@ class PidDeviationBase(AppBaseModel):
 
 
 class PidImpactEntryModel(PidDeviationBase):
+    failure_action_state: FailureActionTypeModel
+
     archive: ArchiveModel
 
 

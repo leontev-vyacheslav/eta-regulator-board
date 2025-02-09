@@ -24,14 +24,14 @@ class EmuOutdoorTempStepVariationRegulationEngine(RegulationEngine):
     pid_impact_parts_critical_msg = 'PROPORTIONAL=%.2f, INTEGRAL=%.2f, DIFFERENTIAL=%.2f, DEVIATION=%.2f, TOTAL_DEVIATION=%.2f'
 
     class State(IntEnum):
-        Low = 1
-        High = 2
+        LOW = 1
+        HIGH = 2
 
     def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: RegulationEngineLoggingLevelModel, step_duration: float) -> None:
         super().__init__(heating_circuit_index, process_cancellation_event, hardwares_process_lock, logging_level)
 
         self.step_duration = step_duration
-        self.__state: EmuOutdoorTempStepVariationRegulationEngine.State = EmuOutdoorTempStepVariationRegulationEngine.State.High
+        self.__state: EmuOutdoorTempStepVariationRegulationEngine.State = EmuOutdoorTempStepVariationRegulationEngine.State.HIGH
         self.__change_state_time: Optional[float] = None
 
         self.__temperature_graph_item: TemperatureGraphItemModel = self._get_calculated_temperatures(
@@ -60,12 +60,12 @@ class EmuOutdoorTempStepVariationRegulationEngine(RegulationEngine):
             self.__change_state_time = time()
 
         if time() - self.__change_state_time > self.step_duration:
-            self.__state = EmuOutdoorTempStepVariationRegulationEngine.State.High if self.__state == EmuOutdoorTempStepVariationRegulationEngine.State.Low else EmuOutdoorTempStepVariationRegulationEngine.State.Low
+            self.__state = EmuOutdoorTempStepVariationRegulationEngine.State.HIGH if self.__state == EmuOutdoorTempStepVariationRegulationEngine.State.LOW else EmuOutdoorTempStepVariationRegulationEngine.State.LOW
             self.__change_state_time = time()
 
         room_temperature_measured = RegulationEngine.default_room_temperature
         outdoor_temperature_measured = self.__temperature_graph_item.outdoor_temperature \
-            if self.__state == EmuOutdoorTempStepVariationRegulationEngine.State.High \
+            if self.__state == EmuOutdoorTempStepVariationRegulationEngine.State.HIGH \
             else self.__temperature_graph_item.outdoor_temperature + EmuOutdoorTempStepVariationRegulationEngine.temperature_step
 
         supply_pipe_temperature_measured = self.__temperature_graph_item.supply_pipe_temperature
@@ -100,4 +100,3 @@ class EmuOutdoorTempStepVariationRegulationEngine(RegulationEngine):
         )
 
         return pid_impact_components
-

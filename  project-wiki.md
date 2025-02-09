@@ -63,7 +63,7 @@ test.txt  100%    29     0.0KB/s   00:00    c
 It is important to mention that we have the option to copy a folder with all of its contents. For example like that:
 
 ```bash
-scp -r src ./startup.sh root@omega-xxx:/home/eta-regulator-board/web-api
+scp -r src ./startup.sh root@omega-xxx:/mnt/mmcblk0p1/eta-regulator-board/web-api
 ```
 
 In the absence of a ssh public key from your computer you  will always need to enter the root user password for every command.
@@ -73,7 +73,7 @@ How to do this see the next question.
 
 The most important thing for this to figure out that public keys OpenWrt save in the folder /etc/dropbear/ but not /root/.ssh
 
-So make an authorized_keys file and apply permissions for it like that
+Therefore, we create the file "authorized_keys" and apply permissions for it:
 
 ```bash
 cd /etc/dropbear/
@@ -94,12 +94,13 @@ Now we can use a command console (cmd, PowerShell, bash ect.) of the developer m
 First of all you need install a standard package manager like as 'pip' using for this OS package manager 'opkg'.
 
 ```bash
+opkg update
 opkg install python3-pip
 ```
 
 ## 7. How to deploy and host a ReactJs application on the OpenWRT OS?
 
-In the beginning you need verify a list of the installed packages OpenWRT OS
+You need to verify the list of OpenWRT OS installed packages at the beginning
 
 ```bash
 opkg list-installed
@@ -108,12 +109,12 @@ opkg list-installed
 You have to see 'uhttpd' package in the list of installed packages, like that
 
 ```bash
-ubusd - 2018-07-26-40e0931e-1
+uhttpd - 2018-06-26-796d42bc-1
 ```
 
 It is a web server written to be an efficient and stable server, suitable for lightweight tasks commonly used with embedded devices and proper integration with OpenWrt's configuration framework (UCI). In addition, it provides all the functionality expected of present day web servers.
 
-Then you need edit uhttpd config file adding several lines, like that
+Then you need to edit uhttpd config file adding several lines, like that
 
 ```yaml
 config uhttpd 'other'
@@ -121,7 +122,7 @@ config uhttpd 'other'
     option http_index 'index.html'
     option index_page 'index.html'
     option error_page '/index.html'
-    option 'home' '/home/eta-regulator-board-web-ui'
+    option 'home' '/mnt/mmcblk0p1/eta-regulator-board/web-ui'
 ```
 
 Then, restart the uHTTPd service to apply the changes:
@@ -132,7 +133,14 @@ Then, restart the uHTTPd service to apply the changes:
 
 Finally, copy the static js-bundle to the appropriate directory on your OpenWrt OS of the Omega2 device.
 
-## 8. How can I start a shell script after reboot OS linux?
+## 8. How can I start a shell script after reboot OS linux (to start web-api in our case)?
+
+You need to add the command in the file "/etc/rc.local", like that:
+
+```bash
+cd /mnt/mmcblk0p1/eta-regulator-board/web-api/&&sh "startup.sh"
+exit 0
+```
 
 ## 9. How to create a python virtual environment based on certain version a python  interpreter (Windows)?
 
@@ -211,6 +219,14 @@ opkg install python3-pip
 
 (free 11M)
 
+### 13. On the stage preparing the device (aka "карабулька") we need to add ${WORKSPACE_ROOT} to the profile file
+
+```shell
+    touch ~/.profile
+    echo 'export PATH=$PATH:/mnt/mmcblk0p2/eta-regulator-board/bin' >> ~/.profile
+    . ~/.profile
+```
+
 ### 13. Install the FLASK library
 
 ```shell
@@ -225,7 +241,10 @@ flask, flask-cors, pydantic, flask-pydantic
 
 (free 9M)
 
+
 ### 14. Deploy applications using deploy.ps1 in the appropriate project folders
+
+
 
 ## 11. How to format microsd card on Omega2+?
 
@@ -251,3 +270,43 @@ There are other better sysfs gpio libraries available for Python3:
 https://pypi.org/project/gpio/
 https://python-periphery.readthedocs.io/en/latest/gpio.html
 https://github.com/vitiral/gpio
+
+
+## 13. How can I stop web API and regulator background processes and then run their again?
+
+```bash
+
+cd /mnt/mmcblk0p1/eta-regulator-board/web-api
+
+top | grep python   # it will give three identificators of processes
+
+kill xxx yyy zzz    # kill all three processes
+
+sh startup.sh       # start web API again
+```
+
+It's convinient to run FS-SSH extention and jump to a terminal on the remote device (on "carabulca")
+in the target folder and then execute this script
+
+## 14. What the device dependant files are there in web-api project?
+
+startup.sh
+
+    /mnt/mmcblk0pXX
+
+rc.local
+
+    /mnt/mmcblk0pXX
+
+task.json
+
+    "echo '192.168.0.104    omega-7995'
+
+uhttpd
+    /mnt/mmcblk0pXX
+
+deployment-support.ps1 -
+
+    $IPADDR = "omega-XXXX"
+    $ACCOUNT = 'root'
+    $WORKSPACE_ROOT = "/mnt/mmcblk0pXX/eta-regulator-board" # /home/eta-regulator-board

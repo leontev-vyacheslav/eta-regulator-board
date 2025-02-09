@@ -23,13 +23,13 @@ const SchedulesTabContentInner = () => {
 
         return new ArrayStore({
             key: 'id',
-            data: regulatorSettings?.heatingCircuits.items[circuitId].regulatorParameters.schedules.items,
+            data: regulatorSettings?.heatingCircuits.items[circuitId].schedules.items,
             onRemoved: async (values: ScheduleModel) => {
                 await putSchedulesAsync(values);
             },
 
             onInserted: async (values: ScheduleModel) => {
-                const item = regulatorSettings?.heatingCircuits.items[circuitId ].regulatorParameters.schedules.items.find(i => i.id === values.id);
+                const item = regulatorSettings?.heatingCircuits.items[circuitId ].schedules.items.find(i => i.id === values.id);
                 if (item) {
                     item.windows = []
                 }
@@ -62,7 +62,7 @@ const SchedulesTabContentInner = () => {
                      text: formatMessage('menu-item-delete-all-schedules'),
                     icon: () => <DeleteAllIcon size={ 20 } />,
                      onClick: async () => {
-                         if (!regulatorSettings || regulatorSettings.heatingCircuits.items[0].regulatorParameters.schedules.items.length === 0) {
+                         if (!regulatorSettings || regulatorSettings.heatingCircuits.items[0].schedules.items.length === 0) {
                             return;
                          }
 
@@ -71,7 +71,7 @@ const SchedulesTabContentInner = () => {
                             iconName: 'DeleteAllIcon',
                             iconSize: 32,
                             callback: async () => {
-                                regulatorSettings.heatingCircuits.items[0].regulatorParameters.schedules.items = [];
+                                regulatorSettings.heatingCircuits.items[0].schedules.items = [];
                                 await putSchedulesAsync([]);
 
                                 setRegulatorSettings({ ...regulatorSettings });

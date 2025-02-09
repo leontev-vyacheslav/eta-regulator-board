@@ -46,11 +46,11 @@ const propsInject = {
                     }
 
                     if (node.attributes.id === 'T1calc' || node.attributes.id === 'T3calc') {
-                        node.children = [{ type: 'text', value: 'props.supplyPipeTemperatureCalc' }];
+                        node.children = [{ type: 'text', value: 'props.supplyPipeTemperatureCalculated' }];
                     }
 
                     if (node.attributes.id === 'T2calc' || node.attributes.id === 'T4calc') {
-                        node.children = [{ type: 'text', value: 'props.returnPipeTemperatureCalc' }];
+                        node.children = [{ type: 'text', value: 'props.returnPipeTemperatureCalculated' }];
                     }
 
                     if (node.attributes.id === 'T_air') {

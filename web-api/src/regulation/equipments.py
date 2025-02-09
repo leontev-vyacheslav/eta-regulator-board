@@ -4,6 +4,7 @@ from datetime import datetime
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
 from omega.ds1307 import DS1307
+from omega.mcp4922 import MCP4922
 from utils.debugging import is_debug
 
 from omega import gpio
@@ -17,30 +18,28 @@ VALVE2_OPEN = V2_PLUS
 VALVE2_CLOSE = V2_MINUS
 
 
-# TODO: consider situations: missing sensors and short circuit (-inf | +inf)
-def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 5) -> float:
+def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 10) -> float:
     if is_debug():
         return 0
 
     gpio.adc_chip_select()
     try:
         gpio.set(gpio.GPIO_Vp, False)
-        # TODO: time profiling
+        sleep(0.5)
         with MCP3208() as mcp_3208:
             value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
-    except Exception as ex:
-        print(ex)
-        temperature = 100.0
+    except:
+        temperature = float("inf")
     finally:
         gpio.set(gpio.GPIO_Vp, True)
 
     try:
         temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
     except ZeroDivisionError:
-        temperature = 100
+        return float("inf")
 
-    if temperature > 100:
-            temperature = 100.0
+    if abs(temperature) > 125:
+        return float("inf")
 
     return temperature
 
@@ -74,3 +73,41 @@ def set_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, impact_sig
         gpio.set(valve_close_pin, True)
         sleep(impact_duration)
         gpio.set(valve_close_pin, False)
+
+
+def close_valve(heating_circuit_index: HeatingCircuitIndexModel):
+    valve_open_pin = VALVE1_OPEN if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_OPEN
+    valve_close_pin = VALVE1_CLOSE if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_CLOSE
+
+    if is_debug():
+        sleep(0.1)
+        return
+
+    gpio.set(valve_open_pin, False)
+    gpio.set(valve_close_pin, False)
+    sleep(0.1)
+    gpio.set(valve_close_pin, True)
+
+
+def open_valve(heating_circuit_index: HeatingCircuitIndexModel):
+    valve_open_pin = VALVE1_OPEN if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_OPEN
+    valve_close_pin = VALVE1_CLOSE if heating_circuit_index == HeatingCircuitIndexModel.FIRST else VALVE2_CLOSE
+
+    if is_debug():
+        sleep(0.1)
+        return
+
+    gpio.set(valve_open_pin, False)
+    gpio.set(valve_close_pin, False)
+    sleep(0.1)
+    gpio.set(valve_open_pin, True)
+
+
+def set_analog_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, impact: float):
+    gpio.dac_chip_select()
+
+    channel = heating_circuit_index
+    value = impact * MCP4922.FULL_RANGE
+
+    with MCP4922() as dac:
+        dac.write(channel, int(value))

@@ -24,14 +24,14 @@ class EmuSupplyPipeTempStepVariationRegulationEngine(RegulationEngine):
     pid_impact_parts_critical_msg = 'P=%.2f, I=%.2f, D=%.2f, DEV=%.2f, TOTAL=%.2f (OUT=%.2f, ROOM=%.2f, SUPL=%.2f, RET=%.2f)'
 
     class State(IntEnum):
-        Low = 1
-        High = 2
+        LOW = 1
+        HIGH = 2
 
     def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: RegulationEngineLoggingLevelModel, step_duration: float) -> None:
         super().__init__(heating_circuit_index, process_cancellation_event, hardwares_process_lock, logging_level)
 
         self.step_duration = step_duration
-        self.__state: EmuSupplyPipeTempStepVariationRegulationEngine.State = EmuSupplyPipeTempStepVariationRegulationEngine.State.High
+        self.__state: EmuSupplyPipeTempStepVariationRegulationEngine.State = EmuSupplyPipeTempStepVariationRegulationEngine.State.HIGH
         self.__change_state_time: Optional[float] = None
 
         self.__temperature_graph_item: TemperatureGraphItemModel = self._get_calculated_temperatures(
@@ -60,14 +60,14 @@ class EmuSupplyPipeTempStepVariationRegulationEngine(RegulationEngine):
             self.__change_state_time = time()
 
         if time() - self.__change_state_time > self.step_duration:
-            self.__state = EmuSupplyPipeTempStepVariationRegulationEngine.State.High if self.__state == EmuSupplyPipeTempStepVariationRegulationEngine.State.Low else EmuSupplyPipeTempStepVariationRegulationEngine.State.Low
+            self.__state = EmuSupplyPipeTempStepVariationRegulationEngine.State.HIGH if self.__state == EmuSupplyPipeTempStepVariationRegulationEngine.State.LOW else EmuSupplyPipeTempStepVariationRegulationEngine.State.LOW
             self.__change_state_time = time()
 
         outdoor_temperature_measured = EmuSupplyPipeTempStepVariationRegulationEngine.known_outdoor_temperature
         room_temperature_measured = RegulationEngine.default_room_temperature
 
         supply_pipe_temperature_measured = self.__temperature_graph_item.supply_pipe_temperature + \
-            EmuSupplyPipeTempStepVariationRegulationEngine.temperature_step if self.__state == EmuSupplyPipeTempStepVariationRegulationEngine.State.High else self.__temperature_graph_item.supply_pipe_temperature
+            EmuSupplyPipeTempStepVariationRegulationEngine.temperature_step if self.__state == EmuSupplyPipeTempStepVariationRegulationEngine.State.HIGH else self.__temperature_graph_item.supply_pipe_temperature
         return_pipe_temperature_measured = self.__temperature_graph_item.return_pipe_temperature
 
         return ArchiveModel(

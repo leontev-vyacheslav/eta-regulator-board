@@ -7,7 +7,12 @@ import { useAuth } from '../auth';
 import { httpClientBase } from './http-client-base';
 import { proclaim, proclaimError } from '../../utils/proclaim';
 
-export type AxiosWithCredentialsFunc = (config: AxiosRequestConfig, suppressLoader?: boolean, suppressShowUnauthorized?: boolean) => Promise<AxiosResponse | undefined>;
+export type AxiosWithCredentialsFunc = (
+    config: AxiosRequestConfig,
+    suppressLoader?: boolean,
+    suppressShowUnauthorized?: boolean,
+    suppressShowError?: boolean
+) => Promise<AxiosResponse | undefined>;
 
 export const useAuthHttpRequest = () => {
     const { getUserAuthDataFromStorage, signOut } = useAuth();
@@ -15,7 +20,7 @@ export const useAuthHttpRequest = () => {
 
     const axiosWithCredentials = useCallback<AxiosWithCredentialsFunc>(
 
-        async (config: AxiosRequestConfig, suppressLoader: boolean = false, suppressShowUnauthorized: boolean = false) => {
+        async (config: AxiosRequestConfig, suppressLoader: boolean = false, suppressShowUnauthorized: boolean = false, suppressShowError: boolean = false) => {
             let response: AxiosResponse<any, any> | null | AxiosResponse<unknown, any> | undefined = null;
             const userAuthData = getUserAuthDataFromStorage();
             config = config || {};
@@ -47,14 +52,16 @@ export const useAuthHttpRequest = () => {
                         });
                     }
                 } else {
-                     await proclaimError(error);
+                    if (!suppressShowError) {
+                        await proclaimError(error);
+                    }
                 }
             } finally {
                 if (!suppressLoader) {
                     setTimeout(() => {
                         hideLoader();
                     }, 100);
-                  }
+                }
             }
 
             return response;

@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 
 from omega.ds1307 import DS1307
 
-#from omega.ds1307 import DS1307
 
 is_started = False
 is_done = False

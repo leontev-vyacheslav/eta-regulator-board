@@ -21,4 +21,3 @@ class RegulationParametersModel(AppBaseModel):
     proportionality_factor_denominator: float
 
     integration_factor_denominator: float
-

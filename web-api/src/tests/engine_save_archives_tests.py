@@ -3,12 +3,12 @@ import os
 import shutil
 import pathlib
 from datetime import datetime, timedelta
-import pytest
 import logging
 from time import time
 from random import random
-
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
+import pytest
+
 from freezegun import freeze_time
 
 from models.regulator.archive_model import ArchiveModel
@@ -93,4 +93,3 @@ def save_archives_check(get_regulation_engine: RegulationEngine, freeze_time_tic
             archives = ArchivesModel.parse_raw(json_text, encoding='utf-8')
 
             assert len(archives.items) == 24
-

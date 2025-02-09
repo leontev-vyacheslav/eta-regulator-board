@@ -23,7 +23,7 @@ const routes = [
         component: AppSettingsPage,
     },
     {
-        path: '/archives',
+        path: '/archives/:circuitIdParam',
         component: ArchivesPage,
     },
     {

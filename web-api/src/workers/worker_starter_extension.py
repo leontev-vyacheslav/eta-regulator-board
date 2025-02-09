@@ -5,10 +5,7 @@ from threading import Thread, Lock
 from typing import Optional
 
 from flask_ex import FlaskEx
-from models.environment_state_model import EnvironmentState
 import workers
-
-environment_state = EnvironmentState()
 
 
 class WorkerStarter():
@@ -37,7 +34,7 @@ class WorkerStarter():
 
                     thread = Thread(
                         target=worker,
-                        args=(app, worker_info.interval, worker_info.immediately, environment_state, lock),
+                        args=(app, worker_info.interval, worker_info.immediately, lock),
                         daemon=True
                     )
                     thread.start()

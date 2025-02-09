@@ -39,16 +39,16 @@ def get_pid_impact_components_check():
     asserted_previoustotal_deviation = 10
 
     asserted_deviation = (asserted_calc_temperatures.supply_pipe_temperature - asserted_archive.supply_pipe_temperature) + \
-        (asserted_calc_temperatures.return_pipe_temperature - asserted_archive.return_pipe_temperature) * asserted_heating_circuit_settings.regulator_parameters.control_parameters.return_pipe_temperature_influence + \
-        (asserted_archive.room_temperature - 20) * asserted_heating_circuit_settings.regulator_parameters.control_parameters.room_temperature_influence
+        (asserted_calc_temperatures.return_pipe_temperature - asserted_archive.return_pipe_temperature) * asserted_heating_circuit_settings.control_parameters.return_pipe_temperature_influence + \
+        (asserted_archive.room_temperature - 20) * asserted_heating_circuit_settings.control_parameters.room_temperature_influence
 
-    asserted_proportional_impact = asserted_heating_circuit_settings.regulator_parameters.regulation_parameters.proportionality_factor * \
+    asserted_proportional_impact = asserted_heating_circuit_settings.regulation_parameters.proportionality_factor * \
         asserted_deviation
 
-    asserted_integration_impact = asserted_heating_circuit_settings.regulator_parameters.regulation_parameters.integration_factor * \
+    asserted_integration_impact = asserted_heating_circuit_settings.regulation_parameters.integration_factor * \
         (asserted_previoustotal_deviation + asserted_deviation)
 
-    asserted_differentiation_impact = asserted_heating_circuit_settings.regulator_parameters.regulation_parameters.differentiation_factor * \
+    asserted_differentiation_impact = asserted_heating_circuit_settings.regulation_parameters.differentiation_factor * \
         (asserted_previous_deviation - asserted_deviation)
 
     tested_pid_impact_components = engine._get_pid_impact_components(
@@ -62,5 +62,3 @@ def get_pid_impact_components_check():
     assert asserted_proportional_impact == tested_pid_impact_components.proportional_impact
     assert asserted_integration_impact == tested_pid_impact_components.integration_impact
     assert asserted_differentiation_impact == tested_pid_impact_components.differentiation_impact
-
-

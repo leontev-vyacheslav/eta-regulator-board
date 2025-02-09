@@ -1,0 +1,5 @@
+[MESSAGES CONTROL]
+disable=C0116, C0114, C0115, C0301, R0903, E0401
+
+[LOGGING]
+disable=logging-fstring-interpolation

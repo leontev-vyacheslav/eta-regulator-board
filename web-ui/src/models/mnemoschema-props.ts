@@ -4,14 +4,14 @@ export type MnemoschemaProps = {
     pumpOn: boolean;
 
     supplyPipeTemperature: number;
-    supplyPipeTemperatureCalc: number;
+    supplyPipeTemperatureCalculated: number;
 
     returnPipeTemperature: number;
-    returnPipeTemperatureCalc: number;
+    returnPipeTemperatureCalculated: number;
 
-    outdoorTemperature?: number,
+    outdoorTemperature?: number;
 
-    valvePosition: number,
+    valvePosition: number;
 
     valveDirection: ValveDirectionModel
 }

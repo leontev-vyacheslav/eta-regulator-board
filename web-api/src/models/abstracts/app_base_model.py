@@ -6,6 +6,10 @@ from utils.strings import snake_to_camel
 
 
 class AppBaseModel(ABC, BaseModel):
+    """
+    The most common abstract model inherited from the pydantic base model.
+    It defines custom serialization rules throughout this project
+    """
     class Config:
         alias_generator = snake_to_camel
         allow_population_by_field_name = True

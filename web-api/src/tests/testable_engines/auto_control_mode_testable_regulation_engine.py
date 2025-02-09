@@ -7,6 +7,6 @@ class AutoControlModeTestableRegulationEngine(BaseSettingsTestableRegulationEngi
 
     def _get_settings(self) -> HeatingCircuitModel:
         settings = super()._get_settings()
-        settings.regulator_parameters.control_parameters.control_mode = ControlModeModel.AUTO
+        settings.control_parameters.control_mode = ControlModeModel.AUTO
 
         return settings

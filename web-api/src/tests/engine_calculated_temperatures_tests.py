@@ -1,8 +1,8 @@
-import pytest
 import logging
 import bisect
-
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
+import pytest
+
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
@@ -35,7 +35,7 @@ def get_calculated_temperatures_precise_match_check(get_regulation_engine: Regul
 
     assert heating_circuit.type == HeatingCircuitTypeModel.HEATING
 
-    for temperature_graph_item in heating_circuit.regulator_parameters.temperature_graph.items:
+    for temperature_graph_item in heating_circuit.temperature_graph.items:
         calc_temperature_graph_item: TemperatureGraphItemModel = engine._get_calculated_temperatures(
             outdoor_temperature=temperature_graph_item.outdoor_temperature
         )
@@ -67,7 +67,7 @@ def get_calculated_temperatures_interpolation_check(get_regulation_engine: Regul
     assert heating_circuit_settings.type == HeatingCircuitTypeModel.HEATING
 
     temperature_graph = sorted(
-        heating_circuit_settings.regulator_parameters.temperature_graph.items,
+        heating_circuit_settings.temperature_graph.items,
         key=lambda i: i.outdoor_temperature
     )
 
@@ -108,3 +108,15 @@ def get_calculated_temperatures_interpolation_check(get_regulation_engine: Regul
         calc_temperature_graph_item.supply_pipe_temperature,
         calc_temperature_graph_item.return_pipe_temperature
     )
+
+
+
+@pytest.mark.parametrize("temp", [float("inf")])
+def get_calculated_temperatures_infinyty_check(get_regulation_engine: RegulationEngine, temp: float):
+    engine = get_regulation_engine
+
+    calculated_temperatures: TemperatureGraphItemModel = engine._get_calculated_temperatures(
+        outdoor_temperature=temp
+    )
+
+    assert calculated_temperatures is not None
