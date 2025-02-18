@@ -16,6 +16,8 @@ export const HeatingCircuitSelector = ({ heatingCircuitIndex, mnemoschemaProps }
 
     const updateSharedRegulatorStateAsync = useCallback(async () => {
         const sharedRegulatorState = await getSharedRegulatorStateAsync(heatingCircuitIndex);
+        console.log(sharedRegulatorState);
+
         if (sharedRegulatorState) {
             setSharedRegulatorState(sharedRegulatorState);
         } else {

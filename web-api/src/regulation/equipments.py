@@ -107,7 +107,7 @@ def set_analog_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, imp
     gpio.dac_chip_select()
 
     channel = heating_circuit_index
-    value = impact * MCP4922.FULL_RANGE
+    value = (impact / 100) * MCP4922.FULL_RANGE
 
     with MCP4922() as dac:
         dac.write(channel, int(value))

@@ -12,7 +12,7 @@ from data_access.accounts_settings_repository import AccountsSettingsRepository
 from regulation.launcher import launch_regulation_engines
 from workers.worker_starter_extension import WorkerStarter
 
-APP_VERSION = 'v.0.1.20250209-154410'
+APP_VERSION = 'v.0.1.20250218-144655'
 APP_NAME = 'Eta Regulator Board Web API'
 
 MASTER_KEY = 'XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='
@@ -21,7 +21,7 @@ app = FlaskEx(__name__)
 CORS(
     app,
     origins=['*'],
-    methods=['GET', 'POST', 'PUT', 'DELETE'],
+    methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allow_headers=['*'],
 )
 WorkerStarter(app)

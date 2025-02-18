@@ -1,6 +1,7 @@
 $GREEN = "`e[32m"
 $RESET = "`e[0m"
-$IPADDR = "omega-8f79"
+$IPADDR = "omega-7e12"
+#$IPADDR = "omega-8f79"
 $ACCOUNT = 'root'
 $WORKSPACE_ROOT = "/mnt/mmcblk0p1/eta-regulator-board" # /home/eta-regulator-board
 

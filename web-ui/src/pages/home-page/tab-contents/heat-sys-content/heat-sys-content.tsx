@@ -3,6 +3,7 @@ import { useMnemoschemaWidth } from '../../../../components/mnemoschemas/use-mne
 import SvgHeatSystem from '../../../../components/mnemoschemas/svg-heat-sys'
 import { HeatingCircuitIndexModel } from '../../../../models/regulator-settings/enums/heating-circuit-type-model';
 import { HeatingCircuitInfo } from '../../heating-circuit-info';
+import { HeatingCircuitDebugInfo } from '../../heating-circuit-debug-info';
 
 export const HeatSysContent = (props: MnemoschemaProps) => {
     const width = useMnemoschemaWidth({ onHomePage: true });
@@ -11,6 +12,7 @@ export const HeatSysContent = (props: MnemoschemaProps) => {
         <>
             <HeatingCircuitInfo heatingCircuitIndex={ HeatingCircuitIndexModel.first } />
             <SvgHeatSystem width={ width } { ...props } />
+            <HeatingCircuitDebugInfo pidImpactResuilt={ props.pidImpactResult } />
         </>
     );
 }

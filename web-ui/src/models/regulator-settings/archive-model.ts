@@ -15,8 +15,25 @@ export type ArchiveExistsModel = {
     exists: boolean
 }
 
+export type PidImpactResultModel  = {
+
+    deviation: number;
+
+    totalDeviation: number;
+
+    proportionalImpact: number;
+
+    integrationImpact: number;
+
+    differentiationImpact: number;
+
+    impact: number;
+}
+
 export type SharedRegulatorStateModel = ArchiveModel & {
     failureActionState: FailureActionTypeModel;
+
+    pidImpactResult: PidImpactResultModel;
 
     supplyPipeTemperatureCalculated: number;
 

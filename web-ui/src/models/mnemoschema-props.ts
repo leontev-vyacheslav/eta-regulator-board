@@ -1,3 +1,4 @@
+import { PidImpactResultModel } from './regulator-settings/archive-model';
 import { ValveDirectionModel } from './regulator-settings/enums/valve-direction-model';
 
 export type MnemoschemaProps = {
@@ -13,5 +14,7 @@ export type MnemoschemaProps = {
 
     valvePosition: number;
 
-    valveDirection: ValveDirectionModel
+    valveDirection: ValveDirectionModel;
+
+    pidImpactResult?: PidImpactResultModel;
 }

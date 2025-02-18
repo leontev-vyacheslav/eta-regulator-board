@@ -223,7 +223,7 @@ opkg install python3-pip
 
 ```shell
     touch ~/.profile
-    echo 'export PATH=$PATH:/mnt/mmcblk0p2/eta-regulator-board/bin' >> ~/.profile
+    echo 'export PATH=$PATH:/mnt/mmcblk0p1/eta-regulator-board/bin' >> ~/.profile
     . ~/.profile
 ```
 

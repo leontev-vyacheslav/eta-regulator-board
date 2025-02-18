@@ -21,7 +21,7 @@ from loggers.engine_logger_builder import build as build_logger
 from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
 from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.temperature_graph_model import TemperatureGraphItemModel
-from models.regulator.archives_model import DailySavedArchivesModel
+from models.regulator.archives_model import ArchivesModel, DailySavedArchivesModel
 from models.regulator.archive_model import ArchiveModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
@@ -60,7 +60,8 @@ class RegulationEngine:
     writing_archives_debug_msg = 'Writing archives has been completed: %s'
     getting_current_rtc_debug_msg = 'Current RTC datetime: %s'
     pid_impact_components_debug_msg = 'The PID impact components: P=%.2f, I=%.2f, D=%.2f, SUM=%.2f DEV=%.2f, TOTAL=%.2f'
-    pid_impact_result_debug_msg = 'The PID impact result: RES=%.2f%%'
+    pid_impact_result_debug_msg = 'The PID impact result: PID=%.2f%%'
+    analog_impact_result_debug_msg = 'The analog impact result: ANL=%.2f%%'
     writing_archives_error_msg = 'An error has happened during writing archives: %s'
 
     def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: RegulationEngineLoggingLevelModel) -> None:
@@ -313,7 +314,6 @@ class RegulationEngine:
 
         # saving to the archive and rewriting the file of archives
         if self._rtc_datetime >= start_current_hour and not self._archives.is_last_day_of_month_saved:
-            self._archives.items.append(archive)
 
             try:
                 start_current_day = self._rtc_datetime.replace(**RegulationEngine.start_current_day_template)
@@ -325,6 +325,15 @@ class RegulationEngine:
                 data_path = year_archives_folder.joinpath(
                     f'{archive_file_name}'
                 )
+
+                if len(self._archives.items) == 0 and data_path.exists():
+                    with gzip.open(data_path, mode='r') as file:
+                        zip_content = file.read()
+                        json = zip_content.decode('utf-8')
+                        existed_archives = ArchivesModel.parse_raw(json)
+                        self._archives.items.extend(existed_archives.items)
+
+                self._archives.items.append(archive)
 
                 json_text = self._archives.json(by_alias=True)
 
@@ -523,7 +532,11 @@ class RegulationEngine:
         return PidImpactResultModel(
             impact=percented_pid_impart,
             deviation=pid_impact_components.deviation,
-            total_deviation=pid_impact_components.total_deviation
+            total_deviation=pid_impact_components.total_deviation,
+
+            proportional_impact=pid_impact_components.proportional_impact,
+            integration_impact=pid_impact_components.integration_impact,
+            differentiation_impact=pid_impact_components.differentiation_impact
         )
 
     def _get_failure_action_state(self, archive: ArchiveModel) -> FailureActionTypeModel:
@@ -620,9 +633,11 @@ class RegulationEngine:
                     pulse_duration_valve = self._heating_circuit_settings.regulation_parameters.pulse_duration_valve
                     analog_valve_impact = analog_valve_impact + pid_impact_result.impact / (pulse_duration_valve / self._calculation_period)
 
+                    self._logger.info(RegulationEngine.analog_impact_result_debug_msg, analog_valve_impact)
+
                     if analog_valve_impact > 100.0:
                         analog_valve_impact = 100.0
-                    if analog_valve_impact < 0.0:
+                    elif analog_valve_impact < 0.0:
                         analog_valve_impact = 0.0
 
                 # sharing a value of the PID impact and the alnalog valver impact among the main and polling threads
@@ -630,7 +645,11 @@ class RegulationEngine:
                     self._shared_pid_impact_result = PidImpactResultModel(
                         impact=pid_impact_result.impact,
                         deviation=pid_impact_result.deviation,
-                        total_deviation=pid_impact_result.total_deviation
+                        total_deviation=pid_impact_result.total_deviation,
+
+                        proportional_impact=pid_impact_result.proportional_impact,
+                        integration_impact=pid_impact_result.integration_impact,
+                        differentiation_impact=pid_impact_result.differentiation_impact
                     )
                     self._shared_analog_valve_impact = analog_valve_impact
 
@@ -638,6 +657,7 @@ class RegulationEngine:
                 total_deviation = pid_impact_result.total_deviation
 
                 self._save_shared_archive(SharedRegulatorStateModel(
+                    pid_impact_result=pid_impact_result,
                     failure_action_state=failure_action_state,
 
                     datetime=archive.datetime,
@@ -651,10 +671,10 @@ class RegulationEngine:
 
                     valve_direction=ValveDirectionModel.UP if pid_impact_result.impact > 0 else ValveDirectionModel.DOWN,
                     valve_position=pid_impact_result.impact,
-
                 ))
             else:
                 self._save_shared_archive(SharedRegulatorStateModel(
+                    pid_impact_result=None,
                     failure_action_state=failure_action_state,
 
                     valve_direction=ValveDirectionModel.UP,
@@ -748,7 +768,11 @@ class RegulationEngine:
                         pid_impact_result = PidImpactResultModel(
                             impact=self._shared_pid_impact_result.impact,
                             deviation=self._shared_pid_impact_result.deviation,
-                            total_deviation=self._shared_pid_impact_result.total_deviation
+                            total_deviation=self._shared_pid_impact_result.total_deviation,
+
+                            proportional_impact=self._shared_pid_impact_result.proportional_impact,
+                            integration_impact=self._shared_pid_impact_result.integration_impact,
+                            differentiation_impact=self._shared_pid_impact_result.differentiation_impact
                         )
                     analog_valve_impact = self._shared_analog_valve_impact
 

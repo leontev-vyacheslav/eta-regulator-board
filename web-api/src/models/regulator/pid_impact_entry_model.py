@@ -23,5 +23,5 @@ class PidImpactResultComponentsModel(PidDeviationBase):
     differentiation_impact: float
 
 
-class PidImpactResultModel(PidDeviationBase):
+class PidImpactResultModel(PidImpactResultComponentsModel):
     impact: float
