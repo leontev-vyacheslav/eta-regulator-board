@@ -3,23 +3,69 @@ import { useRef } from 'react';
 import AppConstants from '../../constants/app-constants';
 import { ArchiveModel } from '../../models/regulator-settings/archive-model';
 import { formatMessage } from 'devextreme/localization';
+import { CurrentDateIcon, OutdoorIcon, ReturnPipeIcon, SupplyPipeIcon } from '../../constants/app-icons';
+import { getUuidV4 } from '../../utils/uuid';
 
-export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
+export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) => {
     const chartRef = useRef<Chart>(null);
+
+    const TooltipTemplate = (info: any) => {
+        debugger
+        return (
+            <div className='temperature-graph-tooltip' data-guid={ getUuidV4() } style={ {} }>
+                {
+                    info.point.data.datetime != null  ?
+                        <div>
+                            <CurrentDateIcon size={ 18 }  />
+                            <div>Время:</div>
+                            <div>{(info.point.data.datetime as Date).toLocaleString('ru-RU')}</div>
+                        </div>
+                        : null
+                }
+                {
+                    info.point.data.outdoorTemperature != null ?
+                        <div>
+                            <OutdoorIcon size={ 18 } color={ AppConstants.colors.outdoorColor } />
+                            <div>Наружный воздух:</div>
+                            <div>{info.point.data.outdoorTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
+                        </div>
+                        : null
+                }
+                {
+                    info.point.data.supplyPipeTemperature  != null ?
+                        <div>
+                            <SupplyPipeIcon size={ 18 } color={ AppConstants.colors.supplyPipeColor } />
+                            <div>Подача:</div>
+                            <div>{info.point.data.supplyPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
+                        </div>
+                        : null
+                }
+                {
+                    info.point.data.returnPipeTemperature != null ?
+                        <div>
+                            <ReturnPipeIcon size={ 18 } color={ AppConstants.colors.returnPipeColor } />
+                            <div>Обратка:</div>
+                            <div>{info.point.data.returnPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
+                        </div>
+                        : null
+                }
+            </div>
+        );
+    }
 
     return (
         <Chart
             className='temperature-graph-chart'
             ref={ chartRef }
             dataSource={ dataSource }
-            height={ () => AppConstants.pageHeight  }
+            height={ () => AppConstants.pageHeight }
             margin={ { top: 10, bottom: 10, left: 10, right: 10 } }
         >
             <Tooltip
                 enabled
                 arrowLength={ 5 }
                 opacity={ 1 }
-                contentRender={ () => {  return null } }
+                contentRender={ TooltipTemplate }
             />
             <Crosshair
                 enabled
@@ -36,7 +82,7 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
             </ArgumentAxis>
 
             <ValueAxis name='outdoorAxis' position='right'>
-                <Tick length={ 4 } shift={ 2 }/>
+                <Tick length={ 4 } shift={ 2 } />
                 <Title text={ formatMessage('app-outdoor-temperature') } >
                     <Font size={ 12 } />
                 </Title>
@@ -64,7 +110,7 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                 }) => {
                     switch (seriesInfo.seriesName) {
                         case 'supplyPipe':
-                            return'Подача'
+                            return 'Подача'
                         case 'returnPipe':
                             return 'Обратка'
                         case 'outdoor':
@@ -75,7 +121,7 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                 } }
                 position='inside'
                 verticalAlignment='top'
-                horizontalAlignment= { 'right' }
+                horizontalAlignment={ 'left' }
                 itemTextPosition='right'
                 columnCount={ 1 }
                 markerSize={ 10 }
@@ -88,7 +134,7 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                                     ? <circle cx={ 5 } cy={ 5 } r={ 5 } fill={ AppConstants.colors.supplyPipeColor }></circle>
                                     : markerInfo.series.name === 'returnPipe' ? <rect x={ 0 } y={ 0 } width={ 9 } height={ 9 } fill={ AppConstants.colors.returnPipeColor }></rect>
 
-                                    : <polygon points={ '5,0 0,10 10,10 ' } fill={ AppConstants.colors.outdoorColor } />
+                                        : <polygon points={ '5,0 0,10 10,10 ' } fill={ AppConstants.colors.outdoorColor } />
                             }
                         </>
                     )
@@ -102,7 +148,7 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                 argumentField="datetime"
                 showInLegend={ true }
                 type='spline' color={ AppConstants.colors.supplyPipeColor }>
-                    <Point visible={ true } size={ 8 } symbol='circle'/>
+                <Point visible={ true } size={ 8 } symbol='circle' />
             </Series>
 
             <Series
@@ -113,7 +159,7 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                 showInLegend={ true }
                 color={ AppConstants.colors.returnPipeColor }
                 type='spline' >
-                    <Point visible={ true } size={ 8 } symbol='square'/>
+                <Point visible={ true } size={ 8 } symbol='square' />
             </Series>
 
             <Series
@@ -125,7 +171,7 @@ export const ArchivesChart = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                 color={ AppConstants.colors.outdoorColor }
                 type='spline'
             >
-                <Point visible={ true } size={ 8 } symbol='triangle'/>
+                <Point visible={ true } size={ 8 } symbol='triangle' />
             </Series>
         </Chart>
     );
