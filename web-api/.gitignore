@@ -141,3 +141,11 @@ cython_debug/
 celerybeat-schedule*.*
 
 distro
+
+log
+
+HEATING__0
+HOT_WATER__1
+
+HEATING__1
+HOT_WATER__0

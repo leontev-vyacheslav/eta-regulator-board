@@ -6,4 +6,4 @@ gunicorn==21.2.0
 pyjwt==2.4.0
 pyaes==1.6.1
 smbus2==0.4.3
-# spidev==3.5
+spidev==3.5

@@ -80,17 +80,12 @@ class RegulationEngine:
 
         self._heating_circuit_settings: HeatingCircuitModel = self._get_settings()
 
-        # log_name = f'{self._heating_circuit_settings.type.name}_{self._heating_circuit_index}_{datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.log'
-        # log_path = pathlib.Path(__file__).parent.parent.parent.joinpath(
-        #     f'log/{log_name}'
-        # )
 
         self._logger = build_logger(
             name='regulation_engine_logger',
             heating_circuit_index=heating_circuit_index,
             heating_circuit_type=self._heating_circuit_settings.type,
             default_level=logging.INFO if logging_level == RegulationEngineLoggingLevelModel.NORMAL else logging.DEBUG,
-            # default_handler=logging.FileHandler(log_path)
         )
 
         self._last_refreshing_settings_time = time()
