@@ -2,7 +2,9 @@ Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
 
 $APP_ROOT = "/web-api"
 
-# TODO: */5 * * * * cd /mnt/mmcblk0p1/eta-regulator-board/web-api && ./restart.sh
+# deleting unnecessary files and folders
+Remove-Item -Path "./data/archives" -Recurse -Force
+Remove-Item -Path "./log" -Recurse -Force
 
 # Check connection
 $testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1
@@ -65,7 +67,7 @@ Write-Host
 # Copying updated files...
 Write-Host "Copying updated files..." -ForegroundColor Green
 
-$remoteOutput = scp -r src data log ./startup.sh ./restart.sh ./requirements.txt ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT} *>&1
+$remoteOutput = scp -r src data ./startup.sh ./restart.sh ./requirements.txt ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT} *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
     exit

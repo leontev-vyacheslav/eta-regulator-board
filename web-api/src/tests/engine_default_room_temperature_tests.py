@@ -1,8 +1,8 @@
 from datetime import datetime, timezone
+import logging
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
-from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
 from regulation.engine import RegulationEngine
 from tests.testable_engines.auto_control_mode_testable_regulation_engine import AutoControlModeTestableRegulationEngine
 from tests.testable_engines.schedules_testable_regulation_engine import SchedulesTestableRegulationEngine
@@ -21,7 +21,7 @@ def get_default_room_temperature_no_comfort_or_econom_modes_check():
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
+        logging_level=logging.DEBUG
     )
 
     default_room_temperature = engine._get_target_temperature()
@@ -37,7 +37,7 @@ def get_default_room_temperature_comfort_no_schedules_check():
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
+        logging_level=logging.DEBUG
     )
 
     assertable_default_room_temperature = float('inf')
@@ -57,7 +57,7 @@ def get_default_room_temperature_comfort_no_schedule_for_weekday_check():
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
+        logging_level=logging.DEBUG
     )
 
     assertable_default_room_temperature = float('inf')
@@ -86,7 +86,7 @@ def get_default_room_temperature_comfort_has_schedule_no_window_check():
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
+        logging_level=logging.DEBUG
     )
 
     assertable_default_room_temperature = float('inf')
@@ -114,7 +114,7 @@ def get_default_room_temperature_comfort_has_schedule_check():
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
+        logging_level=logging.DEBUG
     )
 
     assertable_default_room_temperature = base_testable_settings.control_parameters.comfort_temperature

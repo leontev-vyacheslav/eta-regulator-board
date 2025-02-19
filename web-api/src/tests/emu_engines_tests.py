@@ -5,7 +5,6 @@ from threading import Event as ThreadingEvent, Thread
 import pytest
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
-from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
 from regulation.engine import RegulationEngine
 from tests.emulation_engines.emu_supply_pipe_temp_step_variation_regulation_engine import EmuSupplyPipeTempStepVariationRegulationEngine
 from tests.emulation_engines.emu_outdoor_temp_step_variation_regulation_engine import EmuOutdoorTempStepVariationRegulationEngine
@@ -48,7 +47,7 @@ def supply_pipe_temp_step_variation_check(get_regulation_engine_equipment, durat
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE,
+        logging_level=logging.DEBUG,
         step_duration=duration / 3
     )
     assert engine is not None
@@ -64,7 +63,7 @@ def outdoor_temp_step_variation_check(get_regulation_engine_equipment, duration:
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE,
+        logging_level=logging.DEBUG,
         step_duration=duration / 3
     )
 

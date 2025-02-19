@@ -14,7 +14,6 @@ from freezegun import freeze_time
 from models.regulator.archive_model import ArchiveModel
 from models.regulator.archives_model import ArchivesModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
-from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
 from regulation.engine import RegulationEngine
 
 
@@ -31,7 +30,7 @@ def get_regulation_engine() -> RegulationEngine:
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
+        logging_level=logging.DEBUG
     )
 
 

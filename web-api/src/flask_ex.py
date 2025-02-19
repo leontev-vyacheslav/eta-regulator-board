@@ -7,6 +7,7 @@ from typing import Callable, List, Optional, Any, Union
 from flask import Flask
 from data_access.accounts_settings_repository import AccountsSettingsRepository
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
+from loggers.default_logger_formatter import DefaultLoggingFormatter
 from models.common.accounts_settings_model import AccountsSettingsModel
 
 from models.common.internal_settings_model import InternalSettingsModel
@@ -46,12 +47,18 @@ class FlaskEx(Flask):
 
         self.app_root_path = pathlib.Path(os.path.dirname(__file__)).parent
 
+        log_path = self.app_root_path.joinpath('log')
+        if not log_path.exists():
+            log_path.mkdir()
+
+        archives_path = self.app_root_path.joinpath('data/archives/')
+        if not archives_path.exists():
+            archives_path.mkdir()
+
         self.worker_logger: Logger = self._init_worker_logger()
         self.internal_settings = self._init_internal_settings()
         self.app_background_processes: List[AppBackgroundProcessModel] = []
         self.app_logger = build_logger('default_app_logger')
-
-        # self.regulator_settings_repository = RegulatorSettingsRepository()
 
     def api_route(self, rule: str, **options: Any) -> Callable:
         return self.route(f'/api{rule}', **options)
@@ -59,17 +66,11 @@ class FlaskEx(Flask):
     def _init_worker_logger(self) -> Logger:
         logger = logging.getLogger('worker_logger')
         logger.setLevel(logging.INFO)
-        log_path = self.app_root_path.joinpath('log', 'worker.log')
+        worker_log_path = self.app_root_path.joinpath('log', 'worker.log')
 
-        if not log_path.exists():
-            if not log_path.parent.exists():
-                log_path.parent.mkdir(parents=True)
-            log_path.write_text(data=str(), encoding='utf-8')
-
-        file_handler = logging.FileHandler(f'{log_path}', mode='w')
-        formatter = logging.Formatter(
-            fmt='%(asctime)s [%(levelname)s] %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
+        file_handler = logging.FileHandler(f'{worker_log_path}', mode='w')
+        formatter = DefaultLoggingFormatter(
+            f'[%(utctime)s] [%(pid)d] [%(levelname)s] %(message)s'
         )
         file_handler.setLevel(logging.INFO)
         file_handler.setFormatter(formatter)

@@ -18,7 +18,6 @@ from models.regulator.enums.valve_direction_model import ValveDirectionModel
 
 import regulation.equipments as equipments
 from loggers.engine_logger_builder import build as build_logger
-from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
 from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.temperature_graph_model import TemperatureGraphItemModel
 from models.regulator.archives_model import ArchivesModel, DailySavedArchivesModel
@@ -55,7 +54,7 @@ class RegulationEngine:
     regulation_slept_debug_msg = 'The regulation thread executed/slept during %.6f / %.6f sec.'
 
     measured_temperatures_debug_msg = 'The measured temperatures: OUTDOOR=%.2f, ROOM=%.2f SUPPLY=%.2f; RETURN=%.2f'
-    calculated_temperatures_debug_msg = 'The calculated temperatures: SUPPLY=%.2f; RETURN=%.2f'
+    calculated_temperatures_debug_msg = 'The calculated temperatures: SUPPLY=%.2f, RETURN=%.2f'
     settings_refresh_debug_msg = 'Settings was refreshed'
     writing_archives_debug_msg = 'Writing archives has been completed: %s'
     getting_current_rtc_debug_msg = 'Current RTC datetime: %s'
@@ -64,8 +63,7 @@ class RegulationEngine:
     analog_impact_result_debug_msg = 'The analog impact result: ANL=%.2f%%'
     writing_archives_error_msg = 'An error has happened during writing archives: %s'
 
-    def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: RegulationEngineLoggingLevelModel) -> None:
-        self._logging_level = logging_level
+    def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: int) -> None:
 
         self._heating_circuit_index = heating_circuit_index
         self._process_cancellation_event = process_cancellation_event
@@ -85,7 +83,7 @@ class RegulationEngine:
             name='regulation_engine_logger',
             heating_circuit_index=heating_circuit_index,
             heating_circuit_type=self._heating_circuit_settings.type,
-            default_level=logging.INFO if logging_level == RegulationEngineLoggingLevelModel.NORMAL else logging.DEBUG,
+            default_level=logging_level,
         )
 
         self._last_refreshing_settings_time = time()
@@ -628,7 +626,7 @@ class RegulationEngine:
                     pulse_duration_valve = self._heating_circuit_settings.regulation_parameters.pulse_duration_valve
                     analog_valve_impact = analog_valve_impact + pid_impact_result.impact / (pulse_duration_valve / self._calculation_period)
 
-                    self._logger.info(RegulationEngine.analog_impact_result_debug_msg, analog_valve_impact)
+                    self._logger.debug(RegulationEngine.analog_impact_result_debug_msg, analog_valve_impact)
 
                     if analog_valve_impact > 100.0:
                         analog_valve_impact = 100.0
@@ -819,6 +817,6 @@ def regulation_engine_starter(heating_circuit_index: HeatingCircuitIndexModel, p
         heating_circuit_index=heating_circuit_index,
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
+        logging_level=logging.DEBUG
     )
     engine.start()

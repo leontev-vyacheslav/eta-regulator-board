@@ -4,7 +4,6 @@ from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 from models.regulator.archive_model import ArchiveModel
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
-from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
 from models.regulator.heating_circuits_model import HeatingCircuitModel
 from models.regulator.pid_impact_entry_model import PidImpactEntryModel
 from tests.testable_engines.base_settings_testable_regulation_engine import BaseSettingsTestableRegulationEngine
@@ -21,7 +20,7 @@ def get_pid_impact_components_check():
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
         hardwares_process_lock=hardware_process_lock,
-        logging_level=RegulationEngineLoggingLevelModel.FULL_TRACE
+        logging_level=logging.DEBUG
     )
 
     asserted_archive = ArchiveModel(

@@ -8,7 +8,6 @@ from typing import Optional
 from loggers.engine_logger_builder import build as build_logger
 from models.regulator.archive_model import ArchiveModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
-from models.regulator.enums.regulation_engine_mode_model import RegulationEngineLoggingLevelModel
 from models.regulator.pid_impact_entry_model import PidImpactEntryModel, PidImpactResultComponentsModel
 from models.regulator.temperature_graph_model import TemperatureGraphItemModel
 from regulation.engine import RegulationEngine
@@ -27,7 +26,7 @@ class EmuSupplyPipeTempStepVariationRegulationEngine(RegulationEngine):
         LOW = 1
         HIGH = 2
 
-    def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: RegulationEngineLoggingLevelModel, step_duration: float) -> None:
+    def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: int, step_duration: float) -> None:
         super().__init__(heating_circuit_index, process_cancellation_event, hardwares_process_lock, logging_level)
 
         self.step_duration = step_duration
