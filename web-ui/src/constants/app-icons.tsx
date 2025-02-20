@@ -79,6 +79,11 @@ export { RxArchive as ArchivesIcon } from 'react-icons/rx';
 export { IoMdKey as AccessTokenIcon } from 'react-icons/io';
 export { IoIosLock as LockIcon } from 'react-icons/io';
 
+export { IoEllipseSharp as SupplyPipeChartSingIcon } from 'react-icons/io5';
+export { IoSquareSharp as ReturnPipeChartSingIcon } from 'react-icons/io5';
+export { IoTriangleSharp as OutdoorChartSingIcon } from 'react-icons/io5';
+export { IoTimeSharp as TimeChartSingIcon } from 'react-icons/io5';
+
 
 import { MdMoreVert } from 'react-icons/md';
 export const GridAdditionalMenuIcon = () => <MdMoreVert style={ { cursor: 'pointer' } } size={ 18 } />

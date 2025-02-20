@@ -137,3 +137,4 @@ cython_debug/
 celerybeat-schedule*.*
 
 .idea
+.temp

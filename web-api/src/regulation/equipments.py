@@ -1,5 +1,5 @@
 from time import sleep
-from datetime import datetime
+from datetime import datetime, timezone
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
@@ -46,7 +46,7 @@ def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 
 
 def get_rtc_datetime() -> datetime:
     if is_debug():
-        return datetime.utcnow()
+        return datetime.utcnow().replace(tzinfo=timezone.utc)
 
     with DS1307() as rtc:
         rtc_now = rtc.read_datetime()

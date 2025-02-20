@@ -105,6 +105,10 @@ export const ArchivesPage = () => {
             }
             const archives = await getArchivesByDateAsync(circuitId, archivesDate);
             if (archives) {
+                archives.items = archives.items.map(a => {
+                    // converting to the locale date/time
+                    return { ...a, datetime: new Date(a.datetime) }
+                });
                 setArchives(archives.items);
             }
         })();

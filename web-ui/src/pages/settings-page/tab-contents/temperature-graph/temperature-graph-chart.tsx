@@ -3,7 +3,7 @@ import Chart, { ArgumentAxis, CommonAxisSettings, Crosshair, Font, Grid, Legend,
 import { useTemperatureGraphContext } from './temperature-graph-context';
 import { getUuidV4 } from '../../../../utils/uuid';
 import AppConstants from '../../../../constants/app-constants';
-import { OutdoorIcon, ReturnPipeIcon, SupplyPipeIcon } from '../../../../constants/app-icons';
+import { OutdoorChartSingIcon, ReturnPipeChartSingIcon, SupplyPipeChartSingIcon } from '../../../../constants/app-icons';
 import ArrayStore from 'devextreme/data/array_store';
 import { TemperatureGraphItemModel } from '../../../../models/regulator-settings/temperature-graph-model';
 import { formatMessage } from 'devextreme/localization';
@@ -14,17 +14,17 @@ const TooltipTemplate = (info: any) => {
     return (
         <div className='temperature-graph-tooltip' data-guid={ getUuidV4() } style={ {  } }>
             <div>
-                <OutdoorIcon size={ 18 } />
+                <OutdoorChartSingIcon size={ 18 } color={ AppConstants.colors.outdoorColor }/>
                 <div>Наружный воздух:</div>
                 <div>{`${info.point.data.outdoorTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })}`} °C</div>
             </div>
             <div>
-                <SupplyPipeIcon size={ 18 } />
+                <SupplyPipeChartSingIcon size={ 18 } color={ AppConstants.colors.supplyPipeColor }/>
                 <div>Подача:</div>
                 <div>{info.point.data.supplyPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
             </div>
             <div>
-                <ReturnPipeIcon size={ 18 } />
+                <ReturnPipeChartSingIcon size={ 18 } color={ AppConstants.colors.returnPipeColor } />
                 <div>Обратка:</div>
                 <div>{info.point.data.returnPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
             </div>

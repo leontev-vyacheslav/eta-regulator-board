@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import AppConstants from '../../constants/app-constants';
 import { ArchiveModel } from '../../models/regulator-settings/archive-model';
 import { formatMessage } from 'devextreme/localization';
-import { CurrentDateIcon, OutdoorIcon, ReturnPipeIcon, SupplyPipeIcon } from '../../constants/app-icons';
+import { OutdoorChartSingIcon, ReturnPipeChartSingIcon, SupplyPipeChartSingIcon, TimeChartSingIcon } from '../../constants/app-icons';
 import { getUuidV4 } from '../../utils/uuid';
 
 export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) => {
@@ -16,7 +16,7 @@ export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) =>
                 {
                     info.point.data.datetime != null  ?
                         <div>
-                            <CurrentDateIcon size={ 18 }  />
+                            <TimeChartSingIcon size={ 18 } />
                             <div>Время:</div>
                             <div>{(info.point.data.datetime as Date).toLocaleString('ru-RU')}</div>
                         </div>
@@ -25,7 +25,7 @@ export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) =>
                 {
                     info.point.data.outdoorTemperature != null ?
                         <div>
-                            <OutdoorIcon size={ 18 } color={ AppConstants.colors.outdoorColor } />
+                            <OutdoorChartSingIcon size={ 18 } color={ AppConstants.colors.outdoorColor } />
                             <div>Наружный воздух:</div>
                             <div>{info.point.data.outdoorTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
                         </div>
@@ -34,7 +34,7 @@ export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) =>
                 {
                     info.point.data.supplyPipeTemperature  != null ?
                         <div>
-                            <SupplyPipeIcon size={ 18 } color={ AppConstants.colors.supplyPipeColor } />
+                            <SupplyPipeChartSingIcon size={ 18 } color={ AppConstants.colors.supplyPipeColor } />
                             <div>Подача:</div>
                             <div>{info.point.data.supplyPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
                         </div>
@@ -43,7 +43,7 @@ export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) =>
                 {
                     info.point.data.returnPipeTemperature != null ?
                         <div>
-                            <ReturnPipeIcon size={ 18 } color={ AppConstants.colors.returnPipeColor } />
+                            <ReturnPipeChartSingIcon size={ 18 } color={ AppConstants.colors.returnPipeColor } />
                             <div>Обратка:</div>
                             <div>{info.point.data.returnPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
                         </div>

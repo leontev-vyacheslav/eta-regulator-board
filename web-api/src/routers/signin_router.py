@@ -31,7 +31,7 @@ def signin(body: SignInModel):
     if hashed_signin_password == account.password:
         token = jwt.encode({
             'mac_address': mac_address,
-            'exp': datetime.utcnow() + timedelta(minutes=30)
+            'exp': datetime.utcnow() + timedelta(days=1)
         }, account.password)
 
         return JsonResponse(

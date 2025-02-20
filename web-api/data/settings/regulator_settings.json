@@ -71,32 +71,32 @@
                             "windows": [
                                 {
                                     "id": "3cb8098c-3fe2-4773-b0d7-0ab79d42c31b",
-                                    "startTime": "2023-12-10T21:00:00+00:00",
-                                    "endTime": "2023-12-11T02:00:00+00:00",
+                                    "startTime": "2023-12-10T21:00:00Z",
+                                    "endTime": "2023-12-11T02:00:00Z",
                                     "desiredTemperatureMode": 3
                                 },
                                 {
                                     "id": "474ef98e-47a3-467b-bb5e-1855a795fa96",
-                                    "startTime": "2023-12-11T02:00:00+00:00",
-                                    "endTime": "2023-12-11T07:00:00+00:00",
+                                    "startTime": "2023-12-11T02:00:00Z",
+                                    "endTime": "2023-12-11T07:00:00Z",
                                     "desiredTemperatureMode": 2
                                 },
                                 {
                                     "id": "0309e215-c830-42e5-91ac-1a1ac238bd93",
-                                    "startTime": "2023-12-11T07:00:00+00:00",
-                                    "endTime": "2023-12-11T13:00:00+00:00",
+                                    "startTime": "2023-12-11T07:00:00Z",
+                                    "endTime": "2023-12-11T13:00:00Z",
                                     "desiredTemperatureMode": 3
                                 },
                                 {
                                     "id": "5c6b6182-6284-45ff-8ee6-d52e69859b49",
-                                    "startTime": "2023-12-11T13:00:00+00:00",
-                                    "endTime": "2023-12-11T18:00:00+00:00",
+                                    "startTime": "2023-12-11T13:00:00Z",
+                                    "endTime": "2023-12-11T18:00:00Z",
                                     "desiredTemperatureMode": 2
                                 },
                                 {
                                     "id": "86ed22de-dabc-492a-9c05-d49ec435151b",
-                                    "startTime": "2023-12-11T18:00:00+00:00",
-                                    "endTime": "2023-12-11T20:59:59+00:00",
+                                    "startTime": "2023-12-11T18:05:00Z",
+                                    "endTime": "2023-12-11T20:59:59Z",
                                     "desiredTemperatureMode": 3
                                 }
                             ]
@@ -107,32 +107,32 @@
                             "windows": [
                                 {
                                     "id": "60d33255-523e-4608-aef9-f2f3eb5c3298",
-                                    "startTime": "2023-12-10T21:00:00+00:00",
-                                    "endTime": "2023-12-11T02:00:00+00:00",
+                                    "startTime": "2023-12-10T21:00:00Z",
+                                    "endTime": "2023-12-11T02:00:00Z",
                                     "desiredTemperatureMode": 3
                                 },
                                 {
                                     "id": "9c35f9c7-d0d8-49d5-aef7-8d45c2ab2f5e",
-                                    "startTime": "2023-12-11T02:00:00+00:00",
-                                    "endTime": "2023-12-11T07:00:00+00:00",
+                                    "startTime": "2023-12-11T02:00:00Z",
+                                    "endTime": "2023-12-11T07:00:00Z",
                                     "desiredTemperatureMode": 2
                                 },
                                 {
                                     "id": "a9796a1c-344d-41da-a0ba-6e5cbc1e3655",
-                                    "startTime": "2023-12-11T07:00:00+00:00",
-                                    "endTime": "2023-12-11T13:00:00+00:00",
+                                    "startTime": "2023-12-11T07:00:00Z",
+                                    "endTime": "2023-12-11T13:00:00Z",
                                     "desiredTemperatureMode": 3
                                 },
                                 {
                                     "id": "c11f4693-901b-4683-b899-a011d9936a8f",
-                                    "startTime": "2023-12-11T13:00:00+00:00",
-                                    "endTime": "2023-12-11T18:00:00+00:00",
+                                    "startTime": "2023-12-11T13:00:00Z",
+                                    "endTime": "2023-12-11T18:00:00Z",
                                     "desiredTemperatureMode": 2
                                 },
                                 {
                                     "id": "11dc297c-777b-49ca-b344-973860bb0383",
-                                    "startTime": "2023-12-11T18:00:00+00:00",
-                                    "endTime": "2023-12-11T20:59:59+00:00",
+                                    "startTime": "2023-12-11T18:00:00Z",
+                                    "endTime": "2023-12-11T20:59:59Z",
                                     "desiredTemperatureMode": 3
                                 }
                             ]
@@ -143,32 +143,32 @@
                             "windows": [
                                 {
                                     "id": "886627b6-15fc-4e82-84bb-6a2d5e2e704a",
-                                    "startTime": "2023-12-10T21:00:00+00:00",
-                                    "endTime": "2023-12-11T02:00:00+00:00",
+                                    "startTime": "2023-12-10T21:00:00Z",
+                                    "endTime": "2023-12-11T02:00:00Z",
                                     "desiredTemperatureMode": 3
                                 },
                                 {
                                     "id": "a2f5475d-e133-4a7e-b66e-dcf9dcaa9f71",
-                                    "startTime": "2023-12-11T02:00:00+00:00",
-                                    "endTime": "2023-12-11T07:00:00+00:00",
+                                    "startTime": "2023-12-11T02:00:00Z",
+                                    "endTime": "2023-12-11T07:00:00Z",
                                     "desiredTemperatureMode": 2
                                 },
                                 {
                                     "id": "325ca5f7-934e-4bbf-bc6c-d0b85fab3a36",
-                                    "startTime": "2023-12-11T07:00:00+00:00",
-                                    "endTime": "2023-12-11T13:00:00+00:00",
+                                    "startTime": "2023-12-11T07:00:00Z",
+                                    "endTime": "2023-12-11T13:00:00Z",
                                     "desiredTemperatureMode": 3
                                 },
                                 {
                                     "id": "0a96298c-41f2-4dc3-bc6e-d3c1e53de209",
-                                    "startTime": "2023-12-11T13:00:00+00:00",
-                                    "endTime": "2023-12-11T18:00:00+00:00",
+                                    "startTime": "2023-12-11T13:00:00Z",
+                                    "endTime": "2023-12-11T18:00:00Z",
                                     "desiredTemperatureMode": 2
                                 },
                                 {
                                     "id": "d6ca1f9c-22e1-4005-8dc7-5b2793283df4",
-                                    "startTime": "2023-12-11T18:00:00+00:00",
-                                    "endTime": "2023-12-11T20:59:59+00:00",
+                                    "startTime": "2023-12-11T18:00:00Z",
+                                    "endTime": "2023-12-11T20:59:59Z",
                                     "desiredTemperatureMode": 3
                                 }
                             ]
@@ -179,32 +179,32 @@
                             "windows": [
                                 {
                                     "id": "a37a5c7e-4075-4a30-90a5-bf8db9f0c9e6",
-                                    "startTime": "2023-12-10T21:00:00+00:00",
-                                    "endTime": "2023-12-11T02:00:00+00:00",
+                                    "startTime": "2023-12-10T21:00:00Z",
+                                    "endTime": "2023-12-11T02:00:00Z",
                                     "desiredTemperatureMode": 3
                                 },
                                 {
                                     "id": "debb49a4-493e-49c8-bbdb-552491c40eaf",
-                                    "startTime": "2023-12-11T02:00:00+00:00",
-                                    "endTime": "2023-12-11T07:00:00+00:00",
+                                    "startTime": "2023-12-11T02:00:00Z",
+                                    "endTime": "2023-12-11T07:00:00Z",
                                     "desiredTemperatureMode": 2
                                 },
                                 {
                                     "id": "adb87996-b35e-4441-be19-037241710bfa",
-                                    "startTime": "2023-12-11T07:00:00+00:00",
-                                    "endTime": "2023-12-11T13:00:00+00:00",
+                                    "startTime": "2023-12-11T07:00:00Z",
+                                    "endTime": "2023-12-11T13:00:00Z",
                                     "desiredTemperatureMode": 3
                                 },
                                 {
                                     "id": "3dbb2ad1-66b9-486a-aa9e-65b04573bbfa",
-                                    "startTime": "2023-12-11T13:00:00+00:00",
-                                    "endTime": "2023-12-11T18:00:00+00:00",
+                                    "startTime": "2023-12-11T13:00:00Z",
+                                    "endTime": "2023-12-11T18:00:00Z",
                                     "desiredTemperatureMode": 2
                                 },
                                 {
                                     "id": "5af39513-cf24-4a5c-826c-b2cb1f2570a2",
-                                    "startTime": "2023-12-11T18:00:00+00:00",
-                                    "endTime": "2023-12-11T20:59:59+00:00",
+                                    "startTime": "2023-12-11T18:00:00Z",
+                                    "endTime": "2023-12-11T20:59:59Z",
                                     "desiredTemperatureMode": 3
                                 }
                             ]
@@ -215,32 +215,32 @@
                             "windows": [
                                 {
                                     "id": "432c894e-35be-4d8f-a334-6725d7c36d46",
-                                    "startTime": "2023-12-10T21:00:00+00:00",
-                                    "endTime": "2023-12-11T02:00:00+00:00",
+                                    "startTime": "2023-12-10T21:00:00Z",
+                                    "endTime": "2023-12-11T02:00:00Z",
                                     "desiredTemperatureMode": 3
                                 },
                                 {
                                     "id": "4acc0c08-5c0d-43ab-9a59-6524de08987c",
-                                    "startTime": "2023-12-11T02:00:00+00:00",
-                                    "endTime": "2023-12-11T07:00:00+00:00",
+                                    "startTime": "2023-12-11T02:00:00Z",
+                                    "endTime": "2023-12-11T07:00:00Z",
                                     "desiredTemperatureMode": 2
                                 },
                                 {
                                     "id": "f112b9ab-2bd1-4c0c-a605-b0fd68ebfa88",
-                                    "startTime": "2023-12-11T07:00:00+00:00",
-                                    "endTime": "2023-12-11T13:00:00+00:00",
+                                    "startTime": "2023-12-11T07:00:00Z",
+                                    "endTime": "2023-12-11T13:00:00Z",
                                     "desiredTemperatureMode": 3
                                 },
                                 {
                                     "id": "cf8d2293-3b6d-4ce0-a10d-584e9c4ca090",
-                                    "startTime": "2023-12-11T13:00:00+00:00",
-                                    "endTime": "2023-12-11T18:00:00+00:00",
+                                    "startTime": "2023-12-11T13:00:00Z",
+                                    "endTime": "2023-12-11T18:00:00Z",
                                     "desiredTemperatureMode": 2
                                 },
                                 {
                                     "id": "fdfadb10-a701-426a-8611-f0800520ead7",
-                                    "startTime": "2023-12-11T18:00:00+00:00",
-                                    "endTime": "2023-12-11T20:59:59+00:00",
+                                    "startTime": "2023-12-11T18:00:00Z",
+                                    "endTime": "2023-12-11T20:59:59Z",
                                     "desiredTemperatureMode": 3
                                 }
                             ]
@@ -251,8 +251,8 @@
                             "windows": [
                                 {
                                     "id": "9bd3426c-6647-471c-870a-912c4f4a2c18",
-                                    "startTime": "2023-12-10T21:00:00+00:00",
-                                    "endTime": "2023-12-11T20:59:59+00:00",
+                                    "startTime": "2023-12-10T21:00:00Z",
+                                    "endTime": "2023-12-11T20:59:59Z",
                                     "desiredTemperatureMode": 2
                                 }
                             ]
@@ -263,8 +263,8 @@
                             "windows": [
                                 {
                                     "id": "115489cf-e8d5-4f5c-be86-9444d83a730b",
-                                    "startTime": "2023-12-10T21:00:00+00:00",
-                                    "endTime": "2023-12-11T20:59:59+00:00",
+                                    "startTime": "2023-12-10T21:00:00Z",
+                                    "endTime": "2023-12-11T20:59:59Z",
                                     "desiredTemperatureMode": 2
                                 }
                             ]
@@ -289,7 +289,7 @@
                 "name": "Контур ГВС",
                 "type": 2,
                 "controlParameters": {
-                    "controlMode": 1,
+                    "controlMode": 6,
                     "manualControlMode": null,
                     "outdoorTemperatureSensorFailureAction": null,
                     "supplyPipeTemperatureSensorFailureAction": 2,
@@ -316,8 +316,8 @@
                             "windows": [
                                 {
                                     "id": "a5d84e3c-91e6-b93a-c382-b9765f9319b9",
-                                    "startTime": "2024-10-08T21:00:52.451000+00:00",
-                                    "endTime": "2024-10-08T22:00:44.302000+00:00",
+                                    "startTime": "2024-10-08T21:00:52Z",
+                                    "endTime": "2024-10-08T22:00:44Z",
                                     "desiredTemperatureMode": 2
                                 }
                             ]

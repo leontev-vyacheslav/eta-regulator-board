@@ -6,6 +6,7 @@ import routes from '../../constants/app-api-routes';
 import { ArchivesModel } from '../../models/regulator-settings/archives-model';
 import { ArchiveExistsModel,  SharedRegulatorStateModel } from '../../models/regulator-settings/archive-model';
 import { parseCustomJson } from './../../utils/custom-json-parser';
+import moment from 'moment';
 
 export type AppDataContextArchivesEndpointsModel = {
     getArchivesByDateAsync: (circuitId: number, date: Date) => Promise<ArchivesModel | null>;
@@ -18,10 +19,9 @@ export const useArchivesData = () => {
     const authHttpRequest = useAuthHttpRequest();
 
     const getArchivesByDateAsync = useCallback(async (circuitId: number, date: Date) => {
-        // date.setHours(0, 0, 0, 0);
 
         const response = await authHttpRequest({
-            url: `${routes.host}${routes.archives}/${circuitId}/${date.toISOString()}`,
+            url: `${routes.host}${routes.archives}/${circuitId}/${moment(date).format()}`,
             method: HttpConstants.Methods.Get as Method,
         });
 
@@ -39,10 +39,8 @@ export const useArchivesData = () => {
     }, [authHttpRequest]);
 
     const getExistsArchivesByDateAsync = useCallback(async (circuitId: number, date: Date) => {
-        // date.setHours(0, 0, 0, 0);
-
         const response = await authHttpRequest({
-            url: `${routes.host}${routes.archives}/exists/${circuitId}/${date.toISOString()}`,
+            url: `${routes.host}${routes.archives}/exists/${circuitId}/${moment(date).format()}`,
             method: HttpConstants.Methods.Get as Method,
         });
 
@@ -56,7 +54,7 @@ export const useArchivesData = () => {
 
     const getArchivesByDateAsFile = useCallback<(circuitId: number, date: Date) => Promise<any>>(async (circuitId: number, date: Date) => {
         const response = await authHttpRequest({
-            url: `${routes.host}${routes.archives}/download/${circuitId}/${date.toISOString()}`,
+            url: `${routes.host}${routes.archives}/download/${circuitId}/${moment(date).format()}`,
             responseType: 'blob',
             method: HttpConstants.Methods.Get as Method,
         });

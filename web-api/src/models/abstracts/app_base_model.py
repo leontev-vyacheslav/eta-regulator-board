@@ -1,5 +1,6 @@
 from abc import ABC
 from typing import Any, Dict
+from datetime import datetime
 from pydantic import BaseModel, root_validator
 
 from utils.strings import snake_to_camel
@@ -14,6 +15,9 @@ class AppBaseModel(ABC, BaseModel):
         alias_generator = snake_to_camel
         allow_population_by_field_name = True
         ensure_ascii = False
+        json_encoders = {
+            datetime: lambda v: v.strftime("%Y-%m-%dT%H:%M:%SZ")  # ISO 8601 format
+        }
 
     @root_validator(pre=True)
     def round_floats(cls, values: Dict[str, Any]) -> Dict[str, Any]:

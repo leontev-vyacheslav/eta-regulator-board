@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from smbus2 import SMBus
 
 from omega.decoders import bcd_to_int, int_to_bcd
@@ -24,7 +24,7 @@ class DS1307:
         self._bus.close()
 
 
-    def read_datetime(self, century=21, tzinfo=None):
+    def read_datetime(self, century=21):
         block = self._bus.read_i2c_block_data(self._addr, self._REG_SECONDS, self._REG_CONTROL)
 
         seconds = bcd_to_int(block[self._REG_SECONDS])
@@ -48,7 +48,7 @@ class DS1307:
             minutes,
             seconds,
             0,
-            tzinfo=tzinfo
+            tzinfo=timezone.utc
         )
 
     def write_datetime(self, dt: datetime):
