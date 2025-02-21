@@ -19,7 +19,7 @@ def launch_regulation_engines(app: FlaskEx, target_heating_circuit_index: Option
     heating_circuits = regulator_settings.heating_circuits.items
     regulation_engine_starter: Optional[Callable] = None
 
-    def launch(index: int, item: HeatingCircuitModel):
+    def __launch(index: int, item: HeatingCircuitModel):
         if item.control_parameters.control_mode == ControlModeModel.OFF:
             return
 
@@ -57,7 +57,7 @@ def launch_regulation_engines(app: FlaskEx, target_heating_circuit_index: Option
             if heating_circuit.type in regulation_engine_starter.heating_circuit_types
         ]
         for index, item in enumerate(heating_circuits):
-            launch(index, item)
+            __launch(index, item)
     else:
         target_heating_circuit = next((
             heating_circuit
@@ -65,4 +65,4 @@ def launch_regulation_engines(app: FlaskEx, target_heating_circuit_index: Option
             if index == target_heating_circuit_index
         ), None)
         if target_heating_circuit is not None:
-            launch(target_heating_circuit_index.value, target_heating_circuit)
+            __launch(target_heating_circuit_index.value, target_heating_circuit)

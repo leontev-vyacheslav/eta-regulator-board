@@ -12,7 +12,7 @@ from data_access.accounts_settings_repository import AccountsSettingsRepository
 from regulation.launcher import launch_regulation_engines
 from workers.worker_starter_extension import WorkerStarter
 
-APP_VERSION = 'v.0.1.20250218-144655'
+APP_VERSION = 'v.0.1.20250221-093848'
 APP_NAME = 'Eta Regulator Board Web API'
 
 MASTER_KEY = 'XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='

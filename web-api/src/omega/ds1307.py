@@ -41,14 +41,13 @@ class DS1307:
         year = bcd_to_int(block[self._REG_YEAR])
 
         return datetime(
-            (century - 1) * 100 + year,
-            month,
-            date,
-            hours,
-            minutes,
-            seconds,
-            0,
-            tzinfo=timezone.utc
+            year=(century - 1) * 100 + year,
+            month=month,
+            day=date,
+            hour=hours,
+            minute=minutes,
+            second=seconds,
+            tzinfo=timezone.utc,
         )
 
     def write_datetime(self, dt: datetime):

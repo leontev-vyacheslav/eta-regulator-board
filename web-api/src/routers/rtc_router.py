@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from flask_pydantic import validate
 
 from app import app
@@ -14,7 +14,7 @@ from utils.debugging import is_debug
 def get_rtc() -> RtcDateTimeModel:
 
     if is_debug():
-        return RtcDateTimeModel(datetime=datetime.now())
+        return RtcDateTimeModel(datetime=datetime.utcnow())
 
     with DS1307() as rtc:
         rtc_now = rtc.read_datetime()
