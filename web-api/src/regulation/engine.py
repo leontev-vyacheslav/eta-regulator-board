@@ -48,10 +48,12 @@ class RegulationEngine:
     sensors_polling_started_info_msg = 'The polling thread was STARTED.'
     sensors_polling_stopped_info_msg = 'The polling thread was STOPPED.'
     sensors_polling_slept_debug_msg = 'The polling thread executed/slept during %.6f / %.6f sec.\r\n'
+    sensors_polling_thread_error_msg = 'The polling thread was failed with the error: %s.'
 
-    regulation_started_info_msg = 'The regulation thread  was STARTED.'
+    regulation_started_info_msg = 'The regulation thread was STARTED.'
     regulation_stopped_info_msg = 'The regulation thread was STOPPED.'
     regulation_slept_debug_msg = 'The regulation thread executed/slept during %.6f / %.6f sec.'
+    regulation_thread_error_msg = 'The regulation thread was failed with the error: %s.'
 
     measured_temperatures_debug_msg = 'The measured temperatures: OUTDOOR=%.2f, ROOM=%.2f SUPPLY=%.2f; RETURN=%.2f'
     calculated_temperatures_debug_msg = 'The calculated temperatures: SUPPLY=%.2f, RETURN=%.2f'
@@ -78,9 +80,8 @@ class RegulationEngine:
 
         self._heating_circuit_settings: HeatingCircuitModel = self._get_settings()
 
-
         self._logger = build_logger(
-            name='regulation_engine_logger',
+            name=f'regulation_engine_logger_{heating_circuit_index}_{self._heating_circuit_settings.type.name}',
             heating_circuit_index=heating_circuit_index,
             heating_circuit_type=self._heating_circuit_settings.type,
             default_level=logging_level,
@@ -112,6 +113,7 @@ class RegulationEngine:
                 json = file.read()
             finally:
                 fcntl.flock(file, fcntl.LOCK_UN)
+        file = None
 
         regulator_settings = RegulatorSettingsModel.parse_raw(json)
 
@@ -270,6 +272,7 @@ class RegulationEngine:
                 os.fsync(shared_file.fileno())
             finally:
                 fcntl.flock(shared_file, fcntl.LOCK_UN)
+        shared_file = None
 
     def _save_archives(self, archive: ArchiveModel):
         """
@@ -325,6 +328,7 @@ class RegulationEngine:
                         json = zip_content.decode('utf-8')
                         existed_archives = ArchivesModel.parse_raw(json)
                         self._archives.items.extend(existed_archives.items)
+                    file = None
 
                 self._archives.items.append(archive)
 
@@ -334,6 +338,7 @@ class RegulationEngine:
                     file.write(
                         json_text.encode()
                     )
+                file = None
 
                 self._logger.debug(RegulationEngine.writing_archives_debug_msg, archive_file_name)
 
@@ -581,116 +586,120 @@ class RegulationEngine:
         deviation: float = float('inf')
         analog_valve_impact = 0.0
 
-        self._refresh_rtc_datetime()
+        with self._hardware_process_lock:
+            self._refresh_rtc_datetime()
 
+        try:
         # start polling
-        while True:
-            if threading_cancellation_event.is_set():
-                # stop polling
-                self._logger.info(RegulationEngine.sensors_polling_stopped_info_msg)
-                break
+            while True:
+                if threading_cancellation_event.is_set():
+                    # stop polling
+                    self._logger.info(RegulationEngine.sensors_polling_stopped_info_msg)
+                    break
 
-            start_time = time()
+                start_time = time()
 
-            # here it will be served a HEATING or VENTILATION type of the `regulation channel
-            # if self._heating_circuit_type in
+                # here it will be served a HEATING or VENTILATION type of the `regulation channel
+                # if self._heating_circuit_type in
 
-            # putting on a process lock while receiving archives and current datetime
-            with self._hardware_process_lock:
-                self._refresh_rtc_datetime()
-                archive = self._get_archive()
+                # putting on a process lock while receiving archives and current datetime
+                with self._hardware_process_lock:
+                    self._refresh_rtc_datetime()
+                    archive = self._get_archive()
 
-            self._save_archives(archive)
+                self._save_archives(archive)
 
-            # getting and sharing the failure action state among threads
-            failure_action_state = self._get_failure_action_state(archive)
-            with self._shared_failure_action_state_lock:
-                self._shared_failure_action_state = failure_action_state
+                # getting and sharing the failure action state among threads
+                failure_action_state = self._get_failure_action_state(archive)
+                with self._shared_failure_action_state_lock:
+                    self._shared_failure_action_state = failure_action_state
 
-            calculated_temperatures: TemperatureGraphItemModel = self._get_calculated_temperatures(archive.outdoor_temperature)
+                calculated_temperatures: TemperatureGraphItemModel = self._get_calculated_temperatures(archive.outdoor_temperature)
 
-            if failure_action_state in [FailureActionTypeModel.NO_FAILURE, FailureActionTypeModel.TEMPERATURE_SUSTENANCE]:
-                # calculating the PID impact result (a percentage value)
-                pid_impact_result = self._get_pid_impact_result(
-                    entry=PidImpactEntryModel(
+                if failure_action_state in [FailureActionTypeModel.NO_FAILURE, FailureActionTypeModel.TEMPERATURE_SUSTENANCE]:
+                    # calculating the PID impact result (a percentage value)
+                    pid_impact_result = self._get_pid_impact_result(
+                        entry=PidImpactEntryModel(
+                            failure_action_state=failure_action_state,
+                            archive=archive,
+                            deviation=deviation,
+                            total_deviation=total_deviation
+                        )
+                    )
+
+                    drive_unit_analog_control = self._heating_circuit_settings.regulation_parameters.drive_unit_analog_control
+
+                    if drive_unit_analog_control == True:
+                        pulse_duration_valve = self._heating_circuit_settings.regulation_parameters.pulse_duration_valve
+                        analog_valve_impact = analog_valve_impact + pid_impact_result.impact / (pulse_duration_valve / self._calculation_period)
+
+                        self._logger.debug(RegulationEngine.analog_impact_result_debug_msg, analog_valve_impact)
+
+                        if analog_valve_impact > 100.0:
+                            analog_valve_impact = 100.0
+                        elif analog_valve_impact < 0.0:
+                            analog_valve_impact = 0.0
+
+                    # sharing a value of the PID impact and the alnalog valver impact among the main and polling threads
+                    with self._shared_pid_impact_result_lock:
+                        self._shared_pid_impact_result = PidImpactResultModel(
+                            impact=pid_impact_result.impact,
+                            deviation=pid_impact_result.deviation,
+                            total_deviation=pid_impact_result.total_deviation,
+
+                            proportional_impact=pid_impact_result.proportional_impact,
+                            integration_impact=pid_impact_result.integration_impact,
+                            differentiation_impact=pid_impact_result.differentiation_impact
+                        )
+                        self._shared_analog_valve_impact = analog_valve_impact
+
+                    deviation = pid_impact_result.deviation
+                    total_deviation = pid_impact_result.total_deviation
+
+                    self._save_shared_archive(SharedRegulatorStateModel(
+                        pid_impact_result=pid_impact_result,
                         failure_action_state=failure_action_state,
-                        archive=archive,
-                        deviation=deviation,
-                        total_deviation=total_deviation
-                    )
-                )
 
-                drive_unit_analog_control = self._heating_circuit_settings.regulation_parameters.drive_unit_analog_control
+                        datetime=archive.datetime,
+                        outdoor_temperature=archive.outdoor_temperature,
+                        room_temperature=archive.room_temperature,
+                        supply_pipe_temperature=archive.supply_pipe_temperature,
+                        return_pipe_temperature=archive.return_pipe_temperature,
 
-                if drive_unit_analog_control == True:
-                    pulse_duration_valve = self._heating_circuit_settings.regulation_parameters.pulse_duration_valve
-                    analog_valve_impact = analog_valve_impact + pid_impact_result.impact / (pulse_duration_valve / self._calculation_period)
+                        supply_pipe_temperature_calculated=calculated_temperatures.supply_pipe_temperature,
+                        return_pipe_temperature_calculated=calculated_temperatures.return_pipe_temperature,
 
-                    self._logger.debug(RegulationEngine.analog_impact_result_debug_msg, analog_valve_impact)
+                        valve_direction=ValveDirectionModel.UP if pid_impact_result.impact > 0 else ValveDirectionModel.DOWN,
+                        valve_position=pid_impact_result.impact,
+                    ))
+                else:
+                    self._save_shared_archive(SharedRegulatorStateModel(
+                        pid_impact_result=None,
+                        failure_action_state=failure_action_state,
 
-                    if analog_valve_impact > 100.0:
-                        analog_valve_impact = 100.0
-                    elif analog_valve_impact < 0.0:
-                        analog_valve_impact = 0.0
+                        valve_direction=ValveDirectionModel.UP,
+                        valve_position=float("inf"),
 
-                # sharing a value of the PID impact and the alnalog valver impact among the main and polling threads
-                with self._shared_pid_impact_result_lock:
-                    self._shared_pid_impact_result = PidImpactResultModel(
-                        impact=pid_impact_result.impact,
-                        deviation=pid_impact_result.deviation,
-                        total_deviation=pid_impact_result.total_deviation,
+                        supply_pipe_temperature_calculated=float("inf"),
+                        return_pipe_temperature_calculated=float("inf"),
 
-                        proportional_impact=pid_impact_result.proportional_impact,
-                        integration_impact=pid_impact_result.integration_impact,
-                        differentiation_impact=pid_impact_result.differentiation_impact
-                    )
-                    self._shared_analog_valve_impact = analog_valve_impact
+                        datetime=archive.datetime,
+                        outdoor_temperature=float("inf"),
+                        room_temperature=float("inf"),
+                        supply_pipe_temperature=float("inf"),
+                        return_pipe_temperature=float("inf")
+                    ))
+                # HOT_WATER
+                # else:
+                #     pass
 
-                deviation = pid_impact_result.deviation
-                total_deviation = pid_impact_result.total_deviation
-
-                self._save_shared_archive(SharedRegulatorStateModel(
-                    pid_impact_result=pid_impact_result,
-                    failure_action_state=failure_action_state,
-
-                    datetime=archive.datetime,
-                    outdoor_temperature=archive.outdoor_temperature,
-                    room_temperature=archive.room_temperature,
-                    supply_pipe_temperature=archive.supply_pipe_temperature,
-                    return_pipe_temperature=archive.return_pipe_temperature,
-
-                    supply_pipe_temperature_calculated=calculated_temperatures.supply_pipe_temperature,
-                    return_pipe_temperature_calculated=calculated_temperatures.return_pipe_temperature,
-
-                    valve_direction=ValveDirectionModel.UP if pid_impact_result.impact > 0 else ValveDirectionModel.DOWN,
-                    valve_position=pid_impact_result.impact,
-                ))
-            else:
-                self._save_shared_archive(SharedRegulatorStateModel(
-                    pid_impact_result=None,
-                    failure_action_state=failure_action_state,
-
-                    valve_direction=ValveDirectionModel.UP,
-                    valve_position=float("inf"),
-
-                    supply_pipe_temperature_calculated=float("inf"),
-                    return_pipe_temperature_calculated=float("inf"),
-
-                    datetime=archive.datetime,
-                    outdoor_temperature=float("inf"),
-                    room_temperature=float("inf"),
-                    supply_pipe_temperature=float("inf"),
-                    return_pipe_temperature=float("inf")
-                ))
-            # HOT_WATER
-            # else:
-            #     pass
-
-            end_time = time()
-            delta = end_time - start_time
-            if delta < self._calculation_period:
-                sleep(self._calculation_period - delta)
-                self._logger.debug(RegulationEngine.sensors_polling_slept_debug_msg, delta, self._calculation_period - delta)
+                end_time = time()
+                delta = end_time - start_time
+                if delta < self._calculation_period:
+                    sleep(self._calculation_period - delta)
+                    self._logger.debug(RegulationEngine.sensors_polling_slept_debug_msg, delta, self._calculation_period - delta)
+        except Exception as ex:
+            self._logger.error(RegulationEngine.sensors_polling_thread_error_msg, ex, exc_info=True, stack_info=True)
 
     def start(self) -> None:
         """
@@ -709,97 +718,103 @@ class RegulationEngine:
         )
         polling_thread.start()
 
-        while True:
-            if self._process_cancellation_event.is_set():
-                threading_cancellation_event.set()
-                while polling_thread.is_alive():
+        try:
+            while True:
+                if self._process_cancellation_event.is_set():
+                    threading_cancellation_event.set()
+                    polling_thread.join()
+                    while polling_thread.is_alive():
+                        time.sleep(0.5)
+                        pass
+
+                    # stop regulation thread
+                    self._logger.info(RegulationEngine.regulation_stopped_info_msg)
+
+                    break
+
+                self._refresh_settings()
+
+                failure_action_state = FailureActionTypeModel.NO_FAILURE
+                with self._shared_failure_action_state_lock:
+                    failure_action_state = self._shared_failure_action_state
+
+                self._logger.debug(f"The control mode is: {self._heating_circuit_settings.control_parameters.control_mode.name}",)
+                self._logger.debug(f"The failure action state is: {failure_action_state.name}", )
+
+                # getting time of the beginning of the act on the regulator valve
+                start_time = time()
+
+                # getting the valuable settings values
+                # TODO: should I put on a thread lock or not?
+                regulation_parameters = self._heating_circuit_settings.regulation_parameters
+
+                if failure_action_state == FailureActionTypeModel.NO_ACTION:
                     pass
-                # stop regulation thread
-                self._logger.info(RegulationEngine.regulation_stopped_info_msg)
 
-                break
-
-            self._refresh_settings()
-
-            failure_action_state = FailureActionTypeModel.NO_FAILURE
-            with self._shared_failure_action_state_lock:
-                failure_action_state = self._shared_failure_action_state
-
-            self._logger.debug(f"The control mode is: {self._heating_circuit_settings.control_parameters.control_mode.name}",)
-            self._logger.debug(f"The failure action state is: {failure_action_state.name}", )
-
-            # getting time of the beginning of the act on the regulator valve
-            start_time = time()
-
-            # getting the valuable settings values
-            # TODO: should I put on a thread lock or not?
-            regulation_parameters = self._heating_circuit_settings.regulation_parameters
-
-            if failure_action_state == FailureActionTypeModel.NO_ACTION:
-                pass
-
-            if failure_action_state == FailureActionTypeModel.OPEN_VALVE:
-                with self._hardware_process_lock:
-                    equipments.open_valve(heating_circuit_index=self._heating_circuit_index)
-
-            if failure_action_state == FailureActionTypeModel.CLOSE_VALVE:
-                with self._hardware_process_lock:
-                    equipments.close_valve(heating_circuit_index=self._heating_circuit_index)
-
-            if failure_action_state == FailureActionTypeModel.ANALOG_VALVE_ERROR:
-                if regulation_parameters.drive_unit_analog_control:
+                if failure_action_state == FailureActionTypeModel.OPEN_VALVE:
                     with self._hardware_process_lock:
-                        equipments.set_analog_valve_impact(heating_circuit_index=self._heating_circuit_index, impact=50.0)
+                        equipments.open_valve(heating_circuit_index=self._heating_circuit_index)
 
-            if failure_action_state in [FailureActionTypeModel.NO_FAILURE, FailureActionTypeModel.TEMPERATURE_SUSTENANCE]:
-                pid_impact_result: Optional[PidImpactResultModel] = None
-                analog_valve_impact = 0.0
-
-                # putting on the thread lock to receive the PID impact result
-                with self._shared_pid_impact_result_lock:
-                    if self._shared_pid_impact_result is not None:
-                        pid_impact_result = PidImpactResultModel(
-                            impact=self._shared_pid_impact_result.impact,
-                            deviation=self._shared_pid_impact_result.deviation,
-                            total_deviation=self._shared_pid_impact_result.total_deviation,
-
-                            proportional_impact=self._shared_pid_impact_result.proportional_impact,
-                            integration_impact=self._shared_pid_impact_result.integration_impact,
-                            differentiation_impact=self._shared_pid_impact_result.differentiation_impact
-                        )
-                    analog_valve_impact = self._shared_analog_valve_impact
-
-                # producing an impact to the requlation valve
-                if pid_impact_result is not None:
+                if failure_action_state == FailureActionTypeModel.CLOSE_VALVE:
                     with self._hardware_process_lock:
-                        if not regulation_parameters.drive_unit_analog_control:
-                            impact_duration = abs(pid_impact_result.impact * regulation_parameters.pulse_duration_valve) / 100
+                        equipments.close_valve(heating_circuit_index=self._heating_circuit_index)
 
-                            if impact_duration > regulation_parameters.pulse_duration_valve:
-                                impact_duration = regulation_parameters.pulse_duration_valve
+                if failure_action_state == FailureActionTypeModel.ANALOG_VALVE_ERROR:
+                    if regulation_parameters.drive_unit_analog_control:
+                        with self._hardware_process_lock:
+                            equipments.set_analog_valve_impact(heating_circuit_index=self._heating_circuit_index, impact=50.0)
 
-                            equipments.set_valve_impact(
-                                heating_circuit_index=self._heating_circuit_index,
-                                impact_sign=pid_impact_result.impact > 0.0,
-                                impact_duration=impact_duration
+                if failure_action_state in [FailureActionTypeModel.NO_FAILURE, FailureActionTypeModel.TEMPERATURE_SUSTENANCE]:
+                    pid_impact_result: Optional[PidImpactResultModel] = None
+                    analog_valve_impact = 0.0
+
+                    # putting on the thread lock to receive the PID impact result
+                    with self._shared_pid_impact_result_lock:
+                        if self._shared_pid_impact_result is not None:
+                            pid_impact_result = PidImpactResultModel(
+                                impact=self._shared_pid_impact_result.impact,
+                                deviation=self._shared_pid_impact_result.deviation,
+                                total_deviation=self._shared_pid_impact_result.total_deviation,
+
+                                proportional_impact=self._shared_pid_impact_result.proportional_impact,
+                                integration_impact=self._shared_pid_impact_result.integration_impact,
+                                differentiation_impact=self._shared_pid_impact_result.differentiation_impact
                             )
-                        else:
-                            equipments.set_analog_valve_impact(
-                                heating_circuit_index=self._heating_circuit_index,
-                                impact=analog_valve_impact
-                            )
+                        analog_valve_impact = self._shared_analog_valve_impact
 
-            end_time = time()
-            delta = end_time - start_time
+                    # producing an impact to the requlation valve
+                    if pid_impact_result is not None:
+                        with self._hardware_process_lock:
+                            if not regulation_parameters.drive_unit_analog_control:
+                                impact_duration = abs(pid_impact_result.impact * regulation_parameters.pulse_duration_valve) / 100
 
-            # waiting for the end of period of the act on the regulator valve
-            if delta < regulation_parameters.pulse_duration_valve:
-                sleep(regulation_parameters.pulse_duration_valve - delta)
-                self._logger.debug(
-                    RegulationEngine.regulation_slept_debug_msg,
-                    delta,
-                    regulation_parameters.pulse_duration_valve - delta
-                )
+                                if impact_duration > regulation_parameters.pulse_duration_valve:
+                                    impact_duration = regulation_parameters.pulse_duration_valve
+
+                                equipments.set_valve_impact(
+                                    heating_circuit_index=self._heating_circuit_index,
+                                    impact_sign=pid_impact_result.impact > 0.0,
+                                    impact_duration=impact_duration
+                                )
+                            else:
+                                equipments.set_analog_valve_impact(
+                                    heating_circuit_index=self._heating_circuit_index,
+                                    impact=analog_valve_impact
+                                )
+
+                end_time = time()
+                delta = end_time - start_time
+
+                # waiting for the end of period of the act on the regulator valve
+                if delta < regulation_parameters.pulse_duration_valve:
+                    sleep(regulation_parameters.pulse_duration_valve - delta)
+                    self._logger.debug(
+                        RegulationEngine.regulation_slept_debug_msg,
+                        delta,
+                        regulation_parameters.pulse_duration_valve - delta
+                    )
+        except Exception as ex:
+            self._logger.error(RegulationEngine.regulation_thread_error_msg, ex, exc_info=True, stack_info=True)
 
 
 @regulator_starter_metadata(

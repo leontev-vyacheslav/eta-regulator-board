@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export enum FailureActionTypeModel {
     noAction = 1,
     closeValve = 2,

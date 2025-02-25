@@ -9,8 +9,10 @@
             "env": {
                 "FLASK_APP": "web-api/src/app.py",
                 "FLASK_DEBUG": "1",
-                "REGULATOR_ENGINE_STARTER": "emu_regulation_engine_starter_1",
-                "REGULATOR_ENGINE_LOGGING_TO_FILE": "1"
+                "REGULATION_ENGINE_STARTER": "emu_regulation_engine_starter_1",
+                "REGULATION_ENGINE_LOG_TO_FILE": "1",
+                "APP_LOG_TO_FILE": "1",
+                "REGULATION_ENGINE_LIFETIME": "300"
             },
             "args": [
                 "run",

@@ -22,7 +22,7 @@ def build(name: str, heating_circuit_index: HeatingCircuitIndexModel, heating_ci
     stdout_handler.setFormatter(stdout_formatter)
     logger.addHandler(stdout_handler)
 
-    if os.environ.get('REGULATOR_ENGINE_LOGGING_TO_FILE') == '1':
+    if os.environ.get('REGULATION_ENGINE_LOG_TO_FILE') == '1':
         file_log_name = f'{heating_circuit_type.name}_{heating_circuit_index}'
         file_log_path = pathlib.Path(__file__).parent.parent.parent.joinpath(
             f'log/{file_log_name}'
@@ -31,7 +31,7 @@ def build(name: str, heating_circuit_index: HeatingCircuitIndexModel, heating_ci
             filename=file_log_path,
             when='m',
             interval=5,
-            backupCount=250,
+            backupCount=30,
             encoding='utf-8',
         )
         file_formatter = DefaultLoggingFormatter(

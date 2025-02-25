@@ -1,5 +1,3 @@
-from logging import Logger
-import logging
 import os
 import pathlib
 from typing import Callable, List, Optional, Any, Union
@@ -7,14 +5,13 @@ from typing import Callable, List, Optional, Any, Union
 from flask import Flask
 from data_access.accounts_settings_repository import AccountsSettingsRepository
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
-from loggers.default_logger_formatter import DefaultLoggingFormatter
 from models.common.accounts_settings_model import AccountsSettingsModel
 
 from models.common.internal_settings_model import InternalSettingsModel
 from models.common.app_background_process_model import AppBackgroundProcessModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
-from loggers.default_logger_builder import build as build_logger
+from loggers.app_logger_builder import build as build_logger
 
 
 class FlaskEx(Flask):
@@ -55,7 +52,6 @@ class FlaskEx(Flask):
         if not archives_path.exists():
             archives_path.mkdir()
 
-        self.worker_logger: Logger = self._init_worker_logger()
         self.internal_settings = self._init_internal_settings()
         self.app_background_processes: List[AppBackgroundProcessModel] = []
         self.app_logger = build_logger('default_app_logger')
@@ -63,20 +59,6 @@ class FlaskEx(Flask):
     def api_route(self, rule: str, **options: Any) -> Callable:
         return self.route(f'/api{rule}', **options)
 
-    def _init_worker_logger(self) -> Logger:
-        logger = logging.getLogger('worker_logger')
-        logger.setLevel(logging.INFO)
-        worker_log_path = self.app_root_path.joinpath('log', 'worker.log')
-
-        file_handler = logging.FileHandler(f'{worker_log_path}', mode='w')
-        formatter = DefaultLoggingFormatter(
-            f'[%(utctime)s] [%(pid)d] [%(levelname)s] %(message)s'
-        )
-        file_handler.setLevel(logging.INFO)
-        file_handler.setFormatter(formatter)
-        logger.addHandler(file_handler)
-
-        return logger
 
     def _init_internal_settings(self) -> InternalSettingsModel:
         config_path = self.app_root_path.joinpath('data/settings', 'internal_settings.json')

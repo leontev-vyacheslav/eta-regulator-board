@@ -9,7 +9,6 @@ from models.common.change_tracker_item_model import ChangeTrackerItemModel
 from models.common.enums.user_role_model import UserRoleModel
 from models.common.message_model import MessageModel
 from models.regulator.enums.control_mode_model import ControlModeModel
-from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
 from models.regulator.heating_circuits_model import HeatingCircuitModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
@@ -53,6 +52,7 @@ def on_chanded_control_mode_settings_property(change_tracker_items: List[ChangeT
             )
             if regulator_engine_process is not None:
                 regulator_engine_process.cancellation_event.set()
+                regulator_engine_process.process.join()
                 while regulator_engine_process.process.is_alive():
                     pass
                 app.app_background_processes.remove(regulator_engine_process)
@@ -93,6 +93,7 @@ def on_changed_type_settings_property(change_tracker_items: List[ChangeTrackerIt
 
         if regulator_engine_process is not None and regulator_engine_process.process.is_alive():
             regulator_engine_process.cancellation_event.set()
+            regulator_engine_process.process.join()
             while regulator_engine_process.process.is_alive():
                 pass
             app.app_background_processes.remove(regulator_engine_process)

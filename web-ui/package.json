@@ -29,6 +29,7 @@
     "start": "react-scripts start",
     "reinstall": "yarn install",
     "build": "cross-env NODE_OPTIONS=--max_old_space_size=6144 react-scripts build",
+    "postbuild": "cd ./build/static/js && gzip *.js && cd ../css && gzip *.css",
     "build-themes": "devextreme build",
     "postinstall": "npm run build-themes",
     "lint": "eslint src"

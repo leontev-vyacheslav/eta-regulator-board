@@ -289,7 +289,7 @@
                 "name": "Контур ГВС",
                 "type": 2,
                 "controlParameters": {
-                    "controlMode": 6,
+                    "controlMode": 3,
                     "manualControlMode": null,
                     "outdoorTemperatureSensorFailureAction": null,
                     "supplyPipeTemperatureSensorFailureAction": 2,
