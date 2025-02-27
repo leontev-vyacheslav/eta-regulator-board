@@ -24,11 +24,4 @@ def sync_sys_datetime():
         with DS1307() as rtc:
             rtc_now = rtc.read_datetime()
             dt = rtc_now.strftime("%Y-%m-%d %H:%M:%S")
-            try:
-                 subprocess.run(f'date -s "{dt}" -u', check=True)
-
-                 return True
-            except subprocess.CalledProcessError as e:
-                return False
-            except:
-                return False
+            subprocess.run(['date', '-s', dt, '-u'], check=True)

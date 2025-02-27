@@ -7,7 +7,7 @@
                 "name": "Контур ЦО",
                 "type": 1,
                 "controlParameters": {
-                    "controlMode": 1,
+                    "controlMode": 2,
                     "manualControlMode": 2,
                     "outdoorTemperatureSensorFailureAction": 5,
                     "supplyPipeTemperatureSensorFailureAction": 2,
@@ -272,7 +272,7 @@
                     ]
                 },
                 "regulationParameters": {
-                    "proportionalityFactor": 70.0,
+                    "proportionalityFactor": 74.0,
                     "integrationFactor": 30.0,
                     "differentiationFactor": 0.0,
                     "calculationPeriod": 25.0,

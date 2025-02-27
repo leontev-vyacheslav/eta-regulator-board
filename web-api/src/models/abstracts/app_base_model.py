@@ -16,7 +16,8 @@ class AppBaseModel(ABC, BaseModel):
         allow_population_by_field_name = True
         ensure_ascii = False
         json_encoders = {
-            datetime: lambda v: v.strftime("%Y-%m-%dT%H:%M:%SZ")  # ISO 8601 format
+            datetime: lambda v: v.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            float: lambda x: round(x, 2)
         }
 
     @root_validator(pre=True)

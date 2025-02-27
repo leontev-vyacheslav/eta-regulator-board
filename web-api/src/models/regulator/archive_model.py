@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from models.abstracts.app_base_model import AppBaseModel
 
@@ -13,6 +14,8 @@ class ArchiveModel(AppBaseModel):
     supply_pipe_temperature: float
 
     return_pipe_temperature: float
+
+    is_initial: Optional[bool]
 
 
 class ArchiveExistsModel(AppBaseModel):

@@ -332,7 +332,7 @@ class RegulationEngine:
 
                 self._archives.items.append(archive)
 
-                json_text = self._archives.json(by_alias=True)
+                json_text = self._archives.json(by_alias=True, exclude_none=True)
 
                 with gzip.open(data_path, mode='w') as file:
                     file.write(
@@ -582,6 +582,8 @@ class RegulationEngine:
         """
         self._logger.info(RegulationEngine.sensors_polling_started_info_msg)
 
+        is_initial = True
+
         total_deviation: float = 0.0
         deviation: float = float('inf')
         analog_valve_impact = 0.0
@@ -605,8 +607,11 @@ class RegulationEngine:
                 # putting on a process lock while receiving archives and current datetime
                 with self._hardware_process_lock:
                     self._refresh_rtc_datetime()
+                with self._hardware_process_lock:
                     archive = self._get_archive()
 
+                if is_initial:
+                    archive.is_initial = is_initial
                 self._save_archives(archive)
 
                 # getting and sharing the failure action state among threads
@@ -698,6 +703,8 @@ class RegulationEngine:
                 if delta < self._calculation_period:
                     sleep(self._calculation_period - delta)
                     self._logger.debug(RegulationEngine.sensors_polling_slept_debug_msg, delta, self._calculation_period - delta)
+
+                is_initial = None
         except Exception as ex:
             self._logger.error(RegulationEngine.sensors_polling_thread_error_msg, ex, exc_info=True, stack_info=True)
 

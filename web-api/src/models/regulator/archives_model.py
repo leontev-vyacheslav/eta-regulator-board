@@ -12,7 +12,6 @@ class ArchivesModel(AppBaseModel):
 class DailySavedArchivesModel(ArchivesModel):
     is_last_day_of_month_saved: bool
 
-
     def json(self, *args, **kwargs):
         exclude = {'is_last_day_of_month_saved'}
 

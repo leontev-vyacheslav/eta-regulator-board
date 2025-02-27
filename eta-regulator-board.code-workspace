@@ -15,6 +15,10 @@
         {
             "name": "SSH FS - omega-7e12",
             "uri": "ssh://omega-7e12/"
+        },
+        {
+            "name": "SSH FS - omega-8f79",
+            "uri": "ssh://omega-8f79/"
         }
     ],
     "settings": {

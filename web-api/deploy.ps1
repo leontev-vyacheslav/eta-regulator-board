@@ -1,10 +1,22 @@
+param (
+    [string]$IPADDR
+)
 Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
+
+if ([string]::IsNullOrEmpty($IPADDR)) {
+    Write-Host "The device address is null or empty." -ForegroundColor Red
+    Exit 1
+}
 
 $APP_ROOT = "/web-api"
 
 # deleting unnecessary files and folders
-Remove-Item -Path "./data/archives" -Recurse -Force
-Remove-Item -Path "./log" -Recurse -Force
+if (Test-Path "./data/archives" -PathType Container) {
+    Remove-Item -Path "./data/archives" -Recurse -Force
+}
+if (Test-Path "./log" -PathType Container) {
+    Remove-Item -Path "./log" -Recurse -Force
+}
 
 # Check connection
 $testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1

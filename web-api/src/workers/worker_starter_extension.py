@@ -32,7 +32,7 @@ class WorkerStarter():
                 if hasattr(worker_module, worker_info.name):
                     worker = getattr(worker_module, worker_info.name)
                     lock = Lock()
-                    worker_thread_locks['f{worker_info.name}_lock'] = lock
+                    worker_thread_locks[f'{worker_info.name}_lock'] = lock
 
                     thread = Thread(
                         target=worker,
