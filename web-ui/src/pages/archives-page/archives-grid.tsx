@@ -52,7 +52,6 @@ export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                 allowSorting={ false }
                 cellRender={ gridIsInitialCellRender }
             >
-
             </Column>
             <Column
                 dataType='datetime'
@@ -60,7 +59,7 @@ export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                 width={ 90 }
                 caption={ columnCaptions.datetime }
                 allowSorting={ true }
-                sortOrder='asc'
+                sortOrder='desc'
             >
                 <Format type='shortTime' />
             </Column>
@@ -69,19 +68,16 @@ export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                 dataField='outdoorTemperature'
                 caption={ columnCaptions.outdoorTemperature }
             />
-
             <Column
                 dataType='number'
                 dataField='supplyPipeTemperature'
                 caption={ columnCaptions.supplyPipeTemperature }
             />
-
             <Column
                 dataType='number'
                 dataField='returnPipeTemperature'
                 caption={ columnCaptions.returnPipeTemperature }
             />
-
         </DataGrid>
     );
 }

@@ -3,7 +3,6 @@ import { WorkDateWidget } from '../../components/work-date-widget/work-date-widg
 import { HeatingCircuitIndexModel } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { useRegulatorSettings } from '../../contexts/app-regulator-settings';
 
-
 export const HeatingCircuitInfo = ({ heatingCircuitIndex }: { heatingCircuitIndex: HeatingCircuitIndexModel }) => {
     const { getControlModeName } = useRegulatorSettings();
 

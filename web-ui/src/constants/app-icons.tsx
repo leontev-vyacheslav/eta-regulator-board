@@ -88,7 +88,5 @@ export { VscCircuitBoard as HeatingCircuitMnemoschemaIcon } from 'react-icons/vs
 export { VscCode as HeatingCircuitCodeIcon } from 'react-icons/vsc';
 export { IoWarningOutline as RelaunchIcon } from 'react-icons/io5';
 
-
-
 import { MdMoreVert } from 'react-icons/md';
 export const GridAdditionalMenuIcon = () => <MdMoreVert style={ { cursor: 'pointer' } } size={ 18 } />
