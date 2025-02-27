@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel';
 import { GpioTabContent } from './tab-contents/gpio-content/gpio-tab-content';
 import { AdcTabContent } from './tab-contents/adc-content/adc-tab-content';
-import { DebugPageContextProvider, useDebugPage } from './debug-page-content';
+import { DebugPageContextProvider, useDebugPage } from './debug-page-context';
 import { IconTab } from '../../components/tab-utils/icon-tab';
 import { DacTabContent } from './tab-contents/dac-content/dac-tab-content';
 

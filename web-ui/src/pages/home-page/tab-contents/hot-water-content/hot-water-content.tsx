@@ -4,15 +4,16 @@ import SvgHotWater from '../../../../components/mnemoschemas/svg-hot-water'
 import { HeatingCircuitIndexModel } from '../../../../models/regulator-settings/enums/heating-circuit-type-model';
 import { HeatingCircuitInfo } from '../../heating-circuit-info';
 import { HeatingCircuitDebugInfo } from '../../heating-circuit-debug-info';
+import { useHomePage } from '../../home-page-context';
 
 export const HotWaterContent = (props: MnemoschemaProps) => {
     const width = useMnemoschemaWidth({ onHomePage: true });
+    const { isShowMnemoschema } = useHomePage();
 
-    return (
+    return isShowMnemoschema ?
         <>
             <HeatingCircuitInfo heatingCircuitIndex={ HeatingCircuitIndexModel.second } />
             <SvgHotWater width={ width } { ...props } />
-            <HeatingCircuitDebugInfo pidImpactResuilt={ props.pidImpactResult } />
         </>
-    )
+        : <HeatingCircuitDebugInfo pidImpactResuilt={ props.pidImpactResult } />
 }

@@ -1,9 +1,10 @@
 import { DataGrid, Column, Selection, Format } from 'devextreme-react/data-grid';
 import AppConstants from '../../constants/app-constants';
 import { ArchiveModel } from '../../models/regulator-settings/archive-model';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useScreenSize } from '../../utils/media-query';
 import { formatMessage } from 'devextreme/localization';
+import { RelaunchIcon } from '../../constants/app-icons';
 
 
 export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
@@ -16,6 +17,7 @@ export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
             outdoorTemperature: isXSmall ? 'Tвн, °C' : 'Внеш. темп. (°C)',
             supplyPipeTemperature: isXSmall ? 'Тп, °C' : 'Темп. подачи (°C)',
             returnPipeTemperature: isXSmall ? 'То, °C' : 'Темп. обратки (°C)',
+            isInitial: isXSmall ? '' : '',
         };
     }, [isXSmall]);
 
@@ -24,6 +26,14 @@ export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
     useEffect(() => {
         setColumnCaptions(defaultColumCaptions);
     }, [defaultColumCaptions]);
+
+    const gridIsInitialCellRender = useCallback((e) => {
+            return (
+                <div style={ { display: 'flex', alignItems: 'center', gap: 5 } }>
+                    { e.data.isInitial ? <RelaunchIcon size={ 22 }/> : null }
+                </div>
+            );
+        }, []);
 
     return (
         <DataGrid
@@ -34,6 +44,16 @@ export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
             height={ () => AppConstants.pageHeight }
         >
             <Selection mode='single' />
+            <Column
+                dataType='boolean'
+                dataField='isInitial'
+                width={ 35 }
+                caption={ columnCaptions.isInitial }
+                allowSorting={ false }
+                cellRender={ gridIsInitialCellRender }
+            >
+
+            </Column>
             <Column
                 dataType='datetime'
                 dataField='datetime'
@@ -61,6 +81,7 @@ export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
                 dataField='returnPipeTemperature'
                 caption={ columnCaptions.returnPipeTemperature }
             />
+
         </DataGrid>
     );
 }

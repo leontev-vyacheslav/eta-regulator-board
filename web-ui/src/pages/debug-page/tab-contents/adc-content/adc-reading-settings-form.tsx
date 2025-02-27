@@ -4,7 +4,7 @@ import Button from 'devextreme-react/button';
 import { useAdc } from './adc-context';
 import { useCallback } from 'react';
 import AppConstants from '../../../../constants/app-constants';
-import { useDebugPage } from '../../debug-page-content';
+import { useDebugPage } from '../../debug-page-context';
 
 
 export const AdcReadingSettingsForm = () => {

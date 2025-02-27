@@ -1,4 +1,12 @@
+param (
+    [string]$IPADDR
+)
 Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
+
+if ([string]::IsNullOrEmpty($IPADDR)) {
+    Write-Host "The device address is null or empty." -ForegroundColor Red
+    Exit 1
+}
 
 Clear-Host
 

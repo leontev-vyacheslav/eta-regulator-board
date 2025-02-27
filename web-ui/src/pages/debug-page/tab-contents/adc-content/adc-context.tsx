@@ -2,7 +2,7 @@ import Form from 'devextreme-react/form';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { AdcReadModeModel } from '../../../../models/regulator-settings/enums/adc-read-mode';
 import { useAppData } from '../../../../contexts/app-data/app-data';
-import { useDebugPage } from '../../debug-page-content';
+import { useDebugPage } from '../../debug-page-context';
 import { useSharedArea } from '../../../../contexts/shared-area';
 import { getUuidV4 } from '../../../../utils/uuid';
 import { AdcChannelModel, AdcContextModel, AdcReadingResultsModel, AdcReadingSettingsModel } from '../../../../models/adc-channel-context-model';

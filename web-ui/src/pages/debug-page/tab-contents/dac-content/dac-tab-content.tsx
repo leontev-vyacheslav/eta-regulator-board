@@ -7,7 +7,7 @@ import { useAppData } from '../../../../contexts/app-data/app-data';
 import { proclaim } from '../../../../utils/proclaim';
 import { ActiveSignalGenModel } from '../../../../contexts/app-data/use-dac-data';
 import AppConstants from '../../../../constants/app-constants';
-import { useDebugPage } from '../../debug-page-content';
+import { useDebugPage } from '../../debug-page-context';
 import { formatMessage } from 'devextreme/localization';
 
 const DacTabContentInternal = () => {

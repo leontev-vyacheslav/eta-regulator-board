@@ -8,7 +8,7 @@ import { formatMessage } from 'devextreme/localization';
 import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { useGpioListMenuItems } from './use-gpio-list-menu-items';
 import AppConstants from '../../../../constants/app-constants';
-import { useDebugPage } from '../../debug-page-content';
+import { useDebugPage } from '../../debug-page-context';
 
 export type GpioListProps = { innerRef?: Ref<List<GpioItemModel>> }
 

@@ -9,6 +9,8 @@ export type ArchiveModel = {
     supplyPipeTemperature: number;
 
     returnPipeTemperature: number;
+
+    isInitial?: boolean;
 }
 
 export type ArchiveExistsModel = {
