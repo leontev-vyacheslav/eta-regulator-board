@@ -6,7 +6,7 @@ import { HeatingCircuitInfo } from '../../heating-circuit-info';
 import { HeatingCircuitDebugInfo } from '../../heating-circuit-debug-info';
 import { useHomePage } from '../../home-page-context';
 
-export const HotWaterContent = (props: MnemoschemaProps) => {
+export const HotWaterContent = ( props: MnemoschemaProps) => {
     const width = useMnemoschemaWidth({ onHomePage: true });
     const { isShowMnemoschema } = useHomePage();
 
@@ -15,5 +15,5 @@ export const HotWaterContent = (props: MnemoschemaProps) => {
             <HeatingCircuitInfo heatingCircuitIndex={ HeatingCircuitIndexModel.second } />
             <SvgHotWater width={ width } { ...props } />
         </>
-        : <HeatingCircuitDebugInfo pidImpactResuilt={ props.pidImpactResult } />
+        : <HeatingCircuitDebugInfo sharedRegulatorState={ props } />
 }

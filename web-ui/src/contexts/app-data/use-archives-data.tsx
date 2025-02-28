@@ -4,7 +4,8 @@ import { Method } from 'axios';
 import { HttpConstants } from '../../constants/app-http-constants';
 import routes from '../../constants/app-api-routes';
 import { ArchivesModel } from '../../models/regulator-settings/archives-model';
-import { ArchiveExistsModel,  SharedRegulatorStateModel } from '../../models/regulator-settings/archive-model';
+import { ArchiveExistsModel } from '../../models/regulator-settings/archive-model';
+import { SharedRegulatorStateModel } from '../../models/regulator-settings/shared-regulator-state-model';
 import { parseCustomJson } from './../../utils/custom-json-parser';
 import moment from 'moment';
 

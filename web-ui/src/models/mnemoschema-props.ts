@@ -1,20 +1,5 @@
-import { PidImpactResultModel } from './regulator-settings/archive-model';
-import { ValveDirectionModel } from './regulator-settings/enums/valve-direction-model';
+import { SharedRegulatorStateModel } from './regulator-settings/shared-regulator-state-model';
 
-export type MnemoschemaProps = {
+export type MnemoschemaProps = SharedRegulatorStateModel & {
     pumpOn: boolean;
-
-    supplyPipeTemperature: number;
-    supplyPipeTemperatureCalculated: number;
-
-    returnPipeTemperature: number;
-    returnPipeTemperatureCalculated: number;
-
-    outdoorTemperature?: number;
-
-    valvePosition: number;
-
-    valveDirection: ValveDirectionModel;
-
-    pidImpactResult?: PidImpactResultModel;
 }

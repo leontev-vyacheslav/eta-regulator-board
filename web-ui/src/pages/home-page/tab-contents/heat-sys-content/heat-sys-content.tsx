@@ -15,5 +15,5 @@ export const HeatSysContent = (props: MnemoschemaProps) => {
                 <HeatingCircuitInfo heatingCircuitIndex={ HeatingCircuitIndexModel.first } />
                 <SvgHeatSystem width={ width } { ...props } />
             </>
-            : <HeatingCircuitDebugInfo pidImpactResuilt={ props.pidImpactResult } />
+            : <HeatingCircuitDebugInfo sharedRegulatorState={ props } />
 }

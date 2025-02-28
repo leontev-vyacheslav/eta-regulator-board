@@ -10,4 +10,10 @@
         "**/web-api": true,
         "**/web-ui": true
     },
+    "npm.exclude": [
+        "SSH FS - omega-7e12/",
+        "SSH FS - omega-8f79/",
+        "ssh://omega-7e12/",
+        "ssh://omega-8f79/"
+    ],
 }

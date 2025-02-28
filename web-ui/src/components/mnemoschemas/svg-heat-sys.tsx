@@ -2207,7 +2207,7 @@ const SvgHeatSystem = (props) => (
                 points="462.1,86.3 468.91,83.73 462.1,81.15 "
                 id="valve_M1_up"
                 style={ {
-                    display: props.valveDirection === 1 ? 'inline': 'none',
+                    display: props.impact > 0 ? 'inline': 'none',
                     fill: 'url(#SVGID_51_-4)',
                 } }
                 transform="matrix(0,-0.39309697,0.72359494,0,-26.409893,201.74834)"
@@ -2217,7 +2217,7 @@ const SvgHeatSystem = (props) => (
                 points="462.1,86.3 468.91,83.73 462.1,81.15 "
                 id="valve_M1_dn"
                 style={ {
-                    display: props.valveDirection === 2 ? 'inline': 'none',
+                    display: props.impact < 0 ? 'inline': 'none',
                     fill: 'url(#SVGID_51_-4-0)',
                 } }
                 transform="matrix(0,0.39309697,0.72359494,0,-26.402224,-160.49935)"
@@ -2246,7 +2246,7 @@ const SvgHeatSystem = (props) => (
                         style={ {
                             fill: '#000000',
                         } }>
-                        {props.valvePosition.toLocaleString(undefined, { minimumFractionDigits: 1 })}%
+                        {props.impact.toLocaleString(undefined, { minimumFractionDigits: 1 })}%
                     </tspan>
                 </tspan>
             </text>

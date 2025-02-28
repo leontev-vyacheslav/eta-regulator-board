@@ -2042,7 +2042,7 @@ const SvgHotWater = (props) => (
                 points="468.91,83.73 462.1,81.15 462.1,86.3 "
                 id="valve_M2_up"
                 style={ {
-                    display: props.valveDirection === 1 ? 'inline': 'none',
+                    display: props.impact > 0 ? 'inline': 'none',
                     fill: 'url(#SVGID_51_-4)',
                 } }
                 transform="matrix(0,-0.39309697,0.72359494,0,-26.041453,191.67765)"
@@ -2052,7 +2052,7 @@ const SvgHotWater = (props) => (
                 points="468.91,83.73 462.1,81.15 462.1,86.3 "
                 id="valve_M2_dn"
                 style={ {
-                    display: props.valveDirection === 2 ? 'inline': 'none',
+                    display: props.impact < 0 ? 'inline': 'none',
                     fill: 'url(#SVGID_51_-4-0)',
                 } }
                 transform="matrix(0,0.39309697,0.72359494,0,-26.033784,-170.57004)"
@@ -2081,7 +2081,7 @@ const SvgHotWater = (props) => (
                         style={ {
                             fill: '#000000',
                         } }>
-                        {props.valvePosition.toLocaleString(undefined, { minimumFractionDigits: 1 })}%
+                        {props.impact.toLocaleString(undefined, { minimumFractionDigits: 1 })}%
                     </tspan>
                 </tspan>
             </text>
