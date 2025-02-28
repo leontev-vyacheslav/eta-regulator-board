@@ -15,7 +15,7 @@ from utils.datetime_helper import sync_sys_datetime
 from utils.debugging import is_debug
 from workers.worker_starter_extension import WorkerStarter
 
-APP_VERSION = 'v.0.1.20250227-093948'
+APP_VERSION = 'v.0.1.20250228-113630'
 APP_NAME = 'Eta Regulator Board Web API'
 
 MASTER_KEY = 'XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='

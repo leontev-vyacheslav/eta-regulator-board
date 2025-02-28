@@ -9,10 +9,15 @@ from models.regulator.enums.heating_circuit_index_model import HeatingCircuitInd
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
 
 
-def build(name: str, heating_circuit_index: HeatingCircuitIndexModel, heating_circuit_type: HeatingCircuitTypeModel, default_level: int = logging.DEBUG):
+def build(name: str, heating_circuit_index: HeatingCircuitIndexModel, heating_circuit_type: HeatingCircuitTypeModel, default_level: int = logging.INFO):
+    log_level = default_level
+
+    environment_log_level = os.environ.get('REGULATION_ENGINE_LOG_LEVEL');
+    if environment_log_level is not None:
+        log_level = logging.getLevelName(environment_log_level)
 
     logger = logging.getLogger(f'{name}_{heating_circuit_index}')
-    logger.setLevel(default_level)
+    logger.setLevel(log_level)
 
     stdout_formatter = DefaultLoggingFormatter(
         f'[%(utctime)s] [%(pid)d] [%(levelname)s] [{heating_circuit_index}, {heating_circuit_type.name}] %(message)s'

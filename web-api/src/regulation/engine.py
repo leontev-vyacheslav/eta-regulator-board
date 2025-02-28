@@ -11,10 +11,9 @@ from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 from threading import Thread, Event as ThreadingEvent, Lock as ThreadingLock
 from typing import Optional
 import uuid
-from models.regulator.shared_regulator_state_model import SharedRegulatorStateModel
+from models.regulator.shared_regulator_state_model import SharedRegulatorStateModel, getDefaultSharedRegulatorState
 from models.regulator.enums.outdoor_temperature_sensor_failure_action_type_model import OutdoorTemperatureSensorFailureActionTypeModel
 from models.regulator.enums.supply_pipe_temperature_sensor_failure_action_type_model import SupplyPipeTemperatureSensorFailureActionTypeModel
-from models.regulator.enums.valve_direction_model import ValveDirectionModel
 
 import regulation.equipments as equipments
 from loggers.engine_logger_builder import build as build_logger
@@ -658,11 +657,19 @@ class RegulationEngine:
                         )
                         self._shared_analog_valve_impact = analog_valve_impact
 
+                    delta_deviation = pid_impact_result.deviation - deviation
                     deviation = pid_impact_result.deviation
                     total_deviation = pid_impact_result.total_deviation
 
                     self._save_shared_archive(SharedRegulatorStateModel(
-                        pid_impact_result=pid_impact_result,
+                        delta_deviation=delta_deviation,
+                        deviation=pid_impact_result.deviation,
+                        total_deviation=pid_impact_result.total_deviation,
+                        proportional_impact=pid_impact_result.proportional_impact,
+                        integration_impact=pid_impact_result.integration_impact,
+                        differentiation_impact=pid_impact_result.differentiation_impact,
+                        impact=analog_valve_impact if drive_unit_analog_control == True else pid_impact_result.impact,
+
                         failure_action_state=failure_action_state,
 
                         datetime=archive.datetime,
@@ -673,30 +680,9 @@ class RegulationEngine:
 
                         supply_pipe_temperature_calculated=calculated_temperatures.supply_pipe_temperature,
                         return_pipe_temperature_calculated=calculated_temperatures.return_pipe_temperature,
-
-                        valve_direction=ValveDirectionModel.UP if pid_impact_result.impact > 0 else ValveDirectionModel.DOWN,
-                        valve_position=pid_impact_result.impact,
                     ))
                 else:
-                    self._save_shared_archive(SharedRegulatorStateModel(
-                        pid_impact_result=None,
-                        failure_action_state=failure_action_state,
-
-                        valve_direction=ValveDirectionModel.UP,
-                        valve_position=float("inf"),
-
-                        supply_pipe_temperature_calculated=float("inf"),
-                        return_pipe_temperature_calculated=float("inf"),
-
-                        datetime=archive.datetime,
-                        outdoor_temperature=float("inf"),
-                        room_temperature=float("inf"),
-                        supply_pipe_temperature=float("inf"),
-                        return_pipe_temperature=float("inf")
-                    ))
-                # HOT_WATER
-                # else:
-                #     pass
+                    self._save_shared_archive(getDefaultSharedRegulatorState(archive.datetime, failure_action_state))
 
                 end_time = time()
                 delta = end_time - start_time

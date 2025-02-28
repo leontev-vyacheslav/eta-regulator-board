@@ -1,11 +1,11 @@
-from typing import Optional
+from datetime import datetime
 from models.regulator.archive_model import ArchiveModel
 from models.regulator.enums.failure_action_type_model import FailureActionTypeModel
-from models.regulator.enums.valve_direction_model import ValveDirectionModel
 from models.regulator.pid_impact_entry_model import PidImpactResultModel
 
-class SharedRegulatorStateModel(ArchiveModel):
-    pid_impact_result: Optional[PidImpactResultModel]
+
+class SharedRegulatorStateModel(ArchiveModel, PidImpactResultModel):
+    delta_deviation: float
 
     failure_action_state: FailureActionTypeModel
 
@@ -13,6 +13,25 @@ class SharedRegulatorStateModel(ArchiveModel):
 
     return_pipe_temperature_calculated: float
 
-    valve_direction: ValveDirectionModel
 
-    valve_position: float
+def getDefaultSharedRegulatorState(archive_datetime: datetime, failure_action_state) -> SharedRegulatorStateModel:
+    return SharedRegulatorStateModel(
+        delta_deviation=float("inf"),
+        deviation=float("inf"),
+        total_deviation=float("inf"),
+        proportional_impact=float("inf"),
+        integration_impact=float("inf"),
+        differentiation_impact=float("inf"),
+        impact=float("inf"),
+
+        failure_action_state=failure_action_state,
+
+        datetime=archive_datetime,
+        outdoor_temperature=float("inf"),
+        room_temperature=float("inf"),
+        supply_pipe_temperature=float("inf"),
+        return_pipe_temperature=float("inf"),
+
+        supply_pipe_temperature_calculated=float("inf"),
+        return_pipe_temperature_calculated=float("inf"),
+    )

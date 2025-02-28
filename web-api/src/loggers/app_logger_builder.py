@@ -7,10 +7,15 @@ import logging.handlers
 from loggers.default_logger_formatter import DefaultLoggingFormatter
 
 
-def build(name: str, default_level: int = logging.DEBUG):
+def build(name: str, default_level: int = logging.INFO):
+    log_level = default_level
+
+    environment_log_level = os.environ.get('APP_LOG_LEVEL');
+    if environment_log_level is not None:
+        log_level = logging.getLevelName(environment_log_level)
 
     logger = logging.getLogger(name)
-    logger.setLevel(default_level)
+    logger.setLevel(log_level)
 
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(
