@@ -14,23 +14,22 @@ import { MenuItemModel } from '../../models/menu-item-model';
 import { HomePageContextProvider, useHomePage } from './home-page-context';
 
 export const HomePageInternal = () => {
-    const { isShowMnemoschema, setIsShowMnemoschema } =  useHomePage();
+    const { isShowMnemoschema, setIsShowMnemoschema } = useHomePage();
     const { regulatorSettings, getHeatingCircuitName } = useRegulatorSettings();
     const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
     const tabPanelRef = useRef<TabPanel>(null);
 
     const menuItems = useMemo(() => {
-            return [
-                {
-                    icon: () => isShowMnemoschema ? <HeatingCircuitCodeIcon size={ 20 } color='black' /> : <HeatingCircuitMnemoschemaIcon size={ 20 } color='black' />,
-                    onClick: () => {
-                        setTimeout(() => {
-                            setIsShowMnemoschema(previous => !previous);
-                        }, 200);
-                    },
-                }
-            ] as MenuItemModel[];
-        }, [isShowMnemoschema, setIsShowMnemoschema]);
+        return [
+            {
+                icon: () => isShowMnemoschema ? <HeatingCircuitCodeIcon size={ 20 } color='black' /> : <HeatingCircuitMnemoschemaIcon size={ 20 } color='black' />,
+                onClick: () => {
+                    setIsShowMnemoschema(previous => !previous);
+                    tabPanelRef.current?.instance.repaint()
+                },
+            }
+        ] as MenuItemModel[];
+    }, [isShowMnemoschema, setIsShowMnemoschema]);
 
     return (
         <>

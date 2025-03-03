@@ -15,5 +15,5 @@ export const HotWaterContent = ( props: MnemoschemaProps) => {
             <HeatingCircuitInfo heatingCircuitIndex={ HeatingCircuitIndexModel.second } />
             <SvgHotWater width={ width } { ...props } />
         </>
-        : <HeatingCircuitDebugInfo sharedRegulatorState={ props } />
+        : <HeatingCircuitDebugInfo heatingCircuitIndex={ HeatingCircuitIndexModel.second } sharedRegulatorState={ props } />
 }
