@@ -1,5 +1,12 @@
 #!/bin/sh -e
 
+gpioctl dirout-low 3
+gpioctl dirout-low 2
+gpioctl dirout-low 11
+gpioctl dirout-low 17
+gpioctl dirout-low 16
+gpioctl dirout-low 15
+
 cd /mnt/mmcblk0p1/eta-regulator-board/web-api/&&sh "startup.sh"
 
 exit 0

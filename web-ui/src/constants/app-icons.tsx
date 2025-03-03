@@ -85,9 +85,9 @@ export { IoTriangleSharp as OutdoorChartSingIcon } from 'react-icons/io5';
 export { IoTimeSharp as TimeChartSingIcon } from 'react-icons/io5';
 
 export { IoImageOutline as HeatingCircuitMnemoschemaIcon } from 'react-icons/io5';
-export { IoDocumentOutline as HeatingCircuitCodeIcon } from 'react-icons/io5';
+export { IoInformationCircleOutline as HeatingCircuitCodeIcon } from 'react-icons/io5';
 
-export { IoWarningOutline as RelaunchIcon } from 'react-icons/io5';
+export { IoTimerOutline as RelaunchIcon } from 'react-icons/io5';
 
 import { MdMoreVert } from 'react-icons/md';
 export const GridAdditionalMenuIcon = () => <MdMoreVert style={ { cursor: 'pointer' } } size={ 18 } />

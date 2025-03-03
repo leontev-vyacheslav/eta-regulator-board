@@ -29,9 +29,7 @@ export const ArchivesGrid = ({ dataSource }: {dataSource: ArchiveModel[]}) => {
 
     const gridIsInitialCellRender = useCallback((e) => {
             return (
-                <div style={ { display: 'flex', alignItems: 'center', gap: 5 } }>
-                    { e.data.isInitial ? <RelaunchIcon size={ 22 }/> : null }
-                </div>
+                <>{ e.data.isInitial ? <RelaunchIcon size={ 30 }/> : null }</>
             );
         }, []);
 
