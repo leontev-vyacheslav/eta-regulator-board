@@ -56,7 +56,6 @@ def signout():
 
     return JsonResponse(
         response=MessageModel(message='Токен авторизации для текущего пользователя отозван.'),
-        status=200
     )
 
 
@@ -69,5 +68,4 @@ def auth_check():
         response=MessageModel(
             message='The authorization token is valid.'
         ),
-        status=200
     )

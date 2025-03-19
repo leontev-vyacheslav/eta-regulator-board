@@ -29,10 +29,10 @@ class SettingsRepositoryBase():
 
         with open(self.data_path, 'r', encoding='utf-8') as file:
             try:
-                fcntl.flock(file, fcntl.LOCK_SH)
+                fcntl.flock(file.fileno(), fcntl.LOCK_SH)
                 json = file.read()
             finally:
-                fcntl.flock(file, fcntl.LOCK_UN)
+                fcntl.flock(file.fileno(), fcntl.LOCK_UN)
 
             settings_model = globals().get(self.__class__.__name__.replace("Repository", 'Model'))
 
@@ -42,12 +42,12 @@ class SettingsRepositoryBase():
         with open(self.data_path, 'w', encoding='utf-8') as file:
             json = self.settings.json(by_alias=True, indent=4, ensure_ascii=False)
             try:
-                fcntl.flock(file, fcntl.LOCK_EX)
+                fcntl.flock(file.fileno(), fcntl.LOCK_EX)
                 dumped_bytes = file.write(json)
                 file.flush()
                 os.fsync(file.fileno())
             finally:
-                fcntl.flock(file, fcntl.LOCK_UN)
+                fcntl.flock(file.fileno(), fcntl.LOCK_UN)
 
         return len(json) == dumped_bytes
 

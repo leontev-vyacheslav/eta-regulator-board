@@ -126,19 +126,23 @@ def get_archives_as_file(heating_circuit_index: int, timezone_date: datetime):
 def get_share_regulator_state(heating_circuit_index: int):
     regulator_settings = app.get_regulator_settings()
     heating_circuit_settings = regulator_settings.heating_circuits.items[heating_circuit_index]
+
     shared_regulator_state_file_name = f'{heating_circuit_settings.type.name}__{heating_circuit_index}'
     shared_regulator_state_file_path = app.app_root_path.joinpath(
         f'data/archives/{shared_regulator_state_file_name}'
     )
     if not shared_regulator_state_file_path.exists():
         return Response(status=HTTPStatus.NO_CONTENT)
+    try:
+        with open(shared_regulator_state_file_path, "r", encoding="utf-8") as shared_regulator_state_file:
+            try:
+                fcntl.flock(shared_regulator_state_file.fileno(), fcntl.LOCK_SH)
+                json_str = shared_regulator_state_file.read()
+            finally:
+                fcntl.flock(shared_regulator_state_file.fileno(), fcntl.LOCK_UN)
 
-    with open(shared_regulator_state_file_path, "r", encoding="utf-8") as shared_regulator_state_file:
-        try:
-            fcntl.flock(shared_regulator_state_file, fcntl.LOCK_SH)
-            json_str = shared_regulator_state_file.read()
-        finally:
-            fcntl.flock(shared_regulator_state_file, fcntl.LOCK_UN)
-    shared_regulator_state = SharedRegulatorStateModel.parse_raw(json_str)
+            shared_regulator_state = SharedRegulatorStateModel.parse_raw(json_str)
+    except:
+        return Response(status=HTTPStatus.NO_CONTENT)
 
     return shared_regulator_state

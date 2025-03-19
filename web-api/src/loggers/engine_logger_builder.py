@@ -28,6 +28,9 @@ def build(name: str, heating_circuit_index: HeatingCircuitIndexModel, heating_ci
     logger.addHandler(stdout_handler)
 
     if os.environ.get('REGULATION_ENGINE_LOG_TO_FILE') == '1':
+        file_log_interval = os.environ.get('REGULATION_ENGINE_LOG_TO_FILE_INTERVAL')
+        file_log_backup_count = os.environ.get('REGULATION_ENGINE_LOG_TO_FILE_COUNT')
+
         file_log_name = f'{heating_circuit_type.name}_{heating_circuit_index}'
         file_log_path = pathlib.Path(__file__).parent.parent.parent.joinpath(
             f'log/{file_log_name}'
@@ -35,8 +38,8 @@ def build(name: str, heating_circuit_index: HeatingCircuitIndexModel, heating_ci
         file_handler = logging.handlers.TimedRotatingFileHandler(
             filename=file_log_path,
             when='m',
-            interval=5,
-            backupCount=30,
+            interval=int(file_log_interval) if file_log_interval is not None else 5,
+            backupCount=int(file_log_backup_count) if file_log_interval is not None else 30,
             encoding='utf-8',
         )
         file_formatter = DefaultLoggingFormatter(

@@ -11,6 +11,7 @@ from omega.signal_generators.sin_wave_signal_generator import SinWaveSignalGener
 from omega.signal_generators.square_wave_signal_generator import SquareWaveSignalGenerator
 from responses.json_response import JsonResponse
 from utils.debugging import is_debug
+from lockers import worker_thread_locks
 
 
 def signal_generator_factory_method(cancellation_event: Event, signal_id: int):
@@ -43,8 +44,10 @@ def dummy_signal_generator_factory_method(cancellation_event: Event, signal_id: 
 @app.api_route('/dac/signal/<signal_id>/<lifetime>', methods=['GET'])
 @validate(response_by_alias=True)
 def get_started_signal_gen(signal_id: int, lifetime: int):
+    background_processes_watcher_lock = worker_thread_locks.get('background_processes_watcher_lock')
 
-    active_signal_process_gen = next((p for p in app.app_background_processes if p.name == 'active_signal'), None)
+    with background_processes_watcher_lock:
+        active_signal_process_gen = next((p for p in app.app_background_processes if p.name == 'active_signal'), None)
 
     if active_signal_process_gen is not None:
         active_signal_process_gen.cancellation_event.set()
@@ -67,7 +70,9 @@ def get_started_signal_gen(signal_id: int, lifetime: int):
         lifetime=lifetime,
         data={'signal_id': signal_id}
     )
-    app.app_background_processes.append(active_signal_process_gen)
+
+    with background_processes_watcher_lock:
+        app.app_background_processes.append(active_signal_process_gen)
 
     return JsonResponse(
         response=ActiveSignalGenModel(
@@ -75,14 +80,16 @@ def get_started_signal_gen(signal_id: int, lifetime: int):
             signal_id=signal_id,
             lifetime=active_signal_process_gen.lifetime
         ),
-        status=200
     )
 
 
 @app.api_route('/dac/signal', methods=['GET'])
 @validate(response_by_alias=True)
 def get_active_signal_gen():
-    active_signal_process_gen = next((p for p in app.app_background_processes if p.name == 'active_signal'), None)
+    background_processes_watcher_lock = worker_thread_locks.get('background_processes_watcher_lock')
+
+    with background_processes_watcher_lock:
+        active_signal_process_gen = next((p for p in app.app_background_processes if p.name == 'active_signal'), None)
 
     if active_signal_process_gen is not None:
         active_signal_gen = ActiveSignalGenModel(
@@ -95,19 +102,20 @@ def get_active_signal_gen():
 
     return JsonResponse(
         response=active_signal_gen,
-        status=200
     )
 
 
 @app.api_route('/dac/signal', methods=['DELETE'])
 def delete_active_signal_gen():
+    background_processes_watcher_lock = worker_thread_locks.get('background_processes_watcher_lock')
     active_signal_gen = ActiveSignalGenModel(
         pid=0,
         signal_id=0,
         lifetime=0
     )
 
-    active_signal_process_gen = next((p for p in app.app_background_processes if p.name == 'active_signal'), None)
+    with background_processes_watcher_lock:
+        active_signal_process_gen = next((p for p in app.app_background_processes if p.name == 'active_signal'), None)
 
     if active_signal_process_gen is not None:
         active_signal_gen = ActiveSignalGenModel(
@@ -117,13 +125,14 @@ def delete_active_signal_gen():
         )
 
         active_signal_process_gen.cancellation_event.set()
+        active_signal_process_gen.process.join()
 
         if is_debug():
             active_signal_process_gen.process.terminate()
 
-        app.app_background_processes.remove(active_signal_process_gen)
+        with background_processes_watcher_lock:
+            app.app_background_processes.remove(active_signal_process_gen)
 
     return JsonResponse(
         response=active_signal_gen,
-        status=200
     )

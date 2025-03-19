@@ -127,7 +127,7 @@ if ($reinstallFlag -eq 'yes') {
 
 # Compiling to bytecode for python specific version
 Write-Host "Compiling to bytecode for python specific version..." -ForegroundColor Green
-$remoteOutput = ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}${APP_ROOT}/; python3 -m compileall -b src" *>&1
+$remoteOutput = ssh ${ACCOUNT}@${IPADDR} "cd ${WORKSPACE_ROOT}${APP_ROOT}/; python3 -m compileall src" *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
     exit

@@ -36,7 +36,6 @@ export const HeatingCircuitSelector = ({ heatingCircuitIndex }: { heatingCircuit
 
     const updateSharedRegulatorStateAsync = useCallback(async () => {
         const sharedRegulatorState = await getSharedRegulatorStateAsync(heatingCircuitIndex);
-        console.log(sharedRegulatorState);
 
         if (sharedRegulatorState) {
             setSharedRegulatorState(sharedRegulatorState);
@@ -52,7 +51,7 @@ export const HeatingCircuitSelector = ({ heatingCircuitIndex }: { heatingCircuit
 
         const intervalTimer = setInterval(async () => {
             await updateSharedRegulatorStateAsync();
-        }, 10000);
+        }, 30000);
 
         return () => clearInterval(intervalTimer);
     }, [updateSharedRegulatorStateAsync]);

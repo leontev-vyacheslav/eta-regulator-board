@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import moment from 'moment';
 import { AppSettingsContextModel, AppSettingsDataContextModel } from '../models/app-settings-context';
 import { AppBaseProviderProps } from '../models/app-base-provider-props';
 import { useAppData } from './app-data/app-data';
@@ -30,11 +31,23 @@ function AppSettingsProvider(props: AppBaseProviderProps) {
     }, [updateWorkDateAsync]);
 
     useEffect(() => {
-        const intervalTimer = setInterval(async () => {
+        const rtcIntervalTimer = setInterval(async () => {
             await updateWorkDateAsync();
+        }, 60000 * 10);
+
+
+        const intervalTimer = setInterval(async () => {
+            setAppSettingsData(previous => {
+                const workDate = moment(previous.workDate).add(60, 'seconds');
+
+                return { ...previous, workDate: workDate.toDate() };
+            });
         }, 60000);
 
-        return () => clearInterval(intervalTimer);
+        return () => {
+            clearInterval(rtcIntervalTimer);
+            clearInterval(intervalTimer);
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

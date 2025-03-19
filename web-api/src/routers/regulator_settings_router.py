@@ -16,6 +16,7 @@ from responses.json_response import JsonResponse
 from regulation.launcher import launch_regulation_engines
 from utils.auth_helper import authorize
 from utils.encoding import verify_access_token
+from lockers import worker_thread_locks
 
 
 def on_chanded_control_mode_settings_property(change_tracker_items: List[ChangeTrackerItemModel]) -> None:
@@ -32,16 +33,27 @@ def on_chanded_control_mode_settings_property(change_tracker_items: List[ChangeT
         None
     )
 
-    if control_mode_change_tracker_item is not None:
-        control_mode_current_value = control_mode_change_tracker_item.current_value
-        control_mode_original_value = control_mode_change_tracker_item.original_value
-        search_match = re.search(r'\[(\d+)\]', control_mode_change_tracker_item.path)
-        if search_match is None:
-            return
+    if control_mode_change_tracker_item is None:
+        app.app_logger.debug('control_mode_change_tracker_item: %s', control_mode_change_tracker_item)
+        return
 
-        regulator_engine_process_index = int(search_match.group(1))
-        heating_circuit_index = HeatingCircuitIndexModel(regulator_engine_process_index)
+    control_mode_current_value = control_mode_change_tracker_item.current_value
+    control_mode_original_value = control_mode_change_tracker_item.original_value
 
+    app.app_logger.debug('control_mode_current_value: %s', control_mode_current_value.name)
+    app.app_logger.debug('control_mode_original_value: %s', control_mode_original_value.name)
+
+    search_match = re.search(r'\[(\d+)\]', control_mode_change_tracker_item.path)
+    if search_match is None:
+        return
+
+    regulator_engine_process_index = int(search_match.group(1))
+    heating_circuit_index = HeatingCircuitIndexModel(regulator_engine_process_index)
+
+    app.app_logger.debug('heating_circuit_index: %s', heating_circuit_index.name)
+
+    background_processes_watcher_lock = worker_thread_locks.get('background_processes_watcher_lock')
+    with background_processes_watcher_lock:
         if control_mode_current_value == ControlModeModel.OFF:
             regulator_engine_process = next(
                 (
@@ -53,8 +65,6 @@ def on_chanded_control_mode_settings_property(change_tracker_items: List[ChangeT
             if regulator_engine_process is not None:
                 regulator_engine_process.cancellation_event.set()
                 regulator_engine_process.process.join()
-                while regulator_engine_process.process.is_alive():
-                    pass
                 app.app_background_processes.remove(regulator_engine_process)
 
         if control_mode_original_value == ControlModeModel.OFF and control_mode_current_value != ControlModeModel.OFF:
@@ -83,24 +93,24 @@ def on_changed_type_settings_property(change_tracker_items: List[ChangeTrackerIt
         regultor_engine_process_index = int(search_match.group(1))
         heating_circuit_index = HeatingCircuitIndexModel(regultor_engine_process_index)
 
-        regulator_engine_process = next(
-            (
-                p for p in app.app_background_processes
-                if p.name.startswith(f"regulation_process_{regultor_engine_process_index}")
-            ),
-            None
-        )
+        background_processes_watcher_lock = worker_thread_locks.get('background_processes_watcher_lock')
+        with background_processes_watcher_lock:
+            regulator_engine_process = next(
+                (
+                    p for p in app.app_background_processes
+                    if p.name.startswith(f"regulation_process_{regultor_engine_process_index}")
+                ),
+                None
+            )
 
-        if regulator_engine_process is not None and regulator_engine_process.process.is_alive():
-            regulator_engine_process.cancellation_event.set()
-            regulator_engine_process.process.join()
-            while regulator_engine_process.process.is_alive():
-                pass
-            app.app_background_processes.remove(regulator_engine_process)
+            if regulator_engine_process is not None and regulator_engine_process.process.is_alive():
+                regulator_engine_process.cancellation_event.set()
+                regulator_engine_process.process.join()
+                app.app_background_processes.remove(regulator_engine_process)
 
-            regulator_settings = app.get_regulator_settings()
-            if regulator_settings.heating_circuits.items[regultor_engine_process_index].control_parameters.control_mode != ControlModeModel.OFF:
-                launch_regulation_engines(app=app, target_heating_circuit_index=heating_circuit_index)
+                regulator_settings = app.get_regulator_settings()
+                if regulator_settings.heating_circuits.items[regultor_engine_process_index].control_parameters.control_mode != ControlModeModel.OFF:
+                    launch_regulation_engines(app=app, target_heating_circuit_index=heating_circuit_index)
 
 
 @app.api_route('/regulator-settings', methods=['GET'])
@@ -116,39 +126,42 @@ def get_regulator_settings() -> RegulatorSettingsModel:
 @authorize(roles=[UserRoleModel.ADMIN])
 @validate(response_by_alias=True)
 def put_regulator_settings(body: RegulatorSettingsModel):
-    regulator_settings = body
-    regulator_settings_repository = app.get_regulator_settings_repository()
-    change_tracker_items = regulator_settings_repository.find_changed_fields(regulator_settings)
-    required_access_token = next(
-        (
-            c.required_access_token
-            for c in change_tracker_items
-            if c.required_access_token is not None
-        ),
-        None
-    )
+    try:
+        regulator_settings = body
+        regulator_settings_repository = app.get_regulator_settings_repository()
+        change_tracker_items = regulator_settings_repository.find_changed_fields(regulator_settings)
+        required_access_token = next(
+            (
+                c.required_access_token
+                for c in change_tracker_items
+                if c.required_access_token is not None
+            ),
+            None
+        )
 
-    if required_access_token is not None:
-        access_token = request.headers.get('X-Access-Token')
-        is_verify = access_token is not None and verify_access_token(access_token=access_token)
+        if required_access_token is not None:
+            access_token = request.headers.get('X-Access-Token')
+            is_verify = access_token is not None and verify_access_token(access_token=access_token)
 
-        if not is_verify:
+            if not is_verify:
 
-            return JsonResponse(
-                response=MessageModel(message='Токен доступа отсутствует или указан неверно.'),
-                status=HTTPStatus.FORBIDDEN
-            )
+                return JsonResponse(
+                    response=MessageModel(message='Токен доступа отсутствует или указан неверно.'),
+                    status=HTTPStatus.FORBIDDEN
+                )
 
-    # log here change_tracker_items
-    regulator_settings_repository.update(regulator_settings)
+        # log here change_tracker_items
+        regulator_settings_repository.update(regulator_settings)
 
-    on_changed_type_settings_property(change_tracker_items)
-    on_chanded_control_mode_settings_property(change_tracker_items)
+        on_changed_type_settings_property(change_tracker_items)
+        on_chanded_control_mode_settings_property(change_tracker_items)
 
-    return JsonResponse(
-        response=regulator_settings_repository.settings,
-        status=HTTPStatus.OK
-    )
+        return JsonResponse(
+            response=regulator_settings_repository.settings,
+            status=HTTPStatus.OK
+        )
+    except Exception as ex:
+        app.app_logger.error("The saving of the regulation settings failed: %s", str(ex), exc_info=True, stack_info=True)
 
 
 @app.api_route('/regulator-settings/download', methods=['GET'])

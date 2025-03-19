@@ -8,15 +8,17 @@ from omega import gpio
 from omega.mcp3208 import MCP3208
 from responses.json_response import JsonResponse
 from utils.debugging import is_debug
+from lockers import hardware_process_lock
 
 
 @app.api_route('/adc/<channel>', methods=['GET'])
 @validate(response_by_alias=True)
 def get_adc_value(channel: int):
     if not is_debug():
-        gpio.adc_chip_select()
-        with MCP3208() as mcp_3208:
-            value = mcp_3208.read_avg(channel=channel, measurements=1)
+        with hardware_process_lock:
+            gpio.adc_chip_select()
+            with MCP3208() as mcp_3208:
+                value = mcp_3208.read_avg(channel=channel, measurements=1)
     else:
         value = random() * MCP3208.REFERENCE_VOLTAGE
 
@@ -24,7 +26,6 @@ def get_adc_value(channel: int):
         response=AdcValueModel(
             channel=channel,
             value=value),
-        status=200
     )
 
 
@@ -32,21 +33,23 @@ def get_adc_value(channel: int):
 @validate(response_by_alias=True)
 def get_temperature_value(channel: int):
     if not is_debug():
-        gpio.adc_chip_select()
-        try:
-            gpio.set(gpio.GPIO_Vp, False)
-            with MCP3208() as mcp_3208:
-                value = mcp_3208.read_avg(channel=channel, measurements=5)
-        finally:
-            gpio.set(gpio.GPIO_Vp, True)
+        with hardware_process_lock:
+            gpio.adc_chip_select()
+            try:
+                gpio.set(gpio.GPIO_Vp, False)
+                with MCP3208() as mcp_3208:
+                    value = mcp_3208.read_avg(channel=channel, measurements=5)
+            finally:
+                gpio.set(gpio.GPIO_Vp, True)
     else:
         value = random() * MCP3208.REFERENCE_VOLTAGE
-    # TODO: divide by zero
-    temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
+    try:
+        temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
+    except ZeroDivisionError:
+        temperature = float("inf")
 
     return JsonResponse(
         response=TemperatureValueModel(
             channel=channel,
             value=temperature),
-        status=200
     )

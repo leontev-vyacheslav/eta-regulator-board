@@ -1,5 +1,7 @@
 from time import sleep
 from datetime import datetime, timezone
+from typing import List
+
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
@@ -17,6 +19,39 @@ VALVE1_CLOSE = V1_MINUS
 VALVE2_OPEN = V2_PLUS
 VALVE2_CLOSE = V2_MINUS
 
+def get_temperatures(channels: List[TemperatureSensorChannelModel], measurements: int = 10) -> List[float]:
+    if is_debug():
+        return [0.0 for _ in channels]
+
+    results: List[float] = []
+
+    gpio.adc_chip_select()
+
+    try:
+        gpio.set(gpio.GPIO_Vp, False)
+
+        with MCP3208() as mcp_3208:
+            for channel in channels:
+                try:
+                    sleep(0.01)
+                    value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
+                except:
+                    results.append(float("inf"))
+                    continue
+
+                try:
+                    temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
+                    
+                    if abs(temperature) > 125:
+                        temperature = float("inf")
+
+                    results.append(temperature)
+                except ZeroDivisionError:
+                    results.append(float("inf"))
+    finally:
+        gpio.set(gpio.GPIO_Vp, True)
+
+    return results
 
 def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 10) -> float:
     if is_debug():
@@ -25,7 +60,7 @@ def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 
     gpio.adc_chip_select()
     try:
         gpio.set(gpio.GPIO_Vp, False)
-        sleep(0.5)
+        sleep(0.1)
         with MCP3208() as mcp_3208:
             value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
     except:

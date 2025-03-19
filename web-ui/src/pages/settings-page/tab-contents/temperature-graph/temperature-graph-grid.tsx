@@ -36,8 +36,8 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
             {
                 type: 'range',
                 min: -35,
-                max: 25,
-                message: formatMessage('validation-range-formatted-with-values', '-35°C', '25°C')
+                max: 35,
+                message: formatMessage('validation-range-formatted-with-values', '-35°C', '35°C')
             },
             {
                 type: 'numeric',
@@ -64,9 +64,9 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
         },
         {
             type: 'range',
-            min: 35,
+            min: 10,
             max: 120,
-            message: formatMessage('validation-range-formatted-with-values', '35°C', '120°C')
+            message: formatMessage('validation-range-formatted-with-values', '10°C', '120°C')
         },
         {
             type: 'custom',
@@ -88,9 +88,9 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
         },
         {
             type: 'range',
-            min: 20,
+            min: 10,
             max: 80,
-            message: formatMessage('validation-range-formatted-with-values', '20°C', '80°C')
+            message: formatMessage('validation-range-formatted-with-values', '10°C', '80°C')
         },
         {
             type: 'custom',
@@ -109,7 +109,6 @@ export const TemperatureGraphGrid = ({ dataSource }: { dataSource: any }) => {
             showColumnLines
             dataSource={ dataSource }
             height={ AppConstants.formHeight }
-
         >
             <Selection mode='single' />
 

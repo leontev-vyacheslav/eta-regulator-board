@@ -310,3 +310,7 @@ deployment-support.ps1 -
     $IPADDR = "omega-XXXX"
     $ACCOUNT = 'root'
     $WORKSPACE_ROOT = "/mnt/mmcblk0pXX/eta-regulator-board" # /home/eta-regulator-board
+
+## 15. Read only problems
+
+mount -o remount,rw /mnt/mmcblk0p1
