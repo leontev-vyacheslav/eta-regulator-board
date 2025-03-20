@@ -51,7 +51,7 @@ export const HeatingCircuitSelector = ({ heatingCircuitIndex }: { heatingCircuit
 
         const intervalTimer = setInterval(async () => {
             await updateSharedRegulatorStateAsync();
-        }, 30000);
+        }, 15000);
 
         return () => clearInterval(intervalTimer);
     }, [updateSharedRegulatorStateAsync]);

@@ -20,7 +20,7 @@ from utils.debugging import is_debug
 from workers.worker_starter_extension import WorkerStarter
 from lockers import worker_thread_locks
 
-APP_VERSION = 'v.0.1.20250318-183332'
+APP_VERSION = 'v.0.1.20250320-131031'
 APP_NAME = 'Eta Regulator Board Web API'
 
 MASTER_KEY = 'XAMhI3XWj+PaXP5nRQ+nNpEn9DKyHPTVa95i89UZL6o='

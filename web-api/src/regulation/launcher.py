@@ -1,6 +1,6 @@
 import random
 import os
-from multiprocessing import Process, Event as ProcessEvent, Lock as ProcessLock
+from multiprocessing import Process, Event as ProcessEvent
 import time
 from typing import Callable, Optional
 
@@ -43,7 +43,7 @@ def launch_regulation_engines(app: FlaskEx, target_heating_circuit_index: Option
         regulation_heating_circuit_process.start()
 
         env_lifetime = os.environ.get('REGULATION_ENGINE_LIFETIME')
-        lifetime = 300 if is_debug() else 10800 # 5min or 3hour
+        lifetime = 300 if is_debug() else 10800 # from 5min to 3hour
 
         if env_lifetime and str(env_lifetime).isalnum():
             lifetime = int(env_lifetime)
@@ -81,7 +81,8 @@ def launch_regulation_engines(app: FlaskEx, target_heating_circuit_index: Option
         target_heating_circuit = next((
             heating_circuit
             for index, heating_circuit in enumerate(heating_circuits)
-            if index == target_heating_circuit_index
+            if index == target_heating_circuit_index.value
         ), None)
+
         if target_heating_circuit is not None:
             __launch(target_heating_circuit_index.value, target_heating_circuit)

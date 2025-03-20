@@ -51,6 +51,7 @@ class RegulationEngine:
 
     regulation_started_info_msg = 'The regulation thread was STARTED.'
     regulation_stopped_info_msg = 'The regulation thread was STOPPED.'
+    regulation_stopped_critical_msg = "The regulation thread was STOPPED because the polling thread terminated with an error."
     regulation_slept_debug_msg = 'The regulation thread executed/slept during %.6f / %.6f sec.'
     regulation_thread_error_msg = 'The regulation thread was failed with the error: %s.'
 
@@ -76,6 +77,9 @@ class RegulationEngine:
 
         self._shared_failure_action_state_lock = ThreadingLock()
         self._shared_failure_action_state = FailureActionTypeModel.NO_FAILURE
+
+        self._shared_polling_error_lock = ThreadingLock()
+        self._shared_polling_error: bool = False
 
         self._heating_circuit_settings: HeatingCircuitModel = self._get_settings()
 
@@ -108,10 +112,10 @@ class RegulationEngine:
 
         with open(regulator_settings_path, mode='r', encoding='utf-8') as file:
             try:
-                fcntl.flock(file, fcntl.LOCK_SH)
+                fcntl.flock(file.fileno(), fcntl.LOCK_SH)
                 json = file.read()
             finally:
-                fcntl.flock(file, fcntl.LOCK_UN)
+                fcntl.flock(file.fileno(), fcntl.LOCK_UN)
         file = None
 
         regulator_settings = RegulatorSettingsModel.parse_raw(json)
@@ -225,18 +229,14 @@ class RegulationEngine:
         It receives mesurment results from four temperature sensors (OUTDOOR, ROOM, SUPPLY_PIPE, RETURN_PIPE)
         and returns a packet of data in an object of the ArchiveModel class
         """
-        outdoor_temperature_measured = equipments.get_temperature(
-            TemperatureSensorChannelModel.OUTDOOR_TEMPERATURE
-        )
-        room_temperature_measured = equipments.get_temperature(
-            TemperatureSensorChannelModel.ROOM_TEMPERATURE
-        )
-        supply_pipe_temperature_measured = equipments.get_temperature(
-            TemperatureSensorChannelModel[f'SUPPLY_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}']
-        )
-        return_pipe_temperature_measured = equipments.get_temperature(
-            TemperatureSensorChannelModel[f'RETURN_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}']
-        )
+        with self._hardware_process_lock:
+            outdoor_temperature_measured, room_temperature_measured, supply_pipe_temperature_measured, return_pipe_temperature_measured = \
+                equipments.get_temperatures([
+                    TemperatureSensorChannelModel.OUTDOOR_TEMPERATURE,
+                    TemperatureSensorChannelModel.ROOM_TEMPERATURE,
+                    TemperatureSensorChannelModel[f'SUPPLY_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}'],
+                    TemperatureSensorChannelModel[f'RETURN_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}']
+                ])
 
         self._logger.debug(
             RegulationEngine.measured_temperatures_debug_msg,
@@ -261,17 +261,19 @@ class RegulationEngine:
         root_folder = pathlib.Path(__file__).parent.parent.parent
         shared_archive_file_name = f'{self._heating_circuit_settings.type.name}__{self._heating_circuit_index}'
         shared_archive_path = root_folder.joinpath(f'data/archives/{shared_archive_file_name}')
-
-        with open(shared_archive_path, "w", encoding="utf-8") as shared_file:
-            try:
-                fcntl.flock(shared_file, fcntl.LOCK_EX)
-                json_text = shared_regulator_state.json(by_alias=True)
-                shared_file.write(json_text)
-                shared_file.flush()
-                os.fsync(shared_file.fileno())
-            finally:
-                fcntl.flock(shared_file, fcntl.LOCK_UN)
-        shared_file = None
+        try:
+            with open(shared_archive_path, "w", encoding="utf-8") as shared_file:
+                try:
+                    fcntl.flock(shared_file.fileno(), fcntl.LOCK_EX)
+                    json_text = shared_regulator_state.json(by_alias=True)
+                    shared_file.write(json_text)
+                    shared_file.flush()
+                    os.fsync(shared_file.fileno())
+                finally:
+                    fcntl.flock(shared_file.fileno(), fcntl.LOCK_UN)
+            shared_file = None
+        except Exception as ex:
+            self._logger.error("The saving shared regulator state was failed.", ex, exc_info=True, stack_info=True)
 
     def _save_archives(self, archive: ArchiveModel):
         """
@@ -349,9 +351,10 @@ class RegulationEngine:
         It refreshes the working datetime according to a hardware managed date and time saved in the RTC
         """
         if self._last_refreshing_rtc_time is None or time() - self._last_refreshing_rtc_time >= RegulationEngine.updating_rtc_period:
-            self._rtc_datetime = equipments.get_rtc_datetime()
-            self._last_refreshing_rtc_time = time()
+            with self._hardware_process_lock:
+                self._rtc_datetime = equipments.get_rtc_datetime()
 
+            self._last_refreshing_rtc_time = time()
             self._logger.debug(RegulationEngine.getting_current_rtc_debug_msg, f'{self._rtc_datetime}')
 
     def _get_target_temperature(self) -> float:
@@ -587,11 +590,9 @@ class RegulationEngine:
         deviation: float = float('inf')
         analog_valve_impact = 0.0
 
-        with self._hardware_process_lock:
-            self._refresh_rtc_datetime()
+        self._refresh_rtc_datetime()
 
         try:
-        # start polling
             while True:
                 if threading_cancellation_event.is_set():
                     # stop polling
@@ -600,14 +601,9 @@ class RegulationEngine:
 
                 start_time = time()
 
-                # here it will be served a HEATING or VENTILATION type of the `regulation channel
-                # if self._heating_circuit_type in
-
                 # putting on a process lock while receiving archives and current datetime
-                with self._hardware_process_lock:
-                    self._refresh_rtc_datetime()
-                with self._hardware_process_lock:
-                    archive = self._get_archive()
+                self._refresh_rtc_datetime()
+                archive = self._get_archive()
 
                 if is_initial:
                     archive.is_initial = is_initial
@@ -635,7 +631,8 @@ class RegulationEngine:
 
                     if drive_unit_analog_control == True:
                         pulse_duration_valve = self._heating_circuit_settings.regulation_parameters.pulse_duration_valve
-                        analog_valve_impact = analog_valve_impact + pid_impact_result.impact / (pulse_duration_valve / self._calculation_period)
+                        analog_valve_impact = analog_valve_impact + pid_impact_result.impact / \
+                            (pulse_duration_valve / self._calculation_period)
 
                         self._logger.debug(RegulationEngine.analog_impact_result_debug_msg, analog_valve_impact)
 
@@ -694,6 +691,9 @@ class RegulationEngine:
         except Exception as ex:
             self._logger.error(RegulationEngine.sensors_polling_thread_error_msg, ex, exc_info=True, stack_info=True)
 
+            with self._shared_polling_error_lock:
+                self._shared_polling_error = True
+
     def start(self) -> None:
         """
         It's an entry point of the regutation machine
@@ -710,7 +710,6 @@ class RegulationEngine:
             args=(threading_cancellation_event, )
         )
         polling_thread.start()
-
         try:
             while True:
                 if self._process_cancellation_event.is_set():
@@ -719,11 +718,17 @@ class RegulationEngine:
                     while polling_thread.is_alive():
                         time.sleep(0.5)
                         pass
-
                     # stop regulation thread
                     self._logger.info(RegulationEngine.regulation_stopped_info_msg)
 
                     break
+
+                with self._shared_polling_error_lock:
+                    if self._shared_polling_error == True:
+                        if polling_thread.is_alive():
+                            polling_thread.join()
+                        self._logger.critical(RegulationEngine.regulation_stopped_critical_msg)
+                        break
 
                 self._refresh_settings()
 
