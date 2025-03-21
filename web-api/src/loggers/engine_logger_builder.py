@@ -12,7 +12,7 @@ from models.regulator.enums.heating_circuit_type_model import HeatingCircuitType
 def build(name: str, heating_circuit_index: HeatingCircuitIndexModel, heating_circuit_type: HeatingCircuitTypeModel, default_level: int = logging.INFO):
     log_level = default_level
 
-    environment_log_level = os.environ.get('REGULATION_ENGINE_LOG_LEVEL');
+    environment_log_level = os.environ.get('REGULATION_ENGINE_LOG_LEVEL')
     if environment_log_level is not None:
         log_level = logging.getLevelName(environment_log_level)
 

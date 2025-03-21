@@ -14,7 +14,7 @@ class SharedRegulatorStateModel(ArchiveModel, PidImpactResultModel):
     return_pipe_temperature_calculated: float
 
 
-def getDefaultSharedRegulatorState(archive_datetime: datetime, failure_action_state) -> SharedRegulatorStateModel:
+def get_default_shared_regulator_state(archive_datetime: datetime, failure_action_state) -> SharedRegulatorStateModel:
     return SharedRegulatorStateModel(
         delta_deviation=float("inf"),
         deviation=float("inf"),

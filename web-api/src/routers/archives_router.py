@@ -38,11 +38,11 @@ def get_archives_content(heating_circuit_index: int, timezone_date: datetime):
             with gzip.open(data_path, 'r') as file:
                 zip_content = file.read()
                 json_text = zip_content.decode('utf-8')
-            archives = ArchivesModel.parse_raw(json_text, encoding='utf-8')
-        except:
-            archives = ArchivesModel(items=[])
+            archive_items = ArchivesModel.parse_raw(json_text, encoding='utf-8')
+        except Exception:
+            archive_items = ArchivesModel(items=[])
 
-        return archives
+        return archive_items
 
     total_archives = ArchivesModel(items=[])
     base_date = timezone_date
@@ -142,7 +142,7 @@ def get_share_regulator_state(heating_circuit_index: int):
                 fcntl.flock(shared_regulator_state_file.fileno(), fcntl.LOCK_UN)
 
             shared_regulator_state = SharedRegulatorStateModel.parse_raw(json_str)
-    except:
+    except Exception:
         return Response(status=HTTPStatus.NO_CONTENT)
 
     return shared_regulator_state

@@ -21,6 +21,5 @@ class ScheduleModel(AppBaseModel):
     windows: List[ScheduleWindowModel]
 
 
-# Расписания
 class SchedulesModel(AppBaseModel):
     items: List[ScheduleModel] = []

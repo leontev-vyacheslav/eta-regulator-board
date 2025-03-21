@@ -10,7 +10,7 @@ from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.common.accounts_settings_model import AccountsSettingsModel
 
 
-class SettingsRepositoryBase():
+class SettingsRepositoryBase:
 
     def __init__(self, app=None, **kwargs):
         self._options = kwargs
