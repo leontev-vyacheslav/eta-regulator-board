@@ -278,7 +278,7 @@
                     "calculationPeriod": 25.0,
                     "pulseDurationValve": 5.0,
                     "driveUnitAnalogControl": false,
-                    "insensivityThreshold": 1.0,
+                    "insensitivityThreshold": 1.0,
                     "fullPidImpactRange": 1000.0,
                     "proportionalityFactorDenominator": 5.0,
                     "integrationFactorDenominator": 50.0
@@ -331,7 +331,7 @@
                     "calculationPeriod": 25.0,
                     "pulseDurationValve": 5.0,
                     "driveUnitAnalogControl": false,
-                    "insensivityThreshold": 1.0,
+                    "insensitivityThreshold": 1.0,
                     "fullPidImpactRange": 1000.0,
                     "proportionalityFactorDenominator": 5.0,
                     "integrationFactorDenominator": 50.0

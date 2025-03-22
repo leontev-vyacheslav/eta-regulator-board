@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import subprocess
 
-from lockers import hardware_process_lock
+from lockers import hardware_process_rtc_lock
 from omega.ds1307 import DS1307
 
 
@@ -20,7 +20,7 @@ def is_last_day_of_month(any_day: datetime):
 
 
 def sync_sys_datetime():
-    with hardware_process_lock:
+    with hardware_process_rtc_lock:
         with DS1307() as rtc:
             rtc_now = rtc.read_datetime()
             dt = rtc_now.strftime("%Y-%m-%d %H:%M:%S")

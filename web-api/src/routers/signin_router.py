@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from hashlib import sha256
 from flask_pydantic import validate
 import jwt
+from http import HTTPStatus
 
 from app import app
 from models.common.auth_user_model import AuthUserModel
@@ -22,7 +23,7 @@ def signin(body: SignInModel):
     if account is None:
         return JsonResponse(
             response=MessageModel(message='Не удалось войти в систему. Пользователь не найден.'),
-            status=401
+            status=HTTPStatus.UNAUTHORIZED
         )
 
     hashed_signin_password = sha256(body.password.encode(encoding='utf-8')).hexdigest()
@@ -40,12 +41,12 @@ def signin(body: SignInModel):
                 login=account.login,
                 token=token
             ),
-            status=201
+            status=HTTPStatus.CREATED
         )
 
     return JsonResponse(
         response=MessageModel(message='Не удалось войти в систему. Пароль неправильный.'),
-        status=401
+        status=HTTPStatus.UNAUTHORIZED
     )
 
 

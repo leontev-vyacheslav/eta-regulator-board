@@ -2,7 +2,7 @@ from datetime import datetime
 from flask_pydantic import validate
 
 from app import app
-from lockers import hardware_process_lock
+from lockers import hardware_process_rtc_lock
 from models.common.enums.user_role_model import UserRoleModel
 from models.regulator.rtc_datetime_model import RtcDateTimeModel
 from omega.ds1307 import DS1307
@@ -17,7 +17,7 @@ def get_rtc() -> RtcDateTimeModel:
     if is_debug():
         return RtcDateTimeModel(datetime=datetime.utcnow())
 
-    with hardware_process_lock:
+    with hardware_process_rtc_lock:
         with DS1307() as rtc:
             rtc_now = rtc.read_datetime()
 
@@ -31,8 +31,8 @@ def put_rtc(body: RtcDateTimeModel):
 
     if is_debug():
         return RtcDateTimeModel(datetime=datetime.utcnow())
-    
-    with hardware_process_lock:
+
+    with hardware_process_rtc_lock:
         with DS1307() as rtc:
             rtc.write_datetime(body.datetime)
 

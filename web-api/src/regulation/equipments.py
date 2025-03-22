@@ -1,6 +1,7 @@
 from time import sleep
 from datetime import datetime, timezone
 from typing import List
+from lockers import hardware_process_lock, hardware_process_rtc_lock
 
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
@@ -19,62 +20,65 @@ VALVE1_CLOSE = V1_MINUS
 VALVE2_OPEN = V2_PLUS
 VALVE2_CLOSE = V2_MINUS
 
+
 def get_temperatures(channels: List[TemperatureSensorChannelModel], measurements: int = 10) -> List[float]:
     if is_debug():
         return [0.0 for _ in channels]
 
     results: List[float] = []
 
-    gpio.adc_chip_select()
+    with hardware_process_lock:
+        gpio.adc_chip_select()
 
-    try:
-        gpio.set(gpio.GPIO_Vp, False)
+        try:
+            gpio.set(gpio.GPIO_Vp, False)
+            with MCP3208() as mcp_3208:
+                for channel in channels:
+                    try:
+                        sleep(0.01)
+                        value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
+                    except:
+                        results.append(float("inf"))
+                        continue
 
-        with MCP3208() as mcp_3208:
-            for channel in channels:
-                try:
-                    sleep(0.01)
-                    value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
-                except:
-                    results.append(float("inf"))
-                    continue
+                    try:
+                        temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
 
-                try:
-                    temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
-                    
-                    if abs(temperature) > 125:
-                        temperature = float("inf")
+                        if abs(temperature) > 125:
+                            temperature = float("inf")
 
-                    results.append(temperature)
-                except ZeroDivisionError:
-                    results.append(float("inf"))
-    finally:
-        gpio.set(gpio.GPIO_Vp, True)
+                        results.append(temperature)
+                    except ZeroDivisionError:
+                        results.append(float("inf"))
+        finally:
+            gpio.set(gpio.GPIO_Vp, True)
 
     return results
+
 
 def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 10) -> float:
     if is_debug():
         return 0
 
-    gpio.adc_chip_select()
-    try:
-        gpio.set(gpio.GPIO_Vp, False)
-        sleep(0.1)
-        with MCP3208() as mcp_3208:
-            value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
-    except:
-        temperature = float("inf")
-    finally:
-        gpio.set(gpio.GPIO_Vp, True)
+    with hardware_process_lock:
+        gpio.adc_chip_select()
+        try:
+            gpio.set(gpio.GPIO_Vp, False)
+            sleep(0.1)
+            with MCP3208() as mcp_3208:
+                value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
+        except:
+            temperature = float("inf")
+        finally:
+            gpio.set(gpio.GPIO_Vp, True)
 
-    try:
-        temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
-    except ZeroDivisionError:
-        return float("inf")
+        try:
+            temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
+        except ZeroDivisionError:
+            return float("inf")
 
-    if abs(temperature) > 125:
-        return float("inf")
+        if abs(temperature) > 125:
+            return float("inf")
 
     return temperature
 
@@ -83,8 +87,9 @@ def get_rtc_datetime() -> datetime:
     if is_debug():
         return datetime.utcnow().replace(tzinfo=timezone.utc)
 
-    with DS1307() as rtc:
-        rtc_now = rtc.read_datetime()
+    with hardware_process_rtc_lock:
+        with DS1307() as rtc:
+            rtc_now = rtc.read_datetime()
 
     return rtc_now
 
@@ -97,17 +102,26 @@ def set_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, impact_sig
         sleep(0.5)
         return
 
-    gpio.set(valve_open_pin, False)
-    gpio.set(valve_close_pin, False)
+    with hardware_process_lock:
+        gpio.set(valve_open_pin, False)
+        gpio.set(valve_close_pin, False)
 
     if impact_sign:
-        gpio.set(valve_open_pin, True)
+        with hardware_process_lock:
+            gpio.set(valve_open_pin, True)
+
         sleep(impact_duration)
-        gpio.set(valve_open_pin, False)
+
+        with hardware_process_lock:
+            gpio.set(valve_open_pin, False)
     else:
-        gpio.set(valve_close_pin, True)
+        with hardware_process_lock:
+            gpio.set(valve_close_pin, True)
+
         sleep(impact_duration)
-        gpio.set(valve_close_pin, False)
+
+        with hardware_process_lock:
+            gpio.set(valve_close_pin, False)
 
 
 def close_valve(heating_circuit_index: HeatingCircuitIndexModel):
@@ -118,10 +132,14 @@ def close_valve(heating_circuit_index: HeatingCircuitIndexModel):
         sleep(0.1)
         return
 
-    gpio.set(valve_open_pin, False)
-    gpio.set(valve_close_pin, False)
+    with hardware_process_lock:
+        gpio.set(valve_open_pin, False)
+        gpio.set(valve_close_pin, False)
+
     sleep(0.1)
-    gpio.set(valve_close_pin, True)
+
+    with hardware_process_lock:
+        gpio.set(valve_close_pin, True)
 
 
 def open_valve(heating_circuit_index: HeatingCircuitIndexModel):
@@ -132,17 +150,21 @@ def open_valve(heating_circuit_index: HeatingCircuitIndexModel):
         sleep(0.1)
         return
 
-    gpio.set(valve_open_pin, False)
-    gpio.set(valve_close_pin, False)
+    with hardware_process_lock:
+        gpio.set(valve_open_pin, False)
+        gpio.set(valve_close_pin, False)
+
     sleep(0.1)
-    gpio.set(valve_open_pin, True)
+
+    with hardware_process_lock:
+        gpio.set(valve_open_pin, True)
 
 
 def set_analog_valve_impact(heating_circuit_index: HeatingCircuitIndexModel, impact: float):
-    gpio.dac_chip_select()
-
     channel = heating_circuit_index
     value = (impact / 100) * MCP4922.FULL_RANGE
 
-    with MCP4922() as dac:
-        dac.write(channel, int(value))
+    with hardware_process_lock:
+        gpio.dac_chip_select()
+        with MCP4922() as dac:
+            dac.write(channel, int(value))

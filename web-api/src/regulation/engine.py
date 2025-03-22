@@ -7,11 +7,11 @@ import gzip
 import bisect
 from datetime import datetime
 from time import sleep, time
-from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
+from multiprocessing import Event as ProcessEvent
 from threading import Thread, Event as ThreadingEvent, Lock as ThreadingLock
 from typing import Optional
 import uuid
-from models.regulator.shared_regulator_state_model import SharedRegulatorStateModel, getDefaultSharedRegulatorState
+from models.regulator.shared_regulator_state_model import SharedRegulatorStateModel, get_default_shared_regulator_state
 from models.regulator.enums.outdoor_temperature_sensor_failure_action_type_model import OutdoorTemperatureSensorFailureActionTypeModel
 from models.regulator.enums.supply_pipe_temperature_sensor_failure_action_type_model import SupplyPipeTemperatureSensorFailureActionTypeModel
 
@@ -30,7 +30,6 @@ from models.regulator.enums.temperature_sensor_channel_model import TemperatureS
 from models.regulator.enums.failure_action_type_model import FailureActionTypeModel
 from regulation.metadata.decorators import regulator_starter_metadata
 from utils.datetime_helper import is_last_day_of_month
-
 
 class RegulationEngine:
     updating_rtc_period = 60
@@ -65,11 +64,10 @@ class RegulationEngine:
     analog_impact_result_debug_msg = 'The analog impact result: ANL=%.2f%%'
     writing_archives_error_msg = 'An error has happened during writing archives: %s'
 
-    def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardwares_process_lock: ProcessLock, logging_level: int) -> None:
+    def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, logging_level: int) -> None:
 
         self._heating_circuit_index = heating_circuit_index
         self._process_cancellation_event = process_cancellation_event
-        self._hardware_process_lock = hardwares_process_lock
 
         self._shared_pid_impact_result_lock = ThreadingLock()
         self._shared_pid_impact_result: Optional[PidImpactResultModel] = None
@@ -116,7 +114,6 @@ class RegulationEngine:
                 json = file.read()
             finally:
                 fcntl.flock(file.fileno(), fcntl.LOCK_UN)
-        file = None
 
         regulator_settings = RegulatorSettingsModel.parse_raw(json)
 
@@ -226,17 +223,16 @@ class RegulationEngine:
 
     def _get_archive(self) -> ArchiveModel:
         """
-        It receives mesurment results from four temperature sensors (OUTDOOR, ROOM, SUPPLY_PIPE, RETURN_PIPE)
+        It receives measurement results from four temperature sensors (OUTDOOR, ROOM, SUPPLY_PIPE, RETURN_PIPE)
         and returns a packet of data in an object of the ArchiveModel class
         """
-        with self._hardware_process_lock:
-            outdoor_temperature_measured, room_temperature_measured, supply_pipe_temperature_measured, return_pipe_temperature_measured = \
-                equipments.get_temperatures([
-                    TemperatureSensorChannelModel.OUTDOOR_TEMPERATURE,
-                    TemperatureSensorChannelModel.ROOM_TEMPERATURE,
-                    TemperatureSensorChannelModel[f'SUPPLY_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}'],
-                    TemperatureSensorChannelModel[f'RETURN_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}']
-                ])
+        outdoor_temperature_measured, room_temperature_measured, supply_pipe_temperature_measured, return_pipe_temperature_measured = \
+            equipments.get_temperatures([
+                TemperatureSensorChannelModel.OUTDOOR_TEMPERATURE,
+                TemperatureSensorChannelModel.ROOM_TEMPERATURE,
+                TemperatureSensorChannelModel[f'SUPPLY_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}'],
+                TemperatureSensorChannelModel[f'RETURN_PIPE_TEMPERATURE_{self._heating_circuit_index + 1}']
+            ])
 
         self._logger.debug(
             RegulationEngine.measured_temperatures_debug_msg,
@@ -256,7 +252,7 @@ class RegulationEngine:
 
     def _save_shared_archive(self, shared_regulator_state: SharedRegulatorStateModel):
         """
-        It performs saving the shared regulattion state the values of which are used to display on mnenoschemas in the web UI app
+        It performs saving the shared regulation state the values of which are used to display on mnenoschemas in the web UI app
         """
         root_folder = pathlib.Path(__file__).parent.parent.parent
         shared_archive_file_name = f'{self._heating_circuit_settings.type.name}__{self._heating_circuit_index}'
@@ -271,17 +267,16 @@ class RegulationEngine:
                     os.fsync(shared_file.fileno())
                 finally:
                     fcntl.flock(shared_file.fileno(), fcntl.LOCK_UN)
-            shared_file = None
         except Exception as ex:
             self._logger.error("The saving shared regulator state was failed.", ex, exc_info=True, stack_info=True)
 
     def _save_archives(self, archive: ArchiveModel):
         """
-        This procedure peforms saving the current received archive to an archive file
+        This procedure performs saving the current received archive to an archive file
         """
         # clearing the current archives if the new day has come
         if self._archives.items:
-            self._archives.items.sort(key=lambda archive: archive.datetime)
+            self._archives.items.sort(key=lambda arc: arc.datetime)
             latest_archive_day = self._archives.items[-1].datetime.day
             latest_archive_month = self._archives.items[-1].datetime.month
 
@@ -303,7 +298,7 @@ class RegulationEngine:
 
         is_already_saved = next((
             archive for archive in self._archives.items
-            if archive.datetime >= start_current_hour and archive.datetime <= end_current_hour
+            if start_current_hour <= archive.datetime <= end_current_hour
         ),  None) is not None
 
         if is_already_saved:
@@ -329,7 +324,6 @@ class RegulationEngine:
                         json = zip_content.decode('utf-8')
                         existed_archives = ArchivesModel.parse_raw(json)
                         self._archives.items.extend(existed_archives.items)
-                    file = None
 
                 self._archives.items.append(archive)
 
@@ -339,7 +333,6 @@ class RegulationEngine:
                     file.write(
                         json_text.encode()
                     )
-                file = None
 
                 self._logger.debug(RegulationEngine.writing_archives_debug_msg, archive_file_name)
 
@@ -351,8 +344,7 @@ class RegulationEngine:
         It refreshes the working datetime according to a hardware managed date and time saved in the RTC
         """
         if self._last_refreshing_rtc_time is None or time() - self._last_refreshing_rtc_time >= RegulationEngine.updating_rtc_period:
-            with self._hardware_process_lock:
-                self._rtc_datetime = equipments.get_rtc_datetime()
+            self._rtc_datetime = equipments.get_rtc_datetime()
 
             self._last_refreshing_rtc_time = time()
             self._logger.debug(RegulationEngine.getting_current_rtc_debug_msg, f'{self._rtc_datetime}')
@@ -361,7 +353,7 @@ class RegulationEngine:
         """
         The function allows to get a room/hot water temperature based on
         the control mode of the regulator and/or its schedules.
-        It's impotrant to notice that the target temperature for the HOT_WATER heating curcuit is the hot water temperature, not the room temperature
+        It's important to notice that the target temperature for the HOT_WATER heating circuit is the hot water temperature, not the room temperature
         """
         control_mode = self._heating_circuit_settings.control_parameters.control_mode
         comfort_temperature = self._heating_circuit_settings.control_parameters.comfort_temperature
@@ -406,7 +398,7 @@ class RegulationEngine:
         It's the most important calculation function that allows to get each of the components of the algorithm PID regulation
         """
 
-        insensivity_threshold = self._heating_circuit_settings.regulation_parameters.insensivity_threshold
+        insensitivity_threshold = self._heating_circuit_settings.regulation_parameters.insensitivity_threshold
         manual_control_mode_temperature_setpoint = self._heating_circuit_settings.control_parameters.manual_control_mode_temperature_setpoint
 
         room_temperature_influence = self._heating_circuit_settings.control_parameters.room_temperature_influence
@@ -426,8 +418,8 @@ class RegulationEngine:
                 return_pipe_temperature=float("inf"),
             )
 
-        # the difference between measured and calculated values of the supply pipe temperatures less than the insensivity threshold
-        if abs(calculated_temperatures.supply_pipe_temperature - entry.archive.supply_pipe_temperature) <= insensivity_threshold:
+        # the difference between measured and calculated values of the supply pipe temperatures less than the insensitivity threshold
+        if abs(calculated_temperatures.supply_pipe_temperature - entry.archive.supply_pipe_temperature) <= insensitivity_threshold:
             return PidImpactResultComponentsModel(
                 deviation=0.0,
                 total_deviation=0.0,
@@ -579,7 +571,7 @@ class RegulationEngine:
 
     def _run_polling(self, threading_cancellation_event: ThreadingEvent) -> None:
         """
-        It begins an endless loop polling all of four temperature sensors.
+        It begins an endless loop polling all four temperature sensors.
         The measuring results are always saved in files partitioned by dates and separate folders by years
         """
         self._logger.info(RegulationEngine.sensors_polling_started_info_msg)
@@ -629,7 +621,7 @@ class RegulationEngine:
 
                     drive_unit_analog_control = self._heating_circuit_settings.regulation_parameters.drive_unit_analog_control
 
-                    if drive_unit_analog_control == True:
+                    if drive_unit_analog_control:
                         pulse_duration_valve = self._heating_circuit_settings.regulation_parameters.pulse_duration_valve
                         analog_valve_impact = analog_valve_impact + pid_impact_result.impact / \
                             (pulse_duration_valve / self._calculation_period)
@@ -641,7 +633,7 @@ class RegulationEngine:
                         elif analog_valve_impact < 0.0:
                             analog_valve_impact = 0.0
 
-                    # sharing a value of the PID impact and the alnalog valver impact among the main and polling threads
+                    # sharing a value of the PID impact and the analog valve impact among the main and polling threads
                     with self._shared_pid_impact_result_lock:
                         self._shared_pid_impact_result = PidImpactResultModel(
                             impact=pid_impact_result.impact,
@@ -679,7 +671,7 @@ class RegulationEngine:
                         return_pipe_temperature_calculated=calculated_temperatures.return_pipe_temperature,
                     ))
                 else:
-                    self._save_shared_archive(getDefaultSharedRegulatorState(archive.datetime, failure_action_state))
+                    self._save_shared_archive(get_default_shared_regulator_state(archive.datetime, failure_action_state))
 
                 end_time = time()
                 delta = end_time - start_time
@@ -696,7 +688,7 @@ class RegulationEngine:
 
     def start(self) -> None:
         """
-        It's an entry point of the regutation machine
+        It's an entry point of the regulation machine
         which contains a loop that produces an impact to regulation valves.
         It executes in the main thread of a dedicated process of the regulation machine
         """
@@ -724,7 +716,7 @@ class RegulationEngine:
                     break
 
                 with self._shared_polling_error_lock:
-                    if self._shared_polling_error == True:
+                    if self._shared_polling_error:
                         if polling_thread.is_alive():
                             polling_thread.join()
                         self._logger.critical(RegulationEngine.regulation_stopped_critical_msg)
@@ -750,17 +742,14 @@ class RegulationEngine:
                     pass
 
                 if failure_action_state == FailureActionTypeModel.OPEN_VALVE:
-                    with self._hardware_process_lock:
-                        equipments.open_valve(heating_circuit_index=self._heating_circuit_index)
+                    equipments.open_valve(heating_circuit_index=self._heating_circuit_index)
 
                 if failure_action_state == FailureActionTypeModel.CLOSE_VALVE:
-                    with self._hardware_process_lock:
-                        equipments.close_valve(heating_circuit_index=self._heating_circuit_index)
+                    equipments.close_valve(heating_circuit_index=self._heating_circuit_index)
 
                 if failure_action_state == FailureActionTypeModel.ANALOG_VALVE_ERROR:
                     if regulation_parameters.drive_unit_analog_control:
-                        with self._hardware_process_lock:
-                            equipments.set_analog_valve_impact(heating_circuit_index=self._heating_circuit_index, impact=50.0)
+                        equipments.set_analog_valve_impact(heating_circuit_index=self._heating_circuit_index, impact=50.0)
 
                 if failure_action_state in [FailureActionTypeModel.NO_FAILURE, FailureActionTypeModel.TEMPERATURE_SUSTENANCE]:
                     pid_impact_result: Optional[PidImpactResultModel] = None
@@ -780,25 +769,24 @@ class RegulationEngine:
                             )
                         analog_valve_impact = self._shared_analog_valve_impact
 
-                    # producing an impact to the requlation valve
+                    # producing an impact to the regulation valve
                     if pid_impact_result is not None:
-                        with self._hardware_process_lock:
-                            if not regulation_parameters.drive_unit_analog_control:
-                                impact_duration = abs(pid_impact_result.impact * regulation_parameters.pulse_duration_valve) / 100
+                        if not regulation_parameters.drive_unit_analog_control:
+                            impact_duration = abs(pid_impact_result.impact * regulation_parameters.pulse_duration_valve) / 100
 
-                                if impact_duration > regulation_parameters.pulse_duration_valve:
-                                    impact_duration = regulation_parameters.pulse_duration_valve
+                            if impact_duration > regulation_parameters.pulse_duration_valve:
+                                impact_duration = regulation_parameters.pulse_duration_valve
 
-                                equipments.set_valve_impact(
-                                    heating_circuit_index=self._heating_circuit_index,
-                                    impact_sign=pid_impact_result.impact > 0.0,
-                                    impact_duration=impact_duration
-                                )
-                            else:
-                                equipments.set_analog_valve_impact(
-                                    heating_circuit_index=self._heating_circuit_index,
-                                    impact=analog_valve_impact
-                                )
+                            equipments.set_valve_impact(
+                                heating_circuit_index=self._heating_circuit_index,
+                                impact_sign=pid_impact_result.impact > 0.0,
+                                impact_duration=impact_duration
+                            )
+                        else:
+                            equipments.set_analog_valve_impact(
+                                heating_circuit_index=self._heating_circuit_index,
+                                impact=analog_valve_impact
+                            )
 
                 end_time = time()
                 delta = end_time - start_time
@@ -822,14 +810,13 @@ class RegulationEngine:
         HeatingCircuitTypeModel.HOT_WATER
     ]
 )
-def regulation_engine_starter(heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, hardware_process_lock: ProcessLock):
+def regulation_engine_starter(heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent):
     """
-    It's a dediated function that serves to initiate the execution of the regulation engine
+    It's a dedicated function that serves to initiate the execution of the regulation engine
     """
     engine = RegulationEngine(
         heating_circuit_index=heating_circuit_index,
         process_cancellation_event=process_cancellation_event,
-        hardwares_process_lock=hardware_process_lock,
         logging_level=logging.DEBUG
     )
     engine.start()

@@ -14,7 +14,7 @@ class RegulationParametersModel(AppBaseModel):
 
     drive_unit_analog_control: bool
 
-    insensivity_threshold: float
+    insensitivity_threshold: float
 
     full_pid_impact_range: float
 

@@ -37,7 +37,7 @@ base_testable_settings = HeatingCircuitModel(
         drive_unit_analog_control=False,
 
         full_pid_impact_range=1000,
-        insensivity_threshold=1,
+        insensitivity_threshold=1,
         proportionality_factor_denominator=5,
         integration_factor_denominator=50
     ),

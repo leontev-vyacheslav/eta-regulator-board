@@ -4,5 +4,6 @@ from threading import Lock as ThreadLock
 
 
 hardware_process_lock = ProcessLock()
+hardware_process_rtc_lock = ProcessLock()
 
 worker_thread_locks: Dict[str, ThreadLock] = {}

@@ -80,7 +80,7 @@ export const RegulationParametersForm = () => {
                 } } />
 
             <SimpleItem
-                dataField='insensivityThreshold'
+                dataField='insensitivityThreshold'
                 label={ { location: 'top', showColon: true, text: `Порог нечувствительности (${ currentHeatingCircuitType.shotDescription })` } }
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {

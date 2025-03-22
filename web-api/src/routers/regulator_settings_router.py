@@ -19,9 +19,9 @@ from utils.encoding import verify_access_token
 from lockers import worker_thread_locks
 
 
-def on_chanded_control_mode_settings_property(change_tracker_items: List[ChangeTrackerItemModel]) -> None:
+def on_changed_control_mode_settings_property(change_tracker_items: List[ChangeTrackerItemModel]) -> None:
     """
-    It method define a specific response to a change of the "control_mode" property in the regulator settings model.
+    This method define a specific response to a change of the "control_mode" property in the regulator settings model.
     We need to stop a certain regulation process when the "control_mode" property equals "OFF" value or start the new regulation process otherwise
     """
     control_mode_change_tracker_item = next(
@@ -73,7 +73,7 @@ def on_chanded_control_mode_settings_property(change_tracker_items: List[ChangeT
 
 def on_changed_type_settings_property(change_tracker_items: List[ChangeTrackerItemModel]) -> None:
     """
-    It method define a specific response to a change of the "type" property (the heating system type) in the regulator settings model.
+    This method define a specific response to a change of the "type" property (the heating system type) in the regulator settings model.
     The current regulation engine process must be stopped and restarted for a new type of heating system
     """
     type_change_tracker_item = next(
@@ -154,7 +154,7 @@ def put_regulator_settings(body: RegulatorSettingsModel):
         regulator_settings_repository.update(regulator_settings)
 
         on_changed_type_settings_property(change_tracker_items)
-        on_chanded_control_mode_settings_property(change_tracker_items)
+        on_changed_control_mode_settings_property(change_tracker_items)
 
         return JsonResponse(
             response=regulator_settings_repository.settings,

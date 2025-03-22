@@ -5,7 +5,6 @@ import time
 from typing import Callable, Optional
 
 from flask_ex import FlaskEx
-from lockers import hardware_process_lock
 from models.common.app_background_process_model import AppBackgroundProcessModel
 from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
@@ -37,7 +36,7 @@ def launch_regulation_engines(app: FlaskEx, target_heating_circuit_index: Option
         regulation_heating_circuit_process = Process(
             name=reguration_process_name,
             target=regulation_engine_starter,
-            args=(HeatingCircuitIndexModel(index), process_cancellation_event, hardware_process_lock),
+            args=(HeatingCircuitIndexModel(index), process_cancellation_event),
             daemon=False
         )
         regulation_heating_circuit_process.start()
