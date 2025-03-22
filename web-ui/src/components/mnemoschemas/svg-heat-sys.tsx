@@ -2251,6 +2251,299 @@ const SvgHeatSystem = (props) => (
                 </tspan>
             </text>
         </g>
+
+        <g transform="translate(-33, 0)"
+            style={ {
+                display: 'inline',
+            } }>
+            <rect
+                style={ {
+                    display: 'inline',
+                    fill: '#f2f2f2',
+                    fillOpacity: 1,
+                    stroke: 'url(#linearGradient12662)',
+                    strokeWidth: 0.0561762,
+                    strokeDasharray: 'none',
+                    paintOrder: 'normal',
+                } }
+                width={ 13.222986 }
+                height={ 10.004094 }
+                x={ 44.084148 }
+                y={ 11.776385 }
+                ry={ 0.99756312 }
+            />
+            <text
+                className="st64 st65"
+                x={ 48.75909 }
+                y={ 15.144771 }
+                style={ {
+                    fontSize: 3,
+                    fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
+                    display: 'inline',
+                    strokeWidth: 0.261937,
+                } }>
+                {'Tп.'}
+            </text>
+            <path
+                className="st66"
+                d="m 45.142955,18.944319 v 0 c -0.154543,0 -0.280273,-0.12573 -0.280273,-0.280273 v -4.371737 c 0,-0.154543 0.12573,-0.280273 0.280273,-0.280273 v 0 c 0.154544,0 0.280274,0.12573 0.280274,0.280273 v 4.369118 c 0,0.157162 -0.12573,0.282892 -0.280274,0.282892 z"
+                style={ {
+                    display: 'inline',
+                    fill: 'url(#SVGID_47_)',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.922932 }
+                y1={ 14.614491 }
+                x2={ 45.163914 }
+                y2={ 14.614491 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.922932 }
+                y1={ 16.023716 }
+                x2={ 45.163914 }
+                y2={ 16.023716 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.922932 }
+                y1={ 17.43294 }
+                x2={ 45.163914 }
+                y2={ 17.43294 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.93079 }
+                y1={ 14.884285 }
+                x2={ 45.038189 }
+                y2={ 14.884285 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.93079 }
+                y1={ 15.167179 }
+                x2={ 45.038189 }
+                y2={ 15.167179 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.93079 }
+                y1={ 15.447451 }
+                x2={ 45.038189 }
+                y2={ 15.447451 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.93079 }
+                y1={ 15.730344 }
+                x2={ 45.038189 }
+                y2={ 15.730344 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.93079 }
+                y1={ 16.29351 }
+                x2={ 45.038189 }
+                y2={ 16.29351 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.93079 }
+                y1={ 16.573784 }
+                x2={ 45.038189 }
+                y2={ 16.573784 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.93079 }
+                y1={ 16.856678 }
+                x2={ 45.038189 }
+                y2={ 16.856678 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.93079 }
+                y1={ 17.13957 }
+                x2={ 45.038189 }
+                y2={ 17.13957 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.93079 }
+                y1={ 17.702736 }
+                x2={ 45.038189 }
+                y2={ 17.702736 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.93079 }
+                y1={ 17.983009 }
+                x2={ 45.038189 }
+                y2={ 17.983009 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st14"
+                x1={ 44.93079 }
+                y1={ 18.2659 }
+                x2={ 45.038189 }
+                y2={ 18.2659 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#000000',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st61"
+                x1={ 44.922932 }
+                y1={ 18.682381 }
+                x2={ 44.922932 }
+                y2={ 15.612473 }
+                style={ {
+                    display: 'inline',
+                    fill: 'none',
+                    stroke: '#e30613',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <path
+                className="st62"
+                d="m 45.318454,19.331987 c 0,0.09692 -0.07858,0.178117 -0.178118,0.178117 -0.09954,0 -0.178117,-0.07858 -0.178117,-0.178117 0,-0.09692 0.07858,-0.178118 0.178117,-0.178118 0.09954,0 0.178118,0.0812 0.178118,0.178118 z"
+                style={ {
+                    display: 'inline',
+                    fill: '#9c2724',
+                    stroke: '#e30613',
+                    strokeWidth: 0.0654844,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <line
+                className="st63"
+                x1={ 45.142963 }
+                y1={ 18.944319 }
+                x2={ 45.142963 }
+                y2={ 19.156487 }
+                style={ {
+                    display: 'inline',
+                    fill: '#706f6f',
+                    stroke: '#e30613',
+                    strokeWidth: 0.196453,
+                    strokeMiterlimit: 10,
+                } }
+            />
+            <text
+                className="st64 st65"
+                id="T_room"
+                x={ 47.184452 }
+                y={ 18.265743 }
+                style={ {
+                    fontSize: '2.3px',
+                    fontFamily: 'Roboto,RobotoFallback,Helvetica,Arial,sans-serif',
+                    display: 'inline',
+                    strokeWidth: 0.261937,
+                } }>
+                {props.roomTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })}, °C
+            </text>
+        </g>
     </svg>
 );
 export default SvgHeatSystem;

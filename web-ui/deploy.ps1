@@ -28,7 +28,7 @@ Write-Host "Bump up '$WEB_UI_APP_NAME' build version before delpoyment ($buildDa
 Set-AppVersion `
     -RelativePath "./src/constants/app-constants.ts" `
     -SearchPattern "APP_VERSION = " `
-    -Substitution "const APP_VERSION = 'v.0.1.${buildDateTimeMark}';"
+    -Substitution "const APP_VERSION = 'v.0.2.${buildDateTimeMark}';"
 Start-Sleep -Seconds 2
 Write-Host
 

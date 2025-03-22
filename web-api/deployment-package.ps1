@@ -19,7 +19,7 @@ if ($BumpVersion -eq "yes" -or $BumpVersion -eq "y") {
     Set-AppVersion `
         -RelativePath "./src/app.py" `
         -SearchPattern "APP_VERSION = " `
-        -Substitution "APP_VERSION = 'v.0.1.${buildDateTimeMark}'"
+        -Substitution "APP_VERSION = 'v.0.2.${buildDateTimeMark}'"
 }
 
 If (-not(Test-Path -Path './distro')) {

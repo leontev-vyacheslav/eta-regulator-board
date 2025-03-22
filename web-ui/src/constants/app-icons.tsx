@@ -84,8 +84,8 @@ export { IoSquareSharp as ReturnPipeChartSingIcon } from 'react-icons/io5';
 export { IoTriangleSharp as OutdoorChartSingIcon } from 'react-icons/io5';
 export { IoTimeSharp as TimeChartSingIcon } from 'react-icons/io5';
 
-export { IoImageOutline as HeatingCircuitMnemoschemaIcon } from 'react-icons/io5';
-export { IoInformationCircleOutline as HeatingCircuitCodeIcon } from 'react-icons/io5';
+export { IoShapesOutline as HeatingCircuitMnemoschemaIcon } from 'react-icons/io5';
+export { IoCodeWorkingOutline as HeatingCircuitCodeIcon } from 'react-icons/io5';
 
 export { IoTimerOutline as RelaunchIcon } from 'react-icons/io5';
 

@@ -36,7 +36,7 @@ Write-Host "Bump up '$WEB_API_APP_NAME' build version before delpoyment ($buildD
 Set-AppVersion `
     -RelativePath "./src/app.py" `
     -SearchPattern "APP_VERSION = " `
-    -Substitution "APP_VERSION = 'v.0.1.${buildDateTimeMark}'"
+    -Substitution "APP_VERSION = 'v.0.2.${buildDateTimeMark}'"
 Start-Sleep -Seconds 2
 Write-Host
 

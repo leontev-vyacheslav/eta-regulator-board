@@ -19,7 +19,7 @@ if ($BumpVersion -eq "yes" -or $BumpVersion -eq "y") {
     Set-AppVersion `
         -RelativePath "./src/constants/app-constants.ts" `
         -SearchPattern "APP_VERSION = " `
-        -Substitution "const APP_VERSION = 'v.0.1.${buildDateTimeMark}';"
+        -Substitution "const APP_VERSION = 'v.0.2.${buildDateTimeMark}';"
 
     Set-AppVersion `
         -RelativePath "./public/index.html" `
