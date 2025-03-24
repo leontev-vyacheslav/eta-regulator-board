@@ -23,18 +23,18 @@ def launch_regulation_engines(app: FlaskEx, target_heating_circuit_index: Option
         if item.control_parameters.control_mode == ControlModeModel.OFF:
             return
 
-        reguration_process_name = f'regulation_process_{index}_{item.type.name}'
+        regulation_process_name = f'regulation_process_{index}_{item.type.name}'
 
         delay = random.random() + 1
         start_time_waiting = time.time()
-        app.app_logger.info(f'Waiting before starting \'{reguration_process_name}\' for {delay:.2f} sec...')
+        app.app_logger.info(f'Waiting before starting \'{regulation_process_name}\' for {delay:.2f} sec...')
         while time.time() - start_time_waiting < delay:
             time.sleep(0.01)
 
         process_cancellation_event = ProcessEvent()
 
         regulation_heating_circuit_process = Process(
-            name=reguration_process_name,
+            name=regulation_process_name,
             target=regulation_engine_starter,
             args=(HeatingCircuitIndexModel(index), process_cancellation_event),
             daemon=False
@@ -48,7 +48,7 @@ def launch_regulation_engines(app: FlaskEx, target_heating_circuit_index: Option
             lifetime = int(env_lifetime)
 
         app_process = AppBackgroundProcessModel(
-            name=reguration_process_name,
+            name=regulation_process_name,
             process=regulation_heating_circuit_process,
             cancellation_event=process_cancellation_event,
             lifetime=lifetime + random.randint(1, 5),
@@ -58,7 +58,7 @@ def launch_regulation_engines(app: FlaskEx, target_heating_circuit_index: Option
 
         app.app_background_processes.append(app_process)
 
-        app.app_logger.info(f'The process \'{reguration_process_name}\' was launched with PID {regulation_heating_circuit_process.pid} and lifetime {lifetime} sec.')
+        app.app_logger.info(f'The process \'{regulation_process_name}\' was launched with PID {regulation_heating_circuit_process.pid} and lifetime {lifetime} sec.')
 
     regulation_engine_starter_name = os.environ.get('REGULATION_ENGINE_STARTER')
     if regulation_engine_starter_name is None:

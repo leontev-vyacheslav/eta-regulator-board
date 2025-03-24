@@ -8,6 +8,6 @@ class RegulatorSettingsRepository(SettingsRepositoryBase):
         default_settings_data_path = self._app.app_root_path.joinpath('data/settings/default_heating_circuits_settings.json')
 
         with open(default_settings_data_path, 'r', encoding='utf-8') as file:
-            json = file.read()
+            json_text = file.read()
 
-        return HeatingCircuitsModel.parse_raw(json)
+        return HeatingCircuitsModel.parse_raw(json_text)

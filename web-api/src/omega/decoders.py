@@ -21,3 +21,7 @@ def int_to_bcd(n):
             bcd <<= 1
 
     return bcd >> 1
+
+
+def adc_value_to_temperature(value: float) -> float:
+    return (973 * 3.3 / value - 973 - 1000) / 3.9

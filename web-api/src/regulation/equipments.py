@@ -3,7 +3,6 @@ from datetime import datetime, timezone
 from typing import List
 from lockers import hardware_process_lock, hardware_process_rtc_lock
 
-
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.temperature_sensor_channel_model import TemperatureSensorChannelModel
 from omega.ds1307 import DS1307
@@ -13,6 +12,8 @@ from utils.debugging import is_debug
 from omega import gpio
 from omega.mcp3208 import MCP3208
 from omega.gpio import V1_PLUS, V1_MINUS, V2_PLUS, V2_MINUS
+
+from omega.decoders import adc_value_to_temperature
 
 VALVE1_OPEN = V1_PLUS
 VALVE1_CLOSE = V1_MINUS
@@ -37,12 +38,12 @@ def get_temperatures(channels: List[TemperatureSensorChannelModel], measurements
                     try:
                         sleep(0.01)
                         value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
-                    except:
+                    except Exception:
                         results.append(float("inf"))
                         continue
 
                     try:
-                        temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
+                        temperature = adc_value_to_temperature(value)
 
                         if abs(temperature) > 125:
                             temperature = float("inf")
@@ -67,13 +68,13 @@ def get_temperature(channel: TemperatureSensorChannelModel, measurements: int = 
             sleep(0.1)
             with MCP3208() as mcp_3208:
                 value = mcp_3208.read_avg(channel=channel.value, measurements=measurements)
-        except:
-            temperature = float("inf")
+        except Exception:
+            return float("inf")
         finally:
             gpio.set(gpio.GPIO_Vp, True)
 
         try:
-            temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
+            temperature = adc_value_to_temperature(value)
         except ZeroDivisionError:
             return float("inf")
 

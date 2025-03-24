@@ -10,6 +10,8 @@ from responses.json_response import JsonResponse
 from utils.debugging import is_debug
 from lockers import hardware_process_lock
 
+from omega.decoders import adc_value_to_temperature
+
 
 @app.api_route('/adc/<channel>', methods=['GET'])
 @validate(response_by_alias=True)
@@ -44,7 +46,7 @@ def get_temperature_value(channel: int):
     else:
         value = random() * MCP3208.REFERENCE_VOLTAGE
     try:
-        temperature = (973 * 3.3 / value - 973 - 1000) / 3.9
+        temperature = adc_value_to_temperature(value)
     except ZeroDivisionError:
         temperature = float("inf")
 

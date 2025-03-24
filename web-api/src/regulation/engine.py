@@ -111,11 +111,11 @@ class RegulationEngine:
         with open(regulator_settings_path, mode='r', encoding='utf-8') as file:
             try:
                 fcntl.flock(file.fileno(), fcntl.LOCK_SH)
-                json = file.read()
+                json_text = file.read()
             finally:
                 fcntl.flock(file.fileno(), fcntl.LOCK_UN)
 
-        regulator_settings = RegulatorSettingsModel.parse_raw(json)
+            regulator_settings = RegulatorSettingsModel.parse_raw(json_text)
 
         return regulator_settings.heating_circuits.items[self._heating_circuit_index]
 
@@ -125,7 +125,13 @@ class RegulationEngine:
         after the expiration of a period of time equal to "calculation_period" * "updating_settings_factor" ( by default 2.5 * 5 sec)
         """
         if time() - self._last_refreshing_settings_time > self._calculation_period * RegulationEngine.updating_settings_factor:
-            self._heating_circuit_settings = self._get_settings()
+            try:
+                self._heating_circuit_settings = self._get_settings()
+            except Exception as ex:
+                self._logger.error("The refresh settings was failed.", ex, exc_info=True, stack_info=True)
+
+                return
+
             self._last_refreshing_settings_time = time()
             # class members depending on settings
             self._heating_circuit_type = self._heating_circuit_settings.type

@@ -30,26 +30,28 @@ class SettingsRepositoryBase:
         with open(self.data_path, 'r', encoding='utf-8') as file:
             try:
                 fcntl.flock(file.fileno(), fcntl.LOCK_SH)
-                json = file.read()
+                json_text = file.read()
             finally:
                 fcntl.flock(file.fileno(), fcntl.LOCK_UN)
 
             settings_model = globals().get(self.__class__.__name__.replace("Repository", 'Model'))
 
-            self.settings = getattr(settings_model, 'parse_raw')(json)
+            self.settings = getattr(settings_model, 'parse_raw')(json_text)
 
     def _dump(self) -> bool:
-        with open(self.data_path, 'w', encoding='utf-8') as file:
-            json = self.settings.json(by_alias=True, indent=4, ensure_ascii=False)
+        with open(self.data_path, 'r+', encoding='utf-8') as file:
+            json_text = self.settings.json(by_alias=True, indent=4, ensure_ascii=False)
             try:
                 fcntl.flock(file.fileno(), fcntl.LOCK_EX)
-                dumped_bytes = file.write(json)
+                file.truncate(0)
+                file.seek(0)
+                dumped_bytes = file.write(json_text)
                 file.flush()
                 os.fsync(file.fileno())
             finally:
                 fcntl.flock(file.fileno(), fcntl.LOCK_UN)
 
-        return len(json) == dumped_bytes
+        return len(json_text) == dumped_bytes
 
     def _find_changed_fields(self, obj1: Any, obj2: Any, path: str = '', visited: Optional[Set] = None) -> List[ChangeTrackerItemModel]:
 
