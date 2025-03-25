@@ -126,10 +126,17 @@ def get_regulator_settings() -> RegulatorSettingsModel:
 @authorize(roles=[UserRoleModel.ADMIN])
 @validate(response_by_alias=True)
 def put_regulator_settings(body: RegulatorSettingsModel):
-
         regulator_settings = body
-        regulator_settings_repository = app.get_regulator_settings_repository()
-        change_tracker_items = regulator_settings_repository.find_changed_fields(regulator_settings)
+        try:
+            regulator_settings_repository = app.get_regulator_settings_repository()
+            change_tracker_items = regulator_settings_repository.find_changed_fields(regulator_settings)
+        except Exception as ex:
+            app.app_logger.error("The finding changes in settings was failed: %s", str(ex), exc_info=True, stack_info=True)
+
+            return Response(
+                status=HTTPStatus.INTERNAL_SERVER_ERROR
+            )
+
         required_access_token = next(
             (
                 c.required_access_token
@@ -159,6 +166,7 @@ def put_regulator_settings(body: RegulatorSettingsModel):
             return Response(
                 status=HTTPStatus.INTERNAL_SERVER_ERROR
             )
+
         try:
             on_changed_type_settings_property(change_tracker_items)
             on_changed_control_mode_settings_property(change_tracker_items)
