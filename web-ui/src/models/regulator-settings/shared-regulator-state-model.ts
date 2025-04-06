@@ -11,4 +11,6 @@ export type SharedRegulatorStateModel = ArchiveModel & PidImpactResultModel & {
     supplyPipeTemperatureCalculated: number;
 
     returnPipeTemperatureCalculated: number;
+
+    refreshToken?: string;
 };

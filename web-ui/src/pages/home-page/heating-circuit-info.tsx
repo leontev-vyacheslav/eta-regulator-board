@@ -3,9 +3,18 @@ import { WorkDateWidget } from '../../components/work-date-widget/work-date-widg
 import { HeatingCircuitIndexModel } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { useRegulatorSettings } from '../../contexts/app-regulator-settings';
 import { HeatingCircuitInfoItem } from './heating-circuit-info-item';
+import { MainMenu } from '../../components/menu/main-menu/main-menu';
+import { RefreshIcon } from '../../constants/app-icons';
+import { useHomePage } from './home-page-context';
+import { getQuickGuid } from '../../utils/uuid';
 
-export const HeatingCircuitInfo = ({ heatingCircuitIndex }: { heatingCircuitIndex: HeatingCircuitIndexModel }) => {
+export type HeatingCircuitInfoProps = {
+     heatingCircuitIndex: HeatingCircuitIndexModel,
+}
+
+export const HeatingCircuitInfo = ({ heatingCircuitIndex }: HeatingCircuitInfoProps) => {
     const { getControlModeName } = useRegulatorSettings();
+    const { setUpdateSharedRegulatorStateRefreshToken } = useHomePage();
 
     return (
         <Form className='heating-circuit-info-form'>
@@ -20,9 +29,18 @@ export const HeatingCircuitInfo = ({ heatingCircuitIndex }: { heatingCircuitInde
             </SimpleItem>
             <SimpleItem render={ () => {
                 return (
-                    <HeatingCircuitInfoItem>
-                        {getControlModeName(heatingCircuitIndex)}
-                    </HeatingCircuitInfoItem>
+                    <div style={ { display: 'flex', alignItems: 'center' } }>
+                        <HeatingCircuitInfoItem>
+                            {getControlModeName(heatingCircuitIndex)}
+                        </HeatingCircuitInfoItem>
+                        <MainMenu items={ [
+                            {
+                                icon: () => <RefreshIcon />,
+                                onClick: () => {
+                                    setUpdateSharedRegulatorStateRefreshToken(getQuickGuid())
+                                }
+                            }
+                        ] } /></div>
                 );
             } }>
                 <Label text='Режим управления' showColon />

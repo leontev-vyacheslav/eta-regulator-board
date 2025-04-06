@@ -75,7 +75,6 @@ export const useArchivesData = () => {
         }, true, false, true);
 
         if (response && response.status === HttpConstants.StatusCodes.Ok) {
-
             if(typeof response.data === 'string' || response.data instanceof String) {
                 const rawObj = parseCustomJson((response.data as string).replaceAll('Infinity', '"Infinity"'));
 

@@ -4,3 +4,8 @@ export function getUuidV4 () {
         return v.toString(16);
     });
 }
+
+export function getQuickGuid() {
+    return Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15);
+}

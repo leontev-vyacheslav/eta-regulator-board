@@ -6,6 +6,8 @@ import { useRegulatorSettings } from '../../contexts/app-regulator-settings';
 import { useAppData } from '../../contexts/app-data/app-data';
 import { SharedRegulatorStateModel } from '../../models/regulator-settings/shared-regulator-state-model';
 import { FailureActionTypeModel } from '../../models/regulator-settings/enums/failure-action-type-model';
+import { useHomePage } from './home-page-context';
+import { getQuickGuid } from '../../utils/uuid';
 
 const defultSharedRegulatorState =
 {
@@ -33,16 +35,23 @@ export const HeatingCircuitSelector = ({ heatingCircuitIndex }: { heatingCircuit
     const { regulatorSettings } = useRegulatorSettings();
     const { getSharedRegulatorStateAsync } = useAppData();
     const [sharedRegulatorState, setSharedRegulatorState] = useState<SharedRegulatorStateModel>(defultSharedRegulatorState);
+    const { updateSharedRegulatorStateRefreshToken } = useHomePage();
+
+    const getMixedUpdateSharedRegulatorStateRefreshToken = useCallback(() => {
+        return `${updateSharedRegulatorStateRefreshToken.substring(2, 15)}${getQuickGuid().substring(2, 15)}`
+    }, [updateSharedRegulatorStateRefreshToken]);
 
     const updateSharedRegulatorStateAsync = useCallback(async () => {
         const sharedRegulatorState = await getSharedRegulatorStateAsync(heatingCircuitIndex);
-
+        const refreshToken = getMixedUpdateSharedRegulatorStateRefreshToken();
         if (sharedRegulatorState) {
-            setSharedRegulatorState(sharedRegulatorState);
+            setSharedRegulatorState({ ...sharedRegulatorState, refreshToken: refreshToken });
         } else {
-            setSharedRegulatorState(defultSharedRegulatorState);
+            setSharedRegulatorState({ ...defultSharedRegulatorState, refreshToken: refreshToken });
         }
-    }, [getSharedRegulatorStateAsync, heatingCircuitIndex]);
+
+        console.log(refreshToken);
+    }, [getMixedUpdateSharedRegulatorStateRefreshToken, getSharedRegulatorStateAsync, heatingCircuitIndex]);
 
     useEffect(() => {
         (async () => {

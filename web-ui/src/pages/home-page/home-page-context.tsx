@@ -1,8 +1,12 @@
 import { createContext, Dispatch, useContext, useState } from 'react';
+import { getUuidV4 } from '../../utils/uuid';
+
 
 export type HomePageContextModel = {
   isShowMnemoschema: boolean;
   setIsShowMnemoschema: Dispatch<React.SetStateAction<boolean>>;
+  updateSharedRegulatorStateRefreshToken: string,
+  setUpdateSharedRegulatorStateRefreshToken: Dispatch<React.SetStateAction<string>>;
 };
 
 const HomePageContext = createContext({} as HomePageContextModel);
@@ -10,11 +14,14 @@ const HomePageContext = createContext({} as HomePageContextModel);
 function HomePageContextProvider(props: any) {
 
   const [isShowMnemoschema, setIsShowMnemoschema] = useState<boolean>(true);
+  const [updateSharedRegulatorStateRefreshToken, setUpdateSharedRegulatorStateRefreshToken] = useState<string>(getUuidV4());
 
   return (
     <HomePageContext.Provider value={ {
       isShowMnemoschema,
-      setIsShowMnemoschema
+      setIsShowMnemoschema,
+      updateSharedRegulatorStateRefreshToken,
+      setUpdateSharedRegulatorStateRefreshToken
     } } { ...props } />
   );
 }

@@ -29,8 +29,17 @@
     height: 44px;
   }
 
+  .dx-toolbar-after .dx-toolbar-menu-container  {
+    display: none;
+  }
+
+
   .dx-icon-overflow {
     font-size: 24px;
+    color: rgba(0,0,0,0);
+  }
+  .dx-icon-overflow::before {
+    content: "\f01d";
   }
 }
 
