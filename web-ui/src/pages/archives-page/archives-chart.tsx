@@ -3,55 +3,10 @@ import { useRef } from 'react';
 import AppConstants from '../../constants/app-constants';
 import { ArchiveModel } from '../../models/regulator-settings/archive-model';
 import { formatMessage } from 'devextreme/localization';
-import { OutdoorChartSingIcon, ReturnPipeChartSingIcon, SupplyPipeChartSingIcon, TimeChartSingIcon } from '../../constants/app-icons';
-import { getUuidV4 } from '../../utils/uuid';
+import { ArchiveChartTooltip } from './archive-chart-tooltip';
 
-export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) => {
+export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: ArchiveModel[], isUsedOneAxis: boolean }) => {
     const chartRef = useRef<Chart>(null);
-
-    const TooltipTemplate = (info: any) => {
-        debugger
-        return (
-            <div className='temperature-graph-tooltip' data-guid={ getUuidV4() } style={ {} }>
-                {
-                    info.point.data.datetime != null  ?
-                        <div>
-                            <TimeChartSingIcon size={ 18 } />
-                            <div>Время:</div>
-                            <div>{(info.point.data.datetime as Date).toLocaleString('ru-RU')}</div>
-                        </div>
-                        : null
-                }
-                {
-                    info.point.data.outdoorTemperature != null ?
-                        <div>
-                            <OutdoorChartSingIcon size={ 18 } color={ AppConstants.colors.outdoorColor } />
-                            <div>Наружный воздух:</div>
-                            <div>{info.point.data.outdoorTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
-                        </div>
-                        : null
-                }
-                {
-                    info.point.data.supplyPipeTemperature  != null ?
-                        <div>
-                            <SupplyPipeChartSingIcon size={ 18 } color={ AppConstants.colors.supplyPipeColor } />
-                            <div>Подача:</div>
-                            <div>{info.point.data.supplyPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
-                        </div>
-                        : null
-                }
-                {
-                    info.point.data.returnPipeTemperature != null ?
-                        <div>
-                            <ReturnPipeChartSingIcon size={ 18 } color={ AppConstants.colors.returnPipeColor } />
-                            <div>Обратка:</div>
-                            <div>{info.point.data.returnPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
-                        </div>
-                        : null
-                }
-            </div>
-        );
-    }
 
     return (
         <Chart
@@ -65,7 +20,7 @@ export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) =>
                 enabled
                 arrowLength={ 5 }
                 opacity={ 1 }
-                contentRender={ TooltipTemplate }
+                contentRender={ ArchiveChartTooltip }
             />
             <Crosshair
                 enabled
@@ -81,20 +36,56 @@ export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) =>
                 <Label rotationAngle={ 270 } indentFromAxis={ 15 } displayMode='rotate' format={ 'shortTime' } />
             </ArgumentAxis>
 
-            <ValueAxis name='outdoorAxis' position='right'>
-                <Tick length={ 4 } shift={ 2 } />
-                <Title text={ formatMessage('app-outdoor-temperature') } >
-                    <Font size={ 12 } />
-                </Title>
+            <ValueAxis
+                name='commonAxis'
+                position='left'
+                visible={ isUsedOneAxis }
+                maxValueMargin={ 0.1 }
+                minValueMargin={ 0.1 }
+            >
+                <Grid visible={ isUsedOneAxis } />
+                <Tick length={ 4 } shift={ 2 } visible={ isUsedOneAxis } />
+                {isUsedOneAxis ?
+                    <Title text={ formatMessage('app-temperatures') } >
+                        <Font size={ 12 } />
+                    </Title>
+                    : null}
             </ValueAxis>
 
-            <ValueAxis name='pipeAxis'>
-                <Tick length={ 4 } shift={ 2 } />
+            <ValueAxis
+                name='outdoorAxis'
+                position='left'
+                visible={ !isUsedOneAxis }
+                maxValueMargin={ 0.1 }
+                minValueMargin={ 0.1 }
+            >
+                <Tick length={ 4 } shift={ 2 } visible={ !isUsedOneAxis } />
+                {!isUsedOneAxis
+                    ?
+                    <Title text={ formatMessage('app-outdoor-temperature') } >
+                        <Font size={ 12 } />
+                    </Title>
+                    : null
+                }
 
-                <Grid />
-                <Title text={ formatMessage('app-media-temperature') } >
-                    <Font size={ 12 } />
-                </Title>
+            </ValueAxis>
+
+            <ValueAxis
+                name='pipeAxis'
+                position='right'
+                visible={ !isUsedOneAxis }
+                maxValueMargin={ 0.1 }
+                minValueMargin={ 0.1 }
+            >
+                <Tick length={ 4 } shift={ 2 } visible={ !isUsedOneAxis } />
+                <Grid visible={ !isUsedOneAxis } />
+                {!isUsedOneAxis
+                 ?
+                    <Title text={ formatMessage('app-media-temperature') } >
+                        <Font size={ 12 } />
+                    </Title>
+                : null
+                }
             </ValueAxis>
 
             <CommonAxisSettings>
@@ -143,7 +134,7 @@ export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) =>
 
             <Series
                 name='supplyPipe'
-                axis='pipeAxis'
+                axis={ isUsedOneAxis ? 'commonAxis' : 'pipeAxis' }
                 valueField="supplyPipeTemperature"
                 argumentField="datetime"
                 showInLegend={ true }
@@ -153,7 +144,7 @@ export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) =>
 
             <Series
                 name='returnPipe'
-                axis='pipeAxis'
+                axis={ isUsedOneAxis ? 'commonAxis' : 'pipeAxis' }
                 valueField='returnPipeTemperature'
                 argumentField='datetime'
                 showInLegend={ true }
@@ -164,7 +155,7 @@ export const ArchivesChart = ({ dataSource }: { dataSource: ArchiveModel[] }) =>
 
             <Series
                 name='outdoor'
-                axis='outdoorAxis'
+                axis={ isUsedOneAxis ? 'commonAxis' : 'outdoorAxis' }
                 valueField='outdoorTemperature'
                 argumentField='datetime'
                 showInLegend={ true }

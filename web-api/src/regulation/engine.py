@@ -4,7 +4,6 @@ import fcntl
 import pathlib
 import math
 import gzip
-import bisect
 from datetime import datetime
 from time import sleep, time
 from multiprocessing import Event as ProcessEvent
@@ -16,6 +15,10 @@ from models.regulator.enums.outdoor_temperature_sensor_failure_action_type_model
 from models.regulator.enums.supply_pipe_temperature_sensor_failure_action_type_model import SupplyPipeTemperatureSensorFailureActionTypeModel
 
 import regulation.equipments as equipments
+import regulation.tools as tools
+from regulation.constants.config import RegulationEngineConfig
+from regulation.constants.messages import RegulationEngineMessages
+
 from loggers.engine_logger_builder import build as build_logger
 from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.temperature_graph_model import TemperatureGraphItemModel
@@ -32,37 +35,6 @@ from regulation.metadata.decorators import regulator_starter_metadata
 from utils.datetime_helper import is_last_day_of_month
 
 class RegulationEngine:
-    updating_rtc_period = 60
-    default_room_temperature = 20
-    default_hot_water_temperature = 60
-    default_room_temperature_influence = 0.0
-    default_return_temperature_influence = 0.0
-    updating_settings_factor = 5
-
-    start_current_hour_template = {'minute': 1, 'second': 0, 'microsecond': 0}
-    end_current_hour_template = {'minute': 59, 'second': 59, 'microsecond': 0}
-    start_current_day_template = {'hour': 0, 'minute': 0, 'second': 0, 'microsecond': 0}
-
-    sensors_polling_started_info_msg = 'The polling thread was STARTED.'
-    sensors_polling_stopped_info_msg = 'The polling thread was STOPPED.'
-    sensors_polling_slept_debug_msg = 'The polling thread executed/slept during %.6f / %.6f sec.\r\n'
-    sensors_polling_thread_error_msg = 'The polling thread was failed with the error: %s.'
-
-    regulation_started_info_msg = 'The regulation thread was STARTED.'
-    regulation_stopped_info_msg = 'The regulation thread was STOPPED.'
-    regulation_stopped_critical_msg = "The regulation thread was STOPPED because the polling thread terminated with an error."
-    regulation_slept_debug_msg = 'The regulation thread executed/slept during %.6f / %.6f sec.'
-    regulation_thread_error_msg = 'The regulation thread was failed with the error: %s.'
-
-    measured_temperatures_debug_msg = 'The measured temperatures: OUTDOOR=%.2f, ROOM=%.2f SUPPLY=%.2f; RETURN=%.2f'
-    calculated_temperatures_debug_msg = 'The calculated temperatures: SUPPLY=%.2f, RETURN=%.2f'
-    settings_refresh_debug_msg = 'Settings was refreshed'
-    writing_archives_debug_msg = 'Writing archives has been completed: %s'
-    getting_current_rtc_debug_msg = 'Current RTC datetime: %s'
-    pid_impact_components_debug_msg = 'The PID impact components: P=%.2f, I=%.2f, D=%.2f, SUM=%.2f DEV=%.2f, TOTAL=%.2f'
-    pid_impact_result_debug_msg = 'The PID impact result: PID=%.2f%%'
-    analog_impact_result_debug_msg = 'The analog impact result: ANL=%.2f%%'
-    writing_archives_error_msg = 'An error has happened during writing archives: %s'
 
     def __init__(self, heating_circuit_index: HeatingCircuitIndexModel, process_cancellation_event: ProcessEvent, logging_level: int) -> None:
 
@@ -124,7 +96,7 @@ class RegulationEngine:
         It updates the current regulation channel settings
         after the expiration of a period of time equal to "calculation_period" * "updating_settings_factor" ( by default 2.5 * 5 sec)
         """
-        if time() - self._last_refreshing_settings_time > self._calculation_period * RegulationEngine.updating_settings_factor:
+        if time() - self._last_refreshing_settings_time > self._calculation_period * RegulationEngineConfig.updating_settings_factor:
             try:
                 self._heating_circuit_settings = self._get_settings()
             except Exception as ex:
@@ -137,7 +109,7 @@ class RegulationEngine:
             self._heating_circuit_type = self._heating_circuit_settings.type
             self._calculation_period = self._heating_circuit_settings.regulation_parameters.calculation_period / 10
 
-            self._logger.debug(RegulationEngine.settings_refresh_debug_msg)
+            self._logger.debug(RegulationEngineMessages.settings_refresh_debug_msg)
 
     def _get_calculated_temperatures(self, outdoor_temperature: float) -> TemperatureGraphItemModel:
         """
@@ -151,7 +123,7 @@ class RegulationEngine:
             target_temperature = self._get_target_temperature()
 
             self._logger.debug(
-                RegulationEngine.calculated_temperatures_debug_msg,
+                RegulationEngineMessages.calculated_temperatures_debug_msg,
                 target_temperature,
                 target_temperature
             )
@@ -163,69 +135,18 @@ class RegulationEngine:
                 return_pipe_temperature=target_temperature,
             )
 
-        # Otherwise, we should get the calculated temperatures according to the temperature graph
-        if math.isinf(outdoor_temperature):
-            return TemperatureGraphItemModel(
-                id=uuid.UUID(int=0).__str__(),
-                outdoor_temperature=float("inf"),
-                supply_pipe_temperature=float("inf"),
-                return_pipe_temperature=float("inf")
-            )
-
-        # trying to get the exact match on the temperature graph
-        exact_match_tg_item = next(
-            (
-                item
-                for item in self._heating_circuit_settings.temperature_graph.items
-                if item.outdoor_temperature == outdoor_temperature
-            ),
-            None
+        temperature_graph_item = tools.get_calculated_temperatures(
+            outdoor_temperature,
+            temperature_graph=self._heating_circuit_settings.temperature_graph
         )
-
-        if exact_match_tg_item is not None:
-            return exact_match_tg_item
-
-        temperature_graph = sorted(
-            self._heating_circuit_settings.temperature_graph.items,
-            key=lambda i: i.outdoor_temperature
-        )
-        outdoor_temperature_measured = outdoor_temperature
-        outdoor_temperatures = [item.outdoor_temperature for item in temperature_graph]
-
-        pos = bisect.bisect_left(outdoor_temperatures, outdoor_temperature_measured)
-
-        if pos == 0:
-            supply_pipe_temperature_calculated = temperature_graph[0].supply_pipe_temperature
-            return_pipe_temperature_calculated = temperature_graph[0].return_pipe_temperature
-        elif pos == len(outdoor_temperatures):
-            supply_pipe_temperature_calculated = temperature_graph[-1].supply_pipe_temperature
-            return_pipe_temperature_calculated = temperature_graph[-1].return_pipe_temperature
-        else:
-            tg_left = temperature_graph[pos - 1]
-            tg_right = temperature_graph[pos]
-            # interpolating
-            k = (tg_right.supply_pipe_temperature - tg_left.supply_pipe_temperature) / \
-                (tg_right.outdoor_temperature - tg_left.outdoor_temperature)
-            b = tg_left.supply_pipe_temperature - tg_left.outdoor_temperature * k
-            supply_pipe_temperature_calculated = k * outdoor_temperature_measured + b
-
-            k = (tg_right.return_pipe_temperature - tg_left.return_pipe_temperature) / \
-                (tg_right.outdoor_temperature - tg_left.outdoor_temperature)
-            b = tg_left.return_pipe_temperature - tg_left.outdoor_temperature * k
-            return_pipe_temperature_calculated = k * outdoor_temperature_measured + b
 
         self._logger.debug(
-            RegulationEngine.calculated_temperatures_debug_msg,
-            supply_pipe_temperature_calculated,
-            return_pipe_temperature_calculated
+            RegulationEngineMessages.calculated_temperatures_debug_msg,
+            temperature_graph_item.supply_pipe_temperature,
+            temperature_graph_item.return_pipe_temperature
         )
 
-        return TemperatureGraphItemModel(
-            id=uuid.UUID(int=0).__str__(),
-            outdoor_temperature=outdoor_temperature_measured,
-            supply_pipe_temperature=supply_pipe_temperature_calculated,
-            return_pipe_temperature=return_pipe_temperature_calculated
-        )
+        return temperature_graph_item
 
     def _get_archive(self) -> ArchiveModel:
         """
@@ -241,7 +162,7 @@ class RegulationEngine:
             ])
 
         self._logger.debug(
-            RegulationEngine.measured_temperatures_debug_msg,
+            RegulationEngineMessages.measured_temperatures_debug_msg,
             outdoor_temperature_measured,
             room_temperature_measured,
             supply_pipe_temperature_measured,
@@ -299,8 +220,8 @@ class RegulationEngine:
             self._archives.is_last_day_of_month_saved = False
 
         # calculating the hour boundaries
-        start_current_hour = self._rtc_datetime.replace(**RegulationEngine.start_current_hour_template)
-        end_current_hour = self._rtc_datetime.replace(**RegulationEngine.end_current_hour_template)
+        start_current_hour = self._rtc_datetime.replace(**RegulationEngineConfig.start_current_hour_template)
+        end_current_hour = self._rtc_datetime.replace(**RegulationEngineConfig.end_current_hour_template)
 
         is_already_saved = next((
             archive for archive in self._archives.items
@@ -314,7 +235,7 @@ class RegulationEngine:
         if self._rtc_datetime >= start_current_hour and not self._archives.is_last_day_of_month_saved:
 
             try:
-                start_current_day = self._rtc_datetime.replace(**RegulationEngine.start_current_day_template)
+                start_current_day = self._rtc_datetime.replace(**RegulationEngineConfig.start_current_day_template)
                 archive_file_name = f'{self._heating_circuit_settings.type.name}__{self._heating_circuit_index}__{start_current_day.strftime("%Y-%m-%dT%H:%M:%SZ").replace(":", "_")}.json.gz'
                 root_folder = pathlib.Path(__file__).parent.parent.parent
                 year_archives_folder = root_folder.joinpath(f'data/archives/{start_current_day.year}')
@@ -340,20 +261,23 @@ class RegulationEngine:
                         json_text.encode()
                     )
 
-                self._logger.debug(RegulationEngine.writing_archives_debug_msg, archive_file_name)
+                self._logger.debug(RegulationEngineMessages.writing_archives_debug_msg, archive_file_name)
 
             except Exception as ex:
-                self._logger.error(RegulationEngine.writing_archives_error_msg, str(ex))
+                self._logger.error(RegulationEngineMessages.writing_archives_error_msg, str(ex))
 
     def _refresh_rtc_datetime(self):
         """
         It refreshes the working datetime according to a hardware managed date and time saved in the RTC
         """
-        if self._last_refreshing_rtc_time is None or time() - self._last_refreshing_rtc_time >= RegulationEngine.updating_rtc_period:
-            self._rtc_datetime = equipments.get_rtc_datetime()
+        try:
+            if self._last_refreshing_rtc_time is None or time() - self._last_refreshing_rtc_time >= RegulationEngineConfig.updating_rtc_period:
+                self._rtc_datetime = equipments.get_rtc_datetime()
 
-            self._last_refreshing_rtc_time = time()
-            self._logger.debug(RegulationEngine.getting_current_rtc_debug_msg, f'{self._rtc_datetime}')
+                self._last_refreshing_rtc_time = time()
+                self._logger.debug(RegulationEngineMessages.getting_current_rtc_debug_msg, f'{self._rtc_datetime}')
+        except Exception as ex:
+            self._logger.error('The updating datetime was failed: %s.', ex, exc_info=True, stack_info=True)
 
     def _get_target_temperature(self) -> float:
         """
@@ -366,9 +290,9 @@ class RegulationEngine:
         economical_temperature = self._heating_circuit_settings.control_parameters.economical_temperature
 
         if self._heating_circuit_type == HeatingCircuitTypeModel.HOT_WATER:
-            default_temperature = RegulationEngine.default_hot_water_temperature
+            default_temperature = RegulationEngineConfig.default_hot_water_temperature
         else:
-            default_temperature = RegulationEngine.default_room_temperature
+            default_temperature = RegulationEngineConfig.default_room_temperature
 
         if control_mode == ControlModeModel.COMFORT:
             return comfort_temperature
@@ -409,7 +333,7 @@ class RegulationEngine:
 
         room_temperature_influence = self._heating_circuit_settings.control_parameters.room_temperature_influence
         if room_temperature_influence is None:
-            room_temperature_influence = RegulationEngine.default_room_temperature_influence
+            room_temperature_influence = RegulationEngineConfig.default_room_temperature_influence
         return_pipe_temperature_influence = self._heating_circuit_settings.control_parameters.return_pipe_temperature_influence
 
         target_temperature = self._get_target_temperature()
@@ -491,7 +415,7 @@ class RegulationEngine:
             differentiation_part_impact = -full_differentiation_part_impact
 
         self._logger.debug(
-            RegulationEngine.pid_impact_components_debug_msg,
+            RegulationEngineMessages.pid_impact_components_debug_msg,
             proportional_part_impact,
             integration_part_impact,
             differentiation_part_impact,
@@ -525,7 +449,7 @@ class RegulationEngine:
 
         percented_pid_impart = 100 * pid_impart / full_pid_impact_range
 
-        self._logger.debug(RegulationEngine.pid_impact_result_debug_msg, percented_pid_impart)
+        self._logger.debug(RegulationEngineMessages.pid_impact_result_debug_msg, percented_pid_impart)
 
         return PidImpactResultModel(
             impact=percented_pid_impart,
@@ -580,8 +504,9 @@ class RegulationEngine:
         It begins an endless loop polling all four temperature sensors.
         The measuring results are always saved in files partitioned by dates and separate folders by years
         """
-        self._logger.info(RegulationEngine.sensors_polling_started_info_msg)
+        self._logger.info(RegulationEngineMessages.sensors_polling_started_info_msg)
 
+        # indicates that the archive was received during the start/restart of polling
         is_initial = True
 
         total_deviation: float = 0.0
@@ -594,12 +519,12 @@ class RegulationEngine:
             while True:
                 if threading_cancellation_event.is_set():
                     # stop polling
-                    self._logger.info(RegulationEngine.sensors_polling_stopped_info_msg)
+                    self._logger.info(RegulationEngineMessages.sensors_polling_stopped_info_msg)
                     break
 
                 start_time = time()
 
-                # putting on a process lock while receiving archives and current datetime
+                # receiving archives and current datetime
                 self._refresh_rtc_datetime()
                 archive = self._get_archive()
 
@@ -632,7 +557,7 @@ class RegulationEngine:
                         analog_valve_impact = analog_valve_impact + pid_impact_result.impact / \
                             (pulse_duration_valve / self._calculation_period)
 
-                        self._logger.debug(RegulationEngine.analog_impact_result_debug_msg, analog_valve_impact)
+                        self._logger.debug(RegulationEngineMessages.analog_impact_result_debug_msg, analog_valve_impact)
 
                         if analog_valve_impact > 100.0:
                             analog_valve_impact = 100.0
@@ -683,11 +608,11 @@ class RegulationEngine:
                 delta = end_time - start_time
                 if delta < self._calculation_period:
                     sleep(self._calculation_period - delta)
-                    self._logger.debug(RegulationEngine.sensors_polling_slept_debug_msg, delta, self._calculation_period - delta)
+                    self._logger.debug(RegulationEngineMessages.sensors_polling_slept_debug_msg, delta, self._calculation_period - delta)
 
                 is_initial = None
         except Exception as ex:
-            self._logger.error(RegulationEngine.sensors_polling_thread_error_msg, ex, exc_info=True, stack_info=True)
+            self._logger.error(RegulationEngineMessages.sensors_polling_thread_error_msg, ex, exc_info=True, stack_info=True)
 
             with self._shared_polling_error_lock:
                 self._shared_polling_error = True
@@ -699,7 +624,7 @@ class RegulationEngine:
         It executes in the main thread of a dedicated process of the regulation machine
         """
 
-        self._logger.info(RegulationEngine.regulation_started_info_msg)
+        self._logger.info(RegulationEngineMessages.regulation_started_info_msg)
 
         # start polling temperature sensors and calculation
         threading_cancellation_event = ThreadingEvent()
@@ -717,7 +642,7 @@ class RegulationEngine:
                         time.sleep(0.5)
                         pass
                     # stop regulation thread
-                    self._logger.info(RegulationEngine.regulation_stopped_info_msg)
+                    self._logger.info(RegulationEngineMessages.regulation_stopped_info_msg)
 
                     break
 
@@ -725,7 +650,7 @@ class RegulationEngine:
                     if self._shared_polling_error:
                         if polling_thread.is_alive():
                             polling_thread.join()
-                        self._logger.critical(RegulationEngine.regulation_stopped_critical_msg)
+                        self._logger.critical(RegulationEngineMessages.regulation_stopped_critical_msg)
                         break
 
                 self._refresh_settings()
@@ -801,12 +726,12 @@ class RegulationEngine:
                 if delta < regulation_parameters.pulse_duration_valve:
                     sleep(regulation_parameters.pulse_duration_valve - delta)
                     self._logger.debug(
-                        RegulationEngine.regulation_slept_debug_msg,
+                        RegulationEngineMessages.regulation_slept_debug_msg,
                         delta,
                         regulation_parameters.pulse_duration_valve - delta
                     )
         except Exception as ex:
-            self._logger.error(RegulationEngine.regulation_thread_error_msg, ex, exc_info=True, stack_info=True)
+            self._logger.error(RegulationEngineMessages.regulation_thread_error_msg, ex, exc_info=True, stack_info=True)
 
 
 @regulator_starter_metadata(

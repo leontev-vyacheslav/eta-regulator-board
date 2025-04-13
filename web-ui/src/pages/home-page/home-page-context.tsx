@@ -1,5 +1,5 @@
 import { createContext, Dispatch, useContext, useState } from 'react';
-import { getUuidV4 } from '../../utils/uuid';
+import { getQuickGuid } from '../../utils/uuid';
 
 
 export type HomePageContextModel = {
@@ -14,7 +14,7 @@ const HomePageContext = createContext({} as HomePageContextModel);
 function HomePageContextProvider(props: any) {
 
   const [isShowMnemoschema, setIsShowMnemoschema] = useState<boolean>(true);
-  const [updateSharedRegulatorStateRefreshToken, setUpdateSharedRegulatorStateRefreshToken] = useState<string>(getUuidV4());
+  const [updateSharedRegulatorStateRefreshToken, setUpdateSharedRegulatorStateRefreshToken] = useState<string>(getQuickGuid());
 
   return (
     <HomePageContext.Provider value={ {

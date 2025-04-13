@@ -9,6 +9,7 @@ from models.common.accounts_settings_model import AccountsSettingsModel
 
 from models.common.internal_settings_model import InternalSettingsModel
 from models.common.app_background_process_model import AppBackgroundProcessModel
+from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
 from loggers.app_logger_builder import build as build_logger
@@ -51,6 +52,13 @@ class FlaskEx(Flask):
         archives_path = self.app_root_path.joinpath('data/archives/')
         if not archives_path.exists():
             archives_path.mkdir()
+        else:
+            shared_archive_prefixes = [f'{heating_circuit_type.name}__*' for heating_circuit_type in HeatingCircuitTypeModel]
+            for prefix in shared_archive_prefixes:
+                for shared_archive in archives_path.glob(prefix):
+                    if shared_archive.is_file():
+                        shared_archive.unlink()
+
 
         self.internal_settings = self._init_internal_settings()
         self.app_background_processes: List[AppBackgroundProcessModel] = []

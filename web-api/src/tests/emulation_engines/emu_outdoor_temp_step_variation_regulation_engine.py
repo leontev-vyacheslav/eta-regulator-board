@@ -10,6 +10,8 @@ from models.regulator.archive_model import ArchiveModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.pid_impact_entry_model import PidImpactEntryModel, PidImpactResultComponentsModel
 from models.regulator.temperature_graph_model import TemperatureGraphItemModel
+from regulation.constants.config import RegulationEngineConfig
+from regulation.constants.messages import RegulationEngineMessages
 from regulation.engine import RegulationEngine
 
 
@@ -62,7 +64,7 @@ class EmuOutdoorTempStepVariationRegulationEngine(RegulationEngine):
             self.__state = EmuOutdoorTempStepVariationRegulationEngine.State.HIGH if self.__state == EmuOutdoorTempStepVariationRegulationEngine.State.LOW else EmuOutdoorTempStepVariationRegulationEngine.State.LOW
             self.__change_state_time = time()
 
-        room_temperature_measured = RegulationEngine.default_room_temperature
+        room_temperature_measured = RegulationEngineConfig.default_room_temperature
         outdoor_temperature_measured = self.__temperature_graph_item.outdoor_temperature \
             if self.__state == EmuOutdoorTempStepVariationRegulationEngine.State.HIGH \
             else self.__temperature_graph_item.outdoor_temperature + EmuOutdoorTempStepVariationRegulationEngine.temperature_step
@@ -71,7 +73,7 @@ class EmuOutdoorTempStepVariationRegulationEngine(RegulationEngine):
         return_pipe_temperature_measured = self.__temperature_graph_item.return_pipe_temperature
 
         self._logger.emul(
-            RegulationEngine.measured_temperatures_debug_msg,
+            RegulationEngineMessages.measured_temperatures_debug_msg,
             outdoor_temperature_measured,
             room_temperature_measured,
             supply_pipe_temperature_measured,

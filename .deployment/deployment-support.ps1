@@ -35,19 +35,19 @@ function Set-AppVersion([string] $RelativePath, [string] $SearchPattern, [string
     [System.IO.File]::Move($defaultRouterPath.Path + "~", $defaultRouterPath)
 }
 
-function Sync-DateTime
+function Sync-DateTime ([string] $HOSTNAME)
 {
     Write-Host "Sync date&time according to the device timezone (${utcNow})..." -ForegroundColor Green
-    ssh ${ACCOUNT}@${IPADDR} "ntpd -q -p ptbtime1.ptb.de" # Network Time Protocol daemon
+    ssh ${ACCOUNT}@${HOSTNAME} "ntpd -q -p ptbtime1.ptb.de" # Network Time Protocol daemon
     Start-Sleep -Seconds 2
     Write-Host
 }
 
-function Initialize-AppFolders ([string[]] $AppRootFolders)
+function Initialize-AppFolders ([string] $HOSTNAME, [string[]] $AppRootFolders)
 {
     Write-Host "Initializing the app folders..." -ForegroundColor Green
     foreach( $folder in $AppRootFolders) {
-        ssh ${ACCOUNT}@${IPADDR} "mkdir -p ${WORKSPACE_ROOT}${folder}/"
+        ssh ${ACCOUNT}@${HOSTNAME} "mkdir -p ${WORKSPACE_ROOT}${folder}/"
     }
 
     Start-Sleep -Seconds 2

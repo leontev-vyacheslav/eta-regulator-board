@@ -10,6 +10,7 @@ from models.regulator.archive_model import ArchiveModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.pid_impact_entry_model import PidImpactEntryModel, PidImpactResultComponentsModel
 from models.regulator.temperature_graph_model import TemperatureGraphItemModel
+from regulation.constants.config import RegulationEngineConfig
 from regulation.engine import RegulationEngine
 
 
@@ -63,7 +64,7 @@ class EmuSupplyPipeTempStepVariationRegulationEngine(RegulationEngine):
             self.__change_state_time = time()
 
         outdoor_temperature_measured = EmuSupplyPipeTempStepVariationRegulationEngine.known_outdoor_temperature
-        room_temperature_measured = RegulationEngine.default_room_temperature
+        room_temperature_measured = RegulationEngineConfig.default_room_temperature
 
         supply_pipe_temperature_measured = self.__temperature_graph_item.supply_pipe_temperature + \
             EmuSupplyPipeTempStepVariationRegulationEngine.temperature_step if self.__state == EmuSupplyPipeTempStepVariationRegulationEngine.State.HIGH else self.__temperature_graph_item.supply_pipe_temperature

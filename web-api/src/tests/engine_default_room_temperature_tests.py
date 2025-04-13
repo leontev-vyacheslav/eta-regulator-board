@@ -3,6 +3,7 @@ import logging
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
+from regulation.constants.config import RegulationEngineConfig
 from regulation.engine import RegulationEngine
 from tests.testable_engines.auto_control_mode_testable_regulation_engine import AutoControlModeTestableRegulationEngine
 from tests.testable_engines.schedules_testable_regulation_engine import SchedulesTestableRegulationEngine
@@ -15,7 +16,7 @@ def get_default_room_temperature_no_comfort_or_econom_modes_check():
 
     assertable_default_room_temperature = float('inf')
 
-    RegulationEngine.default_room_temperature = assertable_default_room_temperature
+    RegulationEngineConfig.default_room_temperature = assertable_default_room_temperature
 
     engine = AutoControlModeTestableRegulationEngine(
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
@@ -42,7 +43,7 @@ def get_default_room_temperature_comfort_no_schedules_check():
 
     assertable_default_room_temperature = float('inf')
 
-    RegulationEngine.default_room_temperature = assertable_default_room_temperature
+    RegulationEngineConfig.default_room_temperature = assertable_default_room_temperature
 
     default_room_temperature = engine._get_target_temperature()
 
@@ -62,7 +63,7 @@ def get_default_room_temperature_comfort_no_schedule_for_weekday_check():
 
     assertable_default_room_temperature = float('inf')
 
-    RegulationEngine.default_room_temperature = assertable_default_room_temperature
+    RegulationEngineConfig.default_room_temperature = assertable_default_room_temperature
 
     engine._rtc_datetime = datetime(
         year=2024,
@@ -90,7 +91,7 @@ def get_default_room_temperature_comfort_has_schedule_no_window_check():
     )
 
     assertable_default_room_temperature = float('inf')
-    RegulationEngine.default_room_temperature = assertable_default_room_temperature
+    RegulationEngineConfig.default_room_temperature = assertable_default_room_temperature
 
     engine._rtc_datetime = datetime(
         year=2024,

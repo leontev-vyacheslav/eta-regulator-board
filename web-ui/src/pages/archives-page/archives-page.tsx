@@ -3,7 +3,7 @@ import './archives-page.scss';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import PageHeader from '../../components/page-header/page-header';
 import AppConstants from '../../constants/app-constants';
-import { AdditionalMenuIcon, ArchivesIcon, DownloadIcon, GraphIcon, RefreshIcon, TableIcon, WorkDateIcon } from '../../constants/app-icons';
+import { AdditionalMenuIcon, ArchivesIcon, DownloadIcon, GraphIcon, RefreshIcon, TableIcon, AutoWholeRange, DefaultWholeRange, WorkDateIcon } from '../../constants/app-icons';
 import { ArchivesChart } from './archives-chart';
 import { ArchivesGrid } from './archives-grid';
 import { useAppData } from '../../contexts/app-data/app-data';
@@ -25,6 +25,7 @@ export const ArchivesPage = () => {
     const [archivesDate, setArchivesDate] = useState<Date>(new Date());
     const [archives, setArchives] = useState<ArchiveModel[]>([]);
     const [refreshToken, setRefreshToken] = useState<({ token: number }) | null>({ token: 0 });
+    const [isUsedOneAxis, setIsUsedOneAxis] = useState<boolean>(true);
 
     const circuitId = useMemo(() => {
         return circuitIdParam ? parseInt(circuitIdParam) : 0;
@@ -93,10 +94,18 @@ export const ArchivesPage = () => {
                         text: 'Выгрузить...',
                         icon: () => <DownloadIcon size={ 20 } />,
                         onClick: async () => await downloadRegulatorSettingsAsync()
-                    }
+                    },
+                    {
+                        text: isUsedOneAxis ?  'Две оси значений' : 'Одна ось значений',
+                        icon: () => isUsedOneAxis ?  <AutoWholeRange size={ 20 } color='black' /> : <DefaultWholeRange size={ 20 } color='black' />,
+                        onClick: () => {
+                            setIsUsedOneAxis( previous => !previous);
+                        },
+                        visible: isShowGraph
+                    },
                 ]
             }];
-    }, [downloadRegulatorSettingsAsync, isShowGraph, refreshToken])
+    }, [downloadRegulatorSettingsAsync, isShowGraph, isUsedOneAxis, refreshToken])
 
     useEffect(() => {
         (async () => {
@@ -124,7 +133,7 @@ export const ArchivesPage = () => {
                     <PageToolbar title={ formatMessage('archives-graphs') } menuItems={ menuItems } />
                     {
                         isShowGraph
-                            ? <ArchivesChart dataSource={ archives } />
+                            ? <ArchivesChart dataSource={ archives } isUsedOneAxis={ isUsedOneAxis } />
                             : <ArchivesGrid dataSource={ archives } />
                     }
                 </div>
