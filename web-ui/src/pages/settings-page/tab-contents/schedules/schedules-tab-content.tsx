@@ -2,7 +2,7 @@ import './schedules.scss';
 import { SchedulesContextProvider, useSchedulesContext } from './schedules-context'
 import { SchedulesGrid } from './schedules-grid'
 import { useCallback, useMemo } from 'react';
-import { AddIcon, AdditionalMenuIcon, DeleteAllIcon, RefreshIcon } from '../../../../constants/app-icons';
+import { AddIcon, AdditionalMenuIcon, DeleteAllIcon, HelpIcon, RefreshIcon } from '../../../../constants/app-icons';
 import { ScheduleModel } from '../../../../models/regulator-settings/schedules-model';
 import ArrayStore from 'devextreme/data/array_store';
 import { showConfirmDialog } from '../../../../utils/dialogs';
@@ -11,10 +11,11 @@ import { PageToolbar } from '../../../../components/page-toolbar/page-toolbar';
 import { useSettingPageContext } from '../../settings-page-context';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 import { useAuth } from '../../../../contexts/auth';
+import { quickHelpReferenceService } from '../../../../services/quick-help-reference-service';
 
 const SchedulesTabContentInner = () => {
     const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useRegulatorSettings();
-    const {  circuitId } = useSettingPageContext();
+    const { circuitId } = useSettingPageContext();
     const { putSchedulesAsync, schedulesDataGridRef } = useSchedulesContext();
     const { isAdmin } = useAuth();
 
@@ -29,7 +30,7 @@ const SchedulesTabContentInner = () => {
             },
 
             onInserted: async (values: ScheduleModel) => {
-                const item = regulatorSettings?.heatingCircuits.items[circuitId ].schedules.items.find(i => i.id === values.id);
+                const item = regulatorSettings?.heatingCircuits.items[circuitId].schedules.items.find(i => i.id === values.id);
                 if (item) {
                     item.windows = []
                 }
@@ -39,7 +40,7 @@ const SchedulesTabContentInner = () => {
     }, [circuitId, putSchedulesAsync, regulatorSettings?.heatingCircuits.items]);
 
     const addScheduleAsync = useCallback(async () => {
-        if(schedulesDataGridRef && schedulesDataGridRef.current) {
+        if (schedulesDataGridRef && schedulesDataGridRef.current) {
             await schedulesDataGridRef.current?.instance.addRow();
         }
     }, [schedulesDataGridRef]);
@@ -59,14 +60,14 @@ const SchedulesTabContentInner = () => {
                     onClick: addScheduleAsync
                 },
                 {
-                     text: formatMessage('menu-item-delete-all-schedules'),
+                    text: formatMessage('menu-item-delete-all-schedules'),
                     icon: () => <DeleteAllIcon size={ 20 } />,
-                     onClick: async () => {
-                         if (!regulatorSettings || regulatorSettings.heatingCircuits.items[0].schedules.items.length === 0) {
+                    onClick: async () => {
+                        if (!regulatorSettings || regulatorSettings.heatingCircuits.items[0].schedules.items.length === 0) {
                             return;
-                         }
+                        }
 
-                         showConfirmDialog({
+                        showConfirmDialog({
                             title: formatMessage('confirm-title'),
                             iconName: 'DeleteAllIcon',
                             iconSize: 32,
@@ -77,10 +78,18 @@ const SchedulesTabContentInner = () => {
                                 setRegulatorSettings({ ...regulatorSettings });
                             },
                             textRender: () => {
-                                return <> { formatMessage('confirm-dialog-delete-all-schedules') } </>;
+                                return <> {formatMessage('confirm-dialog-delete-all-schedules')} </>;
                             }
                         });
                     }
+                },
+                {
+                    text: formatMessage('menu-item-help'),
+                    icon: () => <HelpIcon size={ 20 } />,
+                    onClick: async () => {
+                        quickHelpReferenceService.show('regulator-settings/schedules');
+                    },
+                    visible: true,
                 }
             ]
         }];
@@ -88,7 +97,7 @@ const SchedulesTabContentInner = () => {
 
     return (
         <div className='setting-form'>
-            <PageToolbar title={ formatMessage('schedules-title') } menuItems={ isAdmin() ? menuItems: [] } />
+            <PageToolbar title={ formatMessage('schedules-title') } menuItems={ isAdmin() ? menuItems : [] } />
             <SchedulesGrid dataSource={ schedulesStore } />
         </div>
     );

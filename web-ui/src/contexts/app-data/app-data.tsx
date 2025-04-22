@@ -8,6 +8,7 @@ import { AppDataContextAdcEndpointsModel, useAdcData } from './use-adc-data';
 import { AppDataContextDacEndpointsModel, useDacData } from './use-dac-data';
 import { AppDataContextArchivesEndpointsModel, useArchivesData } from './use-archives-data';
 import { AppDataContextAccountsEndpointsModel, useAccountsData } from './use-accounts-data';
+import { AppDataContextQuickHelpRefernceEndpointsModel, useQuickHelpRefernceData } from './use-quick-help-reference-data';
 
 export type AppDataContextModel =  AppDataContextRtcDataTimeEndpointsModel
     & AppDataContextRegulatorSettingsEndpointsModel
@@ -16,32 +17,35 @@ export type AppDataContextModel =  AppDataContextRtcDataTimeEndpointsModel
     & AppDataContextAdcEndpointsModel
     & AppDataContextDacEndpointsModel
     & AppDataContextArchivesEndpointsModel
-    & AppDataContextAccountsEndpointsModel;
+    & AppDataContextAccountsEndpointsModel
+    & AppDataContextQuickHelpRefernceEndpointsModel;
 
 const AppDataContext = createContext<AppDataContextModel>({} as AppDataContextModel);
 const useAppData = () => useContext(AppDataContext);
 
 function AppDataProvider (props: AppBaseProviderProps) {
-    const rtcDateTimeData = useRtcDataTimeData();
-    const regulatorSettingsData = useRegulatorSettingsData();
-    const authData = useAuthData();
-    const gpioData  = useGpioData();
-    const adcData = useAdcData();
-    const dacData = useDacData();
-    const archivesData = useArchivesData();
-    const accountsData = useAccountsData();
+    const rtcDateTime = useRtcDataTimeData();
+    const regulatorSettings = useRegulatorSettingsData();
+    const auth = useAuthData();
+    const gpio  = useGpioData();
+    const adc = useAdcData();
+    const dac = useDacData();
+    const archives = useArchivesData();
+    const accounts = useAccountsData();
+    const quickHelpRefernce = useQuickHelpRefernceData();
 
     return (
         <AppDataContext.Provider
             value={ {
-                ...rtcDateTimeData,
-                ...regulatorSettingsData,
-                ...authData,
-                ...gpioData,
-                ...adcData,
-                ...dacData,
-                ...archivesData,
-                ...accountsData
+                ...rtcDateTime,
+                ...regulatorSettings,
+                ...auth,
+                ...gpio,
+                ...adc,
+                ...dac,
+                ...archives,
+                ...accounts,
+                ...quickHelpRefernce
             } }
             { ...props }
         />

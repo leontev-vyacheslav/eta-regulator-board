@@ -92,5 +92,9 @@ export { IoTimerOutline as RelaunchIcon } from 'react-icons/io5';
 export { MdOutlineAutoGraph as AutoWholeRange } from 'react-icons/md';
 export { MdOutlineShowChart as DefaultWholeRange } from 'react-icons/md';
 
+export { MdOutlineLiveHelp as HelpIcon } from 'react-icons/md';
+
+
+
 import { MdMoreVert } from 'react-icons/md';
 export const GridAdditionalMenuIcon = () => <MdMoreVert style={ { cursor: 'pointer' } } size={ 18 } />

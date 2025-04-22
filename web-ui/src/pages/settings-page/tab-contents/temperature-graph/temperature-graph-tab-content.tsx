@@ -1,7 +1,7 @@
 import './temperature-graph-tab-content.scss';
 import { useMemo, useState } from 'react';
 import { TemperatureGraphProvider, useTemperatureGraphContext } from './temperature-graph-context';
-import { AddIcon, AdditionalMenuIcon, AxisInvert2Icon, AxisInvertIcon, DeleteAllIcon, GraphIcon, RefreshIcon, TableIcon } from '../../../../constants/app-icons';
+import { AddIcon, AdditionalMenuIcon, AxisInvert2Icon, AxisInvertIcon, DeleteAllIcon, GraphIcon, HelpIcon, RefreshIcon, TableIcon } from '../../../../constants/app-icons';
 import { TemperatureGraphItemModel } from '../../../../models/regulator-settings/temperature-graph-model';
 import { useSettingPageContext } from '../../settings-page-context';
 import ArrayStore from 'devextreme/data/array_store';
@@ -12,6 +12,7 @@ import { TemperatureGraphGrid } from './temperature-graph-grid';
 import { TemperatureGraphChart } from './temperature-graph-chart';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 import { useAuth } from '../../../../contexts/auth';
+import { quickHelpReferenceService } from '../../../../services/quick-help-reference-service';
 
 const TemperatureGraphTabContentInner = () => {
     const { regulatorSettings, setRegulatorSettings, refreshRegulatorSettingsAsync } = useRegulatorSettings();
@@ -109,6 +110,14 @@ const TemperatureGraphTabContentInner = () => {
                             }
                         },
                         visible: !isShowGraph,
+                    },
+                    {
+                        text: formatMessage('menu-item-help'),
+                        icon: () => <HelpIcon size={ 20 } />,
+                        onClick: async () => {
+                            quickHelpReferenceService.show('regulator-settings/temperatureGraph');
+                        },
+                        visible: true,
                     }
                 ],
                 visible: isAdmin(),

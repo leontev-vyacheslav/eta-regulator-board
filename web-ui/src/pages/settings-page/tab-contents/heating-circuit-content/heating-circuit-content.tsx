@@ -11,9 +11,13 @@ import { showConfirmDialogEx } from '../../../../utils/dialogs';
 import { formatMessage } from 'devextreme/localization';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 import { useAuth } from '../../../../contexts/auth';
+import { useHelpButtonOptions } from '../../use-help-buttons';
+
+import './heating-circuit-mnemoschema.scss';
 
 export const HeatingCircuitContent = () => {
     const dxHeatingCircuitFormRef = useRef<Form>(null);
+    const getHelpButtonOptions = useHelpButtonOptions();
     const { regulatorSettings, setRegulatorSettings } = useRegulatorSettings();
     const { circuitId, applyDefaultHeatCircuitSettingsAsync, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
@@ -48,11 +52,11 @@ export const HeatingCircuitContent = () => {
                     editorType='dxSelectBox'
                     editorOptions={ {
                         readOnly: !isAdmin(),
+                        ...getHelpButtonOptions('dxSelectBox', 'regulator-settings/type'),
                         items: HeatingCircuitTypes,
                         valueExpr: 'type',
                         displayExpr: 'description',
                         onValueChanged: (e: ValueChangedEvent) => {
-
                             if (e.value == currentHeatingCircuitType.type) {
                                 return;
                             }
@@ -61,11 +65,6 @@ export const HeatingCircuitContent = () => {
                                 const innerCallback = async (dialogResult?: boolean) => {
                                     if (dialogResult) {
                                         await applyDefaultHeatCircuitSettingsAsync(e.value);
-                                        // ?
-                                        // setRegulatorSettings((previous) => {
-                                        //     previous!.heatingCircuits.items[circuitId].type = e.value
-                                        //     return { ...previous! };
-                                        // });
                                     } else {
                                         const previousValue = e.previousValue;
                                         e.component.instance().option('value', previousValue);
@@ -84,21 +83,18 @@ export const HeatingCircuitContent = () => {
                             }
                             else {
                                 console.log(e);
-
-                                // setRegulatorSettings((previous) => {
-                                //     previous!.heatingCircuits.items[circuitId].type = e.value
-                                //     return { ...previous! };
-                                // })
                             }
-                        } }
-                    }
-                />
+                        }
+                    } }
+                >
+                </SimpleItem>
                 <SimpleItem
                     dataField='name'
                     label={ { location: 'top', showColon: true, text: 'Наименование' } }
                     editorType='dxTextBox'
                     editorOptions={ {
-                        readOnly: !isAdmin()
+                        readOnly: !isAdmin(),
+                        ...getHelpButtonOptions('dxTextBox', 'regulator-settings/name'),
                     } }
                 />
                 <SimpleItem

@@ -38,7 +38,7 @@
          "id": "WIFI-HOSTS-ENTRY",
          "type": "pickString",
          "description": "Omega device IP",
-         "options": ["192.168.0.100    heatbox-8f79", "192.168.0.101    heatsys-7e12", "192.168.0.102    heatbox-7542"],
+         "options": ["192.168.0.100    heatbox-8f79", "192.168.0.101    heatbox-7e12", "192.168.0.102    heatbox-7542"],
          "default": ""
       }
    ],

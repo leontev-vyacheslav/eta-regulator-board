@@ -19,5 +19,7 @@ export default {
 
     accounts: '/api/accounts',
 
-    regulatorSettings: '/api/regulator-settings'
+    regulatorSettings: '/api/regulator-settings',
+
+    quickHelpReference: '/api/quick-help-references',
 };

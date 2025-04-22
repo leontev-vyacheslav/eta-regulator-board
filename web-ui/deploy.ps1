@@ -1,27 +1,27 @@
 param (
-    [string]$IPADDR
+    [string]$HOSTNAME
 )
 Import-Module $PSScriptRoot\..\.deployment\deployment-support.ps1 -Force
 
-if ([string]::IsNullOrEmpty($IPADDR)) {
+if ([string]::IsNullOrEmpty($HOSTNAME)) {
     Write-Host "The device address is null or empty." -ForegroundColor Red
     Exit 1
 }
 
 Clear-Host
-
+Write-Host "Checking connection with the device ${HOSTNAME}..." -ForegroundColor Yellow
 $APP_ROOT = "/web-ui"
 # Check connection
-$testConnectionStatus = Test-Connection -TargetName $IPADDR -IPv4 -Count 1
+$testConnectionStatus = Test-Connection -TargetName $HOSTNAME -IPv4 -Count 1
 If($testConnectionStatus.Status -ne "Success")
 {
-    Write-Host "Failed to connect to the device ${IPADDR}." -ForegroundColor Red
+    Write-Host "Failed to connect to the device ${HOSTNAME}." -ForegroundColor Red
     Write-Host
 
     Exit 1
 }
 
-Write-Host "Connection with the device was established!" -ForegroundColor Green
+Write-Host "Connection with the device ${HOSTNAME} was established!" -ForegroundColor Green
 
 # Bump up the app build version
 Write-Host "Bump up '$WEB_UI_APP_NAME' build version before delpoyment ($buildDateTimeMark)..." -ForegroundColor Green
@@ -33,7 +33,7 @@ Start-Sleep -Seconds 2
 Write-Host
 
 # Sync date&time on OpenWrt OS
-Sync-DateTime
+Sync-DateTime($HOSTNAME)
 
 $reinstallFlag = Read-Host -Prompt 'Do you want to install/reinstall all dependencies (yes/no)?'
 if ($reinstallFlag -eq 'yes') {
@@ -56,7 +56,7 @@ if ($rebuildFlag -eq 'yes') {
 
 
 Write-Host "Shutting down UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-$remoteOutput = ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd stop' *>&1
+$remoteOutput = ssh ${ACCOUNT}@${HOSTNAME} '/etc/init.d/uhttpd stop' *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
     # exit
@@ -65,12 +65,10 @@ if ($hasError) {
 Start-Sleep -Seconds 2
 
 # Initializing the app folders
-
-Initialize-AppFolders `
-    -AppRootFolders $APP_ROOT
+Initialize-AppFolders -HOSTNAME $HOSTNAME -AppRootFolders $APP_ROOT
 
 Write-Host "Removing orignal files '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-$remoteOutput = ssh ${ACCOUNT}@${IPADDR} "rm -rf ${WORKSPACE_ROOT}${APP_ROOT}/" *>&1
+$remoteOutput = ssh ${ACCOUNT}@${HOSTNAME} "rm -rf ${WORKSPACE_ROOT}${APP_ROOT}/" *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
     Exit 1
@@ -84,7 +82,7 @@ Start-Sleep -Seconds 2
 Write-Host
 
 Write-Host "Copying updated files..." -ForegroundColor Green
-$remoteOutput = scp -r build ${ACCOUNT}@${IPADDR}:${WORKSPACE_ROOT}${APP_ROOT} *>&1
+$remoteOutput = scp -r build ${ACCOUNT}@${HOSTNAME}:${WORKSPACE_ROOT}${APP_ROOT} *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
     exit
@@ -93,7 +91,7 @@ Start-Sleep -Seconds 2
 Write-Host
 
 Write-Host "Updating UHTTPD configuration for '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-$remoteOutput = scp ../.deployment/configs/uhttpd ${ACCOUNT}@${IPADDR}:/etc/config/uhttpd *>&1
+$remoteOutput = scp ../.deployment/configs/uhttpd ${ACCOUNT}@${HOSTNAME}:/etc/config/uhttpd *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
     exit
@@ -101,21 +99,9 @@ if ($hasError) {
 Start-Sleep -Seconds 2
 
 Write-Host "Starting UHTTPD web server with '$WEB_UI_APP_NAME'..." -ForegroundColor Green
-$remoteOutput = ssh ${ACCOUNT}@${IPADDR} '/etc/init.d/uhttpd start' *>&1
+$remoteOutput = ssh ${ACCOUNT}@${HOSTNAME} '/etc/init.d/uhttpd start' *>&1
 $hasError = Find-ExternalError -remoteOutput $remoteOutput
 if ($hasError) {
     exit
 }
 Start-Sleep -Seconds 2
-
-# param(
-#     [string]$ipaddr,
-#     [string]$distro,
-#     [string]$root
-# )
-
-# Import-Module $PSScriptRoot\deployment_support.ps1 -Force
-
-
-# $WEB_UI_APP_NAME = "eta-regulator-board-web-ui"
-# $APP_ROOT = "/web-ui"

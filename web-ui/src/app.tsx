@@ -43,6 +43,7 @@ function App() {
             'menu-item-delete-all-points': 'Удалить все точки...',
             'menu-item-add-schedule-window': 'Добавить окно...',
             'menu-item-add-point': 'Добавить точку...',
+            'menu-item-help': 'Справка...',
             'confirm-title': 'Подтвердить',
             'temperature-graph-title': 'Температурный график',
             'archives-graphs': 'Температурные графики',
@@ -53,7 +54,7 @@ function App() {
             'app-outdoor-temperature': 'Температура наружного воздуха, °C',
             'app-media-temperature': 'Температура носителя, °C',
             'app-measurement-time': 'Время измерения',
-            'app-temperatures': 'Температуры, °C'
+            'app-temperatures': 'Температуры, °C',
         }
     });
     locale('ru-RU');

@@ -20,14 +20,14 @@ const ContentAuth = () => {
         <>
             <SideNavBarLayout title={ AppConstants.appInfo.title }>
                 <Routes>
-                    { routes.map(({ path, component }) => (
-                        <Route key={ typeof path === 'string' ? path : (path as string[]).join(';') } path={ path } element={ component }/>
-                    )) }
+                    {routes.map(({ path, component }) => (
+                        <Route key={ typeof path === 'string' ? path : (path as string[]).join(';') } path={ path } element={ component } />
+                    ))}
                     <Route path='/not-found' element={ <NotFoundPage /> } />
                     <Route path='*' element={ <Navigate to='/' replace /> } />
                 </Routes>
                 <Footer>
-                    <div> Copyright © { new Date().getFullYear() } { AppConstants.appInfo.companyName }.</div>
+                    <div> Copyright © {new Date().getFullYear()} {AppConstants.appInfo.companyName}.</div>
                 </Footer>
             </SideNavBarLayout>
         </>

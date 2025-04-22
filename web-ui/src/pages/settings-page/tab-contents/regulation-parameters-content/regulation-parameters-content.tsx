@@ -5,9 +5,11 @@ import { useAppData } from '../../../../contexts/app-data/app-data';
 import AppConstants from '../../../../constants/app-constants';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
 import { useAuth } from '../../../../contexts/auth';
+import { useHelpButtonOptions } from '../../use-help-buttons';
 
 export const RegulationParametersForm = () => {
     const dxRegulatorParametersFormRef = useRef<Form>(null);
+    const getHelpButtonOptions = useHelpButtonOptions();
     const { regulatorSettings } = useRegulatorSettings();
     const { circuitId, currentHeatingCircuitType } = useSettingPageContext();
     const { putRegulatorSettingsAsync } = useAppData();
@@ -31,6 +33,7 @@ export const RegulationParametersForm = () => {
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {
                     readOnly: !isAdmin(),
+                    ...getHelpButtonOptions('dxNumberBox', 'regulator-settings/proportionalityFactor'),
                     showSpinButtons: true, min: 0, max: 100
                 } } />
 
@@ -41,6 +44,7 @@ export const RegulationParametersForm = () => {
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {
                     readOnly: !isAdmin(),
+                    ...getHelpButtonOptions('dxNumberBox', 'regulator-settings/integrationFactor'),
                     showSpinButtons: true, min: 0, max: 100
                 } } />
 
@@ -50,6 +54,7 @@ export const RegulationParametersForm = () => {
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {
                     readOnly: !isAdmin(),
+                    ...getHelpButtonOptions('dxNumberBox', 'regulator-settings/differentiationFactor'),
                     showSpinButtons: true, min: 0, max: 100
                 } } />
 
@@ -59,6 +64,7 @@ export const RegulationParametersForm = () => {
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {
                     readOnly: !isAdmin(),
+                    ...getHelpButtonOptions('dxNumberBox', 'regulator-settings/calculationPeriod'),
                     showSpinButtons: true, min: 1, max: 50
                 } } />
 
@@ -68,6 +74,7 @@ export const RegulationParametersForm = () => {
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {
                     readOnly: !isAdmin(),
+                    ...getHelpButtonOptions('dxNumberBox', 'regulator-settings/calculationPeriod'),
                     showSpinButtons: true, min: 1, max: 20
                 } } />
 
@@ -85,6 +92,7 @@ export const RegulationParametersForm = () => {
                 editorType={ 'dxNumberBox' }
                 editorOptions={ {
                     readOnly: !isAdmin(),
+                    ...getHelpButtonOptions('dxNumberBox', 'regulator-settings/insensitivityThreshold'),
                     showSpinButtons: true, min: 1, max: 5
                 } } />
              <GroupItem caption={ 'Служебные' }>
@@ -94,6 +102,7 @@ export const RegulationParametersForm = () => {
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
                         readOnly: !isAdmin(),
+                        ...getHelpButtonOptions('dxNumberBox', 'regulator-settings/fullPidImpactRange'),
                         showSpinButtons: true, min: 1000, max: 5000
                     } } />
 
@@ -103,6 +112,7 @@ export const RegulationParametersForm = () => {
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
                         readOnly: !isAdmin(),
+                        ...getHelpButtonOptions('dxNumberBox', 'regulator-settings/proportionalityFactorDenominator'),
                         showSpinButtons: true, min: 1, max: 50
                     } } />
 
@@ -112,6 +122,7 @@ export const RegulationParametersForm = () => {
                     editorType={ 'dxNumberBox' }
                     editorOptions={ {
                         readOnly: !isAdmin(),
+                        ...getHelpButtonOptions('dxNumberBox', 'regulator-settings/proportionalityFactorDenominator'),
                         showSpinButtons: true, min: 1, max: 50
                     } } />
                 </GroupItem>

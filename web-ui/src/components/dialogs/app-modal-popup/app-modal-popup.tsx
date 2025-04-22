@@ -17,7 +17,7 @@ const AppModalPopup = (props: React.PropsWithChildren<IPopupOptions> & AppModalP
                height={ isXSmall || isSmall ? '95%' : '450' } { ...props }>
             {props.children}
         </Popup>
-    )
+    );
 }
 
 export default  AppModalPopup;
