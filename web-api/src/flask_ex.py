@@ -21,7 +21,7 @@ class FlaskEx(Flask):
         self,
         import_name: str,
         static_url_path: Optional[str] = None,
-        static_folder: Optional[Union[str, os.PathLike]] = "static",
+        static_folder: Optional[Union[str, os.PathLike]] = "../data",
         static_host: Optional[str] = None,
         host_matching: bool = False,
         subdomain_matching: bool = False,
@@ -30,6 +30,7 @@ class FlaskEx(Flask):
         instance_relative_config: bool = False,
         root_path: Optional[str] = None
     ):
+
         super().__init__(
             import_name,
             static_url_path,

@@ -15,7 +15,7 @@ from utils.auth_helper import authorize
 @validate(response_by_alias=True)
 def get_quick_help_reference(reference_key: str) -> RegulatorSettingsModel:
     data_path = app.app_root_path.joinpath(
-        f'data/quick-help/{base64.b64decode(reference_key).decode("UTF-8")}.md'
+        f'data/quick-help/content/{base64.b64decode(reference_key).decode("UTF-8")}.md'
     )
 
     if not data_path.exists():
