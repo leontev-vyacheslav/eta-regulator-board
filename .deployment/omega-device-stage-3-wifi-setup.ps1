@@ -31,7 +31,7 @@ Write-Host
 
 Write-Host "Updating OS package maneger sources and instal Python ${HOSTNAME}..."  -ForegroundColor Yellow
 ssh ${ACCOUNT}@${HOSTNAME} "opkg update"
-$packages = @("python3-light", "python3-spidev")
+$packages = @("python3-light", "python3-spidev", "python3-pip")
 foreach ($package in $packages) {
     ssh ${ACCOUNT}@${HOSTNAME} "opkg install $package"
 }

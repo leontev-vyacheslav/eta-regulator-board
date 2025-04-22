@@ -37,8 +37,14 @@ function Set-AppVersion([string] $RelativePath, [string] $SearchPattern, [string
 
 function Sync-DateTime ([string] $HOSTNAME)
 {
-    Write-Host "Sync date&time according to the device timezone (${utcNow})..." -ForegroundColor Green
-    ssh ${ACCOUNT}@${HOSTNAME} "ntpd -q -p ptbtime1.ptb.de" # Network Time Protocol daemon
+    Write-Host "Sync date&time according to the device timezone (${utcNow})..." -ForegroundColor Yellow
+
+    $output = ssh "${ACCOUNT}@${HOSTNAME}" "ntpd -q -p ptbtime1.ptb.de" 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "The date&time wasn't updated!"
+    }
+    Write-Host "The date&time was updated according to the device timezone (${utcNow})..." -ForegroundColor Green
+
     Start-Sleep -Seconds 2
     Write-Host
 }
@@ -47,7 +53,10 @@ function Initialize-AppFolders ([string] $HOSTNAME, [string[]] $AppRootFolders)
 {
     Write-Host "Initializing the app folders..." -ForegroundColor Green
     foreach( $folder in $AppRootFolders) {
-        ssh ${ACCOUNT}@${HOSTNAME} "mkdir -p ${WORKSPACE_ROOT}${folder}/"
+        $output = ssh ${ACCOUNT}@${HOSTNAME} "mkdir -p ${WORKSPACE_ROOT}${folder}/"
+        if ($LASTEXITCODE -ne 0) {
+            throw "Initializing the app folder ${folder} was failed."
+        }
     }
 
     Start-Sleep -Seconds 2

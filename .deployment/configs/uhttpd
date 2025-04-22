@@ -1,8 +1,8 @@
 config uhttpd 'main'
-    list listen_http '0.0.0.0:80'
-    list listen_http '[::]:80'
-    list listen_https '0.0.0.0:443'
-    list listen_https '[::]:443'
+    list listen_http '0.0.0.0:88'
+    list listen_http '[::]:88'
+    list listen_https '0.0.0.0:8443'
+    list listen_https '[::]:8443'
     option redirect_https '1'
     option home '/www'
     option rfc1918_filter '1'
@@ -28,10 +28,16 @@ config cert 'defaults'
     option commonname 'OpenWrt'
 
 config uhttpd 'other'
-    option listen_http '3000'
+    option listen_http    '0.0.0.0:80'
     option http_index 'index.html'
     option index_page 'index.html'
     option error_page '/index.html'
+    option rfc1918_filter 0
+    option max_requests 3
+    option max_connections 100
+    option script_timeout 60
+    option network_timeout 30
+    option tcp_keepalive 1
     option compress '1'
     option compress_files 'html css js'
     option 'home' '/mnt/mmcblk0p1/eta-regulator-board/web-ui'
