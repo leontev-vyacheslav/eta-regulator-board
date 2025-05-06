@@ -23,7 +23,7 @@ from loggers.engine_logger_builder import build as build_logger
 from models.regulator.enums.control_mode_model import ControlModeModel
 from models.regulator.temperature_graph_model import TemperatureGraphItemModel
 from models.regulator.archives_model import ArchivesModel, DailySavedArchivesModel
-from models.regulator.archive_model import ArchiveModel
+from models.regulator.archive_model import ArchiveModel, ExtendedArchiveModel
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
 from models.regulator.heating_circuits_model import HeatingCircuitModel
@@ -526,18 +526,23 @@ class RegulationEngine:
 
                 # receiving archives and current datetime
                 self._refresh_rtc_datetime()
-                archive = self._get_archive()
+                archive: ArchiveModel = self._get_archive()
+                calculated_temperatures: TemperatureGraphItemModel = self._get_calculated_temperatures(archive.outdoor_temperature)
 
                 if is_initial:
                     archive.is_initial = is_initial
-                self._save_archives(archive)
+
+                self._save_archives(ExtendedArchiveModel.build(
+                    archive=archive,
+                    calculated_temperatures=calculated_temperatures
+                ))
 
                 # getting and sharing the failure action state among threads
                 failure_action_state = self._get_failure_action_state(archive)
                 with self._shared_failure_action_state_lock:
                     self._shared_failure_action_state = failure_action_state
 
-                calculated_temperatures: TemperatureGraphItemModel = self._get_calculated_temperatures(archive.outdoor_temperature)
+                 # calculated_temperatures: TemperatureGraphItemModel = self._get_calculated_temperatures(archive.outdoor_temperature)
 
                 if failure_action_state in [FailureActionTypeModel.NO_FAILURE, FailureActionTypeModel.TEMPERATURE_SUSTENANCE]:
                     # calculating the PID impact result (a percentage value)

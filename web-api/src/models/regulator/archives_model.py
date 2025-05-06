@@ -1,12 +1,11 @@
-from datetime import datetime
 from typing import List
 
 from models.abstracts.app_base_model import AppBaseModel
-from models.regulator.archive_model import ArchiveModel
+from models.regulator.archive_model import ExtendedArchiveModel
 
 
 class ArchivesModel(AppBaseModel):
-    items: List[ArchiveModel]
+    items: List[ExtendedArchiveModel]
 
 
 class DailySavedArchivesModel(ArchivesModel):
@@ -17,6 +16,3 @@ class DailySavedArchivesModel(ArchivesModel):
 
         return super().json(*args, **kwargs, exclude=exclude)
 
-
-class ArchivesDatesModel(AppBaseModel):
-    items: List[datetime]
