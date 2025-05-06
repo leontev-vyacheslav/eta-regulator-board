@@ -72,7 +72,7 @@ export const TemperatureGraphChart = ({ dataSource, showPoints }: { dataSource: 
                 color={ AppConstants.colors.returnPipeColor }
                 type='spline' >
                     <Point visible={ showPoints } size={ 8 }  symbol='square'/>
-                </Series>
+            </Series>
             <ArgumentAxis inverted={ chartArgumentAxisInverted }>
                 <Grid />
                 <Title text={ formatMessage('app-outdoor-temperature') } font={ { size: 12 } } />

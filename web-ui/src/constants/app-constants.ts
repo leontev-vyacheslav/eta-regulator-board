@@ -1,4 +1,4 @@
-const APP_VERSION = 'v.0.2.20250414-121233';
+const APP_VERSION = 'v.0.2.20250505-134734';
 
 const AppConstants = {
     appInfo: {
@@ -19,6 +19,7 @@ const AppConstants = {
         themeBaseAccent: '#FF5722',
         baseDarkgreyTextColor: '#464646',
         supplyPipeColor: '#f5564a',
+        calculatedSupplyPipeColor: '#f5564a',
         returnPipeColor: '#1db2f5',
         outdoorColor: '#4CAF50'
     },

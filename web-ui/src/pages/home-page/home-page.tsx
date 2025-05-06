@@ -1,6 +1,6 @@
 import './home-page.scss';
 import AppConstants from '../../constants/app-constants';
-import { HeatingCircuitCodeIcon, HeatingCircuitMnemoschemaIcon, HomeIcon, AdditionalMenuIcon, RefreshIcon } from '../../constants/app-icons';
+import { HeatingCircuitCodeIcon, HeatingCircuitMnemoschemaIcon, HomeIcon, AdditionalMenuIcon, RefreshIcon, HelpIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel'
 import { useMemo, useRef, useState } from 'react';
@@ -13,6 +13,7 @@ import { useRegulatorSettings } from '../../contexts/app-regulator-settings';
 import { MenuItemModel } from '../../models/menu-item-model';
 import { HomePageContextProvider, useHomePage } from './home-page-context';
 import { getQuickGuid } from '../../utils/uuid';
+import { quickHelpReferenceService } from '../../services/quick-help-reference-service';
 
 export const HomePageInternal = () => {
     const { isShowMnemoschema, setIsShowMnemoschema, setUpdateSharedRegulatorStateRefreshToken } = useHomePage();
@@ -38,6 +39,13 @@ export const HomePageInternal = () => {
                         text: 'Обновить...',
                         onClick: () => {
                             setUpdateSharedRegulatorStateRefreshToken(getQuickGuid());
+                        }
+                    },
+                    {
+                        icon: () => <HelpIcon size={ 20 } />,
+                        text: 'Справка...',
+                        onClick: () => {
+                            quickHelpReferenceService.show('common/mnemoschema');
                         }
                     },
                 ]

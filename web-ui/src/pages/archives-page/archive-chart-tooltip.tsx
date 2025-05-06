@@ -1,13 +1,12 @@
 import AppConstants from '../../constants/app-constants';
 import { OutdoorChartSingIcon, ReturnPipeChartSingIcon, SupplyPipeChartSingIcon, TimeChartSingIcon } from '../../constants/app-icons';
-import { getUuidV4 } from '../../utils/uuid';
 
 
-export const ArchiveChartTooltip = (info: any) => {
+export const ArchiveChartTooltip = ({ info, isShowCalculatedValues }: { info: any, isShowCalculatedValues: boolean }) => {
     return (
-        <div className='temperature-graph-tooltip' data-guid={ getUuidV4() } style={ {} }>
+        <div className='temperature-graph-tooltip' >
             {
-                info.point.data.datetime != null  ?
+                info.point.data.datetime != null ?
                     <div>
                         <TimeChartSingIcon size={ 18 } />
                         <div>Время:</div>
@@ -25,7 +24,7 @@ export const ArchiveChartTooltip = (info: any) => {
                     : null
             }
             {
-                info.point.data.supplyPipeTemperature  != null ?
+                info.point.data.supplyPipeTemperature != null ?
                     <div>
                         <SupplyPipeChartSingIcon size={ 18 } color={ AppConstants.colors.supplyPipeColor } />
                         <div>Подача:</div>
@@ -39,6 +38,24 @@ export const ArchiveChartTooltip = (info: any) => {
                         <ReturnPipeChartSingIcon size={ 18 } color={ AppConstants.colors.returnPipeColor } />
                         <div>Обратка:</div>
                         <div>{info.point.data.returnPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
+                    </div>
+                    : null
+            }
+            {
+                isShowCalculatedValues && info.point.data.calculatedSupplyPipeTemperature != null ?
+                    <div>
+                        <SupplyPipeChartSingIcon size={ 18 } color={ AppConstants.colors.supplyPipeColor } />
+                        <div>Подача (темп. гр.):</div>
+                        <div>{info.point.data.calculatedSupplyPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
+                    </div>
+                    : null
+            }
+            {
+                isShowCalculatedValues && info.point.data.calculatedReturnPipeTemperature != null ?
+                    <div>
+                        <ReturnPipeChartSingIcon size={ 18 } color={ AppConstants.colors.returnPipeColor } />
+                        <div>Обратка (темп. гр.):</div>
+                        <div>{info.point.data.calculatedReturnPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
                     </div>
                     : null
             }

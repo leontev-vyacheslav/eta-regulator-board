@@ -1,13 +1,35 @@
 import { Chart, Tooltip, Crosshair, Series, Point, ArgumentAxis, Grid, Title, ValueAxis, Font, CommonAxisSettings, Legend, Label, MinorGrid, Tick } from 'devextreme-react/chart';
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import AppConstants from '../../constants/app-constants';
-import { ArchiveModel } from '../../models/regulator-settings/archive-model';
 import { formatMessage } from 'devextreme/localization';
 import { ArchiveChartTooltip } from './archive-chart-tooltip';
+import { ArchivesChartProps } from '../../models/archives-chart-props';
 
-export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: ArchiveModel[], isUsedOneAxis: boolean }) => {
+
+export const ArchivesChart = ({ dataSource, isShowTwoAxis, isShowLegends, isShowCalculatedValues }: ArchivesChartProps) => {
     const chartRef = useRef<Chart>(null);
+    const markerRender = useCallback((markerInfo: any) => {
 
+        switch (markerInfo.series.name) {
+            case 'supplyPipe':
+                return <circle cx={ 5 } cy={ 5 } r={ 5 } fill={ AppConstants.colors.supplyPipeColor }></circle>;
+            case 'returnPipe':
+                return <rect x={ 0 } y={ 0 } width={ 9 } height={ 9 } fill={ AppConstants.colors.returnPipeColor }></rect>;
+
+            case 'calculatedSupplyPipe':
+                return (
+                    <path d="M5,5 L13,13 M13,5 L5,13" strokeWidth={ 2 } stroke={ AppConstants.colors.supplyPipeColor }/>
+                );
+            case 'calculatedReturnPipe':
+                return (
+                    <polygon points="5,0 10,5 5,10 0,5" fill={ AppConstants.colors.returnPipeColor } />
+                );
+
+            default:
+                return <polygon points={ '5,0 0,10 10,10 ' } fill={ AppConstants.colors.outdoorColor } />
+        }
+
+    }, []);
     return (
         <Chart
             className='temperature-graph-chart'
@@ -20,7 +42,7 @@ export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: Archi
                 enabled
                 arrowLength={ 5 }
                 opacity={ 1 }
-                contentRender={ ArchiveChartTooltip }
+                contentRender={ (info) => { return <ArchiveChartTooltip info={ info } isShowCalculatedValues={ isShowCalculatedValues } /> } }
             />
             <Crosshair
                 enabled
@@ -28,7 +50,9 @@ export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: Archi
                 dashStyle='dot'
                 horizontalLine={ false }
             />
-
+            <CommonAxisSettings
+            valueMarginsEnabled = { true }
+    />
             <ArgumentAxis>
                 <Grid visible />
                 <MinorGrid visible />
@@ -39,13 +63,14 @@ export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: Archi
             <ValueAxis
                 name='commonAxis'
                 position='left'
-                visible={ isUsedOneAxis }
-                maxValueMargin={ 0.1 }
-                minValueMargin={ 0.1 }
+                visible={ !isShowTwoAxis }
+                // maxValueMargin={ 0.5 }
+                // minValueMargin={ 0.5 }
+
             >
-                <Grid visible={ isUsedOneAxis } />
-                <Tick length={ 4 } shift={ 2 } visible={ isUsedOneAxis } />
-                {isUsedOneAxis ?
+                <Grid visible={ !isShowTwoAxis } />
+                <Tick length={ 4 } shift={ 2 } visible={ !isShowTwoAxis } />
+                {!isShowTwoAxis ?
                     <Title text={ formatMessage('app-temperatures') } >
                         <Font size={ 12 } />
                     </Title>
@@ -55,36 +80,35 @@ export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: Archi
             <ValueAxis
                 name='outdoorAxis'
                 position='left'
-                visible={ !isUsedOneAxis }
-                maxValueMargin={ 0.1 }
-                minValueMargin={ 0.1 }
+                visible={ isShowTwoAxis }
+                // maxValueMargin={ 0.5 }
+                // minValueMargin={ 0.5 }
             >
-                <Tick length={ 4 } shift={ 2 } visible={ !isUsedOneAxis } />
-                {!isUsedOneAxis
+                <Tick length={ 4 } shift={ 2 } visible={ isShowTwoAxis } />
+                {isShowTwoAxis
                     ?
                     <Title text={ formatMessage('app-outdoor-temperature') } >
                         <Font size={ 12 } />
                     </Title>
                     : null
                 }
-
             </ValueAxis>
 
             <ValueAxis
                 name='pipeAxis'
                 position='right'
-                visible={ !isUsedOneAxis }
-                maxValueMargin={ 0.1 }
-                minValueMargin={ 0.1 }
+                visible={ isShowTwoAxis }
+                // maxValueMargin={ 0.5 }
+                // minValueMargin={ 0.5 }
             >
-                <Tick length={ 4 } shift={ 2 } visible={ !isUsedOneAxis } />
-                <Grid visible={ !isUsedOneAxis } />
-                {!isUsedOneAxis
-                 ?
+                <Tick length={ 4 } shift={ 2 } visible={ isShowTwoAxis } />
+                <Grid visible={ isShowTwoAxis } />
+                {isShowTwoAxis
+                    ?
                     <Title text={ formatMessage('app-media-temperature') } >
                         <Font size={ 12 } />
                     </Title>
-                : null
+                    : null
                 }
             </ValueAxis>
 
@@ -93,7 +117,7 @@ export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: Archi
             </CommonAxisSettings>
 
             <Legend
-                visible={ true }
+                visible={ isShowLegends }
                 customizeText={ (seriesInfo: {
                     seriesColor: string;
                     seriesIndex: number;
@@ -106,6 +130,10 @@ export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: Archi
                             return 'Обратка'
                         case 'outdoor':
                             return 'Внешний'
+                        case 'calculatedSupplyPipe':
+                            return 'Подача (темп. гр.)'
+                        case 'calculatedReturnPipe':
+                            return 'Обратка (темп. гр.)'
                         default:
                             return ''
                     }
@@ -117,24 +145,13 @@ export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: Archi
                 columnCount={ 1 }
                 markerSize={ 10 }
                 markerRender={ (markerInfo: any) => {
-
-                    return (
-                        <>
-                            {
-                                markerInfo.series.name === 'supplyPipe'
-                                    ? <circle cx={ 5 } cy={ 5 } r={ 5 } fill={ AppConstants.colors.supplyPipeColor }></circle>
-                                    : markerInfo.series.name === 'returnPipe' ? <rect x={ 0 } y={ 0 } width={ 9 } height={ 9 } fill={ AppConstants.colors.returnPipeColor }></rect>
-
-                                        : <polygon points={ '5,0 0,10 10,10 ' } fill={ AppConstants.colors.outdoorColor } />
-                            }
-                        </>
-                    )
+                    return markerRender(markerInfo);
                 } }
             />
 
             <Series
                 name='supplyPipe'
-                axis={ isUsedOneAxis ? 'commonAxis' : 'pipeAxis' }
+                axis={ !isShowTwoAxis ? 'commonAxis' : 'pipeAxis' }
                 valueField="supplyPipeTemperature"
                 argumentField="datetime"
                 showInLegend={ true }
@@ -144,7 +161,7 @@ export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: Archi
 
             <Series
                 name='returnPipe'
-                axis={ isUsedOneAxis ? 'commonAxis' : 'pipeAxis' }
+                axis={ !isShowTwoAxis ? 'commonAxis' : 'pipeAxis' }
                 valueField='returnPipeTemperature'
                 argumentField='datetime'
                 showInLegend={ true }
@@ -155,7 +172,7 @@ export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: Archi
 
             <Series
                 name='outdoor'
-                axis={ isUsedOneAxis ? 'commonAxis' : 'outdoorAxis' }
+                axis={ !isShowTwoAxis ? 'commonAxis' : 'outdoorAxis' }
                 valueField='outdoorTemperature'
                 argumentField='datetime'
                 showInLegend={ true }
@@ -163,6 +180,32 @@ export const ArchivesChart = ({ dataSource, isUsedOneAxis }: { dataSource: Archi
                 type='spline'
             >
                 <Point visible={ true } size={ 8 } symbol='triangle' />
+            </Series>
+
+            <Series
+                name='calculatedSupplyPipe'
+                axis={ !isShowTwoAxis ? 'commonAxis' : 'pipeAxis' }
+                valueField="calculatedSupplyPipeTemperature"
+                argumentField="datetime"
+                showInLegend={ isShowCalculatedValues }
+                type='spline' color={ AppConstants.colors.supplyPipeColor }
+                visible={ isShowCalculatedValues }
+            >
+                <Point visible={ isShowCalculatedValues } size={ 8 } symbol='cross' />
+
+            </Series>
+
+            <Series
+                name='calculatedReturnPipe'
+                axis={ !isShowTwoAxis ? 'commonAxis' : 'pipeAxis' }
+                valueField='calculatedReturnPipeTemperature'
+                argumentField='datetime'
+                showInLegend={ isShowCalculatedValues }
+                color={ AppConstants.colors.returnPipeColor }
+                type='spline'
+                visible={ isShowCalculatedValues }
+            >
+                <Point visible={ isShowCalculatedValues } size={ 8 } symbol='polygon' />
             </Series>
         </Chart>
     );

@@ -9,6 +9,7 @@ import {
     ManualModeIcon,
     AppIcon,
     ArchivesIcon,
+    HelpIcon,
 } from './app-icons';
 import { TreeViewItemModel } from '../models/tree-view-item';
 import { HeatingCircuitIndexModel } from '../models/regulator-settings/enums/heating-circuit-type-model';
@@ -105,6 +106,12 @@ export const useSideNavigationMenuItems = () => {
                 text: 'О программе',
                 iconRender: (props: IconBaseProps) => <AboutIcon size={ 22 } { ...props } />,
                 path: '/about',
+            },
+            {
+                id: 'help',
+                text: ' Справка',
+                iconRender: (props: IconBaseProps) => <HelpIcon size={ 22 } { ...props } />,
+                command: 'help',
             },
             {
                 id: 'exit',

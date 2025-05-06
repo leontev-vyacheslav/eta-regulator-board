@@ -93,7 +93,11 @@ export { MdOutlineAutoGraph as AutoWholeRange } from 'react-icons/md';
 export { MdOutlineShowChart as DefaultWholeRange } from 'react-icons/md';
 
 export { MdOutlineLiveHelp as HelpIcon } from 'react-icons/md';
+export { IoEyeOutline as ViewIcon } from 'react-icons/io5';
 
+export { MdStackedLineChart as TempGraphCalcValuesViewIcon } from 'react-icons/md';
+export { MdShowChart as TempGraphFactValuesViewIcon } from 'react-icons/md';
+export { IoCheckmark as CheckIcon } from 'react-icons/io5';
 
 
 import { MdMoreVert } from 'react-icons/md';

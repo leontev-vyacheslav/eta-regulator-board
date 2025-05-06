@@ -1,3 +1,5 @@
+<style>body {text-align: justify}</style>
+
 A **temperature graph of a heating system** (also known as a **heating curve**) shows how the **supply temperature** of the heating system (e.g., water temperature in radiators or underfloor heating) varies depending on the **outside temperature**. This is a key concept in modern heating control systems, particularly in **weather-compensated heating systems**.
 
 ### **Key Features of a Heating Curve Graph:**

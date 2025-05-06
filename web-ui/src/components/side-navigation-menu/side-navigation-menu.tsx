@@ -10,6 +10,7 @@ import { SideNavigationMenuProps } from '../../models/side-navigation-menu-props
 import { useWorkdatePicker } from '../../contexts/workdate-context';
 
 import './side-navigation-menu.scss';
+import { quickHelpReferenceService } from '../../services/quick-help-reference-service';
 
 export default function SideNavigationMenu(props: SideNavigationMenuProps) {
     const {
@@ -28,6 +29,7 @@ export default function SideNavigationMenu(props: SideNavigationMenuProps) {
     const wrapperRef = useRef();
     const sideNavigationMenuItems = useSideNavigationMenuItems();
 
+
     const items: TreeViewItemModel[] = useMemo<TreeViewItemModel[]>(
         () => {
             return sideNavigationMenuItems
@@ -36,7 +38,7 @@ export default function SideNavigationMenu(props: SideNavigationMenuProps) {
                     if (item.path && !(/^\//.test(item.path))) {
                         item.path = `/${item.path}`;
                     }
-                    
+
                     return { ...item, expanded: isLarge } as TreeViewItemModel
                 });
         },
@@ -123,6 +125,12 @@ export default function SideNavigationMenu(props: SideNavigationMenuProps) {
 
                         if (treeViewItem.command === 'exit') {
                             signOutWithConfirm();
+
+                            return;
+                        }
+
+                        if (treeViewItem.command === 'help') {
+                            quickHelpReferenceService.show('common/introduction');
 
                             return;
                         }
