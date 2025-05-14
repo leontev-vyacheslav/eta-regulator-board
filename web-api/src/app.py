@@ -32,9 +32,9 @@ CORS(
     methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allow_headers=['*'],
 )
-WorkerStarter(app)
 AccountsSettingsRepository(app)
 RegulatorSettingsRepository(app)
+WorkerStarter(app)
 
 
 @app.errorhandler(Exception)

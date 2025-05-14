@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "web-api",
             "type": "python",
@@ -36,6 +37,16 @@
                 "webpack:///src/*": "${webRoot}/*"
             },
             "preLaunchTask": "npm: start"
-        }
+        },
+        {
+            "name": "remote-connector",
+            "type": "python",
+            "request": "launch",
+            "module": "app",
+            "cwd": "${workspaceFolder}/remote-connector/src",
+            "args": [],
+            "justMyCode": false,
+            "console": "integratedTerminal",
+        },
     ]
 }

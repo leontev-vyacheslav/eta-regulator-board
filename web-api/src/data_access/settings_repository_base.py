@@ -104,6 +104,6 @@ class SettingsRepositoryBase:
         return self._find_changed_fields(self.settings, updated_settings, path, visited)
 
     def update(self, current_settings):
-
-        self.settings = current_settings
+        if current_settings is not None:
+            self.settings = current_settings
         self._dump()

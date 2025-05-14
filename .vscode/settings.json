@@ -8,7 +8,8 @@
         "**/Thumbs.db": true,
 
         "**/web-api": true,
-        "**/web-ui": true
+        "**/web-ui": true,
+        "**/remote-connector": true,
     },
     "npm.exclude": [
         "SSH FS - omega-7e12/",

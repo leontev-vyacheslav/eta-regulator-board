@@ -11,6 +11,10 @@
         {
             "name": "web-ui",
             "path": "web-ui"
+        },
+        {
+            "name": "remote-connector",
+            "path": "remote-connector"
         }
     ],
     "settings": {

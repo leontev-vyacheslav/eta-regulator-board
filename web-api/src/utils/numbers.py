@@ -1,0 +1,2 @@
+NULL_UINT16 = 0xFFFF
+NULL_FLOAT = float('nan')
