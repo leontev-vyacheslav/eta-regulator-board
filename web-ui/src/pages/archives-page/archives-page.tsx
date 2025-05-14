@@ -3,7 +3,7 @@ import './archives-page.scss';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import PageHeader from '../../components/page-header/page-header';
 import AppConstants from '../../constants/app-constants';
-import { AdditionalMenuIcon, ArchivesIcon, DownloadIcon, GraphIcon, RefreshIcon, TableIcon, WorkDateIcon, ViewIcon, CheckIcon } from '../../constants/app-icons';
+import { AdditionalMenuIcon, ArchivesIcon, DownloadIcon, GraphIcon, RefreshIcon, TableIcon, WorkDateIcon, ViewIcon, CheckIcon, HelpIcon } from '../../constants/app-icons';
 import { ArchivesChart } from './archives-chart';
 import { ArchivesGrid } from './archives-grid';
 import { useAppData } from '../../contexts/app-data/app-data';
@@ -16,6 +16,7 @@ import { useParams } from 'react-router';
 import { useRegulatorSettings } from '../../contexts/app-regulator-settings';
 import { HeatingCircuitTypes } from '../../models/regulator-settings/enums/heating-circuit-type-model';
 import { useScreenSize } from '../../utils/media-query';
+import { quickHelpReferenceService } from '../../services/quick-help-reference-service';
 
 export const ArchivesPage = () => {
     const { circuitIdParam } = useParams();
@@ -157,7 +158,19 @@ export const ArchivesPage = () => {
 
     return (
         <>
-            <PageHeader caption={ () => pageHeaderTitle } menuItems={ [] } >
+            <PageHeader caption={ () => pageHeaderTitle } menuItems={ [
+                {
+                    icon: () => <AdditionalMenuIcon size={ 20 } color='black' />,
+                    items: [
+                        {
+                            icon: () => <HelpIcon size={ 20 } />,
+                            text: 'Справка',
+                            onClick: () => {
+                                quickHelpReferenceService.show('archives/introduction');
+                            }
+                        }]
+                }
+            ] } >
                 <ArchivesIcon size={ AppConstants.headerIconSize } />
             </PageHeader>
             <div className={ 'content-block' }>
@@ -165,7 +178,7 @@ export const ArchivesPage = () => {
                     <PageToolbar title={ formatMessage('archives-graphs') } menuItems={ menuItems } />
                     {
                         isShowGraph
-                            ? <ArchivesChart dataSource={ archives } isShowTwoAxis={ isShowTwoAxis } isShowLegends={ isShowLegends } isShowCalculatedValues = { isShowCalculatedValues } />
+                            ? <ArchivesChart dataSource={ archives } isShowTwoAxis={ isShowTwoAxis } isShowLegends={ isShowLegends } isShowCalculatedValues={ isShowCalculatedValues } />
                             : <ArchivesGrid dataSource={ archives } />
                     }
                 </div>

@@ -45,7 +45,7 @@ export const HomePageInternal = () => {
                         icon: () => <HelpIcon size={ 20 } />,
                         text: 'Справка...',
                         onClick: () => {
-                            quickHelpReferenceService.show('common/mnemoschema');
+                            quickHelpReferenceService.show('home/mnemoschema');
                         }
                     },
                 ]
