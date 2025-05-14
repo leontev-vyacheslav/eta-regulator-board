@@ -4,6 +4,11 @@
             "name": "background_processes_watcher",
             "interval": 60,
             "immediately": false
+        },
+        {
+            "name": "remote_connector_launcher",
+            "interval": 0,
+            "immediately": true
         }
     ]
 }
