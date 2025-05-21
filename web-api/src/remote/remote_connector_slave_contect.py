@@ -7,7 +7,13 @@ class RemoteConnectorSlaveContext(ModbusSlaveContext):
         super().__init__(*args, **kwargs)
 
     def setValues(self, fx, address, values):
-        if self.__set_values_callback is not None:
-            self.__set_values_callback(fx, address, values)
+        is_success_updating = False
 
-        super().setValues(fx, address, values)
+        if self.__set_values_callback is not None:
+             is_success_updating = self.__set_values_callback(fx, address, values)
+
+        if  is_success_updating:
+            super().setValues(fx, address, values)
+
+    def getValues(self, fx, address, count=1):
+        return super().getValues(fx, address, count)

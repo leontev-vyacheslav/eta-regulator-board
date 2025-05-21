@@ -15,11 +15,10 @@ logger = logging.getLogger(__name__)
 
 @pytest.fixture(scope='module')
 def get_regulation_engine_equipment():
-    hardware_process_lock = ProcessLock()
     process_cancellation_event = ProcessEvent()
     threading_cancellation_event = ThreadingEvent()
 
-    return (hardware_process_lock, process_cancellation_event, threading_cancellation_event)
+    return (process_cancellation_event, threading_cancellation_event)
 
 
 def engine_polling_runner(engine: RegulationEngine, threading_cancellation_event: ThreadingEvent, duration: float):
@@ -41,12 +40,11 @@ def engine_polling_runner(engine: RegulationEngine, threading_cancellation_event
 
 @pytest.mark.parametrize("duration", [180.0])
 def supply_pipe_temp_step_variation_check(get_regulation_engine_equipment, duration: float):
-    (hardware_process_lock, process_cancellation_event, threading_cancellation_event) = get_regulation_engine_equipment
+    (process_cancellation_event, threading_cancellation_event) = get_regulation_engine_equipment
 
     engine = EmuSupplyPipeTempStepVariationRegulationEngine(
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
-        hardwares_process_lock=hardware_process_lock,
         logging_level=logging.DEBUG,
         step_duration=duration / 3
     )
@@ -57,12 +55,11 @@ def supply_pipe_temp_step_variation_check(get_regulation_engine_equipment, durat
 
 @pytest.mark.parametrize("duration", [180.0])
 def outdoor_temp_step_variation_check(get_regulation_engine_equipment, duration: float):
-    (hardware_process_lock, process_cancellation_event, threading_cancellation_event) = get_regulation_engine_equipment
+    (process_cancellation_event, threading_cancellation_event) = get_regulation_engine_equipment
 
     engine = EmuOutdoorTempStepVariationRegulationEngine(
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
-        hardwares_process_lock=hardware_process_lock,
         logging_level=logging.DEBUG,
         step_duration=duration / 3
     )

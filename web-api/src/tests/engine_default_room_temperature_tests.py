@@ -11,7 +11,6 @@ from tests.testable_engines.base_settings_testable_regulation_engine import Base
 
 
 def get_default_room_temperature_no_comfort_or_econom_modes_check():
-    hardware_process_lock = ProcessLock()
     process_cancellation_event = ProcessEvent()
 
     assertable_default_room_temperature = float('inf')
@@ -21,7 +20,6 @@ def get_default_room_temperature_no_comfort_or_econom_modes_check():
     engine = AutoControlModeTestableRegulationEngine(
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
-        hardwares_process_lock=hardware_process_lock,
         logging_level=logging.DEBUG
     )
 
@@ -31,13 +29,11 @@ def get_default_room_temperature_no_comfort_or_econom_modes_check():
 
 
 def get_default_room_temperature_comfort_no_schedules_check():
-    hardware_process_lock = ProcessLock()
     process_cancellation_event = ProcessEvent()
 
     engine = BaseSettingsTestableRegulationEngine(
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
-        hardwares_process_lock=hardware_process_lock,
         logging_level=logging.DEBUG
     )
 
@@ -51,13 +47,11 @@ def get_default_room_temperature_comfort_no_schedules_check():
 
 
 def get_default_room_temperature_comfort_no_schedule_for_weekday_check():
-    hardware_process_lock = ProcessLock()
     process_cancellation_event = ProcessEvent()
 
     engine = SchedulesTestableRegulationEngine(
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
-        hardwares_process_lock=hardware_process_lock,
         logging_level=logging.DEBUG
     )
 
@@ -80,13 +74,11 @@ def get_default_room_temperature_comfort_no_schedule_for_weekday_check():
 
 
 def get_default_room_temperature_comfort_has_schedule_no_window_check():
-    hardware_process_lock = ProcessLock()
     process_cancellation_event = ProcessEvent()
 
     engine = SchedulesTestableRegulationEngine(
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
-        hardwares_process_lock=hardware_process_lock,
         logging_level=logging.DEBUG
     )
 
@@ -108,13 +100,11 @@ def get_default_room_temperature_comfort_has_schedule_no_window_check():
 
 
 def get_default_room_temperature_comfort_has_schedule_check():
-    hardware_process_lock = ProcessLock()
     process_cancellation_event = ProcessEvent()
 
     engine = SchedulesTestableRegulationEngine(
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
-        hardwares_process_lock=hardware_process_lock,
         logging_level=logging.DEBUG
     )
 

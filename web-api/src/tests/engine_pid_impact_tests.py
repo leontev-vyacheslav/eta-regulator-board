@@ -13,13 +13,11 @@ logger = logging.getLogger(__name__)
 
 def get_pid_impact_components_check():
 
-    hardware_process_lock = ProcessLock()
     process_cancellation_event = ProcessEvent()
 
     engine = BaseSettingsTestableRegulationEngine(
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
-        hardwares_process_lock=hardware_process_lock,
         logging_level=logging.DEBUG
     )
 

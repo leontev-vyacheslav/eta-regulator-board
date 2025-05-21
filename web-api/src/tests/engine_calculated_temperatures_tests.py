@@ -18,12 +18,10 @@ logger = logging.getLogger(__name__)
 def get_regulation_engine() -> RegulationEngine:
     logger.setLevel(logging.DEBUG)
 
-    hardware_process_lock = ProcessLock()
     process_cancellation_event = ProcessEvent()
     return RegulationEngine(
         heating_circuit_index=HeatingCircuitIndexModel.FIRST,
         process_cancellation_event=process_cancellation_event,
-        hardwares_process_lock=hardware_process_lock,
         logging_level=logging.DEBUG
     )
 
