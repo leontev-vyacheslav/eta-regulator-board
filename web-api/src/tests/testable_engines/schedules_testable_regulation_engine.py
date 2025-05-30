@@ -10,7 +10,7 @@ class SchedulesTestableRegulationEngine(BaseSettingsTestableRegulationEngine):
 
     def _get_settings(self) -> HeatingCircuitModel:
         settings = super()._get_settings()
-        settings.control_parameters.control_mode = ControlModeModel.COMFORT
+        settings.control_parameters.control_mode = ControlModeModel.AUTO
         settings.schedules = SchedulesModel(
             items=[
                 ScheduleModel(

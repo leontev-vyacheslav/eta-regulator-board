@@ -4,7 +4,7 @@
         "items": [
             {
                 "id": "a89ddf5d-b2bd-474e-9c96-867068a094fd",
-                "name": "Контур ЦО1111111",
+                "name": "Контур ЦО",
                 "type": 1,
                 "controlParameters": {
                     "controlMode": 3,
@@ -14,7 +14,7 @@
                     "manualControlModeTemperatureSetpoint": 60.0,
                     "analogValveErrorSetpoint": 50.0,
                     "summerModeTransitionTemperature": 10.0,
-                    "comfortTemperature": 45.5,
+                    "comfortTemperature": 20.0,
                     "economicalTemperature": 18.0,
                     "frostProtectionTemperature": 5.0,
                     "roomTemperatureInfluence": 0.0,

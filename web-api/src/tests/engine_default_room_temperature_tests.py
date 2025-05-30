@@ -37,7 +37,7 @@ def get_default_room_temperature_comfort_no_schedules_check():
         logging_level=logging.DEBUG
     )
 
-    assertable_default_room_temperature = float('inf')
+    assertable_default_room_temperature = base_testable_settings.control_parameters.comfort_temperature
 
     RegulationEngineConfig.default_room_temperature = assertable_default_room_temperature
 
@@ -55,9 +55,7 @@ def get_default_room_temperature_comfort_no_schedule_for_weekday_check():
         logging_level=logging.DEBUG
     )
 
-    assertable_default_room_temperature = float('inf')
-
-    RegulationEngineConfig.default_room_temperature = assertable_default_room_temperature
+    assertable_default_room_temperature =base_testable_settings.control_parameters.comfort_temperature
 
     engine._rtc_datetime = datetime(
         year=2024,
@@ -73,7 +71,7 @@ def get_default_room_temperature_comfort_no_schedule_for_weekday_check():
     assert default_room_temperature == assertable_default_room_temperature
 
 
-def get_default_room_temperature_comfort_has_schedule_no_window_check():
+def get_default_room_temperature_has_schedule_no_window_check():
     process_cancellation_event = ProcessEvent()
 
     engine = SchedulesTestableRegulationEngine(

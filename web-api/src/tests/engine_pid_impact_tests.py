@@ -2,6 +2,7 @@ from datetime import datetime
 import logging
 from multiprocessing import Event as ProcessEvent, Lock as ProcessLock
 from models.regulator.archive_model import ArchiveModel
+from models.regulator.enums.failure_action_type_model import FailureActionTypeModel
 
 from models.regulator.enums.heating_circuit_index_model import HeatingCircuitIndexModel
 from models.regulator.heating_circuits_model import HeatingCircuitModel
@@ -52,7 +53,8 @@ def get_pid_impact_components_check():
         entry=PidImpactEntryModel(
             deviation=asserted_previous_deviation,
             total_deviation=asserted_previoustotal_deviation,
-            archive=asserted_archive
+            archive=asserted_archive,
+            failure_action_state=FailureActionTypeModel.NO_FAILURE
         )
     )
 
