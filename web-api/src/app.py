@@ -5,13 +5,13 @@ import os
 import sys
 import signal
 import os.path
-import time
 
 from flask_cors import CORS
 from flask_ex import FlaskEx
 
-from data_access.regulator_settings_repository import RegulatorSettingsRepository
 from data_access.accounts_settings_repository import AccountsSettingsRepository
+from data_access.remote_connectors_repository import RemoteConnectorsSettingsRepository
+from data_access.regulator_settings_repository import RegulatorSettingsRepository
 from models.common.message_model import MessageModel
 from regulation.launcher import launch_regulation_engines
 from responses.json_response import JsonResponse
@@ -33,6 +33,7 @@ CORS(
     allow_headers=['*'],
 )
 AccountsSettingsRepository(app)
+RemoteConnectorsSettingsRepository(app)
 RegulatorSettingsRepository(app)
 WorkerStarter(app)
 

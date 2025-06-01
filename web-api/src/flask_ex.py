@@ -4,13 +4,15 @@ from typing import Callable, List, Optional, Any, Union
 
 from flask import Flask
 from data_access.accounts_settings_repository import AccountsSettingsRepository
-from data_access.regulator_settings_repository import RegulatorSettingsRepository
 from models.common.accounts_settings_model import AccountsSettingsModel
+from data_access.regulator_settings_repository import RegulatorSettingsRepository
+from models.regulator.regulator_settings_model import RegulatorSettingsModel
+from data_access.remote_connectors_repository import RemoteConnectorsSettingsRepository
+from models.remote_connector.remote_connectors_settings_model import RemoteConnectorsSettingsModel
 
 from models.common.internal_settings_model import InternalSettingsModel
 from models.common.app_background_process_model import AppBackgroundProcessModel
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
-from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
 from loggers.app_logger_builder import build as build_logger
 
@@ -88,11 +90,21 @@ class FlaskEx(Flask):
         return regulator_settings_repository.settings
 
     def get_accounts_settings_repository(self) -> AccountsSettingsRepository:
-        regulator_settings_repository: AccountsSettingsRepository = self.extensions['accounts_settings_repository']
+        accounts_settings_repository: AccountsSettingsRepository = self.extensions['accounts_settings_repository']
 
-        return regulator_settings_repository
+        return accounts_settings_repository
 
     def get_accounts_settings(self) -> AccountsSettingsModel:
         accounts_settings_repository: AccountsSettingsRepository = self.extensions['accounts_settings_repository']
 
         return accounts_settings_repository.settings
+
+    def get_remote_connector_settings_repository(self) -> RemoteConnectorsSettingsRepository:
+        remote_connector_settings_repository: RemoteConnectorsSettingsRepository = self.extensions['remote_connectors_settings_repository']
+
+        return remote_connector_settings_repository
+
+    def get_remote_connector_settings(self) -> RemoteConnectorsSettingsModel:
+        remote_connector_settings_repository: RemoteConnectorsSettingsRepository = self.extensions['remote_connectors_settings_repository']
+
+        return remote_connector_settings_repository.settings

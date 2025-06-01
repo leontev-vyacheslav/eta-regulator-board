@@ -1,5 +1,5 @@
 import AppConstants from '../../constants/app-constants';
-import { OutdoorChartSingIcon, ReturnPipeChartSingIcon, SupplyPipeChartSingIcon, TimeChartSingIcon } from '../../constants/app-icons';
+import { CalculatedSupplyPipeChartSingIcon, OutdoorChartSingIcon, ReturnPipeChartSingIcon, SupplyPipeChartSingIcon, TimeChartSingIcon } from '../../constants/app-icons';
 
 
 export const ArchiveChartTooltip = ({ info, isShowCalculatedValues }: { info: any, isShowCalculatedValues: boolean }) => {
@@ -44,7 +44,7 @@ export const ArchiveChartTooltip = ({ info, isShowCalculatedValues }: { info: an
             {
                 isShowCalculatedValues && info.point.data.calculatedSupplyPipeTemperature != null ?
                     <div>
-                        <SupplyPipeChartSingIcon size={ 18 } color={ AppConstants.colors.supplyPipeColor } />
+                        <CalculatedSupplyPipeChartSingIcon size={ 18 } color={ AppConstants.colors.supplyPipeColor } />
                         <div>Подача (темп. гр.):</div>
                         <div>{info.point.data.calculatedSupplyPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
                     </div>
@@ -53,7 +53,9 @@ export const ArchiveChartTooltip = ({ info, isShowCalculatedValues }: { info: an
             {
                 isShowCalculatedValues && info.point.data.calculatedReturnPipeTemperature != null ?
                     <div>
-                        <ReturnPipeChartSingIcon size={ 18 } color={ AppConstants.colors.returnPipeColor } />
+                        <svg width={ 20 } height={ 20 } viewBox="0 0 12 12">
+                            <polygon points="5,0 10,5 5,10 0,5" fill={ AppConstants.colors.returnPipeColor } />
+                        </svg>
                         <div>Обратка (темп. гр.):</div>
                         <div>{info.point.data.calculatedReturnPipeTemperature.toLocaleString(undefined, { minimumFractionDigits: 1 })} °C</div>
                     </div>

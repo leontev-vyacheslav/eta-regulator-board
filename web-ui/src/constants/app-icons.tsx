@@ -83,6 +83,7 @@ export { IoEllipseSharp as SupplyPipeChartSingIcon } from 'react-icons/io5';
 export { IoSquareSharp as ReturnPipeChartSingIcon } from 'react-icons/io5';
 export { IoTriangleSharp as OutdoorChartSingIcon } from 'react-icons/io5';
 export { IoTimeSharp as TimeChartSingIcon } from 'react-icons/io5';
+export { IoCloseSharp as CalculatedSupplyPipeChartSingIcon } from 'react-icons/io5';
 
 export { MdOutlineLayers as HeatingCircuitMnemoschemaIcon } from 'react-icons/md';
 export { MdOutlineTextsms as HeatingCircuitCodeIcon } from 'react-icons/md';
@@ -98,6 +99,8 @@ export { IoEyeOutline as ViewIcon } from 'react-icons/io5';
 export { MdStackedLineChart as TempGraphCalcValuesViewIcon } from 'react-icons/md';
 export { MdShowChart as TempGraphFactValuesViewIcon } from 'react-icons/md';
 export { IoCheckmark as CheckIcon } from 'react-icons/io5';
+
+export {  TbPlugConnected  as RemoteConnectorsIcon } from 'react-icons/tb';
 
 
 import { MdMoreVert } from 'react-icons/md';

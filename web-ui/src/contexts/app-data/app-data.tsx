@@ -9,6 +9,7 @@ import { AppDataContextDacEndpointsModel, useDacData } from './use-dac-data';
 import { AppDataContextArchivesEndpointsModel, useArchivesData } from './use-archives-data';
 import { AppDataContextAccountsEndpointsModel, useAccountsData } from './use-accounts-data';
 import { AppDataContextQuickHelpRefernceEndpointsModel, useQuickHelpRefernceData } from './use-quick-help-reference-data';
+import { AppDataContextRemoteConnectorsSettingsEndpointsModel, useRemoteConnectorsData } from './use-remote-connectors-data';
 
 export type AppDataContextModel =  AppDataContextRtcDataTimeEndpointsModel
     & AppDataContextRegulatorSettingsEndpointsModel
@@ -18,7 +19,8 @@ export type AppDataContextModel =  AppDataContextRtcDataTimeEndpointsModel
     & AppDataContextDacEndpointsModel
     & AppDataContextArchivesEndpointsModel
     & AppDataContextAccountsEndpointsModel
-    & AppDataContextQuickHelpRefernceEndpointsModel;
+    & AppDataContextQuickHelpRefernceEndpointsModel
+    & AppDataContextRemoteConnectorsSettingsEndpointsModel;
 
 const AppDataContext = createContext<AppDataContextModel>({} as AppDataContextModel);
 const useAppData = () => useContext(AppDataContext);
@@ -33,6 +35,7 @@ function AppDataProvider (props: AppBaseProviderProps) {
     const archives = useArchivesData();
     const accounts = useAccountsData();
     const quickHelpRefernce = useQuickHelpRefernceData();
+    const remoteConnectors = useRemoteConnectorsData();
 
     return (
         <AppDataContext.Provider
@@ -45,7 +48,8 @@ function AppDataProvider (props: AppBaseProviderProps) {
                 ...dac,
                 ...archives,
                 ...accounts,
-                ...quickHelpRefernce
+                ...quickHelpRefernce,
+                ...remoteConnectors
             } }
             { ...props }
         />

@@ -1,0 +1,9 @@
+from models.abstracts.app_base_model import AppBaseModel
+from models.remote_connector.serial_remote_connector_settings_model import SerialRemoteConnectorSettingsModel
+from models.remote_connector.tcp_remote_connector_settings_model import  TcpRemoteConnectorSettingsModel
+
+
+class RemoteConnectorsSettingsModel(AppBaseModel):
+    tcp: TcpRemoteConnectorSettingsModel
+
+    serial: SerialRemoteConnectorSettingsModel

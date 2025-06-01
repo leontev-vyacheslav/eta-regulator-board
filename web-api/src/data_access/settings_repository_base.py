@@ -6,8 +6,9 @@ from models.common.change_tracker_item_model import ChangeTrackerItemModel
 from utils.strings import pascal_to_snake
 
 # pylint: disable=unused-import
-from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from models.common.accounts_settings_model import AccountsSettingsModel
+from models.regulator.regulator_settings_model import RegulatorSettingsModel
+from models.remote_connector.remote_connectors_settings_model import RemoteConnectorsSettingsModel
 
 
 class SettingsRepositoryBase:

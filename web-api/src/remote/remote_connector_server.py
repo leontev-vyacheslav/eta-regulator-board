@@ -1,7 +1,7 @@
 import copy
 import fcntl
 from pathlib import Path
-from pymodbus.server.sync import StartTcpServer
+from pymodbus.server.sync import ModbusTcpServer
 from pymodbus.datastore import ModbusServerContext, ModbusSequentialDataBlock
 from pymodbus.device import ModbusDeviceIdentification
 from pymodbus.constants import Endian
@@ -13,7 +13,6 @@ from remote.remote_connector_registers import RemoteConnectorRegisters
 from remote.remote_connector_binary_payload_builder import RemoteConnectorBinaryPayloadBuilder
 from remote.remote_connector_binary_payload_decoder import RemoteConnectorBinaryPayloadDecoder
 from remote.remote_connector_slave_contect import RemoteConnectorSlaveContext
-
 
 class RemoteConnectorServer:
 
@@ -37,6 +36,9 @@ class RemoteConnectorServer:
         self.identity.ProductCode = 'HEATBOX'
         self.identity.ProductName = 'Heating Controller'
         self.identity.MajorMinorRevision = 'v.0.2.20250505-102620'
+
+        server = ModbusTcpServer(context=self.context, identity=self.identity, address=(self.host, self.port))
+        self.server = server
 
     def __set_values_callback(self, fx, address, values) -> bool:
         if fx == 16:
@@ -125,4 +127,4 @@ class RemoteConnectorServer:
         return True
 
     def start(self):
-        StartTcpServer(self.context, identity=self.identity, address=(self.host, self.port))
+        self.server.serve_forever()

@@ -60,7 +60,7 @@ class RemoteConnectorClient:
         address, param_info = RemoteConnectorRegisters.get_param_info_by_name(param_name)
 
         builder = RemoteConnectorBinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
-        builder.add_by_data_type(value, param_info.data_type, param_info.length)
+        builder.add_by_data_type(value, param_info)
         payload = builder.to_registers()
 
         address = address + heating_circuit_index * (RemoteConnectorRegisters.get_max_address())

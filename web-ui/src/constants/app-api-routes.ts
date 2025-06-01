@@ -22,4 +22,6 @@ export default {
     regulatorSettings: '/api/regulator-settings',
 
     quickHelpReference: '/api/quick-help-references',
+
+    remoteConnectors: '/api/remote-connectors',
 };

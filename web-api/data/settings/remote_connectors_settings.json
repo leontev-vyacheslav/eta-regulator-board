@@ -1,0 +1,13 @@
+{
+    "tcp": {
+        "port": 5020,
+        "timeout": 3
+    },
+    "serial": {
+        "baud": 115200,
+        "timeout": 10,
+        "parity": true,
+        "stopbits": 1,
+        "bytesize": 7
+    }
+}
