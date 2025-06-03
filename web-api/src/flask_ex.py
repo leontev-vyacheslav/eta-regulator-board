@@ -99,12 +99,12 @@ class FlaskEx(Flask):
 
         return accounts_settings_repository.settings
 
-    def get_remote_connector_settings_repository(self) -> RemoteConnectorsSettingsRepository:
-        remote_connector_settings_repository: RemoteConnectorsSettingsRepository = self.extensions['remote_connectors_settings_repository']
+    def get_remote_connectors_settings_repository(self) -> RemoteConnectorsSettingsRepository:
+        remote_connectors_settings_repository: RemoteConnectorsSettingsRepository = self.extensions['remote_connectors_settings_repository']
 
-        return remote_connector_settings_repository
+        return remote_connectors_settings_repository
 
-    def get_remote_connector_settings(self) -> RemoteConnectorsSettingsModel:
-        remote_connector_settings_repository: RemoteConnectorsSettingsRepository = self.extensions['remote_connectors_settings_repository']
+    def get_remote_connectors_settings(self) -> RemoteConnectorsSettingsModel:
+        remote_connectors_settings_repository: RemoteConnectorsSettingsRepository = self.extensions['remote_connectors_settings_repository']
 
-        return remote_connector_settings_repository.settings
+        return remote_connectors_settings_repository.settings

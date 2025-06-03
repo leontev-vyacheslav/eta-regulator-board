@@ -25,8 +25,7 @@ class RemoteConnectorSeverThread(threading.Thread):
         self._running = threading.Event()
         self._running.set()
 
-        settings_repository = TestableRemoteConnectorServerRegulatorSettingsRepository(app=None)
-        self.server = RemoteConnectorServer(app=None, host=host, port=port, regulator_settings_repository=settings_repository)
+        self.server = RemoteConnectorServer(app=None, host=host, port=port)
 
     def run(self):
         print("Modbus server started.")

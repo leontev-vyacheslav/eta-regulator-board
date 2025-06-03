@@ -1,7 +1,8 @@
+from abc import ABC
 import copy
 import fcntl
 from pathlib import Path
-from pymodbus.server.sync import ModbusTcpServer
+from pymodbus.server.sync import ModbusTcpServer, ModbusSerialServer
 from pymodbus.datastore import ModbusServerContext, ModbusSequentialDataBlock
 from pymodbus.device import ModbusDeviceIdentification
 from pymodbus.constants import Endian
@@ -14,14 +15,17 @@ from remote.remote_connector_binary_payload_builder import RemoteConnectorBinary
 from remote.remote_connector_binary_payload_decoder import RemoteConnectorBinaryPayloadDecoder
 from remote.remote_connector_slave_contect import RemoteConnectorSlaveContext
 
-class RemoteConnectorServer:
 
-    def __init__(self, app, host: str, port: int, regulator_settings_repository: RegulatorSettingsRepository) -> None:
+class RemoteConnectorServer(ABC):
+
+    def __init__(self, app) -> None:
         self.app = app
-        self.host = host
-        self.port = port
-        self.regulator_settings_repository = regulator_settings_repository
-        self.regulator_settings: RegulatorSettingsModel = copy.deepcopy(regulator_settings_repository.settings)
+
+        self.settings = copy.deepcopy(app.get_remote_connectors_settings())
+
+        self.regulator_settings_repository: RegulatorSettingsRepository = app.get_regulator_settings_repository()
+        self.regulator_settings: RegulatorSettingsModel = copy.deepcopy(self.regulator_settings_repository.settings)
+
         hr = ModbusSequentialDataBlock(0, self.__create_holding_registers())
         store = RemoteConnectorSlaveContext(
             hr=hr,
@@ -34,11 +38,10 @@ class RemoteConnectorServer:
         self.identity = ModbusDeviceIdentification()
         self.identity.VendorName = 'EnergyTechAudit Ltd.'
         self.identity.ProductCode = 'HEATBOX'
-        self.identity.ProductName = 'Heating Controller'
+        self.identity.ProductName = 'Heat Controller'
         self.identity.MajorMinorRevision = 'v.0.2.20250505-102620'
 
-        server = ModbusTcpServer(context=self.context, identity=self.identity, address=(self.host, self.port))
-        self.server = server
+        self.server = None
 
     def __set_values_callback(self, fx, address, values) -> bool:
         if fx == 16:
@@ -128,3 +131,32 @@ class RemoteConnectorServer:
 
     def start(self):
         self.server.serve_forever()
+
+
+class TcpRemoteConnectorServer(RemoteConnectorServer):
+
+    def __init__(self, app) -> None:
+        super().__init__(app)
+
+        self.server = ModbusTcpServer(
+            context=self.context,
+            identity=self.identity,
+            address=('0.0.0.0', self.settings.tcp.port)
+        )
+
+
+class SerialRemoteConnectorServer(RemoteConnectorServer):
+
+    def __init__(self, app) -> None:
+        super().__init__(app)
+
+        self.server = ModbusSerialServer(
+            context=self.context,
+            identity=self.identity,
+            port=self.settings.serial.port,
+            stopbits=self.settings.serial.stopbits,
+            bytesize=self.settings.serial.bytesize,
+            parity=self.settings.serial.parity,
+            baudrate=self.settings.serial.baudrate,
+            timeout=self.settings.serial.timeout,
+        )

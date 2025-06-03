@@ -7,10 +7,11 @@ import { RemoteConnectorsSettingsModel } from '../../../../models/remote-connect
 import { SerialRemoteConnectorBauds } from '../../../../models/remote-connectors-settings/serial-remote-connector-bauds-model';
 import { SerialRemoteConnectorStopbits } from '../../../../models/remote-connectors-settings/serial-remote-connector-stopbits-model';
 import { SerialRemoteConnectorBytesizes } from '../../../../models/remote-connectors-settings/serial-remote-connector-bytesizes-model';
+import { SerialRemoteConnectorParities } from '../../../../models/remote-connectors-settings/serial-remote-connector-parities-model';
 
 export const RemoteConnectorForm = () => {
     const dxServiceFormRef = useRef<Form>(null);
-    const { getRemoteConnectorsSettingsAsync } = useAppData();
+    const { getRemoteConnectorsSettingsAsync, putRemoteConnectorsSettingsAsync } = useAppData();
     const [remoteConnectorsSettings, setRemoteConnectorsSettings] = useState<RemoteConnectorsSettingsModel | null>();
 
     useEffect(() => {
@@ -31,7 +32,7 @@ export const RemoteConnectorForm = () => {
             formData={ remoteConnectorsSettings }
             ref={ dxServiceFormRef }
             onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
-                // await putRemoteConnectorsSettingsAsync(remoteConnectorsSettings!);
+                await putRemoteConnectorsSettingsAsync(remoteConnectorsSettings!);
 
                 if (e.dataField === '') {
                     //
@@ -54,6 +55,12 @@ export const RemoteConnectorForm = () => {
 
             <GroupItem caption={ 'RTU сервер' }>
                 <SimpleItem
+                    dataField='serial.port'
+                    label={ { location: 'top', showColon: true, text: 'Прослушиваемый порт' } }
+                    editorType={ 'dxNumberBox' }
+                />
+
+                <SimpleItem
                     dataField='serial.baud'
                     label={ { location: 'top', showColon: true, text: 'Скорость' } }
                     editorType={ 'dxSelectBox' }
@@ -73,7 +80,12 @@ export const RemoteConnectorForm = () => {
                 <SimpleItem
                     dataField='serial.parity'
                     label={ { location: 'top', showColon: true, text: 'Контроль четности' } }
-                    editorType={ 'dxSwitch' }
+                    editorType={ 'dxSelectBox' }
+                    editorOptions={ {
+                        items: SerialRemoteConnectorParities,
+                        valueExpr: 'id',
+                        displayExpr: 'description',
+                    } }
                 />
 
                 <SimpleItem
@@ -86,6 +98,7 @@ export const RemoteConnectorForm = () => {
                         displayExpr: 'description',
                     } }
                 />
+                
                 <SimpleItem
                     dataField='serial.bytesize'
                     label={ { location: 'top', showColon: true, text: 'Размер байта' } }
