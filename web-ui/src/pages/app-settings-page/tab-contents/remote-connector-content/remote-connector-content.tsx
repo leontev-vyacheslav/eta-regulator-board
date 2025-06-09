@@ -57,7 +57,7 @@ export const RemoteConnectorForm = () => {
                 <SimpleItem
                     dataField='serial.port'
                     label={ { location: 'top', showColon: true, text: 'Прослушиваемый порт' } }
-                    editorType={ 'dxNumberBox' }
+                    editorType={ 'dxTextBox' }
                 />
 
                 <SimpleItem
@@ -98,7 +98,7 @@ export const RemoteConnectorForm = () => {
                         displayExpr: 'description',
                     } }
                 />
-                
+
                 <SimpleItem
                     dataField='serial.bytesize'
                     label={ { location: 'top', showColon: true, text: 'Размер байта' } }

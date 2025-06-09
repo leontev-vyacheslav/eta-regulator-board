@@ -7,7 +7,7 @@ from models.remote_connector.serial_remote_connector_stopbits_model import Seria
 
 class SerialRemoteConnectorSettingsModel(AppBaseModel):
 
-    port: int
+    port: str
 
     baud: SerialRemoteConnectorBaudsModel
 

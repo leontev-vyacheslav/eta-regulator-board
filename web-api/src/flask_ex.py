@@ -6,6 +6,7 @@ from flask import Flask
 from data_access.accounts_settings_repository import AccountsSettingsRepository
 from models.common.accounts_settings_model import AccountsSettingsModel
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
+from models.common.app_background_thread_model import AppBackgroundThreadModel
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
 from data_access.remote_connectors_repository import RemoteConnectorsSettingsRepository
 from models.remote_connector.remote_connectors_settings_model import RemoteConnectorsSettingsModel
@@ -15,6 +16,7 @@ from models.common.app_background_process_model import AppBackgroundProcessModel
 from models.regulator.enums.heating_circuit_type_model import HeatingCircuitTypeModel
 
 from loggers.app_logger_builder import build as build_logger
+from remote.remote_connector_server import RemoteConnectorServer
 
 
 class FlaskEx(Flask):
@@ -65,6 +67,8 @@ class FlaskEx(Flask):
 
         self.internal_settings = self._init_internal_settings()
         self.app_background_processes: List[AppBackgroundProcessModel] = []
+        self.app_background_threads: List[AppBackgroundThreadModel] = []
+
         self.app_logger = build_logger('default_app_logger')
 
     def api_route(self, rule: str, **options: Any) -> Callable:

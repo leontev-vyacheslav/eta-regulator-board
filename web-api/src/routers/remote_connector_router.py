@@ -1,12 +1,17 @@
+import glob
 from http import HTTPStatus
+import time
 from flask import Response
 from flask_pydantic import validate
 
 from app import app
 from models.common.enums.user_role_model import UserRoleModel
 from models.remote_connector.remote_connectors_settings_model import RemoteConnectorsSettingsModel
+from remote.remote_connector_server import RemoteConnectorServer
 from responses.json_response import JsonResponse
 from utils.auth_helper import authorize
+import workers
+from workers.worker_starter_extension import WorkerStarter
 
 
 @app.api_route('/remote-connectors', methods=['GET'])
@@ -36,5 +41,46 @@ def put_remote_connector_settings(body: RemoteConnectorsSettingsModel):
 
     return JsonResponse(
         response=remote_connectors_settings_repository.settings,
+        status=HTTPStatus.OK
+    )
+
+
+@app.api_route('/remote-connectors/restart/<remote_connector_type>', methods=['GET'])
+@validate()
+def restart_remote_connector(remote_connector_type: str):
+    remote_connector_launcher = f'{remote_connector_type}_remote_connector_launcher'
+
+    background_thread = next((t for t in app.app_background_threads if t.name == remote_connector_launcher), None)
+    if background_thread is None:
+        return Response(
+            status=HTTPStatus.NOT_FOUND
+        )
+
+    remote_connector_server: RemoteConnectorServer = background_thread.data.get("remote_connector_server")
+    if remote_connector_server is None:
+        return Response(
+            status=HTTPStatus.NOT_FOUND
+        )
+
+    if hasattr(remote_connector_server.server, 'shutdown'):
+        remote_connector_server.server.shutdown()
+    if remote_connector_server.server.socket is not None:
+        remote_connector_server.server.server_close()
+
+    background_thread.thread.join()
+    app.app_background_threads.remove(background_thread)
+
+    remote_connector_launcher_worker_file = glob.glob(
+        app.app_root_path.joinpath(f'src/{workers.__name__}/{remote_connector_launcher}.py').__str__()
+    )
+    remote_connector_server.server.socket = None
+    remote_connector_server.server = None
+    remote_connector_server = None
+    background_thread = None
+
+    time.sleep(2)
+    WorkerStarter.run(app=app, worker_files=remote_connector_launcher_worker_file)
+
+    return Response(
         status=HTTPStatus.OK
     )

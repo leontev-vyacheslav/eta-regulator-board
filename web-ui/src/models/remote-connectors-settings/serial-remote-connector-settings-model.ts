@@ -5,7 +5,7 @@ import { SerialRemoteConnectorStopbitsModel } from './serial-remote-connector-st
 
 
 export type SerialRemoteConnectorSettingsModel = {
-    port: number;
+    port: string;
 
     baud: SerialRemoteConnectorBaudsModel;
 

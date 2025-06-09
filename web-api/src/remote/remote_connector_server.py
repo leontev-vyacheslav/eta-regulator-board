@@ -2,13 +2,13 @@ from abc import ABC
 import copy
 import fcntl
 from pathlib import Path
-from pymodbus.server.sync import ModbusTcpServer, ModbusSerialServer
 from pymodbus.datastore import ModbusServerContext, ModbusSequentialDataBlock
 from pymodbus.device import ModbusDeviceIdentification
 from pymodbus.constants import Endian
 
 from data_access.regulator_settings_repository import RegulatorSettingsRepository
 from models.regulator.regulator_settings_model import RegulatorSettingsModel
+from models.remote_connector.remote_connectors_settings_model import RemoteConnectorsSettingsModel
 from remote.models.heating_circuit_index_model import HeatingCircuitIndexModel
 from remote.remote_connector_registers import RemoteConnectorRegisters
 from remote.remote_connector_binary_payload_builder import RemoteConnectorBinaryPayloadBuilder
@@ -21,7 +21,7 @@ class RemoteConnectorServer(ABC):
     def __init__(self, app) -> None:
         self.app = app
 
-        self.settings = copy.deepcopy(app.get_remote_connectors_settings())
+        self.settings: RemoteConnectorsSettingsModel = copy.deepcopy(app.get_remote_connectors_settings())
 
         self.regulator_settings_repository: RegulatorSettingsRepository = app.get_regulator_settings_repository()
         self.regulator_settings: RegulatorSettingsModel = copy.deepcopy(self.regulator_settings_repository.settings)
@@ -133,30 +133,3 @@ class RemoteConnectorServer(ABC):
         self.server.serve_forever()
 
 
-class TcpRemoteConnectorServer(RemoteConnectorServer):
-
-    def __init__(self, app) -> None:
-        super().__init__(app)
-
-        self.server = ModbusTcpServer(
-            context=self.context,
-            identity=self.identity,
-            address=('0.0.0.0', self.settings.tcp.port)
-        )
-
-
-class SerialRemoteConnectorServer(RemoteConnectorServer):
-
-    def __init__(self, app) -> None:
-        super().__init__(app)
-
-        self.server = ModbusSerialServer(
-            context=self.context,
-            identity=self.identity,
-            port=self.settings.serial.port,
-            stopbits=self.settings.serial.stopbits,
-            bytesize=self.settings.serial.bytesize,
-            parity=self.settings.serial.parity,
-            baudrate=self.settings.serial.baudrate,
-            timeout=self.settings.serial.timeout,
-        )

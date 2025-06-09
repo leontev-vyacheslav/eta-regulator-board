@@ -4,10 +4,10 @@
         "timeout": 10
     },
     "serial": {
-        "port": 0,
+        "port": "/tmp/ttyV0",
         "baud": 9600,
         "timeout": 10,
-        "parity": "O",
+        "parity": "N",
         "stopbits": 1,
         "bytesize": 8
     }

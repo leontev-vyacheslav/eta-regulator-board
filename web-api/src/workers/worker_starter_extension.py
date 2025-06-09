@@ -2,9 +2,10 @@ import os
 import glob
 import importlib
 from threading import Thread, Lock
-from typing import Optional
+from typing import List, Optional
 
 from flask_ex import FlaskEx
+from models.common.app_background_thread_model import AppBackgroundThreadModel
 import workers
 from lockers import worker_thread_locks
 
@@ -17,11 +18,8 @@ class WorkerStarter():
         if app is not None:
             self.init_app(app)
 
-    def init_app(self, app: FlaskEx):
-
-        worker_files = glob.glob(
-            app.app_root_path.joinpath(f'src/{workers.__name__}/*.py').__str__()
-        )
+    @staticmethod
+    def run(app: FlaskEx, worker_files: List[str]):
 
         for worker_path in worker_files:
             worker_module_name, _ = os.path.splitext(os.path.basename(worker_path))
@@ -40,3 +38,17 @@ class WorkerStarter():
                         daemon=True
                     )
                     thread.start()
+
+                    app.app_background_threads.append(AppBackgroundThreadModel(
+                        name=worker_info.name,
+                        thread=thread,
+                        data={}
+                    ))
+
+    def init_app(self, app: FlaskEx):
+
+        worker_files = glob.glob(
+            app.app_root_path.joinpath(f'src/{workers.__name__}/*.py').__str__()
+        )
+
+        WorkerStarter.run(app, worker_files)
