@@ -46,6 +46,7 @@ def put_remote_connector_settings(body: RemoteConnectorsSettingsModel):
 
 
 @app.api_route('/remote-connectors/restart/<remote_connector_type>', methods=['GET'])
+# @authorize(roles=[UserRoleModel.ADMIN])
 @validate()
 def restart_remote_connector(remote_connector_type: str):
     remote_connector_launcher = f'{remote_connector_type}_remote_connector_launcher'

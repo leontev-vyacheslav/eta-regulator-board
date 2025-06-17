@@ -72,7 +72,7 @@ class RemoteConnectorServer(ABC):
 
     def __get_shared_regulator_state(self, heating_circuit_index: HeatingCircuitIndexModel):
         default_shared_regulator_state = get_remote_connector_default_shared_regulator_state()
-        
+
         shared_regulator_state_file_path: Path = self.app.app_root_path.joinpath(
             f'data/archives/'
         )
@@ -113,11 +113,9 @@ class RemoteConnectorServer(ABC):
             for param_info in RemoteConnectorRegisters.MAP:
 
                 if param_info.name.startswith('shared_regulator_state'):
-                    if 'datetime' in param_info.name:
-                        dt: datetime = getattr(shared_regulator_state, 'datetime')
-                        value = dt.timestamp()
-                    else:
-                        value = getattr(shared_regulator_state, param_info.name.replace('shared_regulator_state.', ''))
+                    value = getattr(shared_regulator_state, param_info.name.replace('shared_regulator_state.', ''))
+                    if isinstance(value, datetime):
+                        value = value.timestamp()
 
                 elif param_info.name.startswith('control_parameters') or param_info.name.startswith('regulation_parameters'):
                     sub_obj_name, sub_obj_param_name = param_info.name.split('.')
