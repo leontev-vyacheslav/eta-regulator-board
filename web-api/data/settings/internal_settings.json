@@ -7,12 +7,12 @@
         },
         {
             "name": "serial_remote_connector_launcher",
-            "interval": 0,
+            "interval": 10,
             "immediately": true
         },
         {
             "name": "tcp_remote_connector_launcher",
-            "interval": 0,
+            "interval": 10,
             "immediately": true
         }
     ]

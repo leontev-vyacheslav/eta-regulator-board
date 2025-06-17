@@ -32,7 +32,7 @@ class RemoteConnectorBinaryPayloadBuilder (BinaryPayloadBuilder):
             val = (high << 8) | low  # Always 0 <= val <= 65535
             self.add_16bit_uint(val)
 
-    def add_by_data_type(self,  value: Any, param_info: ParameterModel):
+    def add_by_data_type(self, value: Any, param_info: ParameterModel):
         if param_info.data_type == ParameterTypes.UINT16:
             if value is not None and (not isinstance(value, int) or value < 0 or value > 65535):
                 raise ValueError("Value must be uint16 (0-65535)")
@@ -40,6 +40,9 @@ class RemoteConnectorBinaryPayloadBuilder (BinaryPayloadBuilder):
 
         elif param_info.data_type == ParameterTypes.FLOAT32:
             self.add_32bit_float(NULL_FLOAT if value is None else value)
+
+        elif param_info.data_type == ParameterTypes.FLOAT64:
+            self.add_64bit_float(NULL_FLOAT if value is None else value)
 
         elif param_info.data_type == ParameterTypes.BOOL:
             self.add_16bit_uint(1 if value else 0)

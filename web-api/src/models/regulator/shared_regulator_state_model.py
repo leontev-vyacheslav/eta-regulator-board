@@ -35,3 +35,26 @@ def get_default_shared_regulator_state(archive_datetime: datetime, failure_actio
         supply_pipe_temperature_calculated=float("inf"),
         return_pipe_temperature_calculated=float("inf"),
     )
+
+
+def get_remote_connector_default_shared_regulator_state() -> SharedRegulatorStateModel:
+    return SharedRegulatorStateModel(
+        delta_deviation=float('nan'),
+        deviation=float('nan'),
+        total_deviation=float('nan'),
+        proportional_impact=float('nan'),
+        integration_impact=float('nan'),
+        differentiation_impact=float('nan'),
+        impact=float('nan'),
+
+        failure_action_state=0xFFFF,
+
+        datetime=datetime.utcnow(),
+        outdoor_temperature=float('nan'),
+        room_temperature=float('nan'),
+        supply_pipe_temperature=float('nan'),
+        return_pipe_temperature=float('nan'),
+
+        supply_pipe_temperature_calculated=float('nan'),
+        return_pipe_temperature_calculated=float('nan'),
+    )

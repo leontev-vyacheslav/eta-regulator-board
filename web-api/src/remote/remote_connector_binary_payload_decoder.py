@@ -22,6 +22,8 @@ class RemoteConnectorBinaryPayloadDecoder(BinaryPayloadDecoder):
             return self.decode_16bit_uint()
         elif data_type == ParameterTypes.FLOAT32:
             return self.decode_32bit_float()
+        elif data_type == ParameterTypes.FLOAT64:
+            return self.decode_64bit_float()
         elif data_type == ParameterTypes.BOOL:
             return bool(self.decode_16bit_uint())
         elif data_type == ParameterTypes.STRING:

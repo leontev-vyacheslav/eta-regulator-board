@@ -1,10 +1,13 @@
 from threading import Lock
+from time import sleep
 
 from flask_ex import FlaskEx
 from remote.serial_remote_connector_server import SerialRemoteConnectorServer
 
 
 def serial_remote_connector_launcher(app: FlaskEx, interval: float, immediately: bool, lock: Lock):
+    sleep(interval)
+
     server = SerialRemoteConnectorServer(
         app=app
     )

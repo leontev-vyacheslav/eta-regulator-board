@@ -1,109 +1,82 @@
 import logging
-import os
-import pathlib
-from time import sleep
 import pytest
-import threading
 
-from data_access.settings_repository_base import SettingsRepositoryBase
-from remote.models.heating_circuit_index_model import HeatingCircuitIndexModel
 from remote.remote_connector_client import RemoteConnectorClient
-from remote.remote_connector_server import RemoteConnectorServer
+from remote.remote_connector_registers import RemoteConnectorRegisters
 
-# pylint: disable=unused-import
-from models.regulator.regulator_settings_model import RegulatorSettingsModel
 
 logger = logging.getLogger(__name__)
 
 
-class RemoteConnectorSeverThread(threading.Thread):
-
-    def __init__(self, host='0.0.0.0', port=5020):
-        super(RemoteConnectorSeverThread, self).__init__()
-        self.host = host
-        self.port = port
-        self._running = threading.Event()
-        self._running.set()
-
-        self.server = RemoteConnectorServer(app=None, host=host, port=port)
-
-    def run(self):
-        print("Modbus server started.")
-        try:
-            # serve_forever blocks, so run until _running is cleared
-            while self._running.is_set():
-                self.server.start()
-        except Exception as e:
-            print("Server error:", e)
-        finally:
-            print("Modbus server stopped.")
-
-    def stop(self):
-        print("Stopping server...")
-        self._running.clear()
-        self.server.server.server_close()  # Close the socket
-
-class TestableRemoteConnectorServerRegulatorSettingsRepository(SettingsRepositoryBase):
-
-    def __init__(self, app=None, **kwargs):
-
-        root = pathlib.Path(os.path.dirname(__file__)).parent.parent
-        self.data_path = root.joinpath(
-            f'data/settings/regulator_settings.json'
-        )
-
-        with open(self.data_path, 'r', encoding='utf-8') as file:
-            json_text = file.read()
-            self.settings = getattr(globals().get('RegulatorSettingsModel'), 'parse_raw')(json_text)
-
-            pass
-
-
 @pytest.fixture(scope='module')
 def remote_connector_client_equipment():
-    host='0.0.0.0'
-    port=5020
+    host = '0.0.0.0'
+    port = 5020
+    params_map = {
+        'type': [1, 2],
+        'name': ['Контур ЦО', 'Контур ГВС'],
+        'shared_regulator_state.impact': [100.0, 66.67],
+    }
 
-    return (host, port)
+    return (host, port, params_map)
 
 
-def remote_connector_client_read_type_check(remote_connector_client_equipment):
-    host, port = remote_connector_client_equipment
+def remote_connector_client_simple_read_check(remote_connector_client_equipment):
+    host, port, params_map = remote_connector_client_equipment
+
+    with RemoteConnectorClient(host=host, port=port) as client:
+        assert client is not None
+        value = client.read(0, param_name='shared_regulator_state.total_deviation')
+        pass
+
+
+def remote_connector_client_read_check(remote_connector_client_equipment):
+    host, port, params_map = remote_connector_client_equipment
+
+    with RemoteConnectorClient(host=host, port=port) as client:
+        assert client is not None
+        for param_name, expected_values in params_map.items():
+            for heating_circuit_index, expected_value in enumerate(expected_values):
+                value = client.read(heating_circuit_index, param_name=param_name)
+                if type(value) is float:
+                    assert pytest.approx(value) == expected_value
+                else:
+                    assert value == expected_value
+
+
+def remote_connector_client_write_check(remote_connector_client_equipment):
+    host, port, params_map = remote_connector_client_equipment
+
     with RemoteConnectorClient(host=host, port=port) as client:
         assert client is not None
 
-        type = client.read(heating_circuit_index=HeatingCircuitIndexModel.FIRST, param_name='type')
-        logger.info(f"type = {type}")
+        for param_name, expected_values in params_map.items():
+            for heating_circuit_index, expected_value in enumerate(expected_values):
 
-        assert type == 1
+                value = client.read(heating_circuit_index=heating_circuit_index, param_name=param_name)
+                if type(value) is float:
+                    assert pytest.approx(value) == expected_value
+                else:
+                    assert value == expected_value
+                new_value = value
 
-def remote_connector_client_read_name_check(remote_connector_client_equipment):
-    host, port = remote_connector_client_equipment
-    with RemoteConnectorClient(host=host, port=port) as client:
-        assert client is not None
+                if type(value) is str:
+                    new_value = value + 'xyz'
+                elif type(value) is float:
+                    new_value = value + 0.1
+                elif type(value) is int:
+                    new_value = value + 1
 
-        name = client.read(heating_circuit_index=HeatingCircuitIndexModel.FIRST, param_name='name')
-        logger.info(f"name = {name}")
+                _, param_info = RemoteConnectorRegisters.get_param_info_by_name(param_name)
+                assert param_info is not None
+                if param_info.readonly:
+                    new_value = value
 
-        assert name == 'Контур ЦО'
+                writing_result = client.write(heating_circuit_index, param_name, new_value)
+                assert writing_result == True
 
+                value_ = client.read(heating_circuit_index, param_name)
+                assert value_ == new_value
 
-def remote_connector_client_write_name_check(remote_connector_client_equipment):
-    host, port = remote_connector_client_equipment
-    with RemoteConnectorClient(host=host, port=port) as client:
-        assert client is not None
-
-
-        new_curcuit_name = 'Тестовое имя'
-
-        writing_result = client.write(heating_circuit_index=HeatingCircuitIndexModel.FIRST, param_name='name', value=new_curcuit_name)
-        assert writing_result == True
-
-        name = client.read(heating_circuit_index=HeatingCircuitIndexModel.FIRST, param_name='name')
-        assert name == new_curcuit_name
-
-
-
-        logger.info(f"name = {name}")
-
-
+                writing_result = client.write(heating_circuit_index, param_name, value)
+                assert writing_result == True

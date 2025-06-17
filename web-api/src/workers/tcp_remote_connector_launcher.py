@@ -1,10 +1,13 @@
 from threading import Lock
+from time import sleep
 
 from flask_ex import FlaskEx
 from remote.tcp_remote_connector_server import TcpRemoteConnectorServer
 
 
 def tcp_remote_connector_launcher(app: FlaskEx, interval: float, immediately: bool, lock: Lock):
+    sleep(interval)
+
     server = TcpRemoteConnectorServer(
         app=app
     )

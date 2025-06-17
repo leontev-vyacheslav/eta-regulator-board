@@ -33,9 +33,8 @@ class RemoteConnectorClient:
         """
         Read a parameter by name
         """
-        address, param_info = RemoteConnectorRegisters.get_param_info_by_name(param_name)
+        address, param_info = RemoteConnectorRegisters.get_heating_circuit_address_by_name(heating_circuit_index, param_name)
 
-        address = address + heating_circuit_index * (RemoteConnectorRegisters.get_max_address())
         response = self.__client.read_holding_registers(
             address,
             param_info.length,
@@ -57,13 +56,11 @@ class RemoteConnectorClient:
         """
         Write a parameter by name
         """
-        address, param_info = RemoteConnectorRegisters.get_param_info_by_name(param_name)
+        address, param_info = RemoteConnectorRegisters.get_heating_circuit_address_by_name(heating_circuit_index, param_name)
 
         builder = RemoteConnectorBinaryPayloadBuilder(byteorder=Endian.Big, wordorder=Endian.Big)
         builder.add_by_data_type(value, param_info)
         payload = builder.to_registers()
-
-        address = address + heating_circuit_index * (RemoteConnectorRegisters.get_max_address())
 
         response = self.__client.write_register(address, payload[0], unit=1) if len(payload) == 1 else self.__client.write_registers(address, payload, unit=1)
 

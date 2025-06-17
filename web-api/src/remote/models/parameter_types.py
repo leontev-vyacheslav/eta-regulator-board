@@ -6,6 +6,8 @@ class ParameterTypes(Enum):
 
     FLOAT32 = "float32"
 
+    FLOAT64 = "float64"
+
     STRING = "string"
 
     BOOL = "bool"
