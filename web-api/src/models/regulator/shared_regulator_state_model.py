@@ -47,7 +47,7 @@ def get_remote_connector_default_shared_regulator_state() -> SharedRegulatorStat
         differentiation_impact=float('nan'),
         impact=float('nan'),
 
-        failure_action_state=0xFFFF,
+        failure_action_state=FailureActionTypeModel.NO_ACTION,
 
         datetime=datetime.utcnow(),
         outdoor_temperature=float('nan'),

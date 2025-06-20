@@ -1,7 +1,6 @@
 {
     "tcp": {
-        "port": 5020,
-        "timeout": 10
+        "port": 5020
     },
     "serial": {
         "port": "/tmp/ttyV0",

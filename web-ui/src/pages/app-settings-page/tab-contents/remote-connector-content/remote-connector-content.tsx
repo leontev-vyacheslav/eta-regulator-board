@@ -2,12 +2,13 @@ import Form, { GroupItem, SimpleItem } from 'devextreme-react/form';
 import AppConstants from '../../../../constants/app-constants';
 import { useEffect, useRef, useState } from 'react';
 import { useAppData } from '../../../../contexts/app-data/app-data';
-import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import { RemoteConnectorsSettingsModel } from '../../../../models/remote-connectors-settings/remote-connectors-settings-model';
 import { SerialRemoteConnectorBauds } from '../../../../models/remote-connectors-settings/serial-remote-connector-bauds-model';
 import { SerialRemoteConnectorStopbits } from '../../../../models/remote-connectors-settings/serial-remote-connector-stopbits-model';
 import { SerialRemoteConnectorBytesizes } from '../../../../models/remote-connectors-settings/serial-remote-connector-bytesizes-model';
 import { SerialRemoteConnectorParities } from '../../../../models/remote-connectors-settings/serial-remote-connector-parities-model';
+import { proclaim } from '../../../../utils/proclaim';
+import { formatMessage } from 'devextreme/localization';
 
 export const RemoteConnectorForm = () => {
     const dxServiceFormRef = useRef<Form>(null);
@@ -31,11 +32,20 @@ export const RemoteConnectorForm = () => {
             colCount={ 1 }
             formData={ remoteConnectorsSettings }
             ref={ dxServiceFormRef }
-            onFieldDataChanged={ async (e: FieldDataChangedEvent) => {
-                await putRemoteConnectorsSettingsAsync(remoteConnectorsSettings!);
+            onFieldDataChanged={ async () => {
+                const settings = await putRemoteConnectorsSettingsAsync(remoteConnectorsSettings!);
 
-                if (e.dataField === '') {
-                    //
+                if (settings) {
+                    proclaim({
+                        type: 'success',
+                        message: formatMessage('app-remote-connector-settings-applying'),
+                        displayTime: 30000000,
+                        position: {
+                            my: 'top center',
+                            at: 'top center',
+                            of: window
+                        },
+                    });
                 }
             } }
         >
@@ -46,11 +56,6 @@ export const RemoteConnectorForm = () => {
                     editorType={ 'dxNumberBox' }
                 />
 
-                <SimpleItem
-                    dataField='tcp.timeout'
-                    label={ { location: 'top', showColon: true, text: 'Время ожидания соединения' } }
-                    editorType={ 'dxNumberBox' }
-                />
             </GroupItem>
 
             <GroupItem caption={ 'RTU сервер' }>

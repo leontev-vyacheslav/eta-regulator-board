@@ -37,6 +37,7 @@ export const QuickReferenceHelpDialog = (props: QuickReferenceHelpDialogProps) =
     return (
         <AppModalPopup
             title='Краткая справка'
+            width={ isXSmall || isSmall ? '95%' : '60%' }
             height={ isXSmall || isSmall ? '80%' : '450' }
             dragEnabled={ !(isXSmall || isSmall) }
             { ...props }

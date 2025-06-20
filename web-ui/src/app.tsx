@@ -55,6 +55,8 @@ function App() {
             'app-media-temperature': 'Температура носителя, °C',
             'app-measurement-time': 'Время измерения',
             'app-temperatures': 'Температуры, °C',
+
+            'app-remote-connector-settings-applying': 'Настройки modbus-коннекторов успешно сохранены. Изменения будут применены ТОЛЬКО после перезапуска устройства!'
         }
     });
     locale('ru-RU');
