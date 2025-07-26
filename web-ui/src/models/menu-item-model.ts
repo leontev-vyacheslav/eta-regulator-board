@@ -11,4 +11,6 @@ export type MenuItemModel = {
   onClick?: (e: ItemClickEvent) => Promise<void> | void;
 
   visible?: boolean;
+
+  textColor? : string;
 }

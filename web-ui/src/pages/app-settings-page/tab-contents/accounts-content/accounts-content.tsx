@@ -71,7 +71,8 @@ export const AccountsGrid = () => {
         } else {
             proclaim({
                 type: 'error',
-                message: 'Значение пароля не совпала с его подтверждением.'
+                message: 'Пароль не совпадает его подтверждением.',
+                // displayTime: 30000000,
             });
             // don't touch. it's important code
             e.data.password = '';

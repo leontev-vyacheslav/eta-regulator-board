@@ -3,8 +3,8 @@
         "port": 5020
     },
     "serial": {
-        "port": "/tmp/ttyV0",
-        "baud": 9600,
+        "port": "/dev/ttyS0",
+        "baud": 115200,
         "timeout": 10,
         "parity": "N",
         "stopbits": 1,

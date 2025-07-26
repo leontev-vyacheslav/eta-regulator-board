@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: OFF */
 
 export enum SerialRemoteConnectorBytesizesModel {
     SEVEN = 7,

@@ -49,12 +49,14 @@ export const useAuthHttpRequest = () => {
                         proclaim({
                             type: 'error',
                             message: response.data.message,
+                            // displayTime: 30000000,
                         });
                     }
                 } else {
                     if (!suppressShowError) {
                         await proclaimError(error);
                     }
+                    console.log(error);
                 }
             } finally {
                 if (!suppressLoader) {

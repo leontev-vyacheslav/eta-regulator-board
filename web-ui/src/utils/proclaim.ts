@@ -6,13 +6,13 @@ import { MessageModel } from '../models/message-model';
 
 export function proclaim(options: any) {
     notify({
-        ...options,
         width: devices.current().phone ? '100%' : undefined,
         position: devices.current().phone ? 'bottom center' : {
             at: 'bottom right',
             my: 'bottom right',
             offset: '-20 -20'
-        }
+        },
+        ...options,
     }, {
         position: 'bottom center',
         direction: 'up-push'
@@ -35,6 +35,7 @@ export async function  proclaimError(error: unknown) {
 
     proclaim({
         type: 'error',
-        message: errorMessage
+        message: errorMessage,
+        // displayTime: 30000000,
     });
 }

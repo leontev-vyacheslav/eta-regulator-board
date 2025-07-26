@@ -1,14 +1,16 @@
-import Form, { SimpleItem } from 'devextreme-react/form';
+import Form, { SimpleItem, ButtonItem } from 'devextreme-react/form';
 import { useRef } from 'react';
 import { useAppData } from '../../../../contexts/app-data/app-data';
 import { FieldDataChangedEvent } from 'devextreme/ui/form';
 import AppConstants from '../../../../constants/app-constants';
 import { useRegulatorSettings } from '../../../../contexts/app-regulator-settings';
+import { useServiceArea } from '../../../../contexts/service-area';
 
 export const ServiceForm = () => {
     const dxServiceFormRef = useRef<Form>(null);
     const { regulatorSettings, setRegulatorSettings } = useRegulatorSettings();
     const { putRegulatorSettingsAsync } = useAppData();
+    const { isInReboot, initSystemReboot } = useServiceArea();
 
     return (
         <Form
@@ -34,6 +36,16 @@ export const ServiceForm = () => {
                 dataField={ 'allowDebugMode' }
                 label={ { location: 'top', showColon: true, text: 'Режим отладки' } }
                 editorType={ 'dxSwitch' }
+            />
+
+            <ButtonItem
+                horizontalAlignment='left'
+                buttonOptions={ {
+                    onClick: initSystemReboot,
+                    text: 'Перезапуск системы',
+                    type: 'danger',
+                    disabled: isInReboot
+                } }
             />
         </Form>
     );

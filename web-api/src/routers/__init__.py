@@ -9,5 +9,6 @@ __all__= [
     'archives_router',
     'accounts_router',
     'quick_help_reference_router',
-    'remote_connector_router'
+    'remote_connector_router',
+    'service_router',
 ]

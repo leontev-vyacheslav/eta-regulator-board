@@ -39,12 +39,7 @@ export const RemoteConnectorForm = () => {
                     proclaim({
                         type: 'success',
                         message: formatMessage('app-remote-connector-settings-applying'),
-                        displayTime: 30000000,
-                        position: {
-                            my: 'top center',
-                            at: 'top center',
-                            of: window
-                        },
+                        // displayTime: 30000000,
                     });
                 }
             } }

@@ -68,7 +68,8 @@ def get_started_signal_gen(signal_id: int, lifetime: int):
         process=signal_process,
         cancellation_event=event,
         lifetime=lifetime,
-        data={'signal_id': signal_id}
+        data={'signal_id': signal_id},
+        relauncher=None
     )
 
     with background_processes_watcher_lock:

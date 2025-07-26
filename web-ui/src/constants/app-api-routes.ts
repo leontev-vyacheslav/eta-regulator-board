@@ -24,4 +24,6 @@ export default {
     quickHelpReference: '/api/quick-help-references',
 
     remoteConnectors: '/api/remote-connectors',
+
+    services: '/api/services',
 };

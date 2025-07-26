@@ -29,7 +29,8 @@ const DacTabContentInternal = () => {
 
         proclaim({
             type: 'success',
-            message: `Запущен генератор с pid ${startedSignal?.pid}.`
+            message: `Запущен генератор с pid ${startedSignal?.pid}.`,
+            // displayTime: 30000000,
         });
 
         setActiveSignalGen(startedSignal);
@@ -41,7 +42,8 @@ const DacTabContentInternal = () => {
             const deletedSignal = await deleteActiveSignalGenAsync();
             proclaim({
                 type: 'warning',
-                message: `Удален активный генератор с pid ${deletedSignal?.pid}.`
+                message: `Удален активный генератор с pid ${deletedSignal?.pid}.`,
+                // displayTime: 30000000,
             });
             setActiveSignalGen(null);
         } finally {
@@ -64,7 +66,6 @@ const DacTabContentInternal = () => {
             }
             const activeSignalGen = await getActiveSignalGenAsync();
             setActiveSignalGen(activeSignalGen);
-
         }, 1000);
 
         return () => clearInterval(intervalTimer)

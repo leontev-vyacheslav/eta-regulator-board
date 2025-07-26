@@ -22,7 +22,8 @@ export const SigninForm = () => {
                 await signIn(formData);
                 proclaim({
                     type: 'success',
-                    message: 'Пользователь успешно выполнил вход.'
+                    message: 'Пользователь успешно выполнил вход.' ,
+                    // displayTime: 30000000,
                 });
 
             } catch (error) {

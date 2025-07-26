@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: OFF */
+
 export enum SerialRemoteConnectorParitiesModel {
     NONE = 'N',
     EVEN = 'E',

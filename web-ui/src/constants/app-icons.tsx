@@ -101,6 +101,8 @@ export { MdShowChart as TempGraphFactValuesViewIcon } from 'react-icons/md';
 export { IoCheckmark as CheckIcon } from 'react-icons/io5';
 
 export {  TbPlugConnected  as RemoteConnectorsIcon } from 'react-icons/tb';
+export {  MdOutlineRestartAlt  as RestartIcon } from 'react-icons/md';
+
 
 
 import { MdMoreVert } from 'react-icons/md';

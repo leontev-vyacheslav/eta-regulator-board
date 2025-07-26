@@ -17,6 +17,7 @@ import ContentNonAuth from './content-non-auth';
 import { WorkdatePickerProvider } from './contexts/workdate-context';
 import Loader from './components/loader/loader';
 import { RegulatorSettingsProvider } from './contexts/app-regulator-settings';
+import { ServiceAreaProvider } from './contexts/service-area';
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
             'confirm-dialog-delete-all-points': 'Удалить все точки?',
             'confirm-dialog-reset-heating-circuit-settings': 'Сбросить настройки текущего контура?',
             'confirm-dialog-change-heating-circuit-type': 'Изменить тип контура и применить настройки по-умолчанию в соответствии с выбранным типом?',
+            'confirm-dialog-system-reboot-request': 'Внимание! Действительно хотите выполнить перезапуск устройства!',
             'menu-item-delete-all-schedules': 'Удалить все дни...',
             'menu-item-delete-all-schedule-windows': 'Удалить все окна...',
             'menu-item-delete-all-points': 'Удалить все точки...',
@@ -56,7 +58,7 @@ function App() {
             'app-measurement-time': 'Время измерения',
             'app-temperatures': 'Температуры, °C',
 
-            'app-remote-connector-settings-applying': 'Настройки modbus-коннекторов успешно сохранены. Изменения будут применены ТОЛЬКО после перезапуска устройства!'
+            'app-remote-connector-settings-applying': 'Изменения будут применены после перезапуска системы!'
         }
     });
     locale('ru-RU');
@@ -72,18 +74,20 @@ function Main() {
             <AuthProvider>
                 <SharedAreaProvider>
                     <AppDataProvider>
-                        <AppSettingsProvider>
-                            <RegulatorSettingsProvider>
-                                <WorkdatePickerProvider>
-                                    <NavigationProvider>
-                                        <div className={ `app ${screenSizeClass}` }>
-                                            <App />
-                                            <Loader />
-                                        </div>
-                                    </NavigationProvider>
-                                </WorkdatePickerProvider>
-                            </RegulatorSettingsProvider>
-                        </AppSettingsProvider>
+                        <ServiceAreaProvider>
+                            <AppSettingsProvider>
+                                <RegulatorSettingsProvider>
+                                    <WorkdatePickerProvider>
+                                        <NavigationProvider>
+                                            <div className={ `app ${screenSizeClass}` }>
+                                                <App />
+                                                <Loader />
+                                            </div>
+                                        </NavigationProvider>
+                                    </WorkdatePickerProvider>
+                                </RegulatorSettingsProvider>
+                            </AppSettingsProvider>
+                        </ServiceAreaProvider>
                     </AppDataProvider>
                 </SharedAreaProvider>
             </AuthProvider>

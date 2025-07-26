@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: OFF */
+
 export enum SerialRemoteConnectorBaudsModel {
     BAUD_200 = 200,
     BAUD_2400 = 2400,

@@ -1,6 +1,6 @@
 import './home-page.scss';
 import AppConstants from '../../constants/app-constants';
-import { HeatingCircuitCodeIcon, HeatingCircuitMnemoschemaIcon, HomeIcon, AdditionalMenuIcon, RefreshIcon, HelpIcon } from '../../constants/app-icons';
+import { HeatingCircuitCodeIcon, HeatingCircuitMnemoschemaIcon, HomeIcon, AdditionalMenuIcon, RefreshIcon, HelpIcon, RestartIcon, ServiceIcon } from '../../constants/app-icons';
 import PageHeader from '../../components/page-header/page-header';
 import { TabPanel, Item as TabPanelItem } from 'devextreme-react/tab-panel'
 import { useMemo, useRef, useState } from 'react';
@@ -14,10 +14,12 @@ import { MenuItemModel } from '../../models/menu-item-model';
 import { HomePageContextProvider, useHomePage } from './home-page-context';
 import { getQuickGuid } from '../../utils/uuid';
 import { quickHelpReferenceService } from '../../services/quick-help-reference-service';
+import { useServiceArea } from '../../contexts/service-area';
 
 export const HomePageInternal = () => {
     const { isShowMnemoschema, setIsShowMnemoschema, setUpdateSharedRegulatorStateRefreshToken } = useHomePage();
     const { regulatorSettings, getHeatingCircuitName } = useRegulatorSettings();
+    const { initSystemReboot } = useServiceArea();
     const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
     const tabPanelRef = useRef<TabPanel>(null);
 
@@ -26,32 +28,44 @@ export const HomePageInternal = () => {
             {
                 icon: () => <AdditionalMenuIcon size={ 20 } color='black' />,
                 items: [
-                    {
-                        icon: () => isShowMnemoschema ? <HeatingCircuitCodeIcon size={ 20 } color='black' /> : <HeatingCircuitMnemoschemaIcon size={ 20 } color='black' />,
-                        text: isShowMnemoschema ? 'Показать параметры': 'Показать мнемосхему',
-                        onClick: () => {
-                            setIsShowMnemoschema(previous => !previous);
-                            tabPanelRef.current?.instance.repaint()
-                        },
+                {
+                    icon: () => isShowMnemoschema ? <HeatingCircuitCodeIcon size={ 20 } color='black' /> : <HeatingCircuitMnemoschemaIcon size={ 20 } color='black' />,
+                    text: isShowMnemoschema ? 'Показать параметры' : 'Показать мнемосхему',
+                    onClick: () => {
+                        setIsShowMnemoschema(previous => !previous);
+                        tabPanelRef.current?.instance.repaint()
                     },
-                    {
-                        icon: () => <RefreshIcon size={ 20 } />,
-                        text: 'Обновить...',
-                        onClick: () => {
-                            setUpdateSharedRegulatorStateRefreshToken(getQuickGuid());
+                },
+                {
+                    icon: () => <RefreshIcon size={ 20 } />,
+                    text: 'Обновить...',
+                    onClick: () => {
+                        setUpdateSharedRegulatorStateRefreshToken(getQuickGuid());
+                    }
+                },
+                {
+                    icon: () => <ServiceIcon size={ 20 }/>,
+                    text: 'Сервис',
+                    items: [
+                        {
+                            icon: () => <RestartIcon size={ 24 } color='darkred' />,
+                            text: 'Перезапуск системы',
+                            onClick: initSystemReboot,
+                            textColor: 'darkred',
                         }
-                    },
-                    {
-                        icon: () => <HelpIcon size={ 20 } />,
-                        text: 'Справка...',
-                        onClick: () => {
-                            quickHelpReferenceService.show('home/mnemoschema');
-                        }
-                    },
+                    ]
+                },
+                {
+                    icon: () => <HelpIcon size={ 20 } />,
+                    text: 'Справка...',
+                    onClick: () => {
+                        quickHelpReferenceService.show('home/mnemoschema');
+                    }
+                },
                 ]
             }
         ] as MenuItemModel[];
-    }, [isShowMnemoschema, setIsShowMnemoschema, setUpdateSharedRegulatorStateRefreshToken]);
+    }, [initSystemReboot, isShowMnemoschema, setIsShowMnemoschema, setUpdateSharedRegulatorStateRefreshToken]);
 
     return (
         <>
